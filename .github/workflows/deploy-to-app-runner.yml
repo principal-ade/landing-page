@@ -18,6 +18,17 @@ jobs:
       contents: read
     
     steps:
+    - name: Debug OIDC claims
+      # This action uses the GitHub Actions toolkit to get the OIDC token
+      # and print its decoded payload, which contains the claims.
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const token = await core.getIDToken()
+          const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+          console.log("----- OIDC Claims -----")
+          core.info(JSON.stringify(payload, null, 2))
+          console.log("-----------------------")
     - name: Checkout code
       uses: actions/checkout@v4
 
