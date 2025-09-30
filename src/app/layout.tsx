@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
-import MermaidInitializer from "@/components/MermaidInitializer";
-import AuthSessionProvider from "@/components/providers/SessionProvider";
-import { AuthRefreshProvider } from "@/components/providers/AuthRefreshProvider";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 
 const inter = Inter({
@@ -17,8 +14,8 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Principle MCP - The Principle engineer for your codebase",
-  description: "The Principle engineer for your codebase",
+  title: "Principal-ade - The Principal Engineer for Your Codebase",
+  description: "AI-powered principal engineering assistant that helps you make better architectural decisions and maintain code quality at scale.",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -38,7 +35,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Principle MCP",
+    title: "Principal-ade",
   },
   formatDetection: {
     telephone: false,
@@ -56,14 +53,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${firaCode.variable} antialiased h-full`}
       >
-        <AuthSessionProvider>
-          <AuthRefreshProvider>
-            <ClientThemeProvider>
-              <MermaidInitializer />
-              {children}
-            </ClientThemeProvider>
-          </AuthRefreshProvider>
-        </AuthSessionProvider>
+        <ClientThemeProvider>
+          {children}
+        </ClientThemeProvider>
       </body>
     </html>
   );
