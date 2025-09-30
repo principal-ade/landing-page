@@ -24,10 +24,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
 
+  // Platform detection for download button
+  const [platform, setPlatform] = React.useState<
+    "mac" | "windows" | "linux" | null
+  >(null);
+  const [architecture, setArchitecture] = React.useState<"arm64" | "x64">(
+    "x64",
+  );
+
   React.useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  React.useEffect(() => {
+    // Detect platform
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    if (userAgent.includes("mac")) {
+      setPlatform("mac");
+      // Detect Apple Silicon vs Intel
+      const isAppleSilicon =
+        userAgent.includes("arm") || navigator.platform === "MacIntel";
+      setArchitecture(isAppleSilicon ? "arm64" : "x64");
+    } else if (userAgent.includes("win")) {
+      setPlatform("windows");
+    } else if (userAgent.includes("linux")) {
+      setPlatform("linux");
+    }
   }, []);
 
   const isMobile = windowWidth < 768;
@@ -267,20 +291,58 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             </div>
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <div
             style={{
               marginTop: "48px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
             }}
           >
+            {/* Download Button - Only show for Mac users */}
+            {platform === "mac" && (
+              <a
+                href="/download"
+                style={{
+                  padding: "16px 32px",
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  backgroundColor: theme.colors.primary,
+                  color: theme.colors.background,
+                  border: "none",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <Download size={20} />
+                Download for Mac ({architecture === "arm64" ? "Apple Silicon" : "Intel"})
+              </a>
+            )}
+
+            {/* Get Started Button */}
             <button
               style={{
                 padding: "16px 32px",
                 fontSize: "18px",
                 fontWeight: "600",
-                backgroundColor: theme.colors.primary,
-                color: theme.colors.background,
-                border: "none",
+                backgroundColor: platform === "mac" ? theme.colors.backgroundSecondary : theme.colors.primary,
+                color: platform === "mac" ? theme.colors.text : theme.colors.background,
+                border: platform === "mac" ? `2px solid ${theme.colors.border}` : "none",
                 borderRadius: "12px",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
@@ -290,7 +352,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+                e.currentTarget.style.boxShadow = platform === "mac"
+                  ? `0 8px 24px ${theme.colors.border}40`
+                  : `0 8px 24px ${theme.colors.primary}40`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
@@ -303,12 +367,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
 
             <div
               style={{
-                marginTop: "16px",
+                marginTop: "8px",
                 fontSize: "14px",
                 color: theme.colors.textMuted,
               }}
             >
-              Coming Soon • Join the waitlist for early access
+              {platform === "mac"
+                ? "Desktop app available now • Web version coming soon"
+                : "Coming Soon • Join the waitlist for early access"}
             </div>
           </div>
         </div>
