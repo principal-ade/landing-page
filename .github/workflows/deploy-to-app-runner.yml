@@ -1,0 +1,80 @@
+name: Deploy Principal ADE Landing Page 
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: principal-ade-landing
+  APP_RUNNER_SERVICE_NAME: principal-ade-landing
+
+jobs:
+  deploy:
+    environment: production
+    name: Deploy to App Runner
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_APP_RUNNER_ARN }}
+        aws-region: us-east-1
+        audience: sts.amazonaws.com
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        docker build -f Dockerfile \
+          --build-arg NPM_TOKEN=$NPM_TOKEN \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Wait for deployment
+      run: |
+        SERVICE_ARN="${SERVICE_ARN:-${{ secrets.PRINCIPAL_ADE_LANDING_PAGE_APP_RUNNER_SERVICE_ARN }}}"
+        echo "Waiting for deployment to complete..."
+        
+        for i in {1..30}; do
+          STATUS=$(aws apprunner describe-service \
+            --service-arn "$SERVICE_ARN" \
+            --query 'Service.Status' \
+            --output text)
+          
+          if [ "$STATUS" = "RUNNING" ]; then
+            echo "Deployment successful!"
+            break
+          elif [ "$STATUS" = "CREATE_FAILED" ] || [ "$STATUS" = "UPDATE_FAILED" ]; then
+            echo "Deployment failed with status: $STATUS"
+            exit 1
+          else
+            echo "Current status: $STATUS. Waiting..."
+            sleep 30
+          fi
+        done
+
+    - name: Get service URL
+      run: |
+        SERVICE_ARN="${SERVICE_ARN:-${{ secrets.PRINCIPAL_ADE_LANDING_PAGE_APP_RUNNER_SERVICE_ARN }}}"
+        SERVICE_URL=$(aws apprunner describe-service \
+          --service-arn "$SERVICE_ARN" \
+          --query 'Service.ServiceUrl' \
+          --output text)
+        echo " Principal ADE Landing Page deployed to: https://$SERVICE_URL"
