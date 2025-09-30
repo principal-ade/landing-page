@@ -11,6 +11,7 @@ import {
   Database,
   Activity,
 } from "lucide-react";
+import { Logo } from "./Logo";
 
 interface LandingPageProps {
   onExploreGithub: () => void;
@@ -104,18 +105,85 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             style={{
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
               fontWeight: "700",
-              marginBottom: isMobile ? "16px" : "20px",
-              background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary || theme.colors.primary} 100%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              color: theme.colors.primary, // Fallback for browsers that don't support text gradients
-              display: "inline-block", // Fix for gradient text rendering
+              marginTop: "0",
+              marginBottom: "0",
+              color: theme.colors.primary,
               width: "100%",
             }}
           >
-            Principal-ade
+            Principal ADE
           </h1>
+
+          {/* Logo */}
+          <div
+            style={{
+              marginBottom: isMobile ? "15px" : "20px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                width: isMobile ? "150px" : "200px",
+                height: isMobile ? "150px" : "200px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Logo
+                width={isMobile ? 150 : 200}
+                height={isMobile ? 150 : 200}
+                color={theme.colors.primary}
+                particleColor={theme.colors.accent}
+                opacity={0.9}
+              />
+            </div>
+          </div>
+
+          {/* Download Button */}
+          <div
+            style={{
+              marginBottom: "20px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            {/* Download Button - Only show for Mac users */}
+            {platform === "mac" && (
+              <a
+                href="/download"
+                style={{
+                  padding: "16px 32px",
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  backgroundColor: theme.colors.primary,
+                  color: theme.colors.background,
+                  border: "none",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <Download size={20} />
+                Download for Mac ({architecture === "arm64" ? "Apple Silicon" : "Intel"})
+              </a>
+            )}
+          </div>
 
           <p
             style={{
@@ -126,28 +194,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               maxWidth: "600px",
               marginLeft: "auto",
               marginRight: "auto",
-              marginTop: "0",
-              marginBottom: isMobile ? "30px" : "40px",
+              marginTop: isMobile ? "30px" : "40px",
+              marginBottom: isMobile ? "20px" : "30px",
             }}
           >
-            The Principal Engineer for Your Codebase
-          </p>
-
-          <p
-            style={{
-              fontSize: isMobile ? "14px" : "16px",
-              color: theme.colors.textSecondary,
-              lineHeight: "1.6",
-              padding: isMobile ? "0 10px" : "0",
-              maxWidth: "800px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: "0",
-              marginBottom: isMobile ? "40px" : "60px",
-            }}
-          >
-            AI-powered principal engineering assistant that helps you make better architectural decisions, 
-            maintain code quality at scale, and guide your development team with expert-level insights.
+            The Agentic Development Environment for Principal Engineers
           </p>
 
           {/* Feature Cards */}
@@ -290,93 +341,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               </p>
             </div>
           </div>
-
-          {/* CTA Buttons */}
-          <div
-            style={{
-              marginTop: "48px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "16px",
-            }}
-          >
-            {/* Download Button - Only show for Mac users */}
-            {platform === "mac" && (
-              <a
-                href="/download"
-                style={{
-                  padding: "16px 32px",
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.background,
-                  border: "none",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <Download size={20} />
-                Download for Mac ({architecture === "arm64" ? "Apple Silicon" : "Intel"})
-              </a>
-            )}
-
-            {/* Get Started Button */}
-            <button
-              style={{
-                padding: "16px 32px",
-                fontSize: "18px",
-                fontWeight: "600",
-                backgroundColor: platform === "mac" ? theme.colors.backgroundSecondary : theme.colors.primary,
-                color: platform === "mac" ? theme.colors.text : theme.colors.background,
-                border: platform === "mac" ? `2px solid ${theme.colors.border}` : "none",
-                borderRadius: "12px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "12px",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = platform === "mac"
-                  ? `0 8px 24px ${theme.colors.border}40`
-                  : `0 8px 24px ${theme.colors.primary}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              <Bot size={20} />
-              Get Started
-            </button>
-
-            <div
-              style={{
-                marginTop: "8px",
-                fontSize: "14px",
-                color: theme.colors.textMuted,
-              }}
-            >
-              {platform === "mac"
-                ? "Desktop app available now • Web version coming soon"
-                : "Coming Soon • Join the waitlist for early access"}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -419,7 +383,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               textAlign: "center",
             }}
           >
-            Principal-ade combines the wisdom of senior engineering leadership with AI-powered analysis 
+            Principal ADE combines the wisdom of senior engineering leadership with AI-powered analysis
             to help you build better software, faster.
           </p>
 
@@ -555,7 +519,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               marginBottom: "40px",
             }}
           >
-            Join the waitlist to be among the first to experience Principal-ade and 
+            Join the waitlist to be among the first to experience Principal ADE and
             revolutionize how you approach software architecture and team leadership.
           </p>
 

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "themed-markdown";
+import { useTheme } from "@a24z/industry-theme";
 import { ChevronDown } from "lucide-react";
+import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 
 interface ThemeSelectorProps {
   position?: "fixed" | "relative";
@@ -11,7 +12,8 @@ interface ThemeSelectorProps {
 export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   position = "fixed",
 }) => {
-  const { theme, setThemeName, availableThemes, currentThemeName } = useTheme();
+  const { theme } = useTheme();
+  const { currentTheme, setCurrentTheme, availableThemes } = useThemeSwitcher();
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -35,7 +37,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   }, [isOpen]);
 
   const handleThemeChange = (themeName: string) => {
-    setThemeName(themeName);
+    setCurrentTheme(themeName);
     setIsOpen(false);
   };
 
@@ -80,7 +82,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           e.currentTarget.style.borderColor = theme.colors.border;
         }}
       >
-        <span>Theme: {currentThemeName}</span>
+        <span>Theme: {currentTheme}</span>
         <ChevronDown
           size={16}
           style={{
@@ -114,29 +116,29 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
                 padding: "12px 16px",
                 textAlign: "left",
                 backgroundColor:
-                  currentThemeName === themeName
+                  currentTheme === themeName
                     ? theme.colors.backgroundSecondary
                     : "transparent",
                 color:
-                  currentThemeName === themeName
+                  currentTheme === themeName
                     ? theme.colors.primary
                     : theme.colors.text,
                 border: "none",
                 cursor: "pointer",
                 fontSize: "14px",
-                fontWeight: currentThemeName === themeName ? "600" : "400",
+                fontWeight: currentTheme === themeName ? "600" : "400",
                 transition: "all 0.15s ease",
                 fontFamily: theme.fonts.body,
                 display: "block",
               }}
               onMouseEnter={(e) => {
-                if (currentThemeName !== themeName) {
+                if (currentTheme !== themeName) {
                   e.currentTarget.style.backgroundColor =
                     theme.colors.backgroundHover;
                 }
               }}
               onMouseLeave={(e) => {
-                if (currentThemeName !== themeName) {
+                if (currentTheme !== themeName) {
                   e.currentTarget.style.backgroundColor = "transparent";
                 } else {
                   e.currentTarget.style.backgroundColor =
