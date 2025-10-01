@@ -10,7 +10,7 @@ import {
   Info,
 } from "lucide-react";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@/components/Logo";
+import { Logo } from "@a24z/logo-component";
 
 interface GitHubRelease {
   id: number;

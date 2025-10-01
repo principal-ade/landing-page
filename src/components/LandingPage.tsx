@@ -5,7 +5,7 @@ import {
   GitBranch,
   Activity,
 } from "lucide-react";
-import { Logo } from "./Logo";
+import { Logo } from "@a24z/logo-component";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
 import { parseMarkdownIntoPresentation } from "themed-markdown";
