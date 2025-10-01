@@ -168,12 +168,7 @@ function DownloadPageContent() {
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
               fontWeight: "700",
               marginBottom: isMobile ? "12px" : "16px",
-              background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary || theme.colors.primary} 100%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              color: theme.colors.primary, // Fallback for browsers that don't support text gradients
-              display: "inline-block", // Fix for gradient text rendering
+              color: theme.colors.primary,
               width: "100%",
             }}
           >
