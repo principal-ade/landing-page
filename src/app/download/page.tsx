@@ -160,7 +160,7 @@ function DownloadPageContent() {
               transition: "color 0.2s",
             }}
           >
-            ← Back to Specktor
+            ← Back to ADE
           </Link>
 
           <h1
@@ -177,7 +177,7 @@ function DownloadPageContent() {
               width: "100%",
             }}
           >
-            Download Specktor
+            Download ADE
           </h1>
 
           <p

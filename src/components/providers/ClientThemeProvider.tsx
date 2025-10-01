@@ -53,6 +53,23 @@ export default function ClientThemeProvider({
   children: React.ReactNode;
 }) {
   const [currentTheme, setCurrentTheme] = React.useState("slate");
+  const [isHydrated, setIsHydrated] = React.useState(false);
+
+  // Load theme from localStorage on mount
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem("ade-theme");
+    if (savedTheme && themes[savedTheme]) {
+      setCurrentTheme(savedTheme);
+    }
+    setIsHydrated(true);
+  }, []);
+
+  // Save theme to localStorage when it changes
+  React.useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("ade-theme", currentTheme);
+    }
+  }, [currentTheme, isHydrated]);
 
   const value: ThemeSwitcherContextValue = {
     currentTheme,
