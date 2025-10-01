@@ -1,18 +1,14 @@
 import React from "react";
 import { useTheme } from "@a24z/industry-theme";
 import {
-  Download,
   CheckCircle,
-  Zap,
-  Users,
-  Bot,
-  Brain,
   GitBranch,
-  Database,
   Activity,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
+import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
+import { parseMarkdownIntoPresentation } from "themed-markdown";
 
 interface LandingPageProps {
   onExploreGithub: () => void;
@@ -28,17 +24,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
     setCurrentTheme(availableThemes[nextIndex]);
   };
 
+  // Markdown content state
+  const [slides, setSlides] = React.useState<string[]>([]);
+  const [isClient, setIsClient] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
   // Responsive breakpoints with React hooks
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
-
-  // Platform detection for download button
-  const [platform, setPlatform] = React.useState<
-    "mac" | "windows" | "linux" | null
-  >(null);
-  const [architecture, setArchitecture] = React.useState<"arm64" | "x64">(
-    "x64",
   );
 
   React.useEffect(() => {
@@ -47,20 +40,51 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Set client-side flag and ensure scroll position stays at top
   React.useEffect(() => {
-    // Detect platform
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    if (userAgent.includes("mac")) {
-      setPlatform("mac");
-      // Detect Apple Silicon vs Intel
-      const isAppleSilicon =
-        userAgent.includes("arm") || navigator.platform === "MacIntel";
-      setArchitecture(isAppleSilicon ? "arm64" : "x64");
-    } else if (userAgent.includes("win")) {
-      setPlatform("windows");
-    } else if (userAgent.includes("linux")) {
-      setPlatform("linux");
+    setIsClient(true);
+    // Force scroll to top on mount and lock it briefly
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+      // Prevent any scroll for a brief moment
+      const preventScroll = () => {
+        if (containerRef.current) {
+          containerRef.current.scrollTop = 0;
+        }
+      };
+      containerRef.current.addEventListener('scroll', preventScroll);
+      setTimeout(() => {
+        containerRef.current?.removeEventListener('scroll', preventScroll);
+      }, 1000);
     }
+  }, []);
+
+  // Keep scroll at top when slides load
+  React.useEffect(() => {
+    if (slides.length > 0 && containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [slides.length]);
+
+  // Fetch markdown content
+  React.useEffect(() => {
+    fetch("/content.md")
+      .then((response) => response.text())
+      .then((text) => {
+        console.log("Loaded markdown content:", text);
+        // Parse markdown into slides
+        try {
+          const presentation = parseMarkdownIntoPresentation(text);
+          console.log("Parsed presentation:", presentation);
+          const parsedSlides = (presentation?.slides || []).map((s) => s.location.content);
+          console.log("Parsed slides:", parsedSlides);
+          setSlides(parsedSlides);
+        } catch (error) {
+          console.error("Error parsing markdown:", error);
+          setSlides([text]); // Fallback to single slide
+        }
+      })
+      .catch((error) => console.error("Error loading markdown:", error));
   }, []);
 
   const isMobile = windowWidth < 768;
@@ -73,17 +97,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   `;
 
   return (
-    <div style={{ width: "100%", overflow: "auto" }}>
+    <div ref={containerRef} style={{ width: "100%", height: "100vh", overflow: "auto", scrollSnapType: "y proximity" }}>
       {/* Hero Section */}
       <div
         style={{
-          minHeight: "100vh",
+          height: "100vh",
           backgroundColor: theme.colors.background,
           backgroundImage: gridBackground,
           backgroundSize: "100px 100px",
           backgroundPosition: "-1px -1px",
           padding: isMobile ? "40px 20px 80px" : "60px 40px 120px",
           position: "relative",
+          scrollSnapAlign: "start",
+          scrollSnapStop: "always",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         {/* Gradient overlay for better contrast */}
@@ -109,6 +138,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             zIndex: 1,
           }}
         >
+          <p
+            style={{
+              fontSize: isMobile ? "14px" : "16px",
+              color: theme.colors.textSecondary,
+              marginTop: "0",
+              marginBottom: "20px",
+              fontWeight: "500",
+            }}
+          >
+            The Agentic Development Environment for Principal Engineers
+          </p>
           <h1
             style={{
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
@@ -288,193 +328,95 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               justifyContent: "center",
             }}
           >
-            {/* Download Button - Only show for Mac users */}
-            {platform === "mac" && (
-              <a
-                href="/download"
-                style={{
-                  padding: "16px 32px",
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.background,
-                  border: "none",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                Download
-              </a>
-            )}
+            <a
+              href="/download"
+              style={{
+                padding: "16px 32px",
+                fontSize: "18px",
+                fontWeight: "600",
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.background,
+                border: "none",
+                borderRadius: "12px",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: "inline-flex",
+                alignItems: "center",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              Download
+            </a>
           </div>
 
-          <p
-            style={{
-              fontSize: isMobile ? "16px" : isTablet ? "18px" : "20px",
-              color: theme.colors.textSecondary,
-              lineHeight: "1.6",
-              padding: isMobile ? "0 10px" : "0",
-              maxWidth: "600px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: isMobile ? "30px" : "40px",
-              marginBottom: isMobile ? "20px" : "30px",
-            }}
-          >
-            The Agentic Development Environment for Principal Engineers
-          </p>
+        </div>
+      </div>
 
-          {/* Feature Cards */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: isMobile
-                ? "1fr"
-                : isTablet
-                ? "repeat(2, 1fr)"
-                : "repeat(3, 1fr)",
-              gap: "24px",
-              maxWidth: "1000px",
-              margin: "0 auto 60px",
-            }}
-          >
+      {/* Book Section */}
+      <div
+        style={{
+          height: "100vh",
+          backgroundColor: theme.colors.background,
+          backgroundImage: gridBackground,
+          backgroundSize: "100px 100px",
+          backgroundPosition: "-1px -1px",
+          padding: isMobile ? "40px 20px" : "60px 40px",
+          position: "relative",
+          scrollSnapAlign: "start",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            width: "100%",
+            height: "80vh",
+            border: `2px solid ${theme.colors.border}`,
+            borderRadius: "12px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          {!isClient || slides.length === 0 ? (
             <div
               style={{
-                backgroundColor: theme.colors.backgroundSecondary,
-                borderRadius: "16px",
-                padding: "24px",
-                border: `2px solid ${theme.colors.border}`,
-                textAlign: "left",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: theme.colors.textSecondary,
+                backgroundColor: theme.colors.background,
+                zIndex: 10,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  marginBottom: "16px",
-                }}
-              >
-                <Brain size={24} color={theme.colors.primary} />
-                <h3
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "600",
-                    color: theme.colors.text,
-                    margin: 0,
-                  }}
-                >
-                  Architectural Guidance
-                </h3>
-              </div>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: theme.colors.textSecondary,
-                  lineHeight: "1.5",
-                  margin: 0,
-                }}
-              >
-                Get expert-level architectural recommendations and design pattern suggestions 
-                tailored to your codebase and team needs.
-              </p>
+              Loading presentation...
             </div>
-
-            <div
-              style={{
-                backgroundColor: theme.colors.backgroundSecondary,
-                borderRadius: "16px",
-                padding: "24px",
-                border: `2px solid ${theme.colors.border}`,
-                textAlign: "left",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  marginBottom: "16px",
-                }}
-              >
-                <Zap size={24} color={theme.colors.primary} />
-                <h3
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "600",
-                    color: theme.colors.text,
-                    margin: 0,
-                  }}
-                >
-                  Code Quality Insights
-                </h3>
-              </div>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: theme.colors.textSecondary,
-                  lineHeight: "1.5",
-                  margin: 0,
-                }}
-              >
-                Continuous analysis of code quality, technical debt, and performance bottlenecks 
-                with actionable improvement recommendations.
-              </p>
-            </div>
-
-            <div
-              style={{
-                backgroundColor: theme.colors.backgroundSecondary,
-                borderRadius: "16px",
-                padding: "24px",
-                border: `2px solid ${theme.colors.border}`,
-                textAlign: "left",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  marginBottom: "16px",
-                }}
-              >
-                <Users size={24} color={theme.colors.primary} />
-                <h3
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "600",
-                    color: theme.colors.text,
-                    margin: 0,
-                  }}
-                >
-                  Team Leadership
-                </h3>
-              </div>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: theme.colors.textSecondary,
-                  lineHeight: "1.5",
-                  margin: 0,
-                }}
-              >
-                Provide technical leadership and mentorship to your development team 
-                with AI-powered guidance and best practices.
-              </p>
-            </div>
+          ) : null}
+          <div style={{ opacity: isClient && slides.length > 0 ? 1 : 0, transition: "opacity 0.3s ease-in", height: "100%" }}>
+            {slides.length > 0 && (
+              <ThemedSlidePresentationBook
+                slides={slides}
+                viewMode="book"
+                showNavigation={true}
+                showSlideCounter={true}
+                showFullscreenButton={true}
+                containerHeight="100%"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -482,10 +424,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       {/* Features Section */}
       <div
         style={{
+          minHeight: "100vh",
           paddingTop: isMobile ? "60px" : "80px",
           paddingBottom: isMobile ? "60px" : "80px",
           backgroundColor: theme.colors.backgroundSecondary,
           width: "100%",
+          scrollSnapAlign: "start",
         }}
       >
         <div
