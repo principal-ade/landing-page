@@ -8,10 +8,10 @@
 export const DESKTOP_APP_CONFIG = {
   // GitHub repository for desktop app releases
   github: {
-    owner: 'a24z-ai',
-    repo: 'electron-app',
+    owner: 'principal-ade',
+    repo: 'landing-page',
     // Full repository path
-    fullRepo: 'a24z-ai/electron-app' as const,
+    fullRepo: 'principal-ade/landing-page' as const,
   },
 
   // Application branding

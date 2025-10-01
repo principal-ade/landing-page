@@ -17,7 +17,6 @@ import {
 export const themes: Record<string, Theme> = {
   terminal: terminalTheme,
   regal: regalTheme,
-  glassmorphism: glassmorphismTheme,
   matrix: matrixTheme,
   "matrix-minimal": matrixMinimalTheme,
   slate: slateTheme,

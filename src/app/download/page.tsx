@@ -10,6 +10,7 @@ import {
   Info,
 } from "lucide-react";
 import { useTheme } from "@a24z/industry-theme";
+import { Logo } from "@/components/Logo";
 
 interface GitHubRelease {
   id: number;
@@ -139,6 +140,60 @@ function DownloadPageContent() {
         color: theme.colors.text,
       }}
     >
+      {/* Logo in top left as back button */}
+      <Link
+        href="/"
+        style={{
+          position: "fixed",
+          top: "20px",
+          left: "20px",
+          zIndex: 1000,
+          textDecoration: "none",
+          transition: "transform 0.2s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
+      >
+        <Logo
+          width={isMobile ? 40 : 50}
+          height={isMobile ? 40 : 50}
+          color={theme.colors.primary}
+          particleColor={theme.colors.accent}
+          opacity={0.9}
+        />
+      </Link>
+
+      {/* Logo in top right */}
+      <Link
+        href="/"
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          zIndex: 1000,
+          textDecoration: "none",
+          transition: "transform 0.2s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
+      >
+        <Logo
+          width={isMobile ? 40 : 50}
+          height={isMobile ? 40 : 50}
+          color={theme.colors.primary}
+          particleColor={theme.colors.accent}
+          opacity={0.9}
+        />
+      </Link>
+
       <div
         style={{
           maxWidth: "1200px",
@@ -147,22 +202,6 @@ function DownloadPageContent() {
         }}
       >
         <header style={{ marginBottom: "60px", textAlign: "center" }}>
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "24px",
-              color: theme.colors.textSecondary,
-              textDecoration: "none",
-              fontSize: "14px",
-              transition: "color 0.2s",
-            }}
-          >
-            ← Back to ADE
-          </Link>
-
           <h1
             style={{
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
@@ -174,19 +213,6 @@ function DownloadPageContent() {
           >
             Download ADE
           </h1>
-
-          <p
-            style={{
-              fontSize: isMobile ? "16px" : isTablet ? "18px" : "20px",
-              color: theme.colors.textSecondary,
-              maxWidth: "600px",
-              margin: "0 auto",
-              padding: isMobile ? "0 10px" : "0",
-            }}
-          >
-            Get the desktop application for the ultimate code visualization
-            experience
-          </p>
         </header>
 
         {loading && (
@@ -555,7 +581,7 @@ function DownloadPageContent() {
                     </p>
                     <button
                       onClick={() => {
-                        window.open("https://discord.gg/jh242TEd", "_blank");
+                        window.open("https://discord.gg/TGf9SVFZ", "_blank");
                       }}
                       style={{
                         padding: isMobile ? "10px 20px" : "12px 24px",

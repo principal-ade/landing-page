@@ -12,6 +12,7 @@ import {
   Activity,
 } from "lucide-react";
 import { Logo } from "./Logo";
+import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 
 interface LandingPageProps {
   onExploreGithub: () => void;
@@ -19,6 +20,13 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   const { theme } = useTheme();
+  const { currentTheme, setCurrentTheme, availableThemes } = useThemeSwitcher();
+
+  const handleLogoClick = () => {
+    const currentIndex = availableThemes.indexOf(currentTheme);
+    const nextIndex = (currentIndex + 1) % availableThemes.length;
+    setCurrentTheme(availableThemes[nextIndex]);
+  };
 
   // Responsive breakpoints with React hooks
   const [windowWidth, setWindowWidth] = React.useState(
@@ -74,7 +82,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           backgroundImage: gridBackground,
           backgroundSize: "100px 100px",
           backgroundPosition: "-1px -1px",
-          padding: isMobile ? "60px 20px 80px" : "100px 40px 120px",
+          padding: isMobile ? "40px 20px 80px" : "60px 40px 120px",
           position: "relative",
         }}
       >
@@ -109,20 +117,89 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               marginBottom: "0",
               color: theme.colors.primary,
               width: "100%",
+              paddingLeft: "10px",
             }}
           >
-            Principal ADE
+            Principal
           </h1>
+          <h2
+            style={{
+              fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
+              fontWeight: "600",
+              marginTop: "0",
+              marginBottom: "0",
+              color: theme.colors.textSecondary,
+              width: "100%",
+            }}
+          >
+            ADE
+          </h2>
 
           {/* Logo */}
           <div
             style={{
-              marginBottom: isMobile ? "15px" : "20px",
+              marginBottom: "0",
               display: "flex",
               justifyContent: "center",
+              alignItems: "center",
+              gap: isMobile ? "20px" : "40px",
+              position: "relative",
             }}
           >
+            {/* Left side themes */}
             <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+                justifyContent: "flex-end",
+                maxWidth: isMobile ? "120px" : "200px",
+              }}
+            >
+              {availableThemes.slice(0, 4).map((themeName) => (
+                <button
+                  key={themeName}
+                  onClick={() => {
+                    setCurrentTheme(themeName);
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor:
+                      currentTheme === themeName
+                        ? theme.colors.primary
+                        : theme.colors.backgroundSecondary,
+                    color:
+                      currentTheme === themeName
+                        ? theme.colors.background
+                        : theme.colors.text,
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: isMobile ? "12px" : "14px",
+                    fontWeight: "500",
+                    transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentTheme !== themeName) {
+                      e.currentTarget.style.backgroundColor =
+                        theme.colors.backgroundHover;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentTheme !== themeName) {
+                      e.currentTarget.style.backgroundColor =
+                        theme.colors.backgroundSecondary;
+                    }
+                  }}
+                >
+                  {themeName}
+                </button>
+              ))}
+            </div>
+
+            <div
+              onClick={handleLogoClick}
               style={{
                 width: isMobile ? "150px" : "200px",
                 height: isMobile ? "150px" : "200px",
@@ -131,6 +208,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
               }}
             >
               <Logo
@@ -140,6 +225,58 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 particleColor={theme.colors.accent}
                 opacity={0.9}
               />
+            </div>
+
+            {/* Right side themes */}
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+                justifyContent: "flex-start",
+                maxWidth: isMobile ? "120px" : "200px",
+              }}
+            >
+              {availableThemes.slice(4, 8).map((themeName) => (
+                <button
+                  key={themeName}
+                  onClick={() => {
+                    setCurrentTheme(themeName);
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor:
+                      currentTheme === themeName
+                        ? theme.colors.primary
+                        : theme.colors.backgroundSecondary,
+                    color:
+                      currentTheme === themeName
+                        ? theme.colors.background
+                        : theme.colors.text,
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: isMobile ? "12px" : "14px",
+                    fontWeight: "500",
+                    transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentTheme !== themeName) {
+                      e.currentTarget.style.backgroundColor =
+                        theme.colors.backgroundHover;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentTheme !== themeName) {
+                      e.currentTarget.style.backgroundColor =
+                        theme.colors.backgroundSecondary;
+                    }
+                  }}
+                >
+                  {themeName}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -167,7 +304,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                   transition: "all 0.2s ease",
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "12px",
                   textDecoration: "none",
                 }}
                 onMouseEnter={(e) => {
@@ -179,8 +315,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <Download size={20} />
-                Download for Mac ({architecture === "arm64" ? "Apple Silicon" : "Intel"})
+                Download
               </a>
             )}
           </div>
