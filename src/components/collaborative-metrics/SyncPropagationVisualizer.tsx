@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useTheme } from "themed-markdown";
+import { useTheme } from "@a24z/industry-theme";
 import { Zap, AlertTriangle } from "lucide-react";
 import { MetricsData } from "./types";
 import { AGENTS } from "./agents";

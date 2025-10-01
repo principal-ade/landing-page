@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
   Download,
@@ -10,15 +9,7 @@ import {
   Package,
   Info,
 } from "lucide-react";
-import { useTheme } from "themed-markdown";
-
-const ThemeProvider = dynamic(
-  () =>
-    import("themed-markdown").then(
-      (mod) => mod.ThemeProvider,
-    ),
-  { ssr: false },
-);
+import { useTheme } from "@a24z/industry-theme";
 
 interface GitHubRelease {
   id: number;
@@ -635,9 +626,5 @@ function DownloadPageContent() {
 }
 
 export default function DownloadPage() {
-  return (
-    <ThemeProvider>
-      <DownloadPageContent />
-    </ThemeProvider>
-  );
+  return <DownloadPageContent />;
 }
