@@ -9,6 +9,7 @@ import { Logo } from "./Logo";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
 import { parseMarkdownIntoPresentation } from "themed-markdown";
+import { Section } from "./Section";
 
 interface LandingPageProps {
   onExploreGithub: () => void;
@@ -420,81 +421,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       </div>
 
       {/* Design And Share Section */}
-      <div
+      <Section
         id="design-and-share"
-        style={{
-          minHeight: "100vh",
-          backgroundColor: theme.colors.backgroundSecondary,
-          padding: isMobile ? "60px 20px" : "80px 40px",
-          position: "relative",
-          scrollSnapAlign: "start",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "30fr 70fr",
-            gap: isMobile ? "40px" : "60px",
-            alignItems: "center",
-          }}
-        >
-          {/* Text Content */}
-          <div>
-            <h2
+        textPosition="left"
+        background="secondary"
+        title="Design And Share"
+        description={
+          <p
+            style={{
+              fontSize: isMobile ? "16px" : "18px",
+              color: theme.colors.textSecondary,
+              lineHeight: "1.8",
+              margin: 0,
+            }}
+          >
+            We store all the information in your git repositories so that they are available with your team, no login or subscription necessary. Just sync and share. We use{" "}
+            <a
+              href="https://github.com/a24z-ai/core-library"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
-                fontSize: isMobile ? "28px" : "36px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                color: theme.colors.text,
-                marginTop: 0,
+                color: theme.colors.primary,
+                textDecoration: "none",
+                fontWeight: "500",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.textDecoration = "underline";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.textDecoration = "none";
               }}
             >
-              Design And Share
-            </h2>
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: theme.colors.textSecondary,
-                lineHeight: "1.8",
-                margin: 0,
-              }}
-            >
-              We store all the information in your git repositories so that they are available with your team, no login or subscription necessary. Just sync and share. We use{" "}
-              <a
-                href="https://github.com/a24z-ai/core-library"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: theme.colors.primary,
-                  textDecoration: "none",
-                  fontWeight: "500",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.textDecoration = "underline";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.textDecoration = "none";
-                }}
-              >
-                a24z-memory
-              </a>{" "}
-              to do it.
-            </p>
-          </div>
-
-          {/* Image */}
+              a24z-memory
+            </a>{" "}
+            to do it.
+          </p>
+        }
+        media={
           <div
             style={{
               width: "100%",
+              height: "600px",
               borderRadius: "12px",
               overflow: "hidden",
-              border: `2px solid ${theme.colors.border}`,
-              backgroundColor: theme.colors.background,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <img
@@ -502,99 +474,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               alt="Design and Share"
               style={{
                 width: "100%",
-                height: "auto",
+                height: "100%",
+                objectFit: "contain",
                 display: "block",
               }}
             />
           </div>
-        </div>
-      </div>
+        }
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
 
       {/* Book Section */}
-      <div
+      <Section
         id="markdown-viewer"
-        style={{
-          minHeight: "100vh",
-          backgroundColor: theme.colors.background,
-          backgroundImage: gridBackground,
-          backgroundSize: "100px 100px",
-          backgroundPosition: "-1px -1px",
-          padding: isMobile ? "60px 20px" : "80px 40px",
-          position: "relative",
-          scrollSnapAlign: "start",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "70fr 30fr",
-            gap: isMobile ? "40px" : "60px",
-            alignItems: "center",
-          }}
-        >
-          {/* Book Viewer */}
-          <div
-            style={{
-              width: "100%",
-              height: "80vh",
-              border: `2px solid ${theme.colors.border}`,
-              borderRadius: "12px",
-              overflow: "hidden",
-              position: "relative",
-              backgroundColor: theme.colors.background,
-            }}
-          >
-            {!isClient || slides.length === 0 ? (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: theme.colors.textSecondary,
-                  backgroundColor: theme.colors.background,
-                  zIndex: 10,
-                }}
-              >
-                Loading presentation...
-              </div>
-            ) : null}
-            <div style={{ opacity: isClient && slides.length > 0 ? 1 : 0, transition: "opacity 0.3s ease-in", height: "100%" }}>
-              {slides.length > 0 && (
-                <ThemedSlidePresentationBook
-                  slides={slides}
-                  viewMode={viewMode}
-                  showNavigation={true}
-                  showSlideCounter={true}
-                  showFullscreenButton={true}
-                  containerHeight="100%"
-                />
-              )}
-            </div>
-          </div>
-
-          {/* Text Content */}
-          <div>
-            <h2
-              style={{
-                fontSize: isMobile ? "28px" : "36px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                color: theme.colors.text,
-                marginTop: 0,
-              }}
-            >
-              Agents Write a lot of Markdown, It Should be easy to read
-            </h2>
+        textPosition="right"
+        background="grid"
+        title="Agents Write a lot of Markdown, It Should be easy to read"
+        description={
+          <>
             <p
               style={{
                 fontSize: isMobile ? "16px" : "18px",
@@ -720,70 +618,74 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Agents Section */}
-      <div
-        id="agents-and-more"
-        style={{
-          minHeight: "100vh",
-          backgroundColor: theme.colors.background,
-          backgroundImage: gridBackground,
-          backgroundSize: "100px 100px",
-          backgroundPosition: "-1px -1px",
-          padding: isMobile ? "60px 20px" : "80px 40px",
-          position: "relative",
-          scrollSnapAlign: "start",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "30fr 70fr",
-            gap: isMobile ? "40px" : "60px",
-            alignItems: "center",
-          }}
-        >
-          {/* Text Content */}
-          <div>
-            <h2
-              style={{
-                fontSize: isMobile ? "28px" : "36px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                color: theme.colors.text,
-                marginTop: 0,
-              }}
-            >
-              Manage Any Local or Remote Agent from one place
-            </h2>
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: theme.colors.textSecondary,
-                lineHeight: "1.8",
-                margin: 0,
-              }}
-            >
-              Bring whatever agent you use and copy and paste tasks to them. All from one unified interface.
-            </p>
-          </div>
-
-          {/* Video */}
+          </>
+        }
+        media={
           <div
             style={{
               width: "100%",
+              height: "600px",
+              border: `2px solid ${theme.colors.border}`,
               borderRadius: "12px",
               overflow: "hidden",
-              border: `2px solid ${theme.colors.border}`,
+              position: "relative",
               backgroundColor: theme.colors.background,
+            }}
+          >
+            {!isClient || slides.length === 0 ? (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: theme.colors.textSecondary,
+                  backgroundColor: theme.colors.background,
+                  zIndex: 10,
+                }}
+              >
+                Loading presentation...
+              </div>
+            ) : null}
+            <div style={{ opacity: isClient && slides.length > 0 ? 1 : 0, transition: "opacity 0.3s ease-in", height: "100%" }}>
+              {slides.length > 0 && (
+                <ThemedSlidePresentationBook
+                  slides={slides}
+                  viewMode={viewMode}
+                  showNavigation={true}
+                  showSlideCounter={true}
+                  showFullscreenButton={true}
+                  containerHeight="100%"
+                />
+              )}
+            </div>
+          </div>
+        }
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
+
+      {/* Agents Section */}
+      <Section
+        id="agents-and-more"
+        textPosition="left"
+        background="secondary"
+        title="Manage Any Local or Remote Agent from one place"
+        description="Bring whatever agent you use and copy and paste tasks to them. All from one unified interface."
+        media={
+          <div
+            style={{
+              width: "100%",
+              height: "600px",
+              borderRadius: "12px",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <video
@@ -793,7 +695,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               playsInline
               style={{
                 width: "100%",
-                height: "auto",
+                height: "100%",
+                objectFit: "contain",
                 display: "block",
               }}
             >
@@ -801,41 +704,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               Your browser does not support the video tag.
             </video>
           </div>
-        </div>
-      </div>
+        }
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
 
       {/* Repositories Video Section */}
-      <div
+      <Section
         id="repositories-video"
-        style={{
-          minHeight: "100vh",
-          backgroundColor: theme.colors.backgroundSecondary,
-          padding: isMobile ? "60px 20px" : "80px 40px",
-          position: "relative",
-          scrollSnapAlign: "start",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "70fr 30fr",
-            gap: isMobile ? "40px" : "60px",
-            alignItems: "center",
-          }}
-        >
-          {/* Video */}
+        textPosition="right"
+        background="grid"
+        title="The Environment For All Your Projects"
+        description="We watch your projects for changes to make it easy to understand what is happening at a high level"
+        media={
           <div
             style={{
               width: "100%",
+              height: "600px",
               borderRadius: "12px",
               overflow: "hidden",
-              border: `2px solid ${theme.colors.border}`,
-              backgroundColor: theme.colors.background,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <video
@@ -845,7 +735,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               playsInline
               style={{
                 width: "100%",
-                height: "auto",
+                height: "100%",
+                objectFit: "contain",
                 display: "block",
               }}
             >
@@ -853,91 +744,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               Your browser does not support the video tag.
             </video>
           </div>
-
-          {/* Text Content */}
-          <div>
-            <h2
-              style={{
-                fontSize: isMobile ? "28px" : "36px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                color: theme.colors.text,
-                marginTop: 0,
-              }}
-            >
-              The Environment For All Your Projects
-            </h2>
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: theme.colors.textSecondary,
-                lineHeight: "1.8",
-                margin: 0,
-              }}
-            >
-              We watch your projects for changes to make it easy to understand what is happening at a high level
-            </p>
-          </div>
-        </div>
-      </div>
+        }
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
 
       {/* Download Section */}
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: theme.colors.background,
-          padding: isMobile ? "60px 20px" : "80px 40px",
-          position: "relative",
-          scrollSnapAlign: "start",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "30fr 70fr",
-            gap: isMobile ? "40px" : "60px",
-            alignItems: "center",
-          }}
-        >
-          {/* Text Content */}
-          <div>
-            <h2
-              style={{
-                fontSize: isMobile ? "28px" : "36px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                color: theme.colors.text,
-                marginTop: 0,
-              }}
-            >
-              Ready to Transform Your Engineering Practice?
-            </h2>
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: theme.colors.textSecondary,
-                lineHeight: "1.8",
-                margin: 0,
-              }}
-            >
-              Download Principal ADE and revolutionize how you approach software architecture and team leadership.
-            </p>
-          </div>
-
-          {/* Download Button Area */}
+      <Section
+        id="download"
+        textPosition="left"
+        background="secondary"
+        title="Ready to Transform Your Engineering Practice?"
+        description="Download Principal ADE and revolutionize how you approach software architecture and team leadership."
+        media={
           <div
             style={{
               width: "100%",
+              height: "600px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              minHeight: "300px",
               gap: "24px",
             }}
           >
@@ -1013,8 +840,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               Download Alpha
             </a>
           </div>
-        </div>
-      </div>
+        }
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
     </div>
   );
 };
