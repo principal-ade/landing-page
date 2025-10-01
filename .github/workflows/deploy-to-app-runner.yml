@@ -18,17 +18,6 @@ jobs:
       contents: read
     
     steps:
-    - name: Debug OIDC claims
-      # This action uses the GitHub Actions toolkit to get the OIDC token
-      # and print its decoded payload, which contains the claims.
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const token = await core.getIDToken()
-          const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
-          console.log("----- OIDC Claims -----")
-          core.info(JSON.stringify(payload, null, 2))
-          console.log("-----------------------")
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -57,35 +46,3 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-    - name: Wait for deployment
-      run: |
-        SERVICE_ARN="${SERVICE_ARN:-${{ secrets.PRINCIPAL_ADE_LANDING_PAGE_APP_RUNNER_SERVICE_ARN }}}"
-        echo "Waiting for deployment to complete..."
-        
-        for i in {1..30}; do
-          STATUS=$(aws apprunner describe-service \
-            --service-arn "$SERVICE_ARN" \
-            --query 'Service.Status' \
-            --output text)
-          
-          if [ "$STATUS" = "RUNNING" ]; then
-            echo "Deployment successful!"
-            break
-          elif [ "$STATUS" = "CREATE_FAILED" ] || [ "$STATUS" = "UPDATE_FAILED" ]; then
-            echo "Deployment failed with status: $STATUS"
-            exit 1
-          else
-            echo "Current status: $STATUS. Waiting..."
-            sleep 30
-          fi
-        done
-
-    - name: Get service URL
-      run: |
-        SERVICE_ARN="${SERVICE_ARN:-${{ secrets.PRINCIPAL_ADE_LANDING_PAGE_APP_RUNNER_SERVICE_ARN }}}"
-        SERVICE_URL=$(aws apprunner describe-service \
-          --service-arn "$SERVICE_ARN" \
-          --query 'Service.ServiceUrl' \
-          --output text)
-        echo " Principal ADE Landing Page deployed to: https://$SERVICE_URL"
