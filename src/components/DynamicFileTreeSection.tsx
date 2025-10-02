@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Theme } from "@a24z/industry-theme";
-import { DynamicFileTree, DirectoryFilterInput, DirectoryFilter } from "@a24z/dynamic-file-tree";
+import { DynamicFileTree, DirectoryFilterInput, DirectoryFilter, filterFileTreeByPaths } from "@a24z/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 
 interface DynamicFileTreeSectionProps {
@@ -12,67 +12,6 @@ interface DynamicFileTreeSectionProps {
   isMobile?: boolean;
   onFileSelect?: (filePath: string) => void;
 }
-
-// Helper function to filter FileTree based on selected directory paths
-const filterFileTree = (tree: FileTree, selectedPaths: string[]): FileTree => {
-  if (selectedPaths.length === 0) {
-    return tree;
-  }
-
-  // Helper to check if a path should be included
-  const shouldIncludePath = (path: string): boolean => {
-    return selectedPaths.some(selectedPath =>
-      path.startsWith(selectedPath) || selectedPath.startsWith(path)
-    );
-  };
-
-  // Filter DirectoryInfo recursively
-  const filterDirectory = (dir: any): any | null => {
-    if (!shouldIncludePath(dir.path)) {
-      return null;
-    }
-
-    const filteredChildren = dir.children
-      .map((child: any) => {
-        if ('children' in child) {
-          return filterDirectory(child);
-        } else {
-          return shouldIncludePath(child.path) ? child : null;
-        }
-      })
-      .filter((child: any): child is any => child !== null);
-
-    if (filteredChildren.length === 0 && !selectedPaths.includes(dir.path)) {
-      return null;
-    }
-
-    return {
-      ...dir,
-      children: filteredChildren,
-      fileCount: filteredChildren.filter((c: any) => !('children' in c)).length,
-    };
-  };
-
-  const filteredRoot = filterDirectory(tree.root);
-  if (!filteredRoot) {
-    return tree;
-  }
-
-  const allFiles = tree.allFiles.filter(f => shouldIncludePath(f.path));
-  const allDirectories = tree.allDirectories.filter(d => shouldIncludePath(d.path));
-
-  return {
-    ...tree,
-    root: filteredRoot,
-    allFiles,
-    allDirectories,
-    stats: {
-      ...tree.stats,
-      totalFiles: allFiles.length,
-      totalDirectories: allDirectories.length,
-    },
-  };
-};
 
 export const DynamicFileTreeSection: React.FC<DynamicFileTreeSectionProps> = ({
   fileTree,
@@ -98,9 +37,9 @@ export const DynamicFileTreeSection: React.FC<DynamicFileTreeSectionProps> = ({
     .filter(f => f.mode === 'include')
     .map(f => f.path);
 
-  // Get the tree to display - filtered if in 'selected' mode
+  // Get the tree to display - filtered if in 'selected' mode using library utility
   const displayTree = viewMode === "selected"
-    ? filterFileTree(fileTree, currentSelectedDirs)
+    ? filterFileTreeByPaths(fileTree, currentSelectedDirs)
     : fileTree;
 
   const handleFiltersChange = (filters: DirectoryFilter[]) => {

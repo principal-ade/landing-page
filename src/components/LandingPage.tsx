@@ -105,20 +105,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           backgroundImage: gridBackground,
           backgroundSize: "100px 100px",
           backgroundPosition: "-1px -1px",
-          padding: isMobile ? "0 20px 80px" : "0 40px 120px",
           position: "relative",
           scrollSnapAlign: "start",
           scrollSnapStop: "always",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          overflow: "hidden",
         }}
       >
+        {/* Circular gradient emanating from logo center */}
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(50% - 120px)",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "200%",
+            height: "200%",
+            background: `radial-gradient(circle at center, transparent 0%, ${theme.colors.primary}30 25%, ${theme.colors.primary}50 50%)`,
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
         {/* Action Buttons - Bottom Center */}
         <div
           style={{
             position: "absolute",
-            bottom: isMobile ? "120px" : "140px",
+            bottom: isMobile ? "160px" : "180px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 10,
@@ -199,6 +213,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             bottom: 0,
             background: `radial-gradient(circle at center, transparent 0%, ${theme.colors.background}99 100%)`,
             pointerEvents: "none",
+            zIndex: 1,
           }}
         />
 
@@ -209,8 +224,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             margin: "0 auto",
             textAlign: "center",
             position: "relative",
-            zIndex: 1,
-            marginTop: "-60px",
+            zIndex: 2,
+            marginTop: "-180px",
           }}
         >
           <h2
