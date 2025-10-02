@@ -1,10 +1,6 @@
 import React from "react";
+import Link from "next/link";
 import { useTheme } from "@a24z/industry-theme";
-import {
-  CheckCircle,
-  GitBranch,
-  Activity,
-} from "lucide-react";
 import { Logo } from "@a24z/logo-component";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
@@ -118,7 +114,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           justifyContent: "center",
         }}
       >
-        {/* Download Button - Bottom Center */}
+        {/* Action Buttons - Bottom Center */}
         <div
           style={{
             position: "absolute",
@@ -126,6 +122,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 10,
+            display: "flex",
+            gap: "16px",
+            alignItems: "center",
           }}
         >
           <a
@@ -136,13 +135,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               fontWeight: "600",
               backgroundColor: theme.colors.primary,
               color: theme.colors.background,
-              border: "none",
+              border: `1px solid ${theme.colors.primary}`,
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease",
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               textDecoration: "none",
+              width: isMobile ? "100px" : "200px",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
@@ -155,6 +156,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           >
             Download Alpha
           </a>
+          <Link
+            href="/blog"
+            style={{
+              padding: isMobile ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : "15px",
+              fontWeight: "600",
+              backgroundColor: "transparent",
+              color: theme.colors.text,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textDecoration: "none",
+              width: isMobile ? "100px" : "200px",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.borderColor = theme.colors.primary;
+              e.currentTarget.style.color = theme.colors.primary;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = theme.colors.border;
+              e.currentTarget.style.color = theme.colors.text;
+            }}
+          >
+            Blog
+          </Link>
         </div>
 
         {/* Gradient overlay for better contrast */}
