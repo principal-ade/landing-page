@@ -159,8 +159,8 @@ function DownloadPageContent() {
         }}
       >
         <Logo
-          width={isMobile ? 40 : 50}
-          height={isMobile ? 40 : 50}
+          width={isMobile ? 50 : 60}
+          height={isMobile ? 50 : 60}
           color={theme.colors.primary}
           particleColor={theme.colors.accent}
           opacity={0.9}
@@ -186,8 +186,8 @@ function DownloadPageContent() {
         }}
       >
         <Logo
-          width={isMobile ? 40 : 50}
-          height={isMobile ? 40 : 50}
+          width={isMobile ? 50 : 60}
+          height={isMobile ? 50 : 60}
           color={theme.colors.primary}
           particleColor={theme.colors.accent}
           opacity={0.9}
@@ -287,7 +287,7 @@ function DownloadPageContent() {
                   }}
                 >
                   <Info
-                    size={48}
+                    size={60}
                     style={{
                       color: theme.colors.textSecondary,
                       marginBottom: "16px",
@@ -350,7 +350,7 @@ function DownloadPageContent() {
                           transition: "all 0.2s",
                         }}
                       >
-                        <Icon size={20} />
+                        <Icon size={28} />
                         {label}
                       </button>
                     );
@@ -384,7 +384,7 @@ function DownloadPageContent() {
                             gap: "8px",
                           }}
                         >
-                          <Icon size={20} />
+                          <Icon size={28} />
                           {label}
                         </div>
                         <span
@@ -420,7 +420,7 @@ function DownloadPageContent() {
                         gap: "12px",
                       }}
                     >
-                      <Download size={24} />
+                      <Download size={32} />
                       Latest Release
                     </h2>
 
@@ -486,7 +486,7 @@ function DownloadPageContent() {
                                     "translateY(0) scale(1)";
                                 }}
                               >
-                                <Download size={20} />
+                                <Download size={24} />
                                 Download ({formatFileSize(asset.size)})
                               </a>
                             ) : (
@@ -524,7 +524,7 @@ function DownloadPageContent() {
                                 gap: "8px",
                               }}
                             >
-                              <Info size={16} />
+                              <Info size={20} />
                               Release Notes
                             </h4>
                             <div

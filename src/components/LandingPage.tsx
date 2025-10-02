@@ -10,6 +10,7 @@ import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
 import { parseMarkdownIntoPresentation } from "themed-markdown";
 import { Section } from "./Section";
+import { EngineeringContextSection } from "./EngineeringContextSection";
 
 interface LandingPageProps {
   onExploreGithub: () => void;
@@ -117,6 +118,45 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           justifyContent: "center",
         }}
       >
+        {/* Download Button - Bottom Center */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: isMobile ? "120px" : "140px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 10,
+          }}
+        >
+          <a
+            href="/download"
+            style={{
+              padding: isMobile ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : "15px",
+              fontWeight: "600",
+              backgroundColor: theme.colors.primary,
+              color: theme.colors.background,
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            Download Alpha
+          </a>
+        </div>
+
         {/* Gradient overlay for better contrast */}
         <div
           style={{
@@ -140,41 +180,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             zIndex: 1,
           }}
         >
-          <p
-            style={{
-              fontSize: isMobile ? "14px" : "16px",
-              color: theme.colors.textSecondary,
-              marginTop: "0",
-              marginBottom: "20px",
-              fontWeight: "500",
-            }}
-          >
-            The Agentic Development Environment for Principal Engineers
-          </p>
-          <h1
-            style={{
-              fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
-              fontWeight: "700",
-              marginTop: "0",
-              marginBottom: "0",
-              color: theme.colors.primary,
-              width: "100%",
-              paddingLeft: "10px",
-            }}
-          >
-            Principal
-          </h1>
           <h2
             style={{
               fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
               fontWeight: "600",
               marginTop: "0",
               marginBottom: "0",
-              color: theme.colors.textSecondary,
+              color: theme.colors.accent,
               width: "100%",
+              paddingLeft: "4px",
             }}
           >
-            ADE
+            Principal
           </h2>
 
           {/* Logo */}
@@ -190,8 +207,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             <div
               onClick={handleLogoClick}
               style={{
-                width: isMobile ? "150px" : "200px",
-                height: isMobile ? "150px" : "200px",
+                width: isMobile ? "200px" : "260px",
+                height: isMobile ? "200px" : "260px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 display: "flex",
@@ -208,8 +225,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               }}
             >
               <Logo
-                width={isMobile ? 150 : 200}
-                height={isMobile ? 150 : 200}
+                width={isMobile ? 200 : 260}
+                height={isMobile ? 200 : 260}
                 color={theme.colors.primary}
                 particleColor={theme.colors.accent}
                 opacity={0.9}
@@ -217,42 +234,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             </div>
           </div>
 
-          {/* Download Button */}
-          <div
+          <h3
             style={{
+              fontSize: isMobile ? "20px" : isTablet ? "24px" : "28px",
+              fontWeight: "600",
+              marginTop: "0",
               marginBottom: "20px",
-              display: "flex",
-              justifyContent: "center",
+              color: theme.colors.primary,
+              width: "100%",
             }}
           >
-            <a
-              href="/download"
-              style={{
-                padding: "16px 32px",
-                fontSize: "18px",
-                fontWeight: "600",
-                backgroundColor: theme.colors.primary,
-                color: theme.colors.background,
-                border: "none",
-                borderRadius: "12px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                display: "inline-flex",
-                alignItems: "center",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              Download Alpha
-            </a>
-          </div>
+            ADE
+          </h3>
 
         </div>
 
@@ -416,6 +409,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             }}
           >
             All Your Projects
+          </div>
+          <div
+            onClick={() => {
+              const section = document.getElementById("engineering-context");
+              if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+            style={{
+              cursor: "pointer",
+              fontSize: isMobile ? "16px" : "18px",
+              fontWeight: "600",
+              color: theme.colors.text,
+              transition: "all 0.3s ease",
+              textDecoration: "none",
+              padding: "16px 24px",
+              backgroundColor: `${theme.colors.background}80`,
+              backdropFilter: "blur(10px)",
+              borderRadius: "12px",
+              border: `1px solid ${theme.colors.border}40`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = theme.colors.primary;
+              e.currentTarget.style.transform = "translateX(-8px)";
+              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = theme.colors.text;
+              e.currentTarget.style.transform = "translateX(0)";
+              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+            }}
+          >
+            Engineering Context
           </div>
         </div>
       </div>
@@ -749,13 +775,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         isTablet={isTablet}
       />
 
+      {/* Engineering Context Section */}
+      <Section
+        id="engineering-context"
+        textPosition="left"
+        background="secondary"
+        title="Engineering Context Across All Your Repositories"
+        description="Browse and explore the structure of all your projects from one unified interface. Understand dependencies, architecture, and documentation across your entire engineering organization."
+        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} />}
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
+
       {/* Download Section */}
       <Section
         id="download"
         textPosition="left"
         background="secondary"
-        title="Ready to Transform Your Engineering Practice?"
-        description="Download Principal ADE and revolutionize how you approach software architecture and team leadership."
+        title="Ready to be a Principal Engineer?"
+        description=""
         media={
           <div
             style={{
@@ -768,43 +806,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               gap: "24px",
             }}
           >
-            <h1
-              style={{
-                fontSize: isMobile ? "32px" : "48px",
-                fontWeight: "700",
-                marginTop: "0",
-                marginBottom: "0",
-                color: theme.colors.primary,
-              }}
-            >
-              Principal
-            </h1>
-            <h2
-              style={{
-                fontSize: isMobile ? "24px" : "32px",
-                fontWeight: "600",
-                marginTop: "0",
-                marginBottom: "0",
-                color: theme.colors.textSecondary,
-              }}
-            >
-              ADE
-            </h2>
             <div
+              onClick={handleLogoClick}
               style={{
-                width: isMobile ? "120px" : "150px",
-                height: isMobile ? "120px" : "150px",
+                width: isMobile ? "200px" : "300px",
+                height: isMobile ? "200px" : "300px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                marginBottom: "20px",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
               }}
             >
               <Logo
-                width={isMobile ? 120 : 150}
-                height={isMobile ? 120 : 150}
+                width={isMobile ? 200 : 300}
+                height={isMobile ? 200 : 300}
                 color={theme.colors.primary}
                 particleColor={theme.colors.accent}
                 opacity={0.9}
@@ -813,30 +837,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             <a
               href="/download"
               style={{
-                padding: "24px 48px",
-                fontSize: "24px",
+                padding: "16px 32px",
+                fontSize: "18px",
                 fontWeight: "600",
                 backgroundColor: theme.colors.primary,
                 color: theme.colors.background,
                 border: "none",
-                borderRadius: "16px",
+                borderRadius: "12px",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "16px",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = `0 12px 32px ${theme.colors.primary}40`;
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              <CheckCircle size={28} />
               Download Alpha
             </a>
           </div>
