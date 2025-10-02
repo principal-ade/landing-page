@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@a24z/dynamic-file-tree": "^0.1.1",
+    "@a24z/dynamic-file-tree": "^0.1.3",
     "@a24z/industry-theme": "^0.1.1",
     "@a24z/logo-component": "^0.1.1",
     "hast-util-sanitize": "^5.0.2",

@@ -3,7 +3,7 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { useTheme } from "@a24z/industry-theme";
-import { DocumentView, ThemeProvider } from "themed-markdown";
+import { DocumentView } from "themed-markdown";
 import Link from "next/link";
 import { Logo } from "@a24z/logo-component";
 import { useThemeSwitcher } from "@/components/providers/ClientThemeProvider";
@@ -118,23 +118,23 @@ export default function BlogPostPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
         backgroundColor: theme.colors.background,
       }}
     >
       {/* Header with Logo */}
       <div
         style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
+          flexShrink: 0,
           borderBottom: `1px solid ${theme.colors.border}`,
           backgroundColor: theme.colors.backgroundSecondary,
         }}
       >
         <div
           style={{
-            maxWidth: "1200px",
+	    maxWidth: "80%",
             margin: "0 auto",
             padding: 0,
             display: "flex",
@@ -335,7 +335,12 @@ export default function BlogPostPage() {
         </div>
       </div>
 
-      <div>
+      <div
+        style={{
+          flex: 1,
+          overflow: "auto",
+        }}
+      >
 
         {/* Loading State */}
         {loading && (
@@ -406,13 +411,14 @@ export default function BlogPostPage() {
 
         {/* Blog Content */}
         {!loading && !error && content && (
-          <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in" }}>
-            <ThemeProvider theme={theme}>
-              <DocumentView
-                content={content}
-                fontSizeScale={fontSizeScale}
-              />
-            </ThemeProvider>
+          <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in", paddingTop: "20px" }}>
+            <DocumentView
+              content={content}
+              fontSizeScale={fontSizeScale}
+              transparentBackground={true}
+              theme={theme}
+              maxWidth="70%"
+            />
           </div>
         )}
       </div>

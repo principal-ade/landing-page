@@ -5,8 +5,8 @@ import {
   SlidePresentationBook,
   SlidePresentationBookProps,
   ThemeProvider,
-  useTheme
 } from "themed-markdown";
+import { useTheme } from "@a24z/industry-theme";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
 

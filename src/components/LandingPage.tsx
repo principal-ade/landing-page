@@ -814,7 +814,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         background="secondary"
         title="Engineering Context Across All Your Repositories"
         description="Browse and explore the structure of all your projects from one unified interface. Understand dependencies, architecture, and documentation across your entire engineering organization."
-        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} />}
+        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} useMultiTree={true} />}
         isMobile={isMobile}
         isTablet={isTablet}
       />

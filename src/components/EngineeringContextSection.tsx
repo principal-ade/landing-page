@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import { useTheme } from "@a24z/industry-theme";
-import { DynamicFileTree, DirectoryFilterInput, DirectoryFilter } from "@a24z/dynamic-file-tree";
 import { FileTree, DirectoryInfo, FileInfo } from "@principal-ai/repository-abstraction";
+import { DynamicFileTreeSection } from "./DynamicFileTreeSection";
+import { MultiFileTreeSection } from "./MultiFileTreeSection";
 
 interface EngineeringContextSectionProps {
   isMobile?: boolean;
   isTablet?: boolean;
+  useMultiTree?: boolean;
 }
 
 // Sample file tree data for demonstration
@@ -420,67 +422,6 @@ const createSharedTree = (): FileTree => {
   };
 };
 
-// Helper function to filter FileTree based on selected directory paths
-const filterFileTree = (tree: FileTree, selectedPaths: string[]): FileTree => {
-  if (selectedPaths.length === 0) {
-    return tree;
-  }
-
-  // Helper to check if a path should be included
-  const shouldIncludePath = (path: string): boolean => {
-    return selectedPaths.some(selectedPath =>
-      path.startsWith(selectedPath) || selectedPath.startsWith(path)
-    );
-  };
-
-  // Filter DirectoryInfo recursively
-  const filterDirectory = (dir: DirectoryInfo): DirectoryInfo | null => {
-    if (!shouldIncludePath(dir.path)) {
-      return null;
-    }
-
-    const filteredChildren = dir.children
-      .map(child => {
-        if ('children' in child) {
-          return filterDirectory(child);
-        } else {
-          return shouldIncludePath(child.path) ? child : null;
-        }
-      })
-      .filter((child): child is FileInfo | DirectoryInfo => child !== null);
-
-    if (filteredChildren.length === 0 && !selectedPaths.includes(dir.path)) {
-      return null;
-    }
-
-    return {
-      ...dir,
-      children: filteredChildren,
-      fileCount: filteredChildren.filter(c => !('children' in c)).length,
-    };
-  };
-
-  const filteredRoot = filterDirectory(tree.root);
-  if (!filteredRoot) {
-    return tree;
-  }
-
-  const allFiles = tree.allFiles.filter(f => shouldIncludePath(f.path));
-  const allDirectories = tree.allDirectories.filter(d => shouldIncludePath(d.path));
-
-  return {
-    ...tree,
-    root: filteredRoot,
-    allFiles,
-    allDirectories,
-    stats: {
-      ...tree.stats,
-      totalFiles: allFiles.length,
-      totalDirectories: allDirectories.length,
-    },
-  };
-};
-
 // Create repositories once to avoid recreating on every render
 const repositories = [
   { id: "frontend-app", name: "Frontend App", tree: createFrontendTree() },
@@ -491,41 +432,28 @@ const repositories = [
 export const EngineeringContextSection: React.FC<EngineeringContextSectionProps> = ({
   isMobile = false,
   isTablet = false,
+  useMultiTree = false,
 }) => {
   const { theme } = useTheme();
   const [selectedRepo, setSelectedRepo] = useState<string>("frontend-app");
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"all" | "selected">("all");
-
-  // Track directory filters for each repository
-  const [directoryFilters, setDirectoryFilters] = useState<Record<string, DirectoryFilter[]>>({
-    "frontend-app": [],
-    "backend-api": [],
-    "shared-components": [],
-  });
 
   const currentRepo = repositories.find(r => r.id === selectedRepo);
-  const currentFilters = directoryFilters[selectedRepo] || [];
 
-  // Extract paths from filters that are in 'include' mode for display
-  const currentSelectedDirs = currentFilters
-    .filter(f => f.mode === 'include')
-    .map(f => f.path);
+  // Use multi-tree view if specified
+  if (useMultiTree) {
+    return (
+      <MultiFileTreeSection
+        repositories={repositories}
+        theme={theme}
+        isMobile={isMobile}
+        onFileSelect={(repoId, filePath) => {
+          console.log(`Selected file in ${repoId}:`, filePath);
+        }}
+      />
+    );
+  }
 
-  // Get the tree to display - filtered if in 'selected' mode
-  const displayTree = currentRepo
-    ? viewMode === "selected"
-      ? filterFileTree(currentRepo.tree, currentSelectedDirs)
-      : currentRepo.tree
-    : null;
-
-  const handleFiltersChange = (filters: DirectoryFilter[]) => {
-    setDirectoryFilters(prev => ({
-      ...prev,
-      [selectedRepo]: filters,
-    }));
-  };
-
+  // Default single-tree view with repository selector
   return (
     <div
       style={{
@@ -595,143 +523,17 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
       </div>
 
       {/* File Tree Viewer */}
-      <div
-        style={{
-          flex: 1,
-          border: `2px solid ${theme.colors.border}`,
-          borderRadius: "12px",
-          overflow: "hidden",
-          backgroundColor: theme.colors.background,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div
-          style={{
-            padding: "16px",
-            borderBottom: `1px solid ${theme.colors.border}`,
-            backgroundColor: theme.colors.backgroundSecondary,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: "12px",
+      {currentRepo && (
+        <DynamicFileTreeSection
+          fileTree={currentRepo.tree}
+          theme={theme}
+          title={currentRepo.name}
+          isMobile={isMobile}
+          onFileSelect={(filePath) => {
+            console.log("Selected file:", filePath);
           }}
-        >
-          <h4
-            style={{
-              fontSize: "16px",
-              fontWeight: "600",
-              color: theme.colors.text,
-              margin: 0,
-            }}
-          >
-            {currentRepo?.name}
-          </h4>
-
-          {/* View Mode Toggle */}
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-            }}
-          >
-            <button
-              onClick={() => setViewMode("all")}
-              style={{
-                padding: "6px 12px",
-                fontSize: "13px",
-                fontWeight: "500",
-                backgroundColor: viewMode === "all" ? theme.colors.primary : "transparent",
-                color: viewMode === "all" ? theme.colors.background : theme.colors.text,
-                border: `1px solid ${viewMode === "all" ? theme.colors.primary : theme.colors.border}`,
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-            >
-              Show All
-            </button>
-            <button
-              onClick={() => setViewMode("selected")}
-              style={{
-                padding: "6px 12px",
-                fontSize: "13px",
-                fontWeight: "500",
-                backgroundColor: viewMode === "selected" ? theme.colors.primary : "transparent",
-                color: viewMode === "selected" ? theme.colors.background : theme.colors.text,
-                border: `1px solid ${viewMode === "selected" ? theme.colors.primary : theme.colors.border}`,
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-            >
-              Show Selected ({currentSelectedDirs.length})
-            </button>
-          </div>
-        </div>
-        {/* Directory Filter Input */}
-        <div
-          style={{
-            padding: "16px",
-            borderBottom: `1px solid ${theme.colors.border}`,
-            backgroundColor: theme.colors.background,
-          }}
-        >
-          <div
-            style={{
-              fontSize: "13px",
-              fontWeight: "500",
-              color: theme.colors.text,
-              marginBottom: "8px",
-            }}
-          >
-            Select Directories to Filter:
-          </div>
-          {currentRepo && (
-            <DirectoryFilterInput
-              fileTree={currentRepo.tree}
-              theme={theme}
-              filters={currentFilters}
-              onFiltersChange={handleFiltersChange}
-            />
-          )}
-        </div>
-
-        <div
-          style={{
-            flex: 1,
-            overflow: "auto",
-            padding: "16px",
-          }}
-        >
-          {displayTree && (
-            <DynamicFileTree
-              key={`${selectedRepo}-${viewMode}`}
-              fileTree={displayTree}
-              theme={theme}
-              selectedDirectories={currentSelectedDirs}
-              onFileSelect={(filePath) => {
-                setSelectedFile(filePath);
-                console.log("Selected file:", filePath);
-              }}
-            />
-          )}
-        </div>
-        {selectedFile && (
-          <div
-            style={{
-              padding: "12px 16px",
-              borderTop: `1px solid ${theme.colors.border}`,
-              backgroundColor: theme.colors.backgroundSecondary,
-              fontSize: "12px",
-              color: theme.colors.textSecondary,
-            }}
-          >
-            Selected: {selectedFile}
-          </div>
-        )}
-      </div>
+        />
+      )}
     </div>
   );
 };
