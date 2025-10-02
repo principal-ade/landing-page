@@ -105,7 +105,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           backgroundImage: gridBackground,
           backgroundSize: "100px 100px",
           backgroundPosition: "-1px -1px",
-          padding: isMobile ? "40px 20px 80px" : "60px 40px 120px",
+          padding: isMobile ? "0 20px 80px" : "0 40px 120px",
           position: "relative",
           scrollSnapAlign: "start",
           scrollSnapStop: "always",
@@ -210,6 +210,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             textAlign: "center",
             position: "relative",
             zIndex: 1,
+            marginTop: "-60px",
           }}
         >
           <h2
@@ -286,7 +287,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           style={{
             position: "absolute",
             left: isMobile ? "20px" : "350px",
-            top: "50%",
+            top: "40%",
             transform: "translateY(-50%)",
             display: "flex",
             flexDirection: "column",
@@ -367,7 +368,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           style={{
             position: "absolute",
             right: isMobile ? "20px" : "350px",
-            top: "50%",
+            top: "40%",
             transform: "translateY(-50%)",
             display: "flex",
             flexDirection: "column",
@@ -543,11 +544,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         isTablet={isTablet}
       />
 
+      {/* Engineering Context Section */}
+      <Section
+        id="engineering-context"
+        textPosition="right"
+        background="grid"
+        title="Engineering Context Across All Your Repositories"
+        description="Browse and explore the structure of all your projects from one unified interface. Understand dependencies, architecture, and documentation across your entire engineering organization."
+        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} useMultiTree={true} />}
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
+
       {/* Book Section */}
       <Section
         id="markdown-viewer"
-        textPosition="right"
-        background="grid"
+        textPosition="left"
+        background="secondary"
         title="Agents Write a lot of Markdown, It Should be easy to read"
         description={
           <>
@@ -730,8 +743,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       {/* Agents Section */}
       <Section
         id="agents-and-more"
-        textPosition="left"
-        background="secondary"
+        textPosition="right"
+        background="grid"
         title="Manage Any Local or Remote Agent from one place"
         description="Bring whatever agent you use and copy and paste tasks to them. All from one unified interface."
         media={
@@ -770,8 +783,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       {/* Repositories Video Section */}
       <Section
         id="repositories-video"
-        textPosition="right"
-        background="grid"
+        textPosition="left"
+        background="secondary"
         title="The Environment For All Your Projects"
         description="We watch your projects for changes to make it easy to understand what is happening at a high level"
         media={
@@ -807,23 +820,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         isTablet={isTablet}
       />
 
-      {/* Engineering Context Section */}
-      <Section
-        id="engineering-context"
-        textPosition="left"
-        background="secondary"
-        title="Engineering Context Across All Your Repositories"
-        description="Browse and explore the structure of all your projects from one unified interface. Understand dependencies, architecture, and documentation across your entire engineering organization."
-        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} useMultiTree={true} />}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
-
       {/* Download Section */}
       <Section
         id="download"
-        textPosition="left"
-        background="secondary"
+        textPosition="right"
+        background="grid"
         title="Ready to be a Principal Engineer?"
         description=""
         media={
