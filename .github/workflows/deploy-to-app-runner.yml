@@ -9,7 +9,6 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: principal-ade/landing-page
-  APP_RUNNER_SERVICE_NAME: principal-ade-landing
 
 jobs:
   deploy:

@@ -3,10 +3,11 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { useTheme } from "@a24z/industry-theme";
-import { DocumentView } from "themed-markdown";
+import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
 import Link from "next/link";
 import { Logo } from "@a24z/logo-component";
 import { useThemeSwitcher } from "@/components/providers/ClientThemeProvider";
+import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
 
@@ -20,6 +21,8 @@ export default function BlogPostPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [isClient, setIsClient] = React.useState(false);
   const [fontSizeScale, setFontSizeScale] = React.useState(1);
+  const [viewMode, setViewMode] = React.useState<"book" | "single">("book");
+  const [slides, setSlides] = React.useState<string[]>([]);
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -104,6 +107,19 @@ export default function BlogPostPage() {
       })
       .then((data) => {
         setContent(data.content || "");
+
+        // If this is the pitch-deck, parse it into slides
+        if (slug === "pitch-deck") {
+          try {
+            const presentation = parseMarkdownIntoPresentation(data.content);
+            const parsedSlides = (presentation?.slides || []).map((s) => s.location.content);
+            setSlides(parsedSlides);
+          } catch (error) {
+            console.error("Error parsing markdown into slides:", error);
+            setSlides([data.content]); // Fallback to single slide
+          }
+        }
+
         setLoading(false);
       })
       .catch((error) => {
@@ -176,11 +192,58 @@ export default function BlogPostPage() {
                   margin: 0,
                 }}
               >
-                Blog
+                Principal ADE
               </h1>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* View Mode Toggle for pitch-deck */}
+            {slug === "pitch-deck" && !isMobile && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    color: theme.colors.textSecondary,
+                    fontWeight: "500",
+                  }}
+                >
+                  View:
+                </span>
+                <button
+                  onClick={() => setViewMode("book")}
+                  style={{
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    backgroundColor: viewMode === "book" ? theme.colors.primary : "transparent",
+                    color: viewMode === "book" ? theme.colors.background : theme.colors.text,
+                    border: `1px solid ${viewMode === "book" ? theme.colors.primary : theme.colors.border}`,
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  Slides
+                </button>
+                <button
+                  onClick={() => setViewMode("single")}
+                  style={{
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    backgroundColor: viewMode === "single" ? theme.colors.primary : "transparent",
+                    color: viewMode === "single" ? theme.colors.background : theme.colors.text,
+                    border: `1px solid ${viewMode === "single" ? theme.colors.primary : theme.colors.border}`,
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  Document
+                </button>
+              </div>
+            )}
+
             {/* Theme Selector */}
             {!isMobile && (
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -412,13 +475,45 @@ export default function BlogPostPage() {
         {/* Blog Content */}
         {!loading && !error && content && (
           <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in", paddingTop: "20px" }}>
-            <DocumentView
-              content={content}
-              fontSizeScale={fontSizeScale}
-              transparentBackground={true}
-              theme={theme}
-              maxWidth="70%"
-            />
+            {slug === "pitch-deck" && viewMode === "book" && slides.length > 0 ? (
+              <div style={{
+                width: "100%",
+                height: "calc(100vh - 120px)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "20px"
+              }}>
+                <div style={{
+                  width: "90%",
+                  height: "100%",
+                  maxWidth: "1400px",
+                  border: `2px solid ${theme.colors.border}`,
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  backgroundColor: theme.colors.background,
+                }}>
+                  <ThemedSlidePresentationBook
+                    slides={slides}
+                    viewMode="single"
+                    showNavigation={true}
+                    showSlideCounter={true}
+                    showFullscreenButton={true}
+                    containerHeight="100%"
+                    theme={theme}
+                    fontSizeScale={fontSizeScale}
+                  />
+                </div>
+              </div>
+            ) : (
+              <DocumentView
+                content={content}
+                fontSizeScale={fontSizeScale}
+                transparentBackground={true}
+                theme={theme}
+                maxWidth="70%"
+              />
+            )}
           </div>
         )}
       </div>

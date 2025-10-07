@@ -171,14 +171,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             Download Alpha
           </a>
           <Link
-            href="/blog"
+            href="/blog/pitch-deck"
             style={{
               padding: isMobile ? "8px 16px" : "10px 20px",
               fontSize: isMobile ? "14px" : "15px",
               fontWeight: "600",
-              backgroundColor: "transparent",
-              color: theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
+              backgroundColor: theme.colors.accent,
+              color: theme.colors.background,
+              border: `1px solid ${theme.colors.accent}`,
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease",
@@ -190,16 +190,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = theme.colors.primary;
-              e.currentTarget.style.color = theme.colors.primary;
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.accent}40`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = theme.colors.border;
-              e.currentTarget.style.color = theme.colors.text;
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Blog
+            PitchDeck
           </Link>
         </div>
 
