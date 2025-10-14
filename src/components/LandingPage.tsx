@@ -737,6 +737,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               {slides.length > 0 && (
                 <ThemedSlidePresentationBook
                   slides={slides}
+                  theme={theme}
                   viewMode={viewMode}
                   showNavigation={true}
                   showSlideCounter={true}
