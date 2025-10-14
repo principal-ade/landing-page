@@ -9,7 +9,6 @@ interface DynamicFileTreeSectionProps {
   fileTree: FileTree;
   theme: Theme;
   title?: string;
-  isMobile?: boolean;
   onFileSelect?: (filePath: string) => void;
 }
 
@@ -17,7 +16,6 @@ export const DynamicFileTreeSection: React.FC<DynamicFileTreeSectionProps> = ({
   fileTree,
   theme,
   title,
-  isMobile = false,
   onFileSelect,
 }) => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -167,7 +165,7 @@ export const DynamicFileTreeSection: React.FC<DynamicFileTreeSectionProps> = ({
               fontStyle: "italic",
             }}
           >
-            ℹ️ Type to search and select directories. Selected directories will be highlighted when you click "Show Selected".
+            ℹ️ Type to search and select directories. Selected directories will be highlighted when you click &ldquo;Show Selected&rdquo;.
           </div>
         )}
         {currentSelectedDirs.length > 0 && viewMode === "all" && (
@@ -178,7 +176,7 @@ export const DynamicFileTreeSection: React.FC<DynamicFileTreeSectionProps> = ({
               marginTop: "8px",
             }}
           >
-            ✓ {currentSelectedDirs.length} director{currentSelectedDirs.length === 1 ? 'y' : 'ies'} selected. Click "Show Selected" to filter the view.
+            ✓ {currentSelectedDirs.length} director{currentSelectedDirs.length === 1 ? 'y' : 'ies'} selected. Click &ldquo;Show Selected&rdquo; to filter the view.
           </div>
         )}
       </div>

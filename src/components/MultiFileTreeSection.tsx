@@ -14,14 +14,12 @@ interface Repository {
 interface MultiFileTreeSectionProps {
   repositories: Repository[];
   theme: Theme;
-  isMobile?: boolean;
   onFileSelect?: (repoId: string, filePath: string) => void;
 }
 
 export const MultiFileTreeSection: React.FC<MultiFileTreeSectionProps> = ({
   repositories,
   theme,
-  isMobile = false,
   onFileSelect,
 }) => {
   // Convert repositories to LoadedFileTreeSource format

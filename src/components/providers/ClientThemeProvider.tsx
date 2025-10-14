@@ -5,7 +5,6 @@ import { ThemeProvider, Theme } from "@a24z/industry-theme";
 import {
   terminalTheme,
   regalTheme,
-  glassmorphismTheme,
   matrixTheme,
   matrixMinimalTheme,
   slateTheme,

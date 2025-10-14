@@ -8,7 +8,6 @@ import { MultiFileTreeSection } from "./MultiFileTreeSection";
 
 interface EngineeringContextSectionProps {
   isMobile?: boolean;
-  isTablet?: boolean;
   useMultiTree?: boolean;
 }
 
@@ -431,7 +430,6 @@ const repositories = [
 
 export const EngineeringContextSection: React.FC<EngineeringContextSectionProps> = ({
   isMobile = false,
-  isTablet = false,
   useMultiTree = false,
 }) => {
   const { theme } = useTheme();
@@ -445,7 +443,6 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
       <MultiFileTreeSection
         repositories={repositories}
         theme={theme}
-        isMobile={isMobile}
         onFileSelect={(repoId, filePath) => {
           console.log(`Selected file in ${repoId}:`, filePath);
         }}
@@ -528,7 +525,6 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
           fileTree={currentRepo.tree}
           theme={theme}
           title={currentRepo.name}
-          isMobile={isMobile}
           onFileSelect={(filePath) => {
             console.log("Selected file:", filePath);
           }}

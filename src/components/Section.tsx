@@ -9,7 +9,6 @@ interface SectionProps {
   description: string | ReactNode;
   media: ReactNode;
   isMobile?: boolean;
-  isTablet?: boolean;
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -20,7 +19,6 @@ export const Section: React.FC<SectionProps> = ({
   description,
   media,
   isMobile = false,
-  isTablet = false,
 }) => {
   const { theme } = useTheme();
 

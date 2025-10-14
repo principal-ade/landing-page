@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
@@ -539,22 +540,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              position: "relative",
             }}
           >
-            <img
+            <Image
               src="/local_drawing.png"
               alt="Design and Share"
+              fill
               style={{
-                width: "100%",
-                height: "100%",
                 objectFit: "contain",
-                display: "block",
               }}
             />
           </div>
         }
         isMobile={isMobile}
-        isTablet={isTablet}
       />
 
       {/* Engineering Context Section */}
@@ -564,9 +563,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         background="grid"
         title="Engineering Context Across All Your Repositories"
         description="Browse and explore the structure of all your projects from one unified interface. Understand dependencies, architecture, and documentation across your entire engineering organization."
-        media={<EngineeringContextSection isMobile={isMobile} isTablet={isTablet} useMultiTree={true} />}
+        media={<EngineeringContextSection isMobile={isMobile} useMultiTree={true} />}
         isMobile={isMobile}
-        isTablet={isTablet}
       />
 
       {/* Book Section */}
@@ -750,7 +748,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </div>
         }
         isMobile={isMobile}
-        isTablet={isTablet}
       />
 
       {/* Agents Section */}
@@ -790,7 +787,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </div>
         }
         isMobile={isMobile}
-        isTablet={isTablet}
       />
 
       {/* Repositories Video Section */}
@@ -830,7 +826,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </div>
         }
         isMobile={isMobile}
-        isTablet={isTablet}
       />
 
       {/* Download Section */}
@@ -910,7 +905,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </div>
         }
         isMobile={isMobile}
-        isTablet={isTablet}
       />
     </div>
   );

@@ -23,6 +23,7 @@ export function SuffixDiscoveryPanel({ fileTree, onClose }: SuffixDiscoveryPanel
   // Check existing issues on mount
   useEffect(() => {
     checkExistingIssues();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDiscover = async () => {
