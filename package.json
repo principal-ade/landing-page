@@ -13,6 +13,8 @@
     "@a24z/dynamic-file-tree": "^0.1.3",
     "@a24z/industry-theme": "^0.1.1",
     "@a24z/logo-component": "^0.1.1",
+    "@a24z/observability-sdk": "^0.4.8",
+    "@libsql/client": "^0.15.15",
     "hast-util-sanitize": "^5.0.2",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.534.0",
