@@ -51,14 +51,41 @@ export async function GET() {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('[API] Error fetching session count:', error);
+    // Check for common database connection errors
+    let userMessage = 'Failed to fetch session count';
+    let status = 500;
+
+    if (error instanceof Error) {
+      const errorMessage = error.message.toLowerCase();
+
+      if (errorMessage.includes('http status 404') || errorMessage.includes('server_error')) {
+        userMessage = 'Database not found. Please check TURSO_DATABASE_URL is correct.';
+        status = 503; // Service Unavailable
+        console.error('[API] Database connection failed - URL not found. Check TURSO_DATABASE_URL environment variable.');
+      } else if (errorMessage.includes('unauthorized') || errorMessage.includes('auth')) {
+        userMessage = 'Database authentication failed. Please check TURSO_AUTH_TOKEN is correct.';
+        status = 401;
+        console.error('[API] Database authentication failed. Check TURSO_AUTH_TOKEN environment variable.');
+      } else if (errorMessage.includes('network') || errorMessage.includes('enotfound')) {
+        userMessage = 'Cannot connect to database. Please check your network connection.';
+        status = 503;
+        console.error('[API] Network error connecting to database:', error.message);
+      } else {
+        userMessage = error.message;
+        console.error('[API] Error fetching session count:', error);
+      }
+    } else {
+      console.error('[API] Error fetching session count:', error);
+    }
+
     return NextResponse.json(
       {
         error: 'Failed to fetch session count',
         count: 0,
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: userMessage,
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
-      { status: 500 }
+      { status }
     );
   }
 }

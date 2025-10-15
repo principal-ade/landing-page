@@ -13,7 +13,7 @@
     "@a24z/dynamic-file-tree": "^0.1.19",
     "@a24z/industry-theme": "^0.1.1",
     "@a24z/logo-component": "^0.1.1",
-    "@a24z/observability-sdk": "^0.4.8",
+    "@a24z/observability-sdk": "^0.5.2",
     "@libsql/client": "^0.15.15",
     "@octokit/rest": "^22.0.0",
     "@principal-ai/code-city-builder": "^0.1.1",

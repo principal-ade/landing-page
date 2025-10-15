@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
 import { RepositoryMap } from "../../components/repository-map";
+import { RepositoryList } from "../../components/RepositoryList";
 
 export default function LiveEventsPage() {
   const { theme } = useTheme();
@@ -29,6 +30,7 @@ export default function LiveEventsPage() {
   }, []);
   const [sessionCount, setSessionCount] = useState<number | null>(null);
   const [sessionCountError, setSessionCountError] = useState<string | null>(null);
+  const [selectedRepo, setSelectedRepo] = useState<{ owner: string; name: string } | null>(null);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -203,14 +205,52 @@ export default function LiveEventsPage() {
           />
         </div>
 
-        {/* Repository Map */}
+        {/* Two Column Layout: Public Repos Left, Map Right */}
         <div
           style={{
             gridColumn: "1 / -1",
-            height: "600px",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "400px 1fr",
+            gap: "24px",
+            alignItems: "start",
           }}
         >
-          <RepositoryMap owner="principal-ade" repo="landing-page" />
+          {/* Public Repository List */}
+          <div>
+            <RepositoryList
+              refreshInterval={30000}
+              showOnlyPublic={true}
+              onSelectRepo={setSelectedRepo}
+              selectedRepo={selectedRepo}
+            />
+          </div>
+
+          {/* Repository Map */}
+          <div
+            style={{
+              height: "600px",
+              minHeight: "600px",
+            }}
+          >
+            {selectedRepo ? (
+              <RepositoryMap owner={selectedRepo.owner} repo={selectedRepo.name} />
+            ) : (
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: theme.colors.backgroundSecondary,
+                  borderRadius: theme.radii[2],
+                  border: `1px solid ${theme.colors.border}`,
+                  color: theme.colors.textSecondary,
+                }}
+              >
+                Select a repository to view its map
+              </div>
+            )}
+          </div>
         </div>
         </div>
       </div>
