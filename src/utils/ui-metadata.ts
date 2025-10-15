@@ -30,7 +30,7 @@ export interface UIMetadata {
   /**
    * Position of cell labels relative to the cell
    */
-  cellLabelPosition?: 'none' | 'top' | 'bottom';
+  cellLabelPosition?: "none" | "top" | "bottom";
   /**
    * Height of cell labels as a percentage of cell height (0-1)
    */
@@ -41,13 +41,15 @@ export interface UIMetadata {
  * Get UI metadata from a CodebaseView's metadata field
  * Returns undefined if no UI metadata is present
  */
-export function getUIMetadata(metadata?: Record<string, unknown>): UIMetadata | undefined {
-  if (!metadata || typeof metadata !== 'object') {
+export function getUIMetadata(
+  metadata?: Record<string, unknown>,
+): UIMetadata | undefined {
+  if (!metadata || typeof metadata !== "object") {
     return undefined;
   }
 
   const ui = metadata.ui;
-  if (!ui || typeof ui !== 'object') {
+  if (!ui || typeof ui !== "object") {
     return undefined;
   }
 
