@@ -4,13 +4,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
-import { RepositoryMap } from "../../components/repository-map";
-import { RepositoryList } from "../../components/RepositoryList";
+import { RepositoryCard } from "../../components/RepositoryCard";
 
 export default function LiveEventsPage() {
   const { theme } = useTheme();
 
-  // Add global styles for animations
+  // Add global styles for animations and prevent scrolling
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -22,15 +21,33 @@ export default function LiveEventsPage() {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.7; }
       }
+      body, html {
+        overflow: hidden;
+        height: 100vh;
+        position: fixed;
+        width: 100%;
+      }
     `;
     document.head.appendChild(style);
+
+    // Store original body styles
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+
     return () => {
       document.head.removeChild(style);
+      // Restore original styles
+      document.body.style.overflow = originalOverflow;
+      document.body.style.position = originalPosition;
     };
   }, []);
-  const [sessionCount, setSessionCount] = useState<number | null>(null);
-  const [sessionCountError, setSessionCountError] = useState<string | null>(null);
-  const [selectedRepo, setSelectedRepo] = useState<{ owner: string; name: string } | null>(null);
+  const [sessionCount, setSessionCount] = useState<number>(0);
+  const [projectCount, setProjectCount] = useState<number>(0);
+  const [repositories, setRepositories] = useState<Array<{
+    repoName: string;
+    repoOwner: string;
+    lastActivityMs: number;
+  }>>([]);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -41,30 +58,43 @@ export default function LiveEventsPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fetch session count from API
+  // Fetch session count, repository count, and repositories from API
   useEffect(() => {
-    const fetchSessionCount = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/agent-events/session-count');
-        const data = await response.json();
+        // Fetch session count
+        const sessionResponse = await fetch('/api/agent-events/session-count');
+        const sessionData = await sessionResponse.json();
 
-        if (response.ok) {
-          setSessionCount(data.count);
-          setSessionCountError(null);
-        } else {
-          setSessionCountError(data.message || 'Failed to fetch session count');
+        if (sessionResponse.ok) {
+          setSessionCount(sessionData.count);
+        }
+
+        // Fetch repository count
+        const repoResponse = await fetch('/api/agent-events/repositories');
+        const repoData = await repoResponse.json();
+
+        if (repoResponse.ok) {
+          setProjectCount(repoData.count || 0);
+        }
+
+        // Fetch repositories by activity
+        const repoByActivityResponse = await fetch('/api/agent-events/repositories-by-activity');
+        const repoByActivityData = await repoByActivityResponse.json();
+
+        if (repoByActivityResponse.ok) {
+          setRepositories(repoByActivityData.repositories || []);
         }
       } catch (error) {
-        setSessionCountError('Network error fetching session count');
-        console.error('Error fetching session count:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
     // Initial fetch
-    fetchSessionCount();
+    fetchData();
 
     // Fetch every 5 seconds (5000ms) to match sync interval
-    const interval = setInterval(fetchSessionCount, 5000);
+    const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -74,8 +104,11 @@ export default function LiveEventsPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        height: "100vh",
+        overflow: "hidden",
         backgroundColor: theme.colors.background,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Header with Logo */}
@@ -89,170 +122,127 @@ export default function LiveEventsPage() {
           style={{
             maxWidth: "1400px",
             margin: "0 auto",
-            padding: 0,
+            padding: isMobile ? "8px 16px" : "12px 24px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "16px",
           }}
         >
-          <Link
-            href="/"
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <Link
+              href="/"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                textDecoration: "none",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
+              <Logo
+                width={isMobile ? 60 : 80}
+                height={isMobile ? 60 : 80}
+                color={theme.colors.primary}
+                particleColor={theme.colors.accent}
+                opacity={0.9}
+              />
+            </Link>
+            <div>
+              <h1
+                style={{
+                  fontSize: isMobile ? "24px" : "32px",
+                  fontWeight: "700",
+                  color: theme.colors.text,
+                  margin: 0,
+                }}
+              >
+                Principal View
+              </h1>
+            </div>
+          </div>
+
+          {/* Session and Project Count */}
+          <div
             style={{
               display: "flex",
               alignItems: "center",
-              textDecoration: "none",
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
+              gap: theme.space[3],
+              padding: isMobile ? theme.space[2] : theme.space[3],
+              backgroundColor: theme.colors.background,
+              borderRadius: theme.radii[2],
+              border: `1px solid ${theme.colors.border}`,
             }}
           >
-            <Logo
-              width={isMobile ? 60 : 80}
-              height={isMobile ? 60 : 80}
-              color={theme.colors.primary}
-              particleColor={theme.colors.accent}
-              opacity={0.9}
-            />
-          </Link>
-          <div>
-            <h1
+            <div style={{ textAlign: "right" }}>
+              <div
+                style={{
+                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
+                  fontWeight: theme.fontWeights.bold,
+                  color: theme.colors.primary,
+                  lineHeight: 1.2,
+                }}
+              >
+                {sessionCount} / {projectCount}
+              </div>
+              <div
+                style={{
+                  fontSize: theme.fontSizes[0],
+                  color: theme.colors.textSecondary,
+                  marginTop: "2px",
+                }}
+              >
+                sessions / projects
+              </div>
+            </div>
+            <div
               style={{
-                fontSize: isMobile ? "24px" : "32px",
-                fontWeight: "700",
-                color: theme.colors.text,
-                margin: 0,
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                backgroundColor: sessionCount > 0 ? theme.colors.success : theme.colors.textMuted,
+                animation: sessionCount > 0 ? "pulse 2s infinite" : "none",
               }}
-            >
-              Principal View
-            </h1>
+            />
           </div>
         </div>
       </div>
 
       <div
         style={{
-          maxWidth: "1400px",
+          maxWidth: "1600px",
           margin: "0 auto",
-          padding: isMobile ? "40px 20px" : "60px 40px",
+          padding: isMobile ? "20px" : "24px 40px",
+          flex: 1,
+          overflow: "auto",
         }}
       >
-        {/* Main Content Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-            gap: "24px",
-          }}
-        >
-        {/* Session Count Card */}
-        <div
-          style={{
-            gridColumn: "1 / -1",
-            backgroundColor: theme.colors.backgroundSecondary,
-            borderRadius: theme.radii[2],
-            padding: theme.space[4],
-            border: `2px solid ${theme.colors.primary}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <h2
-              style={{
-                fontSize: theme.fontSizes[2],
-                fontWeight: theme.fontWeights.heading,
-                marginBottom: theme.space[1],
-                color: theme.colors.textSecondary,
-              }}
-            >
-              Sessions in Last 24 Hours
-            </h2>
-            <div
-              style={{
-                fontSize: "48px",
-                fontWeight: theme.fontWeights.bold,
-                color: theme.colors.primary,
-                lineHeight: 1,
-              }}
-            >
-              {sessionCount !== null ? sessionCount : '...'}
-            </div>
-            {sessionCountError && (
-              <div
-                style={{
-                  fontSize: theme.fontSizes[0],
-                  color: theme.colors.error,
-                  marginTop: theme.space[2],
-                }}
-              >
-                {sessionCountError}
-              </div>
-            )}
-          </div>
+        {/* Repository Cards - ordered by most recent activity */}
+        {repositories.length === 0 ? (
           <div
             style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              backgroundColor: sessionCount !== null ? theme.colors.success : theme.colors.textMuted,
-              animation: sessionCount !== null ? "pulse 2s infinite" : "none",
-            }}
-          />
-        </div>
-
-        {/* Two Column Layout: Public Repos Left, Map Right */}
-        <div
-          style={{
-            gridColumn: "1 / -1",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "400px 1fr",
-            gap: "24px",
-            alignItems: "start",
-          }}
-        >
-          {/* Public Repository List */}
-          <div>
-            <RepositoryList
-              refreshInterval={30000}
-              showOnlyPublic={true}
-              onSelectRepo={setSelectedRepo}
-              selectedRepo={selectedRepo}
-            />
-          </div>
-
-          {/* Repository Map */}
-          <div
-            style={{
-              height: "600px",
-              minHeight: "600px",
+              textAlign: "center",
+              padding: theme.space[6],
+              color: theme.colors.textSecondary,
             }}
           >
-            {selectedRepo ? (
-              <RepositoryMap owner={selectedRepo.owner} repo={selectedRepo.name} />
-            ) : (
-              <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: theme.colors.backgroundSecondary,
-                  borderRadius: theme.radii[2],
-                  border: `1px solid ${theme.colors.border}`,
-                  color: theme.colors.textSecondary,
-                }}
-              >
-                Select a repository to view its map
-              </div>
-            )}
+            No repository activity found
           </div>
-        </div>
-        </div>
+        ) : (
+          repositories.map((repo) => (
+            <RepositoryCard
+              key={`${repo.repoOwner}/${repo.repoName}`}
+              owner={repo.repoOwner}
+              repo={repo.repoName}
+              lastActivityMs={repo.lastActivityMs}
+            />
+          ))
+        )}
       </div>
     </div>
   );
