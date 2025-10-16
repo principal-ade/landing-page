@@ -82,7 +82,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "300px 1fr 300px",
+          gridTemplateColumns: "1fr 1fr 1fr",
           gap: theme.space[4],
           alignItems: "start",
         }}

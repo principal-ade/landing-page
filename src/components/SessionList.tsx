@@ -236,7 +236,7 @@ export const SessionList: React.FC<SessionListProps> = ({
                     wordBreak: "break-all",
                   }}
                 >
-                  {session.sessionId.substring(0, 8)}...
+                  {session.sessionId}
                 </div>
                 <div
                   style={{

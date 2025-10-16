@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTheme } from "@a24z/industry-theme";
+import { EventPlaybackService, PlaybackState } from "../services/EventPlaybackService";
+import { EventPlaybackControls } from "./EventPlaybackControls";
 
 interface Event {
   timestamp: string;
@@ -23,6 +25,17 @@ export const EventList: React.FC<EventListProps> = ({
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [playbackState, setPlaybackState] = useState<PlaybackState>({
+    isPlaying: false,
+    currentIndex: -1,
+    totalEvents: 0,
+    speed: 1,
+    currentEvent: null,
+  });
+
+  // Use ref to persist service instance across renders
+  const playbackServiceRef = useRef<EventPlaybackService | null>(null);
+  const eventListRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -101,6 +114,79 @@ export const EventList: React.FC<EventListProps> = ({
         return eventType;
     }
   };
+
+  // Initialize playback service
+  useEffect(() => {
+    // Create service if it doesn't exist
+    if (!playbackServiceRef.current) {
+      playbackServiceRef.current = new EventPlaybackService();
+    }
+
+    // Always subscribe when component mounts (handles React Strict Mode)
+    const unsubscribe = playbackServiceRef.current.onStateChange((state) => {
+      setPlaybackState(state);
+    });
+
+    return () => {
+      unsubscribe();
+      // Don't destroy the service here, just unsubscribe
+    };
+  }, []);
+
+  // Load events into playback service when they change (but not on every fetch)
+  useEffect(() => {
+    if (!playbackServiceRef.current || events.length === 0) {
+      return;
+    }
+
+    const currentState = playbackServiceRef.current.getState();
+
+    // Only reload if event count actually changed or this is the first load
+    if (currentState.totalEvents !== events.length) {
+      playbackServiceRef.current.loadEvents(events);
+    }
+  }, [events]);
+
+  // Auto-scroll to current event
+  useEffect(() => {
+    if (playbackState.currentIndex >= 0 && eventListRef.current) {
+      const eventElements = eventListRef.current.querySelectorAll('[data-event-index]');
+      const currentElement = eventElements[playbackState.currentIndex] as HTMLElement;
+
+      if (currentElement) {
+        currentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [playbackState.currentIndex]);
+
+  // Playback control handlers
+  const handlePlay = useCallback(() => {
+    playbackServiceRef.current?.play();
+  }, []);
+
+  const handlePause = useCallback(() => {
+    playbackServiceRef.current?.pause();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    playbackServiceRef.current?.next();
+  }, []);
+
+  const handlePrevious = useCallback(() => {
+    playbackServiceRef.current?.previous();
+  }, []);
+
+  const handleGoToStart = useCallback(() => {
+    playbackServiceRef.current?.goToStart();
+  }, []);
+
+  const handleGoToEnd = useCallback(() => {
+    playbackServiceRef.current?.goToEnd();
+  }, []);
+
+  const handleSpeedChange = useCallback((speed: 0.5 | 1 | 2 | 5) => {
+    playbackServiceRef.current?.setSpeed(speed);
+  }, []);
 
   if (loading) {
     return (
@@ -204,11 +290,29 @@ export const EventList: React.FC<EventListProps> = ({
             fontSize: theme.fontSizes[0],
             color: theme.colors.textSecondary,
             marginBottom: theme.space[3],
+            wordBreak: "break-all",
           }}
         >
-          Session: {sessionId.substring(0, 12)}...
+          Session: {sessionId}
         </div>
       </div>
+
+      {/* Playback Controls */}
+      {events.length > 0 && (
+        <div style={{ marginBottom: theme.space[3] }}>
+          <EventPlaybackControls
+            playbackState={playbackState}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+            onGoToStart={handleGoToStart}
+            onGoToEnd={handleGoToEnd}
+            onSpeedChange={handleSpeedChange}
+          />
+        </div>
+      )}
+
       <div
         style={{
           fontSize: theme.fontSizes[0],
@@ -219,6 +323,7 @@ export const EventList: React.FC<EventListProps> = ({
         {events.length} event{events.length !== 1 ? "s" : ""} found
       </div>
       <div
+        ref={eventListRef}
         style={{
           overflowY: "auto",
           flex: 1,
@@ -239,15 +344,28 @@ export const EventList: React.FC<EventListProps> = ({
             {events.map((event, index) => {
               const eventType = String(event.event_type || event.eventType || "unknown");
               const toolName = event.tool_name ? String(event.tool_name) : null;
+              const isCurrentEvent = playbackState.currentIndex === index;
 
               return (
                 <div
                   key={index}
+                  data-event-index={index}
                   style={{
                     padding: theme.space[3],
-                    backgroundColor: theme.colors.background,
+                    backgroundColor: isCurrentEvent
+                      ? theme.colors.primary + "15"
+                      : theme.colors.background,
                     borderRadius: theme.radii[1],
-                    border: `1px solid ${theme.colors.border}`,
+                    border: `2px solid ${
+                      isCurrentEvent
+                        ? theme.colors.primary
+                        : theme.colors.border
+                    }`,
+                    transform: isCurrentEvent ? "scale(1.02)" : "scale(1)",
+                    transition: "all 0.3s ease",
+                    boxShadow: isCurrentEvent
+                      ? `0 4px 12px ${theme.colors.primary}30`
+                      : "none",
                   }}
                 >
                   <div

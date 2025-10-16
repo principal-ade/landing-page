@@ -120,8 +120,6 @@ export default function LiveEventsPage() {
       >
         <div
           style={{
-            maxWidth: "1400px",
-            margin: "0 auto",
             padding: isMobile ? "8px 16px" : "12px 24px",
             display: "flex",
             alignItems: "center",
@@ -215,8 +213,6 @@ export default function LiveEventsPage() {
 
       <div
         style={{
-          maxWidth: "1600px",
-          margin: "0 auto",
           padding: isMobile ? "20px" : "24px 40px",
           flex: 1,
           overflow: "auto",
