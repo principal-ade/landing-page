@@ -64,7 +64,7 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
           owner,
           repo,
           repoInfo.defaultBranch,
-          true, // noCache: true - always fetch fresh
+          false, // Use cache to avoid rate limits
         );
 
         setFileSystemTree(tree);

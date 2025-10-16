@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 
 function addCorsHeaders(response: NextResponse) {
   response.headers.set("Access-Control-Allow-Origin", "*");
@@ -20,6 +21,16 @@ export async function OPTIONS() {
 }
 
 const GITHUB_API_BASE = "https://api.github.com";
+
+// Cache durations (in seconds) for different action types
+const CACHE_DURATIONS = {
+  info: 300, // 5 minutes - repository info changes infrequently
+  tree: 180, // 3 minutes - file tree changes with commits
+  readme: 600, // 10 minutes - README changes rarely
+  file: 600, // 10 minutes - individual files change rarely
+  contributors: 1800, // 30 minutes - very stable data
+  "file-count": 600, // 10 minutes - stable data
+} as const;
 
 async function makeGitHubRequest(endpoint: string) {
   const token = process.env.GITHUB_TOKEN || null;
@@ -60,6 +71,22 @@ async function makeGitHubRequest(endpoint: string) {
   return response.json();
 }
 
+// Cached version of makeGitHubRequest
+function makeCachedGitHubRequest(
+  endpoint: string,
+  cacheKey: string,
+  revalidate: number,
+) {
+  return unstable_cache(
+    async () => makeGitHubRequest(endpoint),
+    [cacheKey],
+    {
+      revalidate,
+      tags: ["github-api", cacheKey],
+    },
+  )();
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ owner: string; name: string }> },
@@ -73,82 +100,36 @@ export async function GET(
 
     switch (action) {
       case "info":
-        data = await makeGitHubRequest(`/repos/${owner}/${name}`);
-        break;
-
-      case "pulls":
-        const state = searchParams.get("state") || "open";
-        const pullsData = await makeGitHubRequest(
-          `/repos/${owner}/${name}/pulls?state=${state}&per_page=50`,
-        );
-
-        // Fetch detailed information for each PR to get changed_files, additions, deletions
-        const detailedPulls = await Promise.all(
-          pullsData.map(async (pr: any) => {
-            try {
-              const detailData = await makeGitHubRequest(
-                `/repos/${owner}/${name}/pulls/${pr.number}`,
-              );
-              return {
-                ...pr,
-                changed_files: detailData.changed_files,
-                additions: detailData.additions,
-                deletions: detailData.deletions,
-              };
-            } catch (error) {
-              console.warn(
-                `Failed to fetch details for PR #${pr.number}:`,
-                error,
-              );
-              return pr; // Return original PR data if detail fetch fails
-            }
-          }),
-        );
-
-        data = detailedPulls;
-        break;
-
-      case "pull-files":
-        const prNumber = searchParams.get("pr");
-        if (!prNumber) {
-          return NextResponse.json(
-            { error: "PR number required" },
-            { status: 400 },
-          );
-        }
-        data = await makeGitHubRequest(
-          `/repos/${owner}/${name}/pulls/${prNumber}/files`,
-        );
-        break;
-
-      case "pull-comments":
-        const prNum = searchParams.get("pr");
-        if (!prNum) {
-          return NextResponse.json(
-            { error: "PR number required" },
-            { status: 400 },
-          );
-        }
-        data = await makeGitHubRequest(
-          `/repos/${owner}/${name}/pulls/${prNum}/comments`,
+        data = await makeCachedGitHubRequest(
+          `/repos/${owner}/${name}`,
+          `repo-info-${owner}-${name}`,
+          CACHE_DURATIONS.info,
         );
         break;
 
       case "tree":
         // Fetch from GitHub
         const ref = searchParams.get("ref") || "HEAD";
-        data = await makeGitHubRequest(
+        data = await makeCachedGitHubRequest(
           `/repos/${owner}/${name}/git/trees/${ref}?recursive=1`,
+          `repo-tree-${owner}-${name}-${ref}`,
+          CACHE_DURATIONS.tree,
         );
         break;
 
       case "readme":
-        data = await makeGitHubRequest(`/repos/${owner}/${name}/readme`);
+        data = await makeCachedGitHubRequest(
+          `/repos/${owner}/${name}/readme`,
+          `repo-readme-${owner}-${name}`,
+          CACHE_DURATIONS.readme,
+        );
         break;
 
       case "contributors":
-        data = await makeGitHubRequest(
+        data = await makeCachedGitHubRequest(
           `/repos/${owner}/${name}/contributors?per_page=100`,
+          `repo-contributors-${owner}-${name}`,
+          CACHE_DURATIONS.contributors,
         );
         break;
 
@@ -160,8 +141,10 @@ export async function GET(
             { status: 400 },
           );
         }
-        data = await makeGitHubRequest(
+        data = await makeCachedGitHubRequest(
           `/repos/${owner}/${name}/contents/${filePath}`,
+          `repo-file-${owner}-${name}-${filePath}`,
+          CACHE_DURATIONS.file,
         );
         break;
 
@@ -169,7 +152,17 @@ export async function GET(
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
 
-    return NextResponse.json(data);
+    // Add cache control headers to response
+    const cacheDuration = CACHE_DURATIONS[action as keyof typeof CACHE_DURATIONS] || 300;
+    const response = NextResponse.json(data);
+
+    // Set cache headers for CDN/browser caching
+    response.headers.set(
+      "Cache-Control",
+      `public, s-maxage=${cacheDuration}, stale-while-revalidate=${cacheDuration * 2}`,
+    );
+
+    return response;
   } catch (error) {
     console.error("GitHub API proxy error:", error);
     return NextResponse.json(
