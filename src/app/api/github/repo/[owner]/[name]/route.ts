@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
+import { gitTreeCache } from "@/lib/git-tree-cache";
 
 function addCorsHeaders(response: NextResponse) {
   response.headers.set("Access-Control-Allow-Origin", "*");
@@ -108,13 +109,27 @@ export async function GET(
         break;
 
       case "tree":
-        // Fetch from GitHub
+        // Fetch tree with in-memory caching by SHA
         const ref = searchParams.get("ref") || "HEAD";
-        data = await makeCachedGitHubRequest(
-          `/repos/${owner}/${name}/git/trees/${ref}?recursive=1`,
-          `repo-tree-${owner}-${name}-${ref}`,
-          CACHE_DURATIONS.tree,
+        const cacheKey = `${owner}/${name}/${ref}`;
+
+        // Check in-memory cache first
+        let cachedTree = gitTreeCache.get(cacheKey);
+        if (cachedTree) {
+          data = cachedTree;
+          break;
+        }
+
+        // Not in cache, fetch from GitHub
+        data = await makeGitHubRequest(
+          `/repos/${owner}/${name}/git/trees/${ref}?recursive=1`
         );
+
+        // Cache by both the requested ref AND the returned SHA
+        if (data && data.sha) {
+          gitTreeCache.set(cacheKey, data);
+          gitTreeCache.set(data.sha, data); // Also cache by SHA for direct lookups
+        }
         break;
 
       case "readme":

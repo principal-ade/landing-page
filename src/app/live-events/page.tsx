@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
 import { RepositoryCard } from "../../components/RepositoryCard";
+import { EventTimeline } from "../../components/EventTimeline";
 
 export default function LiveEventsPage() {
   const { theme } = useTheme();
@@ -218,6 +219,11 @@ export default function LiveEventsPage() {
           overflow: "auto",
         }}
       >
+        {/* Event Timeline - 24 hour view */}
+        <div style={{ marginBottom: theme.space[4] }}>
+          <EventTimeline hours={24} height={160} />
+        </div>
+
         {/* Repository Cards - ordered by most recent activity */}
         {repositories.length === 0 ? (
           <div

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { TursoObservabilitySDK } from '@a24z/observability-sdk';
 import { Octokit } from '@octokit/rest';
+import { repoVisibilityCache } from '@/lib/repo-visibility-cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,18 +70,37 @@ export async function GET() {
 
     const repositoriesWithVisibility = await Promise.all(
       repositories.map(async (repo) => {
+        // Check cache first
+        const cachedVisibility = repoVisibilityCache.get(repo.repoOwner, repo.repoName);
+        if (cachedVisibility !== null) {
+          return {
+            ...repo,
+            isPublic: cachedVisibility
+          };
+        }
+
+        // Not in cache, fetch from GitHub
         try {
           const { data } = await octokit.repos.get({
             owner: repo.repoOwner,
             repo: repo.repoName
           });
+          const isPublic = !data.private;
+
+          // Store in cache
+          repoVisibilityCache.set(repo.repoOwner, repo.repoName, isPublic);
+
           return {
             ...repo,
-            isPublic: !data.private
+            isPublic
           };
         } catch (error) {
           // If we can't fetch the repo, assume it's private or doesn't exist
           console.warn(`Could not fetch visibility for ${repo.repoOwner}/${repo.repoName}:`, error instanceof Error ? error.message : 'Unknown error');
+
+          // Cache the result as private to avoid repeated failed requests
+          repoVisibilityCache.set(repo.repoOwner, repo.repoName, false);
+
           return {
             ...repo,
             isPublic: false
