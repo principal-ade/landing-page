@@ -41,73 +41,37 @@ export async function GET(request: NextRequest) {
     // Create Turso SDK instance
     const sdk = TursoObservabilitySDK.createCloud(tursoUrl, tursoAuthToken);
 
-    // Query pre_hook_logs (events before tool execution)
-    const preHookResult = await sdk.execute(
+    // Use the new normalized_events table (v2.1.0+)
+    // This provides normalized file paths and repository context in a single query
+    const result = await sdk.execute(
       `SELECT
         timestamp,
+        event_type,
         tool_name,
-        tool_call_id,
-        'pre_hook' as event_type,
-        tool_input,
-        cwd
-       FROM pre_hook_logs
+        operation,
+        provider,
+        working_directory,
+        normalized_working_directory,
+        normalized_files,
+        repository_context
+       FROM normalized_events
        WHERE session_id = ?
        ORDER BY timestamp ASC`,
       [sessionId]
     ) as { rows?: any[] };
 
-    // Query post_hook_logs (events after tool execution)
-    const postHookResult = await sdk.execute(
-      `SELECT
-        timestamp,
-        tool_name,
-        tool_call_id,
-        'post_hook' as event_type,
-        tool_response,
-        error_message,
-        success,
-        duration_ms,
-        cwd
-       FROM post_hook_logs
-       WHERE session_id = ?
-       ORDER BY timestamp ASC`,
-      [sessionId]
-    ) as { rows?: any[] };
-
-    // Query user_prompt_logs (user interactions)
-    const userPromptResult = await sdk.execute(
-      `SELECT
-        timestamp,
-        'user_prompt' as event_type,
-        prompt,
-        character_count,
-        word_count,
-        cwd
-       FROM user_prompt_logs
-       WHERE session_id = ?
-       ORDER BY timestamp ASC`,
-      [sessionId]
-    ) as { rows?: any[] };
-
-    // Combine all events
-    const allEvents = [
-      ...(preHookResult.rows || []),
-      ...(postHookResult.rows || []),
-      ...(userPromptResult.rows || [])
-    ];
-
-    // Sort by timestamp
-    allEvents.sort((a, b) => {
-      const tsA = Number(a.timestamp) || 0;
-      const tsB = Number(b.timestamp) || 0;
-      return tsA - tsB;
-    });
-
-    // Format events
-    const events = allEvents.map(row => ({
-      ...row,
-      timestamp: row.timestamp ? new Date(Number(row.timestamp) * 1000).toISOString() : null,
-      timestampMs: row.timestamp ? Number(row.timestamp) * 1000 : 0,
+    // Format events for the API response
+    const events = (result.rows || []).map((event: any) => ({
+      timestamp: event.timestamp ? new Date(Number(event.timestamp) * 1000).toISOString() : null,
+      timestampMs: event.timestamp ? Number(event.timestamp) * 1000 : 0,
+      event_type: event.event_type,
+      tool_name: event.tool_name,
+      operation: event.operation,
+      provider: event.provider,
+      working_directory: event.working_directory,
+      normalized_working_directory: event.normalized_working_directory,
+      normalized_files: event.normalized_files ? JSON.parse(event.normalized_files) : null,
+      repository_context: event.repository_context ? JSON.parse(event.repository_context) : null,
     }));
 
     // Close the connection

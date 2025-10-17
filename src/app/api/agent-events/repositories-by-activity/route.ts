@@ -35,23 +35,15 @@ export async function GET() {
     // Create Turso SDK instance
     const sdk = TursoObservabilitySDK.createCloud(tursoUrl, tursoAuthToken);
 
-    // Query for repositories ordered by most recent activity
-    // We'll check multiple tables to get the most recent activity
+    // Query normalized_events table (v2.1.0+) - much faster than UNION across 4 tables
+    // This table is specifically optimized for repository activity queries
     const result = await sdk.execute(
       `SELECT
         repo_name as repoName,
         repo_owner as repoOwner,
         MAX(timestamp) as lastActivity,
         COUNT(DISTINCT session_id) as sessionCount
-       FROM (
-         SELECT repo_name, repo_owner, timestamp, session_id FROM pre_hook_logs
-         UNION ALL
-         SELECT repo_name, repo_owner, timestamp, session_id FROM post_hook_logs
-         UNION ALL
-         SELECT repo_name, repo_owner, timestamp, session_id FROM user_prompt_logs
-         UNION ALL
-         SELECT repo_name, repo_owner, timestamp, session_id FROM session_start_logs
-       )
+       FROM normalized_events
        WHERE repo_name IS NOT NULL AND repo_name != ''
        GROUP BY repo_name, repo_owner
        ORDER BY lastActivity DESC

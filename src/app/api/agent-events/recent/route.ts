@@ -37,56 +37,21 @@ export async function GET() {
     // Create Turso SDK instance
     const sdk = TursoObservabilitySDK.createCloud(tursoUrl, tursoAuthToken);
 
-    // Try to get most recent event from different tables
-    // First try pre_hook_logs (tool calls)
-    const preHookResult = await sdk.execute(
+    // Query normalized_events table (v2.1.0+) - single query instead of 3
+    const result = await sdk.execute(
       `SELECT
         session_id as sessionId,
         timestamp,
         repo_name as repoName,
         repo_owner as repoOwner,
         tool_name as toolName,
-        'tool_call' as eventType
-       FROM pre_hook_logs
+        event_type as eventType
+       FROM normalized_events
        ORDER BY timestamp DESC
        LIMIT 1`
     ) as { rows?: RecentEventRow[] };
 
-    // Try user_prompt_logs
-    const userPromptResult = await sdk.execute(
-      `SELECT
-        session_id as sessionId,
-        timestamp,
-        repo_name as repoName,
-        repo_owner as repoOwner,
-        'user_prompt' as eventType,
-        prompt
-       FROM user_prompt_logs
-       ORDER BY timestamp DESC
-       LIMIT 1`
-    ) as { rows?: RecentEventRow[] };
-
-    // Try session_start_logs
-    const sessionStartResult = await sdk.execute(
-      `SELECT
-        session_id as sessionId,
-        timestamp,
-        repo_name as repoName,
-        repo_owner as repoOwner,
-        'session_start' as eventType
-       FROM session_start_logs
-       ORDER BY timestamp DESC
-       LIMIT 1`
-    ) as { rows?: RecentEventRow[] };
-
-    // Combine and find the most recent
-    const allEvents = [
-      ...(preHookResult.rows || []),
-      ...(userPromptResult.rows || []),
-      ...(sessionStartResult.rows || [])
-    ];
-
-    if (allEvents.length === 0) {
+    if (!result.rows || result.rows.length === 0) {
       await sdk.close();
       return NextResponse.json({
         event: null,
@@ -95,14 +60,7 @@ export async function GET() {
       });
     }
 
-    // Sort by timestamp to get the most recent
-    allEvents.sort((a, b) => {
-      const tsA = Number(a.timestamp) || 0;
-      const tsB = Number(b.timestamp) || 0;
-      return tsB - tsA;
-    });
-
-    const mostRecent = allEvents[0];
+    const mostRecent = result.rows[0];
 
     // Format the response
     const event = {
