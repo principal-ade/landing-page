@@ -114,7 +114,7 @@ export async function GET(
         const cacheKey = `${owner}/${name}/${ref}`;
 
         // Check in-memory cache first
-        let cachedTree = gitTreeCache.get(cacheKey);
+        const cachedTree = gitTreeCache.get(cacheKey);
         if (cachedTree) {
           data = cachedTree;
           break;

@@ -172,19 +172,6 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     return clusters;
   }, [sessionSegments]);
 
-  const getEventTypeColor = (eventType?: string) => {
-    switch (eventType) {
-      case "pre_hook":
-        return theme.colors.accent;
-      case "post_hook":
-        return theme.colors.success;
-      case "user_prompt":
-        return theme.colors.primary;
-      default:
-        return theme.colors.text;
-    }
-  };
-
   // Calculate time range
   const now = Date.now();
   const totalStartTime = now - hours * 60 * 60 * 1000;
@@ -239,7 +226,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     const startDate = new Date(visibleStartTime);
 
     // Find the first midnight or noon in the visible range
-    let current = new Date(startDate);
+    const current = new Date(startDate);
     current.setMinutes(0, 0, 0);
 
     // Move to next midnight or noon

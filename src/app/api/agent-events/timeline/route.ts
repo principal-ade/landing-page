@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
           const isPublic = !data.private;
           repoVisibilityCache.set(owner, name, isPublic);
           visibilityMap.set(key, isPublic);
-        } catch (error) {
+        } catch {
           // Assume private if we can't fetch
           repoVisibilityCache.set(owner, name, false);
           visibilityMap.set(key, false);
