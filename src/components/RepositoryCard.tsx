@@ -12,6 +12,24 @@ interface RepositoryCardProps {
   lastActivityMs: number;
 }
 
+interface CurrentEvent {
+  normalized_files?: Array<{
+    originalPath: string;
+    absolutePath: string;
+    displayPath: string;
+    repository?: {
+      gitRoot: string;
+      relativePath: string;
+      remoteUrl?: string;
+      owner?: string;
+      repo?: string;
+    };
+  }>;
+  operation?: string;
+  tool_name?: string;
+  [key: string]: unknown;
+}
+
 export const RepositoryCard: React.FC<RepositoryCardProps> = ({
   owner,
   repo,
@@ -19,6 +37,13 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
 }) => {
   const { theme } = useTheme();
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
+  const [currentEvent, setCurrentEvent] = useState<CurrentEvent | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [accumulatedFiles, setAccumulatedFiles] = useState<{
+    read: Set<string>;
+    edited: Set<string>;
+  }>({ read: new Set(), edited: new Set() });
+  const previousEventTimestampRef = React.useRef<number | null>(null);
 
   const formatRelativeTime = (timestampMs: number) => {
     const now = Date.now();
@@ -31,6 +56,61 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${days}d ago`;
+  };
+
+  // Track accumulated files from events
+  React.useEffect(() => {
+    if (!currentEvent) return;
+
+    const currentTimestamp = (currentEvent as any).timestampMs || 0;
+    const previousTimestamp = previousEventTimestampRef.current;
+
+    // Reset accumulated files if we've gone back in time (playback reset or rewind)
+    if (previousTimestamp !== null && currentTimestamp < previousTimestamp) {
+      setAccumulatedFiles({ read: new Set(), edited: new Set() });
+      previousEventTimestampRef.current = currentTimestamp;
+      return;
+    }
+
+    // Update timestamp reference
+    previousEventTimestampRef.current = currentTimestamp;
+
+    // Extract file paths from the event
+    const filePaths = currentEvent.normalized_files
+      ?.map(file => file.repository?.relativePath || file.displayPath)
+      .filter((path): path is string => !!path) || [];
+
+    if (filePaths.length === 0) return;
+
+    // Accumulate files based on operation type
+    const operation = currentEvent.operation?.toLowerCase();
+
+    setAccumulatedFiles(prev => {
+      const newAccumulated = {
+        read: new Set(prev.read),
+        edited: new Set(prev.edited),
+      };
+
+      if (operation === 'read') {
+        filePaths.forEach(path => newAccumulated.read.add(path));
+      } else if (operation === 'edit' || operation === 'write') {
+        filePaths.forEach(path => newAccumulated.edited.add(path));
+      }
+
+      return newAccumulated;
+    });
+  }, [currentEvent]);
+
+  // Reset accumulated files when session changes
+  React.useEffect(() => {
+    setAccumulatedFiles({ read: new Set(), edited: new Set() });
+    previousEventTimestampRef.current = null;
+  }, [selectedSession]);
+
+  // Handler to clear accumulated files
+  const handleClearAccumulated = () => {
+    setAccumulatedFiles({ read: new Set(), edited: new Set() });
+    previousEventTimestampRef.current = null;
   };
 
   return (
@@ -105,7 +185,14 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
             minHeight: "500px",
           }}
         >
-          <RepositoryMap owner={owner} repo={repo} />
+          <RepositoryMap
+            owner={owner}
+            repo={repo}
+            currentEvent={currentEvent}
+            isPlaying={isPlaying}
+            accumulatedFiles={accumulatedFiles}
+            onClearAccumulated={handleClearAccumulated}
+          />
         </div>
 
         {/* Event List or Placeholder */}
@@ -114,6 +201,8 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
             <EventList
               sessionId={selectedSession}
               refreshInterval={5000}
+              onEventChange={setCurrentEvent}
+              onPlaybackStateChange={setIsPlaying}
             />
           ) : (
             <div

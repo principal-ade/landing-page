@@ -15,11 +15,15 @@ interface Event {
 interface EventListProps {
   sessionId: string;
   refreshInterval?: number;
+  onEventChange?: (event: Event | null) => void;
+  onPlaybackStateChange?: (isPlaying: boolean) => void;
 }
 
 export const EventList: React.FC<EventListProps> = ({
   sessionId,
   refreshInterval = 5000,
+  onEventChange,
+  onPlaybackStateChange,
 }) => {
   const { theme } = useTheme();
   const [events, setEvents] = useState<Event[]>([]);
@@ -125,13 +129,21 @@ export const EventList: React.FC<EventListProps> = ({
     // Always subscribe when component mounts (handles React Strict Mode)
     const unsubscribe = playbackServiceRef.current.onStateChange((state) => {
       setPlaybackState(state);
+      // Notify parent component about current event change
+      if (onEventChange) {
+        onEventChange(state.currentEvent as Event | null);
+      }
+      // Notify parent component about playback state change
+      if (onPlaybackStateChange) {
+        onPlaybackStateChange(state.isPlaying);
+      }
     });
 
     return () => {
       unsubscribe();
       // Don't destroy the service here, just unsubscribe
     };
-  }, []);
+  }, [onEventChange, onPlaybackStateChange]);
 
   // Load events into playback service when they change (but not on every fetch)
   useEffect(() => {

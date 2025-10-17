@@ -14,16 +14,49 @@ import {
   DEFAULT_FILE_CONFIGS,
 } from "../../utils/fileColorMapping";
 
+interface NormalizedFile {
+  originalPath: string;
+  absolutePath: string;
+  displayPath: string;
+  repository?: {
+    gitRoot: string;
+    relativePath: string;
+    remoteUrl?: string;
+    owner?: string;
+    repo?: string;
+  };
+}
+
+interface CurrentEvent {
+  normalized_files?: NormalizedFile[];
+  operation?: string;
+  tool_name?: string;
+  [key: string]: unknown;
+}
+
+interface AccumulatedFiles {
+  read: Set<string>;
+  edited: Set<string>;
+}
+
 interface RepositoryMapProps {
   owner: string;
   repo: string;
   className?: string;
+  currentEvent?: CurrentEvent | null;
+  isPlaying?: boolean;
+  accumulatedFiles?: AccumulatedFiles;
+  onClearAccumulated?: () => void;
 }
 
 export const RepositoryMap: React.FC<RepositoryMapProps> = ({
   owner,
   repo,
   className = "w-full h-full",
+  currentEvent,
+  isPlaying = false,
+  accumulatedFiles,
+  onClearAccumulated,
 }) => {
   const { theme } = useTheme();
   const [fileSystemTree, setFileSystemTree] = useState<FileTree | null>(null);
@@ -38,12 +71,117 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
   });
 
   // Create highlight layers based on file types
-  const highlightLayers = useMemo((): HighlightLayer[] => {
+  const fileTypeHighlightLayers = useMemo((): HighlightLayer[] => {
     return createFileColorHighlightLayers(
       DEFAULT_FILE_CONFIGS,
       fileSystemTree,
     );
   }, [fileSystemTree]);
+
+  // Create accumulated highlight layers for files read and edited
+  const accumulatedHighlightLayers = useMemo((): HighlightLayer[] => {
+    if (!accumulatedFiles || (!accumulatedFiles.read.size && !accumulatedFiles.edited.size)) {
+      return [];
+    }
+
+    const layers: HighlightLayer[] = [];
+
+    // Files read layer
+    if (accumulatedFiles.read.size > 0) {
+      layers.push({
+        id: 'accumulated-read',
+        name: `Files Read (${accumulatedFiles.read.size})`,
+        color: theme.colors.accent, // Blue for reads
+        enabled: true,
+        opacity: 0.4, // Lower opacity for accumulated layers
+        priority: 500, // Medium priority
+        items: Array.from(accumulatedFiles.read).map(path => ({
+          path,
+          type: 'file' as const,
+          renderStrategy: 'fill' as const,
+        })),
+      });
+    }
+
+    // Files edited layer
+    if (accumulatedFiles.edited.size > 0) {
+      layers.push({
+        id: 'accumulated-edited',
+        name: `Files Edited (${accumulatedFiles.edited.size})`,
+        color: theme.colors.warning, // Orange for edits
+        enabled: true,
+        opacity: 0.4, // Lower opacity for accumulated layers
+        priority: 510, // Slightly higher priority than read
+        items: Array.from(accumulatedFiles.edited).map(path => ({
+          path,
+          type: 'file' as const,
+          renderStrategy: 'fill' as const,
+        })),
+      });
+    }
+
+    return layers;
+  }, [accumulatedFiles, theme.colors]);
+
+  // Create current event highlight layer (the active event being played)
+  const currentEventHighlightLayer = useMemo((): HighlightLayer[] => {
+    if (!currentEvent?.normalized_files || currentEvent.normalized_files.length === 0) {
+      return [];
+    }
+
+    // Determine color based on operation type
+    const getOperationColor = (operation?: string): string => {
+      switch (operation) {
+        case 'read':
+          return theme.colors.accent; // Blue for reads
+        case 'write':
+        case 'edit':
+          return theme.colors.warning; // Orange for edits/writes
+        default:
+          return theme.colors.primary; // Default color
+      }
+    };
+
+    const color = getOperationColor(currentEvent.operation);
+
+    // Extract file paths from normalized_files
+    const filePaths = currentEvent.normalized_files
+      .map(file => file.repository?.relativePath || file.displayPath)
+      .filter((path): path is string => !!path);
+
+    if (filePaths.length === 0) {
+      return [];
+    }
+
+    return [{
+      id: `current-event-${Date.now()}`,
+      name: `Current: ${currentEvent.tool_name || 'Unknown'} (${currentEvent.operation || 'N/A'})`,
+      color,
+      enabled: true,
+      opacity: 0.9, // Higher opacity for current event
+      priority: 1000, // Highest priority to show above accumulated layers
+      items: filePaths.map(path => ({
+        path,
+        type: 'file' as const,
+        renderStrategy: 'glow' as const, // Use glow effect for current event
+      })),
+    }];
+  }, [currentEvent, theme.colors]);
+
+  // Determine if we have any accumulated files
+  const hasAccumulatedFiles = accumulatedFiles &&
+    (accumulatedFiles.read.size > 0 || accumulatedFiles.edited.size > 0);
+
+  // Combine file type layers with event layers (event layers on top)
+  // Hide file type highlighting when playback is active OR when there are accumulated files
+  const highlightLayers = useMemo((): HighlightLayer[] => {
+    if (isPlaying || hasAccumulatedFiles) {
+      // During playback or when showing accumulated results: only show accumulated layers + current event
+      return [...accumulatedHighlightLayers, ...currentEventHighlightLayer];
+    }
+    // When not playing and no accumulated files: show file type layers + current event
+    return [...fileTypeHighlightLayers, ...currentEventHighlightLayer];
+  }, [fileTypeHighlightLayers, accumulatedHighlightLayers, currentEventHighlightLayer, isPlaying, hasAccumulatedFiles]);
 
   // Load repository data
   useEffect(() => {
@@ -150,9 +288,51 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
         position: "relative",
         width: "500px",
         height: "500px",
+        display: "flex",
+        flexDirection: "column",
       }}
       className={className}
     >
+      {/* Clear button - only show when there are accumulated files and not playing */}
+      {hasAccumulatedFiles && !isPlaying && onClearAccumulated && (
+        <div
+          style={{
+            position: "absolute",
+            top: theme.space[2],
+            right: theme.space[2],
+            zIndex: 1000,
+          }}
+        >
+          <button
+            onClick={onClearAccumulated}
+            style={{
+              backgroundColor: theme.colors.backgroundSecondary,
+              color: theme.colors.text,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              padding: `${theme.space[1]} ${theme.space[3]}`,
+              fontSize: theme.fontSizes[0],
+              fontWeight: theme.fontWeights.medium,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: theme.space[1],
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = theme.colors.background;
+              e.currentTarget.style.borderColor = theme.colors.primary;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+              e.currentTarget.style.borderColor = theme.colors.border;
+            }}
+          >
+            Clear Highlights
+          </button>
+        </div>
+      )}
+
       {cityData ? (
         <ArchitectureMapHighlightLayers
           cityData={cityData}
