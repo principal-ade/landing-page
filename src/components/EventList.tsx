@@ -279,7 +279,7 @@ export const EventList: React.FC<EventListProps> = ({
         borderRadius: theme.radii[2],
         border: `1px solid ${theme.colors.border}`,
         padding: theme.space[4],
-        maxHeight: "600px",
+        height: "100%",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",

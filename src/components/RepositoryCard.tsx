@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import { useTheme } from "@a24z/industry-theme";
 import { RepositoryMap } from "./repository-map";
-import { SessionList } from "./SessionList";
 import { EventList } from "./EventList";
 
 interface RepositoryCardProps {
   owner: string;
   repo: string;
   lastActivityMs: number;
+  selectedSession?: string | null;
 }
 
 interface CurrentEvent {
@@ -34,9 +34,9 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
   owner,
   repo,
   lastActivityMs,
+  selectedSession = null,
 }) => {
   const { theme } = useTheme();
-  const [selectedSession, setSelectedSession] = useState<string | null>(null);
   const [currentEvent, setCurrentEvent] = useState<CurrentEvent | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [accumulatedFiles, setAccumulatedFiles] = useState<{
@@ -158,72 +158,97 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
         </div>
       </div>
 
-      {/* Three column layout: Sessions (left), Map (middle), Events (right) */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: theme.space[4],
-          alignItems: "start",
-        }}
-      >
-        {/* Sessions List */}
-        <div>
-          <SessionList
-            owner={owner}
-            repo={repo}
-            onSelectSession={setSelectedSession}
-            selectedSession={selectedSession}
-            refreshInterval={5000}
-          />
-        </div>
-
-        {/* Repository Map */}
+      {/* Three column layout: Events (left), Map (middle), Summary (right) - only shown when session selected */}
+      {selectedSession ? (
         <div
           style={{
-            height: "500px",
-            minHeight: "500px",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: theme.space[4],
+            alignItems: "start",
           }}
         >
-          <RepositoryMap
-            owner={owner}
-            repo={repo}
-            currentEvent={currentEvent}
-            isPlaying={isPlaying}
-            accumulatedFiles={accumulatedFiles}
-            onClearAccumulated={handleClearAccumulated}
-          />
-        </div>
-
-        {/* Event List or Placeholder */}
-        <div>
-          {selectedSession ? (
+          {/* Event List */}
+          <div
+            style={{
+              height: "500px",
+              minHeight: "500px",
+            }}
+          >
             <EventList
               sessionId={selectedSession}
               refreshInterval={5000}
               onEventChange={setCurrentEvent}
               onPlaybackStateChange={setIsPlaying}
             />
-          ) : (
-            <div
+          </div>
+
+          {/* Repository Map */}
+          <div
+            style={{
+              height: "500px",
+              minHeight: "500px",
+            }}
+          >
+            <RepositoryMap
+              owner={owner}
+              repo={repo}
+              currentEvent={currentEvent}
+              isPlaying={isPlaying}
+              accumulatedFiles={accumulatedFiles}
+              onClearAccumulated={handleClearAccumulated}
+            />
+          </div>
+
+          {/* Summary Placeholder */}
+          <div
+            style={{
+              height: "500px",
+              backgroundColor: theme.colors.background,
+              borderRadius: theme.radii[2],
+              border: `1px solid ${theme.colors.border}`,
+              padding: theme.space[4],
+            }}
+          >
+            <h3
               style={{
-                height: "500px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: theme.colors.background,
-                borderRadius: theme.radii[2],
-                border: `1px solid ${theme.colors.border}`,
-                color: theme.colors.textSecondary,
-                padding: theme.space[4],
-                textAlign: "center",
+                fontSize: theme.fontSizes[2],
+                fontWeight: theme.fontWeights.bold,
+                color: theme.colors.text,
+                margin: 0,
+                marginBottom: theme.space[3],
               }}
             >
-              Select a session to view events
+              Session Summary
+            </h3>
+            <div
+              style={{
+                color: theme.colors.textSecondary,
+                fontSize: theme.fontSizes[1],
+              }}
+            >
+              Summary content will appear here
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          style={{
+            height: "200px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: theme.colors.background,
+            borderRadius: theme.radii[2],
+            border: `1px solid ${theme.colors.border}`,
+            color: theme.colors.textSecondary,
+            padding: theme.space[4],
+            textAlign: "center",
+          }}
+        >
+          Click on a session in the timeline above to view details
+        </div>
+      )}
     </div>
   );
 };

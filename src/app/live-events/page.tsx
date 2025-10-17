@@ -52,6 +52,11 @@ export default function LiveEventsPage() {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
+  const [selectedSession, setSelectedSession] = useState<{
+    sessionId: string;
+    repoOwner?: string;
+    repoName?: string;
+  } | null>(null);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -101,6 +106,21 @@ export default function LiveEventsPage() {
   }, []);
 
   const isMobile = windowWidth < 768;
+
+  // Handle timeline session click
+  const handleTimelineEventClick = (event: {
+    sessionId?: string;
+    repoOwner?: string;
+    repoName?: string;
+  }) => {
+    if (event.sessionId) {
+      setSelectedSession({
+        sessionId: event.sessionId,
+        repoOwner: event.repoOwner,
+        repoName: event.repoName,
+      });
+    }
+  };
 
   return (
     <div
@@ -221,7 +241,11 @@ export default function LiveEventsPage() {
       >
         {/* Event Timeline - 24 hour view */}
         <div style={{ marginBottom: theme.space[4] }}>
-          <EventTimeline hours={24} height={160} />
+          <EventTimeline
+            hours={24}
+            height={160}
+            onEventClick={handleTimelineEventClick}
+          />
         </div>
 
         {/* Repository Cards - ordered by most recent activity */}
@@ -242,6 +266,12 @@ export default function LiveEventsPage() {
               owner={repo.repoOwner}
               repo={repo.repoName}
               lastActivityMs={repo.lastActivityMs}
+              selectedSession={
+                selectedSession?.repoOwner === repo.repoOwner &&
+                selectedSession?.repoName === repo.repoName
+                  ? selectedSession.sessionId
+                  : null
+              }
             />
           ))
         )}

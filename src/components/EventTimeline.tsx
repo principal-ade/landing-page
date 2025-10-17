@@ -60,7 +60,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartOffset, setDragStartOffset] = useState(0);
-  const [showPublicOnly, setShowPublicOnly] = useState(false);
+  const [showPublicOnly, setShowPublicOnly] = useState(true);
 
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -812,9 +812,14 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
           const minWidth = 0.1; // 0.1% of timeline
           const displayWidth = Math.max(width, minWidth);
 
-          // Generate a consistent color for this session
-          // Use sessionId for color generation (doesn't leak repo info)
-          const sessionColor = `hsl(${(segment.sessionId.charCodeAt(0) * 137.5) % 360}, 60%, 60%)`;
+          // Generate a consistent color based on repository
+          // Use repository owner/name for color generation
+          const repoKey = segment.repoOwner && segment.repoName
+            ? `${segment.repoOwner}/${segment.repoName}`
+            : segment.sessionId; // Fallback to sessionId if no repo info
+
+          const colorSeed = repoKey.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const sessionColor = `hsl(${(colorSeed * 137.5) % 360}, 60%, 60%)`;
 
           return (
             <div
