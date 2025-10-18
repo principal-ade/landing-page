@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import { useTheme } from "@a24z/industry-theme";
 import { RepositoryMap } from "./repository-map";
 import { EventList } from "./EventList";
+import { RepositoryTimeline } from "./RepositoryTimeline";
 
 interface RepositoryCardProps {
   owner: string;
   repo: string;
   lastActivityMs: number;
   selectedSession?: string | null;
+  onSessionClick?: (sessionId: string) => void;
 }
 
 interface CurrentEvent {
@@ -35,6 +37,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
   repo,
   lastActivityMs,
   selectedSession = null,
+  onSessionClick,
 }) => {
   const { theme } = useTheme();
   const [currentEvent, setCurrentEvent] = useState<CurrentEvent | null>(null);
@@ -129,7 +132,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: theme.space[4],
+          marginBottom: theme.space[3],
           paddingBottom: theme.space[3],
           borderBottom: `1px solid ${theme.colors.border}`,
         }}
@@ -156,6 +159,18 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
             Last activity: {formatRelativeTime(lastActivityMs)}
           </div>
         </div>
+      </div>
+
+      {/* Repository Timeline */}
+      <div style={{ marginBottom: theme.space[4] }}>
+        <RepositoryTimeline
+          repoName={repo}
+          repoOwner={owner}
+          hours={24}
+          height={100}
+          onSessionClick={onSessionClick}
+          selectedSession={selectedSession}
+        />
       </div>
 
       {/* Three column layout: Events (left), Map (middle), Summary (right) - only shown when session selected */}

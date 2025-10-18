@@ -122,6 +122,15 @@ export default function LiveEventsPage() {
     }
   };
 
+  // Handle repository timeline session click
+  const handleRepositorySessionClick = (repoOwner: string, repoName: string) => (sessionId: string) => {
+    setSelectedSession({
+      sessionId,
+      repoOwner,
+      repoName,
+    });
+  };
+
   return (
     <div
       style={{
@@ -272,6 +281,7 @@ export default function LiveEventsPage() {
                   ? selectedSession.sessionId
                   : null
               }
+              onSessionClick={handleRepositorySessionClick(repo.repoOwner, repo.repoName)}
             />
           ))
         )}
