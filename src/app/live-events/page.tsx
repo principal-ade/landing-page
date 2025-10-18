@@ -190,7 +190,7 @@ export default function LiveEventsPage() {
                   margin: 0,
                 }}
               >
-                Principal View
+                Engineer Activity
               </h1>
             </div>
           </div>

@@ -488,7 +488,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
           </div>
         </div>
 
-        {/* Filters and zoom controls */}
+        {/* Filters */}
         <div style={{ display: "flex", gap: theme.space[3], alignItems: "center" }}>
           {/* Public only filter */}
           <label
@@ -512,66 +512,6 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
             />
             <span>Public only</span>
           </label>
-
-          {/* Zoom controls */}
-          <div style={{ display: "flex", gap: theme.space[1], alignItems: "center" }}>
-            <button
-              onClick={handleZoomOut}
-              disabled={zoomLevel <= 1}
-              style={{
-                padding: `${theme.space[1]} ${theme.space[2]}`,
-                fontSize: theme.fontSizes[0],
-                backgroundColor: theme.colors.background,
-                color: theme.colors.text,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                cursor: zoomLevel <= 1 ? "not-allowed" : "pointer",
-                opacity: zoomLevel <= 1 ? 0.5 : 1,
-              }}
-            >
-              -
-            </button>
-            <span
-              style={{
-                fontSize: theme.fontSizes[0],
-                color: theme.colors.text,
-                minWidth: "30px",
-                textAlign: "center",
-              }}
-            >
-              {zoomLevel}x
-            </span>
-            <button
-              onClick={handleZoomIn}
-              style={{
-                padding: `${theme.space[1]} ${theme.space[2]}`,
-                fontSize: theme.fontSizes[0],
-                backgroundColor: theme.colors.background,
-                color: theme.colors.text,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                cursor: "pointer",
-              }}
-            >
-              +
-            </button>
-            {zoomLevel > 1 && (
-              <button
-                onClick={handleResetZoom}
-                style={{
-                  padding: `${theme.space[1]} ${theme.space[2]}`,
-                  fontSize: theme.fontSizes[0],
-                  backgroundColor: theme.colors.background,
-                  color: theme.colors.primary,
-                  border: `1px solid ${theme.colors.primary}`,
-                  borderRadius: theme.radii[1],
-                  cursor: "pointer",
-                }}
-              >
-                Reset
-              </button>
-            )}
-          </div>
         </div>
       </div>
 

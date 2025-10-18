@@ -457,7 +457,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
         overflow: "hidden",
       }}
     >
-      {/* Compact header with zoom controls */}
+      {/* Compact header */}
       <div
         style={{
           display: "flex",
@@ -475,66 +475,6 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
           {sessionSegments.length} session{sessionSegments.length !== 1 ? "s" : ""} • {events.length} event
           {events.length !== 1 ? "s" : ""}
           {activityClusters.length > 1 && ` • ${activityClusters.length} clusters`}
-        </div>
-
-        {/* Zoom controls */}
-        <div style={{ display: "flex", gap: theme.space[1], alignItems: "center" }}>
-          <button
-            onClick={handleZoomOut}
-            disabled={zoomLevel <= 1}
-            style={{
-              padding: `2px ${theme.space[1]}`,
-              fontSize: theme.fontSizes[0],
-              backgroundColor: theme.colors.background,
-              color: theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              cursor: zoomLevel <= 1 ? "not-allowed" : "pointer",
-              opacity: zoomLevel <= 1 ? 0.5 : 1,
-            }}
-          >
-            -
-          </button>
-          <span
-            style={{
-              fontSize: theme.fontSizes[0],
-              color: theme.colors.text,
-              minWidth: "25px",
-              textAlign: "center",
-            }}
-          >
-            {zoomLevel}x
-          </span>
-          <button
-            onClick={handleZoomIn}
-            style={{
-              padding: `2px ${theme.space[1]}`,
-              fontSize: theme.fontSizes[0],
-              backgroundColor: theme.colors.background,
-              color: theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              cursor: "pointer",
-            }}
-          >
-            +
-          </button>
-          {zoomLevel > 1 && (
-            <button
-              onClick={handleResetZoom}
-              style={{
-                padding: `2px ${theme.space[1]}`,
-                fontSize: theme.fontSizes[0],
-                backgroundColor: theme.colors.background,
-                color: theme.colors.primary,
-                border: `1px solid ${theme.colors.primary}`,
-                borderRadius: theme.radii[1],
-                cursor: "pointer",
-              }}
-            >
-              Reset
-            </button>
-          )}
         </div>
       </div>
 
@@ -590,7 +530,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
         ref={timelineRef}
         style={{
           position: "relative",
-          height: `${height - (activityClusters.length > 1 ? 65 : 45)}px`,
+          height: `${height - (activityClusters.length > 1 ? 75 : 55)}px`,
           width: "100%",
           cursor: isDragging ? "grabbing" : zoomLevel > 1 ? "grab" : "default",
         }}
@@ -619,7 +559,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
                 top: 0,
                 left: `${leftPos}%`,
                 width: `${width}%`,
-                bottom: showLabels ? "16px" : 0,
+                bottom: showLabels ? "30px" : 0,
                 backgroundColor: period.isNight ? `${theme.colors.primary}08` : "transparent",
                 pointerEvents: "none",
                 zIndex: 0,
@@ -640,7 +580,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
                 position: "absolute",
                 left: `${position}%`,
                 top: 0,
-                bottom: showLabels ? "16px" : 0,
+                bottom: showLabels ? "30px" : 0,
                 pointerEvents: "none",
               }}
             >
@@ -686,8 +626,10 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
               bottom: 0,
               left: 0,
               right: 0,
-              height: "16px",
+              height: "30px",
               pointerEvents: "none",
+              display: "flex",
+              alignItems: "flex-end",
             }}
           >
             {timeMarkers.map((marker, idx) => {

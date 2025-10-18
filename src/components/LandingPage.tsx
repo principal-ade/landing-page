@@ -33,9 +33,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
+  const [windowHeight, setWindowHeight] = React.useState(
+    typeof window !== "undefined" ? window.innerHeight : 768,
+  );
 
   React.useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -90,6 +96,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
+  // iPad landscape (1024x768) has constrained height
+  const isConstrainedHeight = windowHeight < 900;
+
   // Create a subtle grid pattern
   const gridBackground = `
     linear-gradient(${theme.colors.border}40 1px, transparent 1px),
@@ -119,7 +128,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <div
           style={{
             position: "absolute",
-            top: "calc(50% - 120px)",
+            top: isConstrainedHeight ? "calc(50% - 50px)" : "calc(50% - 120px)",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "200%",
@@ -129,110 +138,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             zIndex: 0,
           }}
         />
-        {/* Action Buttons - Bottom Center */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: isMobile ? "160px" : "180px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10,
-            display: "flex",
-            gap: "16px",
-            alignItems: "center",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            maxWidth: isMobile ? "90%" : "auto",
-          }}
-        >
-          <a
-            href="/download"
-            style={{
-              padding: isMobile ? "8px 16px" : "10px 20px",
-              fontSize: isMobile ? "14px" : "15px",
-              fontWeight: "600",
-              backgroundColor: theme.colors.primary,
-              color: theme.colors.background,
-              border: `1px solid ${theme.colors.primary}`,
-              borderRadius: "8px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              width: isMobile ? "100px" : "200px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Download Alpha
-          </a>
-          <Link
-            href="/blog/pitch-deck"
-            style={{
-              padding: isMobile ? "8px 16px" : "10px 20px",
-              fontSize: isMobile ? "14px" : "15px",
-              fontWeight: "600",
-              backgroundColor: theme.colors.accent,
-              color: theme.colors.background,
-              border: `1px solid ${theme.colors.accent}`,
-              borderRadius: "8px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              width: isMobile ? "100px" : "200px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.accent}40`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            PitchDeck
-          </Link>
-          <Link
-            href="/live-events"
-            style={{
-              padding: isMobile ? "8px 16px" : "10px 20px",
-              fontSize: isMobile ? "14px" : "15px",
-              fontWeight: "600",
-              backgroundColor: theme.colors.success,
-              color: theme.colors.background,
-              border: `1px solid ${theme.colors.success}`,
-              borderRadius: "8px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              width: isMobile ? "100px" : "200px",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.success}40`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Live Events
-          </Link>
-        </div>
 
         {/* Gradient overlay for better contrast */}
         <div
@@ -256,38 +161,130 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             textAlign: "center",
             position: "relative",
             zIndex: 2,
-            marginTop: "-180px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isMobile ? "20px" : isConstrainedHeight ? "40px" : "80px",
+            padding: isMobile ? "0 20px" : "0 40px",
           }}
         >
-          <h2
-            style={{
-              fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
-              fontWeight: "600",
-              marginTop: "0",
-              marginBottom: "0",
-              color: theme.colors.accent,
-              width: "100%",
-              paddingLeft: "4px",
-            }}
-          >
-            Principal
-          </h2>
+          {/* Left Quick Links */}
+          {!isMobile && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: isConstrainedHeight ? "30px" : "60px",
+                flex: "0 0 auto",
+              }}
+            >
+              <div
+                onClick={() => {
+                  const section = document.getElementById("design-and-share");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: isConstrainedHeight ? "13px" : "16px",
+                  fontWeight: "600",
+                  color: theme.colors.text,
+                  transition: "all 0.3s ease",
+                  textDecoration: "none",
+                  padding: isConstrainedHeight ? "8px 12px" : "12px 16px",
+                  backgroundColor: `${theme.colors.background}80`,
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  border: `1px solid ${theme.colors.border}40`,
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = theme.colors.primary;
+                  e.currentTarget.style.transform = "translateX(8px)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = theme.colors.text;
+                  e.currentTarget.style.transform = "translateX(0)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+                }}
+              >
+                Design And Share
+              </div>
+              <div
+                onClick={() => {
+                  const section = document.getElementById("markdown-viewer");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: isConstrainedHeight ? "13px" : "16px",
+                  fontWeight: "600",
+                  color: theme.colors.text,
+                  transition: "all 0.3s ease",
+                  textDecoration: "none",
+                  padding: isConstrainedHeight ? "8px 12px" : "12px 16px",
+                  backgroundColor: `${theme.colors.background}80`,
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  border: `1px solid ${theme.colors.border}40`,
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = theme.colors.primary;
+                  e.currentTarget.style.transform = "translateX(8px)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = theme.colors.text;
+                  e.currentTarget.style.transform = "translateX(0)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+                }}
+              >
+                Review Plans
+              </div>
+            </div>
+          )}
 
-          {/* Logo */}
+          {/* Center: Logo and Titles */}
           <div
             style={{
-              marginBottom: "0",
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
-              position: "relative",
+              gap: isMobile ? "12px" : isConstrainedHeight ? "16px" : "20px",
+              flex: "0 0 auto",
             }}
           >
+            <h2
+              style={{
+                fontSize: isMobile ? "24px" : isConstrainedHeight ? "26px" : isTablet ? "28px" : "32px",
+                fontWeight: "600",
+                margin: "0",
+                color: theme.colors.accent,
+              }}
+            >
+              Principal
+            </h2>
+
+            {/* Logo */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
             <div
               onClick={handleLogoClick}
               style={{
-                width: isMobile ? "200px" : "260px",
-                height: isMobile ? "200px" : "260px",
+                width: isMobile ? "200px" : isConstrainedHeight ? "220px" : "260px",
+                height: isMobile ? "200px" : isConstrainedHeight ? "220px" : "260px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 display: "flex",
@@ -304,8 +301,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               }}
             >
               <Logo
-                width={isMobile ? 200 : 260}
-                height={isMobile ? 200 : 260}
+                width={isMobile ? 200 : isConstrainedHeight ? 220 : 260}
+                height={isMobile ? 200 : isConstrainedHeight ? 220 : 260}
                 color={theme.colors.primary}
                 particleColor={theme.colors.accent}
                 opacity={0.9}
@@ -315,213 +312,235 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
 
           <h3
             style={{
-              fontSize: isMobile ? "20px" : isTablet ? "24px" : "28px",
+              fontSize: isMobile ? "20px" : isConstrainedHeight ? "22px" : isTablet ? "24px" : "28px",
               fontWeight: "600",
-              marginTop: "0",
-              marginBottom: "20px",
+              margin: "0",
               color: theme.colors.primary,
-              width: "100%",
             }}
           >
             ADE
           </h3>
+          </div>
 
+          {/* Right Quick Links */}
+          {!isMobile && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: isConstrainedHeight ? "30px" : "60px",
+                flex: "0 0 auto",
+              }}
+            >
+              <div
+                onClick={() => {
+                  const section = document.getElementById("agents-and-more");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: isConstrainedHeight ? "13px" : "16px",
+                  fontWeight: "600",
+                  color: theme.colors.text,
+                  transition: "all 0.3s ease",
+                  textDecoration: "none",
+                  padding: isConstrainedHeight ? "8px 12px" : "12px 16px",
+                  backgroundColor: `${theme.colors.background}80`,
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  border: `1px solid ${theme.colors.border}40`,
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = theme.colors.primary;
+                  e.currentTarget.style.transform = "translateX(-8px)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = theme.colors.text;
+                  e.currentTarget.style.transform = "translateX(0)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+                }}
+              >
+                Manage Agents
+              </div>
+              <div
+                onClick={() => {
+                  const section = document.getElementById("repositories-video");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: isConstrainedHeight ? "13px" : "16px",
+                  fontWeight: "600",
+                  color: theme.colors.text,
+                  transition: "all 0.3s ease",
+                  textDecoration: "none",
+                  padding: isConstrainedHeight ? "8px 12px" : "12px 16px",
+                  backgroundColor: `${theme.colors.background}80`,
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  border: `1px solid ${theme.colors.border}40`,
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = theme.colors.primary;
+                  e.currentTarget.style.transform = "translateX(-8px)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = theme.colors.text;
+                  e.currentTarget.style.transform = "translateX(0)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+                }}
+              >
+                All Your Projects
+              </div>
+              <div
+                onClick={() => {
+                  const section = document.getElementById("engineering-context");
+                  if (section) {
+                    section.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: isConstrainedHeight ? "13px" : "16px",
+                  fontWeight: "600",
+                  color: theme.colors.text,
+                  transition: "all 0.3s ease",
+                  textDecoration: "none",
+                  padding: isConstrainedHeight ? "8px 12px" : "12px 16px",
+                  backgroundColor: `${theme.colors.background}80`,
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "12px",
+                  border: `1px solid ${theme.colors.border}40`,
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = theme.colors.primary;
+                  e.currentTarget.style.transform = "translateX(-8px)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = theme.colors.text;
+                  e.currentTarget.style.transform = "translateX(0)";
+                  e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+                }}
+              >
+                Engineering Context
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Quick Links - Left Side */}
+        {/* Action Buttons - Bottom Center */}
         <div
           style={{
             position: "absolute",
-            left: isMobile ? "20px" : "350px",
-            top: "40%",
-            transform: "translateY(-50%)",
+            bottom: isMobile ? "60px" : isConstrainedHeight ? "40px" : "60px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 3,
             display: "flex",
-            flexDirection: "column",
-            gap: "80px",
-            zIndex: 10,
+            gap: "16px",
+            alignItems: "center",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            maxWidth: isMobile ? "90%" : "auto",
           }}
         >
-          <div
-            onClick={() => {
-              const section = document.getElementById("design-and-share");
-              if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
+          <a
+            href="/download"
             style={{
-              cursor: "pointer",
-              fontSize: isMobile ? "16px" : "18px",
+              padding: isMobile ? "8px 16px" : isConstrainedHeight ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : isConstrainedHeight ? "13px" : "15px",
               fontWeight: "600",
-              color: theme.colors.text,
-              transition: "all 0.3s ease",
+              backgroundColor: theme.colors.primary,
+              color: theme.colors.background,
+              border: `1px solid ${theme.colors.primary}`,
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               textDecoration: "none",
-              padding: "16px 24px",
-              backgroundColor: `${theme.colors.background}80`,
-              backdropFilter: "blur(10px)",
-              borderRadius: "12px",
-              border: `1px solid ${theme.colors.border}40`,
+              width: isMobile ? "100px" : isConstrainedHeight ? "150px" : "200px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-              e.currentTarget.style.transform = "translateX(8px)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.colors.text;
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Design And Share
-          </div>
-          <div
-            onClick={() => {
-              const section = document.getElementById("markdown-viewer");
-              if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
+            Download Alpha
+          </a>
+          <Link
+            href="/blog/pitch-deck"
             style={{
-              cursor: "pointer",
-              fontSize: isMobile ? "16px" : "18px",
+              padding: isMobile ? "8px 16px" : isConstrainedHeight ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : isConstrainedHeight ? "13px" : "15px",
               fontWeight: "600",
-              color: theme.colors.text,
-              transition: "all 0.3s ease",
+              backgroundColor: theme.colors.accent,
+              color: theme.colors.background,
+              border: `1px solid ${theme.colors.accent}`,
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               textDecoration: "none",
-              padding: "16px 24px",
-              backgroundColor: `${theme.colors.background}80`,
-              backdropFilter: "blur(10px)",
-              borderRadius: "12px",
-              border: `1px solid ${theme.colors.border}40`,
+              width: isMobile ? "100px" : isConstrainedHeight ? "150px" : "200px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-              e.currentTarget.style.transform = "translateX(8px)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.accent}40`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.colors.text;
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Review Plans
-          </div>
-        </div>
-
-        {/* Quick Links - Right Side */}
-        <div
-          style={{
-            position: "absolute",
-            right: isMobile ? "20px" : "350px",
-            top: "40%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "80px",
-            alignItems: "flex-end",
-            zIndex: 10,
-          }}
-        >
-          <div
-            onClick={() => {
-              const section = document.getElementById("agents-and-more");
-              if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
+            PitchDeck
+          </Link>
+          <Link
+            href="/live-events"
             style={{
-              cursor: "pointer",
-              fontSize: isMobile ? "16px" : "18px",
+              padding: isMobile ? "8px 16px" : isConstrainedHeight ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : isConstrainedHeight ? "13px" : "15px",
               fontWeight: "600",
-              color: theme.colors.text,
-              transition: "all 0.3s ease",
+              backgroundColor: theme.colors.success,
+              color: theme.colors.background,
+              border: `1px solid ${theme.colors.success}`,
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               textDecoration: "none",
-              padding: "16px 24px",
-              backgroundColor: `${theme.colors.background}80`,
-              backdropFilter: "blur(10px)",
-              borderRadius: "12px",
-              border: `1px solid ${theme.colors.border}40`,
+              width: isMobile ? "100px" : isConstrainedHeight ? "150px" : "200px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-              e.currentTarget.style.transform = "translateX(-8px)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.success}40`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.colors.text;
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Manage Agents
-          </div>
-          <div
-            onClick={() => {
-              const section = document.getElementById("repositories-video");
-              if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
-            style={{
-              cursor: "pointer",
-              fontSize: isMobile ? "16px" : "18px",
-              fontWeight: "600",
-              color: theme.colors.text,
-              transition: "all 0.3s ease",
-              textDecoration: "none",
-              padding: "16px 24px",
-              backgroundColor: `${theme.colors.background}80`,
-              backdropFilter: "blur(10px)",
-              borderRadius: "12px",
-              border: `1px solid ${theme.colors.border}40`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-              e.currentTarget.style.transform = "translateX(-8px)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.colors.text;
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
-            }}
-          >
-            All Your Projects
-          </div>
-          <div
-            onClick={() => {
-              const section = document.getElementById("engineering-context");
-              if (section) {
-                section.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
-            style={{
-              cursor: "pointer",
-              fontSize: isMobile ? "16px" : "18px",
-              fontWeight: "600",
-              color: theme.colors.text,
-              transition: "all 0.3s ease",
-              textDecoration: "none",
-              padding: "16px 24px",
-              backgroundColor: `${theme.colors.background}80`,
-              backdropFilter: "blur(10px)",
-              borderRadius: "12px",
-              border: `1px solid ${theme.colors.border}40`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-              e.currentTarget.style.transform = "translateX(-8px)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}95`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.colors.text;
-              e.currentTarget.style.transform = "translateX(0)";
-              e.currentTarget.style.backgroundColor = `${theme.colors.background}80`;
-            }}
-          >
-            Engineering Context
-          </div>
+            Live Events
+          </Link>
         </div>
       </div>
 

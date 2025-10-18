@@ -167,7 +167,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
           repoName={repo}
           repoOwner={owner}
           hours={24}
-          height={100}
+          height={140}
           onSessionClick={onSessionClick}
           selectedSession={selectedSession}
         />
