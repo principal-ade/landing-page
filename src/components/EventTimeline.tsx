@@ -337,11 +337,6 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     });
   };
 
-  const handleResetZoom = () => {
-    setZoomLevel(1);
-    setPanOffset(0);
-  };
-
   // Jump to activity cluster
   const jumpToCluster = (cluster: ActivityCluster) => {
     // Calculate where this cluster is in the total timeline

@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Use global sessions store (in production, use Redis or a database)
-declare global {
-  var cliAuthSessions: Map<
-    string,
-    {
-      code_challenge: string;
-      code?: string;
-      created_at: number;
-    }
-  >;
-  var cliAuthCleanupInterval: NodeJS.Timeout;
-}
-
 // Initialize if not exists
 if (!global.cliAuthSessions) {
   global.cliAuthSessions = new Map();
@@ -54,6 +41,7 @@ export async function POST(request: NextRequest) {
     global.cliAuthSessions.set(state, {
       code_challenge,
       created_at: Date.now(),
+      provider: "github",
     });
 
     // Build GitHub OAuth URL

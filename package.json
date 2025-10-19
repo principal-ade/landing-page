@@ -20,6 +20,7 @@
     "@principal-ai/code-city-react": "^0.1.4",
     "@principal-ai/codebase-composition": "^0.2.8",
     "@principal-ai/repository-abstraction": "^0.2.3",
+    "@workos-inc/node": "^7.71.0",
     "hast-util-sanitize": "^5.0.2",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.534.0",

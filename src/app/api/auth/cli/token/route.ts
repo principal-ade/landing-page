@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
-// Use the shared global sessions
-declare global {
-  var cliAuthSessions: Map<
-    string,
-    {
-      code_challenge: string;
-      code?: string;
-      created_at: number;
-    }
-  >;
-}
-
 export async function POST(request: NextRequest) {
   try {
     const { state, code_verifier } = await request.json();

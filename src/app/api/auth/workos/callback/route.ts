@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { WorkOS } from "@workos-inc/node";
 
 // Initialize if not exists
 if (!global.cliAuthSessions) {
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Authentication Failed - Specktor</title>
+          <title>Authentication Failed - WorkOS</title>
           <style>
             body {
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
             }
             h1 { color: #d32f2f; margin-bottom: 1rem; }
             p { color: #666; margin-bottom: 1rem; }
-            
+
             @media (prefers-color-scheme: dark) {
               body {
                 background: #1a1a1a;
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
         <body>
           <div class="container">
             <h1>Authentication Failed</h1>
-            <p>Unable to complete authentication with GitHub.</p>
+            <p>Unable to complete authentication with WorkOS.</p>
             <p><strong>Error:</strong> ${errorDescription}</p>
             <p>You can close this window and try again.</p>
           </div>
@@ -90,7 +91,7 @@ export async function GET(request: NextRequest) {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Session Expired - Specktor</title>
+          <title>Session Expired - WorkOS</title>
           <style>
             body {
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -111,7 +112,7 @@ export async function GET(request: NextRequest) {
             }
             h1 { color: #f57c00; margin-bottom: 1rem; }
             p { color: #666; }
-            
+
             @media (prefers-color-scheme: dark) {
               body {
                 background: #1a1a1a;
@@ -142,17 +143,124 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Verify this is a WorkOS session
+  if (session.provider !== "workos") {
+    return NextResponse.json(
+      {
+        error: "invalid_provider",
+        error_description: "This session was initiated with a different provider",
+      },
+      { status: 400 },
+    );
+  }
+
   // Store the code with the session
   session.code = code;
   global.cliAuthSessions.set(state, session);
 
-  // Return success page
+  // If this is a web flow (has return_url), exchange token and redirect
+  if (session.return_url) {
+    try {
+      // Initialize WorkOS client
+      const workos = new WorkOS(process.env.WORKOS_API_KEY!);
+
+      // Exchange code for access token
+      let authResponse;
+      try {
+        authResponse = await workos.userManagement.authenticateWithCode({
+          clientId: process.env.WORKOS_CLIENT_ID!,
+          code: code,
+        });
+      } catch (authError: any) {
+        // Check if email verification is required
+        if (
+          authError?.rawData?.code === "email_verification_required" ||
+          authError?.message?.includes("Email ownership must be verified")
+        ) {
+          console.log("[WorkOS] Email verification required:", {
+            email: authError?.rawData?.email,
+            hasPendingToken: !!authError?.rawData?.pending_authentication_token,
+          });
+
+          // Store the pending token in the session
+          session.pending_auth_token = authError.rawData.pending_authentication_token;
+          session.email = authError.rawData.email;
+          global.cliAuthSessions.set(state, session);
+
+          // Redirect to verification page with state
+          const verifyUrl = new URL(session.return_url);
+          verifyUrl.pathname = "/auth/verify-email";
+          verifyUrl.searchParams.set("state", state);
+          verifyUrl.searchParams.set("email", authError.rawData.email || "your email");
+
+          return NextResponse.redirect(verifyUrl.toString());
+        }
+
+        // Re-throw other errors
+        throw authError;
+      }
+
+      // Get user profile
+      const userProfile = await workos.userManagement.getUser(
+        authResponse.user.id,
+      );
+
+      // Create user session data
+      const userData = {
+        id: authResponse.user.id,
+        email: authResponse.user.email,
+        login: authResponse.user.email?.split("@")[0] || authResponse.user.id,
+        name:
+          authResponse.user.firstName && authResponse.user.lastName
+            ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+            : authResponse.user.email,
+        avatar_url: userProfile.profilePictureUrl || null,
+        access_token: authResponse.accessToken,
+        refresh_token: authResponse.refreshToken,
+      };
+
+      // Clean up the session
+      global.cliAuthSessions.delete(state);
+
+      // Set session cookie and redirect
+      const response = NextResponse.redirect(session.return_url);
+
+      // Store user data in a secure HTTP-only cookie
+      response.cookies.set("workos_session", JSON.stringify(userData), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Token exchange error:", error);
+      console.error("Error details:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        code: code,
+        state: state,
+        workos_client_id: process.env.WORKOS_CLIENT_ID,
+        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/workos/callback`,
+      });
+
+      // Redirect with error
+      const errorUrl = new URL(session.return_url);
+      errorUrl.searchParams.set("auth_error", "token_exchange_failed");
+      errorUrl.searchParams.set("error_message", error instanceof Error ? error.message : "Unknown error");
+      return NextResponse.redirect(errorUrl.toString());
+    }
+  }
+
+  // For CLI flow, return success page
   return new NextResponse(
     `
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Authentication Successful - Specktor</title>
+        <title>Authentication Successful - WorkOS</title>
         <style>
           body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -173,7 +281,7 @@ export async function GET(request: NextRequest) {
           }
           h1 { color: #2e7d32; margin-bottom: 1rem; }
           p { color: #666; margin-bottom: 1rem; }
-          
+
           @media (prefers-color-scheme: dark) {
             body {
               background: #1a1a1a;

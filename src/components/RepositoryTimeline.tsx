@@ -323,11 +323,6 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
     });
   };
 
-  const handleResetZoom = () => {
-    setZoomLevel(1);
-    setPanOffset(0);
-  };
-
   // Jump to activity cluster
   const jumpToCluster = (cluster: ActivityCluster) => {
     const clusterCenter = cluster.centerTime;

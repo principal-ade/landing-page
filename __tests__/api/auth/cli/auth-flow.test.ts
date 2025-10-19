@@ -94,6 +94,7 @@ describe('CLI Authentication Flow', () => {
       global.cliAuthSessions.set(state, {
         code_challenge: codeChallenge,
         created_at: Date.now(),
+        provider: "github",
       });
     });
 
@@ -155,6 +156,7 @@ describe('CLI Authentication Flow', () => {
         code_challenge: codeChallenge,
         code: 'test_auth_code',
         created_at: Date.now(),
+        provider: "github",
       });
 
       // Mock GitHub API responses
@@ -216,6 +218,7 @@ describe('CLI Authentication Flow', () => {
       global.cliAuthSessions.set(state, {
         code_challenge: codeChallenge,
         created_at: Date.now(),
+        provider: "github",
       });
 
       const request = new NextRequest('http://localhost/api/auth/cli/token', {
@@ -266,12 +269,14 @@ describe('CLI Authentication Flow', () => {
       global.cliAuthSessions.set(expiredState, {
         code_challenge: 'test',
         created_at: Date.now() - 6 * 60 * 1000, // 6 minutes ago
+        provider: "github",
       });
 
       // Create a valid session
       global.cliAuthSessions.set(state, {
         code_challenge: codeChallenge,
         created_at: Date.now(),
+        provider: "github",
       });
 
       // Trigger cleanup (normally runs every minute)
