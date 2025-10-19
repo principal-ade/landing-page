@@ -47,6 +47,7 @@ interface RepositoryMapProps {
   isPlaying?: boolean;
   accumulatedFiles?: AccumulatedFiles;
   onClearAccumulated?: () => void;
+  githubToken?: string | null;
 }
 
 export const RepositoryMap: React.FC<RepositoryMapProps> = ({
@@ -57,6 +58,7 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
   isPlaying = false,
   accumulatedFiles,
   onClearAccumulated,
+  githubToken,
 }) => {
   const { theme } = useTheme();
   const [fileSystemTree, setFileSystemTree] = useState<FileTree | null>(null);
@@ -192,7 +194,8 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
       setError(null);
 
       try {
-        const githubService = new GitHubService();
+        // Create GitHub service with user's token
+        const githubService = new GitHubService(githubToken || undefined);
 
         // First fetch repository info to get the default branch
         const repoInfo = await githubService.fetchRepositoryInfo(owner, repo);
@@ -209,7 +212,7 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
       } catch (err) {
         console.error("Failed to load repository:", err);
         setError(
-          `Failed to load repository ${owner}/${repo}. Please check that the repository exists and is public.`,
+          `Failed to load repository ${owner}/${repo}. Please check that you have access to this repository.`,
         );
       } finally {
         setLoading(false);
@@ -217,7 +220,7 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
     };
 
     loadRepository();
-  }, [owner, repo]);
+  }, [owner, repo, githubToken]);
 
   if (loading) {
     return (

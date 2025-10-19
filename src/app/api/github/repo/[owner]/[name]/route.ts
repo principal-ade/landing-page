@@ -33,8 +33,9 @@ const CACHE_DURATIONS = {
   "file-count": 600, // 10 minutes - stable data
 } as const;
 
-async function makeGitHubRequest(endpoint: string) {
-  const token = process.env.GITHUB_TOKEN || null;
+async function makeGitHubRequest(endpoint: string, userToken?: string | null) {
+  // Use user's token if provided, otherwise fall back to server token
+  const token = userToken || process.env.GITHUB_TOKEN || null;
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
@@ -77,13 +78,16 @@ function makeCachedGitHubRequest(
   endpoint: string,
   cacheKey: string,
   revalidate: number,
+  userToken?: string | null,
 ) {
+  // Note: We include userToken in the cache key for user-specific data
+  const fullCacheKey = userToken ? `${cacheKey}-user-${userToken.substring(0, 8)}` : cacheKey;
   return unstable_cache(
-    async () => makeGitHubRequest(endpoint),
-    [cacheKey],
+    async () => makeGitHubRequest(endpoint, userToken),
+    [fullCacheKey],
     {
       revalidate,
-      tags: ["github-api", cacheKey],
+      tags: ["github-api", fullCacheKey],
     },
   )();
 }
@@ -97,6 +101,10 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action") || "info";
 
+    // Get user's GitHub token from Authorization header
+    const authHeader = request.headers.get('authorization');
+    const userToken = authHeader?.replace('Bearer ', '').replace('token ', '') || null;
+
     let data;
 
     switch (action) {
@@ -105,6 +113,7 @@ export async function GET(
           `/repos/${owner}/${name}`,
           `repo-info-${owner}-${name}`,
           CACHE_DURATIONS.info,
+          userToken,
         );
         break;
 
@@ -122,7 +131,8 @@ export async function GET(
 
         // Not in cache, fetch from GitHub
         data = await makeGitHubRequest(
-          `/repos/${owner}/${name}/git/trees/${ref}?recursive=1`
+          `/repos/${owner}/${name}/git/trees/${ref}?recursive=1`,
+          userToken
         );
 
         // Cache by both the requested ref AND the returned SHA
@@ -137,6 +147,7 @@ export async function GET(
           `/repos/${owner}/${name}/readme`,
           `repo-readme-${owner}-${name}`,
           CACHE_DURATIONS.readme,
+          userToken,
         );
         break;
 
@@ -145,6 +156,7 @@ export async function GET(
           `/repos/${owner}/${name}/contributors?per_page=100`,
           `repo-contributors-${owner}-${name}`,
           CACHE_DURATIONS.contributors,
+          userToken,
         );
         break;
 
@@ -160,6 +172,7 @@ export async function GET(
           `/repos/${owner}/${name}/contents/${filePath}`,
           `repo-file-${owner}-${name}-${filePath}`,
           CACHE_DURATIONS.file,
+          userToken,
         );
         break;
 

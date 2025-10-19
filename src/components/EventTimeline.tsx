@@ -11,7 +11,6 @@ interface TimelineEvent {
   sessionId?: string;
   repoName?: string;
   repoOwner?: string;
-  isPublic?: boolean;
 }
 
 interface ActivityCluster {
@@ -28,7 +27,6 @@ interface SessionSegment {
   eventCount: number;
   repoName?: string;
   repoOwner?: string;
-  isPublic?: boolean;
   events: TimelineEvent[];
 }
 
@@ -38,6 +36,7 @@ interface EventTimelineProps {
   height?: number;
   showLabels?: boolean;
   onEventClick?: (event: TimelineEvent) => void;
+  githubToken?: string | null;
 }
 
 export const EventTimeline: React.FC<EventTimelineProps> = ({
@@ -46,6 +45,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   height = 160,
   showLabels = true,
   onEventClick,
+  githubToken,
 }) => {
   const { theme } = useTheme();
   const [events, setEvents] = useState<TimelineEvent[]>([]);
@@ -60,14 +60,20 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartOffset, setDragStartOffset] = useState(0);
-  const [showPublicOnly, setShowPublicOnly] = useState(true);
 
   const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`/api/agent-events/timeline?hours=${hours}`);
+        const headers: HeadersInit = {};
+        if (githubToken) {
+          headers['Authorization'] = `Bearer ${githubToken}`;
+        }
+
+        const response = await fetch(`/api/agent-events/timeline?hours=${hours}`, {
+          headers,
+        });
         const data = await response.json();
 
         if (response.ok) {
@@ -87,7 +93,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     fetchEvents();
     const interval = setInterval(fetchEvents, refreshInterval);
     return () => clearInterval(interval);
-  }, [hours, refreshInterval]);
+  }, [hours, refreshInterval, githubToken]);
 
   // Group events into session segments
   const allSessionSegments = useMemo(() => {
@@ -106,7 +112,6 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
           eventCount: 1,
           repoName: event.repoName,
           repoOwner: event.repoOwner,
-          isPublic: event.isPublic,
           events: [event],
         });
       } else {
@@ -121,11 +126,10 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
     return Array.from(sessionMap.values()).sort((a, b) => a.startTime - b.startTime);
   }, [events]);
 
-  // Filter sessions based on public/private toggle
+  // Use all session segments (filtering now happens server-side based on user access)
   const sessionSegments = useMemo(() => {
-    if (!showPublicOnly) return allSessionSegments;
-    return allSessionSegments.filter(segment => segment.isPublic === true);
-  }, [allSessionSegments, showPublicOnly]);
+    return allSessionSegments;
+  }, [allSessionSegments]);
 
   // Detect activity clusters based on session segments
   const activityClusters = useMemo(() => {
@@ -476,37 +480,9 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
               color: theme.colors.textSecondary,
             }}
           >
-            {showPublicOnly && sessionSegments.length < allSessionSegments.length
-              ? `${sessionSegments.length} / ${allSessionSegments.length} sessions`
-              : `${sessionSegments.length} sessions`} • {events.length} events
+            {sessionSegments.length} sessions • {events.length} events
             {activityClusters.length > 1 && ` • ${activityClusters.length} clusters`}
           </div>
-        </div>
-
-        {/* Filters */}
-        <div style={{ display: "flex", gap: theme.space[3], alignItems: "center" }}>
-          {/* Public only filter */}
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: theme.space[1],
-              cursor: "pointer",
-              fontSize: theme.fontSizes[0],
-              color: theme.colors.text,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={showPublicOnly}
-              onChange={(e) => setShowPublicOnly(e.target.checked)}
-              style={{
-                cursor: "pointer",
-                accentColor: theme.colors.primary,
-              }}
-            />
-            <span>Public only</span>
-          </label>
         </div>
       </div>
 
@@ -812,9 +788,7 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
             </div>
             {hoveredSegment.repoOwner && hoveredSegment.repoName && (
               <div style={{ color: theme.colors.textSecondary, fontSize: theme.fontSizes[0], marginBottom: "2px" }}>
-                {hoveredSegment.isPublic
-                  ? `${hoveredSegment.repoOwner}/${hoveredSegment.repoName}`
-                  : "Private Repository"}
+                {hoveredSegment.repoOwner}/{hoveredSegment.repoName}
               </div>
             )}
             <div style={{ color: theme.colors.text, fontSize: theme.fontSizes[0], marginBottom: "2px" }}>

@@ -61,8 +61,20 @@ export class GitHubService {
    */
   async makeRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
     if (this.useProxy) {
-      // Use internal proxy API
-      const response = await fetch(`${this.baseUrl}${endpoint}`, options);
+      // Use internal proxy API with auth token
+      const headers: Record<string, string> = {
+        ...((options?.headers as Record<string, string>) || {}),
+      };
+
+      // Pass user's GitHub token to proxy
+      if (this.token) {
+        headers["Authorization"] = `Bearer ${this.token}`;
+      }
+
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        ...options,
+        headers,
+      });
 
       if (!response.ok) {
         // Check for auth errors

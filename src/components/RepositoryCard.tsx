@@ -12,6 +12,7 @@ interface RepositoryCardProps {
   lastActivityMs: number;
   selectedSession?: string | null;
   onSessionClick?: (sessionId: string) => void;
+  githubToken?: string | null;
 }
 
 interface CurrentEvent {
@@ -38,6 +39,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
   lastActivityMs,
   selectedSession = null,
   onSessionClick,
+  githubToken,
 }) => {
   const { theme } = useTheme();
   const [currentEvent, setCurrentEvent] = useState<CurrentEvent | null>(null);
@@ -170,6 +172,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
           height={140}
           onSessionClick={onSessionClick}
           selectedSession={selectedSession}
+          githubToken={githubToken}
         />
       </div>
 
@@ -212,6 +215,7 @@ export const RepositoryCard: React.FC<RepositoryCardProps> = ({
               isPlaying={isPlaying}
               accumulatedFiles={accumulatedFiles}
               onClearAccumulated={handleClearAccumulated}
+              githubToken={githubToken}
             />
           </div>
 

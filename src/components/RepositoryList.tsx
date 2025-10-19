@@ -8,17 +8,16 @@ interface Repository {
   repoOwner: string;
   lastActivity: string | null;
   sessionCount: number;
-  isPublic: boolean;
 }
 
 interface RepositoryListProps {
   refreshInterval?: number; // in milliseconds
-  showOnlyPublic?: boolean; // Filter to show only public repos
   onSelectRepo?: (repo: { owner: string; name: string }) => void; // Callback when repo is selected
   selectedRepo?: { owner: string; name: string } | null; // Currently selected repo
+  githubToken?: string | null; // GitHub access token for authentication
 }
 
-export function RepositoryList({ refreshInterval = 30000, showOnlyPublic = false, onSelectRepo, selectedRepo }: RepositoryListProps) {
+export function RepositoryList({ refreshInterval = 30000, onSelectRepo, selectedRepo, githubToken }: RepositoryListProps) {
   const { theme } = useTheme();
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,19 +25,22 @@ export function RepositoryList({ refreshInterval = 30000, showOnlyPublic = false
 
   const fetchRepositories = async () => {
     try {
-      const response = await fetch('/api/agent-events/repositories');
+      const headers: HeadersInit = {};
+      if (githubToken) {
+        headers['Authorization'] = `Bearer ${githubToken}`;
+      }
+
+      const response = await fetch('/api/agent-events/repositories', { headers });
       const data = await response.json();
 
       if (response.ok) {
         const repos = data.repositories || [];
-        // Filter to show only public repos if requested
-        const filteredRepos = showOnlyPublic ? repos.filter((r: Repository) => r.isPublic) : repos;
-        setRepositories(filteredRepos);
+        setRepositories(repos);
         setError(null);
 
         // Auto-select first repo if none selected
-        if (onSelectRepo && !selectedRepo && filteredRepos.length > 0) {
-          onSelectRepo({ owner: filteredRepos[0].repoOwner, name: filteredRepos[0].repoName });
+        if (onSelectRepo && !selectedRepo && repos.length > 0) {
+          onSelectRepo({ owner: repos[0].repoOwner, name: repos[0].repoName });
         }
       } else {
         setError(data.message || 'Failed to fetch repositories');
@@ -60,7 +62,7 @@ export function RepositoryList({ refreshInterval = 30000, showOnlyPublic = false
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshInterval, showOnlyPublic]);
+  }, [refreshInterval, githubToken]);
 
   const formatTimeAgo = (timestamp: string | null): string => {
     if (!timestamp) return 'Unknown';
@@ -173,7 +175,7 @@ export function RepositoryList({ refreshInterval = 30000, showOnlyPublic = false
             color: theme.colors.text,
           }}
         >
-          {showOnlyPublic ? 'Public Repositories' : 'Active Repositories'}
+          Active Repositories
         </h3>
         <div
           style={{

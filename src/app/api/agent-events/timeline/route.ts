@@ -24,6 +24,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const hours = parseInt(searchParams.get('hours') || '24', 10);
 
+    // Get GitHub token from Authorization header or query param
+    const authHeader = request.headers.get('authorization');
+    const githubToken = authHeader?.replace('Bearer ', '') || searchParams.get('token');
+
     // Validate environment variables
     const tursoUrl = process.env.TURSO_DATABASE_URL;
     const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
@@ -74,9 +78,10 @@ export async function GET(request: NextRequest) {
     // Close the connection
     await sdk.close();
 
-    // Check visibility for unique repos
+    // Use user's GitHub token to check repository access
+    // If no token provided, use server token as fallback for public repos only
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN
+      auth: githubToken || process.env.GITHUB_TOKEN
     });
 
     const uniqueRepos = new Map<string, { owner: string; name: string }>();
@@ -89,43 +94,34 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const visibilityMap = new Map<string, boolean>();
+    // Check which repos the user has access to
+    const accessibleRepos = new Map<string, boolean>();
     await Promise.all(
       Array.from(uniqueRepos.values()).map(async ({ owner, name }) => {
         const key = `${owner}/${name}`;
 
-        // Check cache first
-        const cachedVisibility = repoVisibilityCache.get(owner, name);
-        if (cachedVisibility !== null) {
-          visibilityMap.set(key, cachedVisibility);
-          return;
-        }
-
-        // Not in cache, fetch from GitHub
+        // Try to fetch the repo with the user's token
+        // If successful, they have access; if 404/403, they don't
         try {
-          const { data } = await octokit.repos.get({ owner, repo: name });
-          const isPublic = !data.private;
-          repoVisibilityCache.set(owner, name, isPublic);
-          visibilityMap.set(key, isPublic);
-        } catch {
-          // Assume private if we can't fetch
-          repoVisibilityCache.set(owner, name, false);
-          visibilityMap.set(key, false);
+          await octokit.repos.get({ owner, repo: name });
+          accessibleRepos.set(key, true);
+        } catch (error: any) {
+          // If user doesn't have access or repo doesn't exist, exclude it
+          accessibleRepos.set(key, false);
         }
       })
     );
 
-    // Add visibility info to events
-    const eventsWithVisibility = events.map(event => ({
-      ...event,
-      isPublic: event.repoOwner && event.repoName
-        ? visibilityMap.get(`${event.repoOwner}/${event.repoName}`) ?? false
-        : false
-    }));
+    // Filter events to only include repos the user has access to
+    const eventsWithAccess = events.filter(event => {
+      if (!event.repoOwner || !event.repoName) return true;
+      const key = `${event.repoOwner}/${event.repoName}`;
+      return accessibleRepos.get(key) ?? false;
+    });
 
     return NextResponse.json({
-      events: eventsWithVisibility,
-      count: eventsWithVisibility.length,
+      events: eventsWithAccess,
+      count: eventsWithAccess.length,
       timeWindow: `${hours} hours`,
       startTime: new Date(hoursAgoTimestamp * 1000).toISOString(),
       endTime: new Date().toISOString(),

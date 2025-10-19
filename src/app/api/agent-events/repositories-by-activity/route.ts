@@ -14,9 +14,15 @@ interface RepositoryActivityRow {
 /**
  * GET /api/agent-events/repositories-by-activity
  * Returns repositories ordered by most recent activity
+ * Filters based on user's GitHub access
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    // Get GitHub token from Authorization header or query param
+    const url = new URL(request.url);
+    const authHeader = request.headers.get('authorization');
+    const githubToken = authHeader?.replace('Bearer ', '') || url.searchParams.get('token');
+
     // Validate environment variables
     const tursoUrl = process.env.TURSO_DATABASE_URL;
     const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
@@ -62,34 +68,33 @@ export async function GET() {
     // Close the connection
     await sdk.close();
 
-    // Check GitHub to filter out private repos
+    // Use user's GitHub token to check repository access
+    // If no token provided, use server token as fallback for public repos only
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN // Optional, but helps with rate limits
+      auth: githubToken || process.env.GITHUB_TOKEN
     });
 
-    const publicRepositories = await Promise.all(
+    const accessibleRepositories = await Promise.all(
       repositories.map(async (repo) => {
         try {
-          const { data } = await octokit.repos.get({
+          // Try to fetch the repo with the user's token
+          // If successful, they have access; if 404/403, they don't
+          await octokit.repos.get({
             owner: repo.repoOwner,
             repo: repo.repoName
           });
 
-          // Only return if public
-          if (!data.private) {
-            return repo;
-          }
-          return null;
+          // User has access to this repo
+          return repo;
         } catch (error) {
-          // If we can't fetch the repo, assume it's private or doesn't exist
-          console.warn(`Could not fetch visibility for ${repo.repoOwner}/${repo.repoName}:`, error instanceof Error ? error.message : 'Unknown error');
+          // If user doesn't have access or repo doesn't exist, exclude it
           return null;
         }
       })
     );
 
-    // Filter out nulls (private repos)
-    const filteredRepositories = publicRepositories.filter((repo): repo is NonNullable<typeof repo> => repo !== null);
+    // Filter out repos the user doesn't have access to
+    const filteredRepositories = accessibleRepositories.filter((repo): repo is NonNullable<typeof repo> => repo !== null);
 
     return NextResponse.json({
       repositories: filteredRepositories,

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     // Parse the session data
     const userData = JSON.parse(sessionCookie.value);
 
-    // Return user info (without sensitive tokens)
+    // Return user info including GitHub token for API access
     return NextResponse.json({
       authenticated: true,
       user: {
@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
         login: userData.login,
         name: userData.name,
         avatar_url: userData.avatar_url,
+        github_access_token: userData.github_access_token,
       },
     });
   } catch (error) {

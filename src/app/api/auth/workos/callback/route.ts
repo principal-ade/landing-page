@@ -205,6 +205,21 @@ export async function GET(request: NextRequest) {
         authResponse.user.id,
       );
 
+      // Extract GitHub access token from the authentication response
+      // When "Return GitHub OAuth tokens" is enabled in WorkOS Dashboard,
+      // the GitHub access token will be available in the response
+      let githubAccessToken: string | null = null;
+
+      // WorkOS returns the OAuth provider's access token when configured
+      // Check if the response contains the impersonator/OAuth token
+      if ((authResponse as any).impersonator?.accessToken) {
+        githubAccessToken = (authResponse as any).impersonator.accessToken;
+      } else if ((authResponse as any).oauthTokens?.accessToken) {
+        githubAccessToken = (authResponse as any).oauthTokens.accessToken;
+      }
+
+      console.log('[WorkOS] GitHub token available:', !!githubAccessToken);
+
       // Create user session data
       const userData = {
         id: authResponse.user.id,
@@ -217,6 +232,7 @@ export async function GET(request: NextRequest) {
         avatar_url: userProfile.profilePictureUrl || null,
         access_token: authResponse.accessToken,
         refresh_token: authResponse.refreshToken,
+        github_access_token: githubAccessToken,
       };
 
       // Clean up the session

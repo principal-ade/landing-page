@@ -62,6 +62,7 @@ export default function LiveEventsPage() {
     login: string;
     name: string;
     avatar_url: string | null;
+    github_access_token?: string | null;
   } | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
@@ -133,8 +134,15 @@ export default function LiveEventsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const headers: HeadersInit = {};
+        if (user?.github_access_token) {
+          headers['Authorization'] = `Bearer ${user.github_access_token}`;
+        }
+
         // Fetch repositories by activity
-        const repoByActivityResponse = await fetch('/api/agent-events/repositories-by-activity');
+        const repoByActivityResponse = await fetch('/api/agent-events/repositories-by-activity', {
+          headers,
+        });
         const repoByActivityData = await repoByActivityResponse.json();
 
         if (repoByActivityResponse.ok) {
@@ -152,7 +160,7 @@ export default function LiveEventsPage() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   const isMobile = windowWidth < 768;
 
@@ -440,6 +448,7 @@ export default function LiveEventsPage() {
             hours={24}
             height={160}
             onEventClick={handleTimelineEventClick}
+            githubToken={user?.github_access_token || null}
           />
         </div>
 
@@ -468,6 +477,7 @@ export default function LiveEventsPage() {
                   : null
               }
               onSessionClick={handleRepositorySessionClick(repo.repoOwner, repo.repoName)}
+              githubToken={user?.github_access_token || null}
             />
           ))
         )}

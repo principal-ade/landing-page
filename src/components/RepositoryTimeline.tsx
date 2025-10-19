@@ -11,7 +11,6 @@ interface TimelineEvent {
   sessionId?: string;
   repoName?: string;
   repoOwner?: string;
-  isPublic?: boolean;
 }
 
 interface ActivityCluster {
@@ -38,6 +37,7 @@ interface RepositoryTimelineProps {
   showLabels?: boolean;
   onSessionClick?: (sessionId: string) => void;
   selectedSession?: string | null;
+  githubToken?: string | null;
 }
 
 export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
@@ -49,6 +49,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
   showLabels = true,
   onSessionClick,
   selectedSession,
+  githubToken,
 }) => {
   const { theme } = useTheme();
   const [allEvents, setAllEvents] = useState<TimelineEvent[]>([]);
@@ -69,7 +70,14 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`/api/agent-events/timeline?hours=${hours}`);
+        const headers: HeadersInit = {};
+        if (githubToken) {
+          headers['Authorization'] = `Bearer ${githubToken}`;
+        }
+
+        const response = await fetch(`/api/agent-events/timeline?hours=${hours}`, {
+          headers,
+        });
         const data = await response.json();
 
         if (response.ok) {
@@ -89,7 +97,7 @@ export const RepositoryTimeline: React.FC<RepositoryTimelineProps> = ({
     fetchEvents();
     const interval = setInterval(fetchEvents, refreshInterval);
     return () => clearInterval(interval);
-  }, [hours, refreshInterval]);
+  }, [hours, refreshInterval, githubToken]);
 
   // Filter events for this repository
   const events = useMemo(() => {

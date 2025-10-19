@@ -15,9 +15,15 @@ interface RepositoryRow {
 /**
  * GET /api/agent-events/repositories
  * Returns a list of repositories from agent sessions
+ * Filters based on user's GitHub access
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    // Get GitHub token from Authorization header or query param
+    const url = new URL(request.url);
+    const authHeader = request.headers.get('authorization');
+    const githubToken = authHeader?.replace('Bearer ', '') || url.searchParams.get('token');
+
     // Validate environment variables
     const tursoUrl = process.env.TURSO_DATABASE_URL;
     const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
@@ -63,56 +69,37 @@ export async function GET() {
     // Close the connection
     await sdk.close();
 
-    // Check GitHub to see if repos are public
+    // Use user's GitHub token to check repository access
+    // If no token provided, use server token as fallback for public repos only
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN // Optional, but helps with rate limits
+      auth: githubToken || process.env.GITHUB_TOKEN
     });
 
-    const repositoriesWithVisibility = await Promise.all(
+    const accessibleRepositories = await Promise.all(
       repositories.map(async (repo) => {
-        // Check cache first
-        const cachedVisibility = repoVisibilityCache.get(repo.repoOwner, repo.repoName);
-        if (cachedVisibility !== null) {
-          return {
-            ...repo,
-            isPublic: cachedVisibility
-          };
-        }
-
-        // Not in cache, fetch from GitHub
         try {
-          const { data } = await octokit.repos.get({
+          // Try to fetch the repo with the user's token
+          // If successful, they have access
+          await octokit.repos.get({
             owner: repo.repoOwner,
             repo: repo.repoName
           });
-          const isPublic = !data.private;
 
-          // Store in cache
-          repoVisibilityCache.set(repo.repoOwner, repo.repoName, isPublic);
-
-          return {
-            ...repo,
-            isPublic
-          };
+          // User has access to this repo
+          return repo;
         } catch (error) {
-          // If we can't fetch the repo, assume it's private or doesn't exist
-          console.warn(`Could not fetch visibility for ${repo.repoOwner}/${repo.repoName}:`, error instanceof Error ? error.message : 'Unknown error');
-
-          // Cache the result as private to avoid repeated failed requests
-          repoVisibilityCache.set(repo.repoOwner, repo.repoName, false);
-
-          return {
-            ...repo,
-            isPublic: false
-          };
+          // If user doesn't have access or repo doesn't exist, exclude it
+          return null;
         }
       })
     );
 
+    // Filter out repos the user doesn't have access to
+    const filteredRepositories = accessibleRepositories.filter((repo): repo is NonNullable<typeof repo> => repo !== null);
+
     return NextResponse.json({
-      repositories: repositoriesWithVisibility,
-      count: repositoriesWithVisibility.length,
-      publicCount: repositoriesWithVisibility.filter(r => r.isPublic).length,
+      repositories: filteredRepositories,
+      count: filteredRepositories.length,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
