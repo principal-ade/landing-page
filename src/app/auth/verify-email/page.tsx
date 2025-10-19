@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "@a24z/industry-theme";
 
-export default function VerifyEmailPage() {
+function VerifyEmailForm() {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
 
@@ -201,5 +201,13 @@ export default function VerifyEmailPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Loading...</div>}>
+      <VerifyEmailForm />
+    </Suspense>
   );
 }
