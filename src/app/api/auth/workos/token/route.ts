@@ -82,39 +82,89 @@ export async function POST(request: NextRequest) {
       authResponse.user.id,
     );
 
-    // Extract GitHub user information from the profile
-    // WorkOS stores provider-specific data in the user object
-    const githubData = userProfile.profilePictureUrl
-      ? {
-          avatar_url: userProfile.profilePictureUrl,
+    // Extract GitHub access token from the authentication response
+    // When "Return GitHub OAuth tokens" is enabled in WorkOS Dashboard,
+    // the GitHub access token will be available in the response
+    let githubAccessToken: string | null = null;
+
+    // WorkOS returns the OAuth provider's access token when configured
+    // Check if the response contains the impersonator/OAuth token
+    if ((authResponse as any).impersonator?.accessToken) {
+      githubAccessToken = (authResponse as any).impersonator.accessToken;
+    } else if ((authResponse as any).oauthTokens?.accessToken) {
+      githubAccessToken = (authResponse as any).oauthTokens.accessToken;
+    }
+
+    console.log("[WorkOS] GitHub token available:", !!githubAccessToken);
+
+    // Fetch real GitHub user data using the GitHub token
+    let githubUserData = null;
+    if (githubAccessToken) {
+      try {
+        const userResponse = await fetch("https://api.github.com/user", {
+          headers: {
+            Authorization: `Bearer ${githubAccessToken}`,
+            Accept: "application/json",
+          },
+        });
+
+        if (userResponse.ok) {
+          githubUserData = await userResponse.json();
+          console.log(
+            "[WorkOS] GitHub user data fetched:",
+            githubUserData.login,
+          );
+        } else {
+          console.warn("[WorkOS] Failed to fetch GitHub user data");
         }
-      : {};
+      } catch (error) {
+        console.error("[WorkOS] Error fetching GitHub user data:", error);
+      }
+    }
 
     // Clean up the session
     global.cliAuthSessions.delete(state);
 
     // Return the token and user info
-    // Note: WorkOS manages the access token internally
-    // You can use authResponse.accessToken for WorkOS API calls
-    // For GitHub API calls, you'll need to get the connection details
+    // Primary access token should be GitHub token (for backwards compatibility with Electron app)
     return NextResponse.json({
-      access_token: authResponse.accessToken,
+      // Use GitHub token as primary access_token if available (for api.github.com calls)
+      access_token: githubAccessToken || authResponse.accessToken,
+
+      // Keep WorkOS token available for WorkOS API calls
+      workos_access_token: authResponse.accessToken,
       refresh_token: authResponse.refreshToken,
       token_type: "Bearer",
-      user: {
-        id: authResponse.user.id,
-        email: authResponse.user.email,
-        // WorkOS doesn't always provide a username/login
-        // You may need to extract this from email or profile
-        login: authResponse.user.email?.split("@")[0] || authResponse.user.id,
-        name:
-          authResponse.user.firstName && authResponse.user.lastName
-            ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-            : authResponse.user.email,
-        ...githubData,
-      },
+
+      // Use real GitHub user data if available, fallback to WorkOS data
+      user: githubUserData
+        ? {
+            id: githubUserData.id, // Real GitHub ID (number)
+            email: githubUserData.email || authResponse.user.email,
+            login: githubUserData.login, // Real GitHub username
+            name:
+              githubUserData.name ||
+              (authResponse.user.firstName && authResponse.user.lastName
+                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+                : authResponse.user.email),
+            avatar_url: githubUserData.avatar_url,
+          }
+        : {
+            // Fallback to WorkOS data if GitHub fetch failed
+            id: authResponse.user.id,
+            email: authResponse.user.email,
+            login:
+              authResponse.user.email?.split("@")[0] || authResponse.user.id,
+            name:
+              authResponse.user.firstName && authResponse.user.lastName
+                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+                : authResponse.user.email,
+            avatar_url: userProfile.profilePictureUrl || null,
+          },
+
       provider: "workos",
       workos_user_id: authResponse.user.id,
+      github_access_token: githubAccessToken, // Also available explicitly
     });
   } catch (error) {
     console.error("WorkOS token exchange error:", error);
