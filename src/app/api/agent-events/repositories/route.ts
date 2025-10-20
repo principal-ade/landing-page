@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { TursoObservabilitySDK } from '@a24z/observability-sdk';
 import { Octokit } from '@octokit/rest';
 import { repoVisibilityCache } from '@/lib/repo-visibility-cache';
+import { createFallbackOctokit, ensureRepoAccessible } from '../github-access';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,24 +72,37 @@ export async function GET(request: Request) {
 
     // Use user's GitHub token to check repository access
     // If no token provided, use server token as fallback for public repos only
+    const effectiveToken = githubToken || process.env.GITHUB_TOKEN;
+
+    if (!effectiveToken) {
+      console.warn('[API] No GitHub token available (neither user nor server). Public repo access may be rate-limited.');
+    } else if (!githubToken) {
+      console.log('[API] Using server token for unauthenticated user - public repos will be visible');
+    }
+
     const octokit = new Octokit({
-      auth: githubToken || process.env.GITHUB_TOKEN
+      auth: effectiveToken,
+      request: {
+        timeout: 10000 // 10 second timeout
+      }
     });
+
+    const fallbackOctokit = createFallbackOctokit(githubToken);
 
     const accessibleRepositories = await Promise.all(
       repositories.map(async (repo) => {
         try {
-          // Try to fetch the repo with the user's token
-          // If successful, they have access
-          await octokit.repos.get({
-            owner: repo.repoOwner,
-            repo: repo.repoName
-          });
+          const hasAccess = await ensureRepoAccessible(
+            octokit,
+            fallbackOctokit,
+            repo.repoOwner,
+            repo.repoName
+          );
 
-          // User has access to this repo
-          return repo;
+          return hasAccess ? repo : null;
         } catch (error) {
-          // If user doesn't have access or repo doesn't exist, exclude it
+          // If an unexpected error occurs, exclude the repo but log the issue
+          console.error('[API] Unexpected error checking repo access:', error);
           return null;
         }
       })

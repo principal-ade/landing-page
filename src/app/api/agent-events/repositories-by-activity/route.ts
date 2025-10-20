@@ -71,8 +71,19 @@ export async function GET(request: Request) {
 
     // Use user's GitHub token to check repository access
     // If no token provided, use server token as fallback for public repos only
+    const effectiveToken = githubToken || process.env.GITHUB_TOKEN;
+
+    if (!effectiveToken) {
+      console.warn('[API] No GitHub token available (neither user nor server). Public repo access may be rate-limited.');
+    } else if (!githubToken) {
+      console.log('[API] Using server token for unauthenticated user - public repos will be visible');
+    }
+
     const octokit = new Octokit({
-      auth: githubToken || process.env.GITHUB_TOKEN
+      auth: effectiveToken,
+      request: {
+        timeout: 10000 // 10 second timeout
+      }
     });
 
     const fallbackOctokit = createFallbackOctokit(githubToken);
