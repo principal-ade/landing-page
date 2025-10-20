@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { TursoObservabilitySDK } from '@a24z/observability-sdk';
 import { Octokit } from '@octokit/rest';
+import { createFallbackOctokit, ensureRepoAccessible } from '../github-access';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,20 +75,22 @@ export async function GET(request: Request) {
       auth: githubToken || process.env.GITHUB_TOKEN
     });
 
+    const fallbackOctokit = createFallbackOctokit(githubToken);
+
     const accessibleRepositories = await Promise.all(
       repositories.map(async (repo) => {
         try {
-          // Try to fetch the repo with the user's token
-          // If successful, they have access; if 404/403, they don't
-          await octokit.repos.get({
-            owner: repo.repoOwner,
-            repo: repo.repoName
-          });
+          const hasAccess = await ensureRepoAccessible(
+            octokit,
+            fallbackOctokit,
+            repo.repoOwner,
+            repo.repoName
+          );
 
-          // User has access to this repo
-          return repo;
+          return hasAccess ? repo : null;
         } catch (error) {
-          // If user doesn't have access or repo doesn't exist, exclude it
+          // If an unexpected error occurs, exclude the repo but log the issue
+          console.error('[API] Unexpected error checking repo access:', error);
           return null;
         }
       })
