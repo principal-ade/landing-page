@@ -156,7 +156,7 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
     }
 
     return [{
-      id: `current-event-${Date.now()}`,
+      id: 'current-event',
       name: `Current: ${currentEvent.tool_name || 'Unknown'} (${currentEvent.operation || 'N/A'})`,
       color,
       enabled: true,

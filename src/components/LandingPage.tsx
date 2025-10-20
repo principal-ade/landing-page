@@ -110,7 +110,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       {/* Hero Section */}
       <div
         style={{
-          height: "100vh",
+          minHeight: "100vh",
           backgroundColor: theme.colors.background,
           backgroundImage: gridBackground,
           backgroundSize: "100px 100px",
@@ -121,7 +121,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           overflow: "hidden",
+          padding: isMobile ? "40px 0" : "60px 0",
         }}
       >
         {/* Circular gradient emanating from logo center */}
@@ -312,13 +314,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
 
           <h3
             style={{
-              fontSize: isMobile ? "20px" : isConstrainedHeight ? "22px" : isTablet ? "24px" : "28px",
+              fontSize: isMobile ? "16px" : isConstrainedHeight ? "18px" : isTablet ? "20px" : "24px",
               fontWeight: "600",
               margin: "0",
               color: theme.colors.primary,
             }}
           >
-            ADE
+            Agentic Development Environment
           </h3>
           </div>
 
@@ -438,13 +440,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           )}
         </div>
 
-        {/* Action Buttons - Bottom Center */}
+        {/* Action Buttons */}
         <div
           style={{
-            position: "absolute",
-            bottom: isMobile ? "60px" : isConstrainedHeight ? "40px" : "60px",
-            left: "50%",
-            transform: "translateX(-50%)",
+            marginTop: isMobile ? "40px" : isConstrainedHeight ? "60px" : "80px",
             zIndex: 3,
             display: "flex",
             gap: "16px",
