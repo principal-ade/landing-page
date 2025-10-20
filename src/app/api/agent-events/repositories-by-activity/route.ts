@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { TursoObservabilitySDK } from '@a24z/observability-sdk';
 import { Octokit } from '@octokit/rest';
-import { createFallbackOctokit, ensureRepoAccessible } from '../github-access';
+import { createFallbackOctokit, batchCheckRepoAccess } from '../github-access';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,27 +88,19 @@ export async function GET(request: Request) {
 
     const fallbackOctokit = createFallbackOctokit(githubToken);
 
-    const accessibleRepositories = await Promise.all(
-      repositories.map(async (repo) => {
-        try {
-          const hasAccess = await ensureRepoAccessible(
-            octokit,
-            fallbackOctokit,
-            repo.repoOwner,
-            repo.repoName
-          );
+    // Batch check repository access with concurrency limiting
+    const repoList = repositories.map(repo => ({
+      owner: repo.repoOwner,
+      name: repo.repoName
+    }));
 
-          return hasAccess ? repo : null;
-        } catch (error) {
-          // If an unexpected error occurs, exclude the repo but log the issue
-          console.error('[API] Unexpected error checking repo access:', error);
-          return null;
-        }
-      })
-    );
+    const accessMap = await batchCheckRepoAccess(octokit, fallbackOctokit, repoList);
 
-    // Filter out repos the user doesn't have access to
-    const filteredRepositories = accessibleRepositories.filter((repo): repo is NonNullable<typeof repo> => repo !== null);
+    // Filter repositories based on access
+    const filteredRepositories = repositories.filter(repo => {
+      const key = `${repo.repoOwner}/${repo.repoName}`;
+      return accessMap.get(key) ?? false;
+    });
 
     return NextResponse.json({
       repositories: filteredRepositories,

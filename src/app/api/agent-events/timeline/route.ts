@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { TursoObservabilitySDK } from '@a24z/observability-sdk';
 import { Octokit } from '@octokit/rest';
-import { repoVisibilityCache } from '@/lib/repo-visibility-cache';
-import { createFallbackOctokit, ensureRepoAccessible } from '../github-access';
+import { createFallbackOctokit, batchCheckRepoAccess } from '../github-access';
 
 export const dynamic = 'force-dynamic';
 
@@ -108,28 +107,11 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Check which repos the user has access to
-    const accessibleRepos = new Map<string, boolean>();
-    await Promise.all(
-      Array.from(uniqueRepos.values()).map(async ({ owner, name }) => {
-        const key = `${owner}/${name}`;
-
-        // Try to fetch the repo with the user's token
-        // If successful, they have access; if 404/403, they don't
-        try {
-          const hasAccess = await ensureRepoAccessible(
-            octokit,
-            fallbackOctokit,
-            owner,
-            name
-          );
-
-          accessibleRepos.set(key, hasAccess);
-        } catch (error: any) {
-          console.error('[API] Unexpected error checking repo access:', error);
-          accessibleRepos.set(key, false);
-        }
-      })
+    // Check which repos the user has access to (with concurrency limiting)
+    const accessibleRepos = await batchCheckRepoAccess(
+      octokit,
+      fallbackOctokit,
+      Array.from(uniqueRepos.values())
     );
 
     // Filter events to only include repos the user has access to

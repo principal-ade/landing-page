@@ -1,10 +1,12 @@
 import { Octokit } from '@octokit/rest';
+import { repoVisibilityCache } from '@/lib/repo-visibility-cache';
 
 export type OctokitLike = Pick<InstanceType<typeof Octokit>, 'repos'>;
 
 const GITHUB_TIMEOUT = 10000; // 10 seconds
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 1000; // 1 second
+const MAX_CONCURRENT_REQUESTS = 5; // Limit concurrent GitHub API calls
 
 export function createFallbackOctokit(userToken: string | null): OctokitLike {
   const serverToken = process.env.GITHUB_TOKEN;
@@ -107,6 +109,38 @@ async function tryRepoAccess(
   return false;
 }
 
+/**
+ * Limits concurrent execution of async tasks
+ */
+async function limitConcurrency<T>(
+  tasks: (() => Promise<T>)[],
+  limit: number
+): Promise<T[]> {
+  const results: T[] = new Array(tasks.length);
+  const executing: Promise<void>[] = [];
+
+  for (let i = 0; i < tasks.length; i++) {
+    const index = i;
+    const promise = tasks[index]().then((result) => {
+      results[index] = result;
+      // Remove from executing array
+      const execIndex = executing.indexOf(promise);
+      if (execIndex !== -1) {
+        executing.splice(execIndex, 1);
+      }
+    });
+
+    executing.push(promise);
+
+    if (executing.length >= limit) {
+      await Promise.race(executing);
+    }
+  }
+
+  await Promise.all(executing);
+  return results;
+}
+
 export async function ensureRepoAccessible(
   primaryOctokit: OctokitLike,
   fallbackOctokit: OctokitLike,
@@ -117,21 +151,60 @@ export async function ensureRepoAccessible(
     return false;
   }
 
+  // Check cache first
+  const cachedResult = repoVisibilityCache.get(owner, repo);
+  if (cachedResult !== null) {
+    return cachedResult;
+  }
+
+  let hasAccess = false;
+
   try {
-    return await tryRepoAccess(primaryOctokit, owner, repo);
+    hasAccess = await tryRepoAccess(primaryOctokit, owner, repo);
   } catch (error) {
     if (!isCredentialError(error)) {
       // Log the error but don't fail the entire request
       console.error(`[API] Error checking ${owner}/${repo}:`, error);
+      // Cache the negative result to avoid retrying
+      repoVisibilityCache.set(owner, repo, false);
       return false;
     }
 
     // Credential error - try fallback
     try {
-      return await tryRepoAccess(fallbackOctokit, owner, repo);
+      hasAccess = await tryRepoAccess(fallbackOctokit, owner, repo);
     } catch (fallbackError) {
       console.error(`[API] Fallback also failed for ${owner}/${repo}:`, fallbackError);
+      // Cache the negative result
+      repoVisibilityCache.set(owner, repo, false);
       return false;
     }
   }
+
+  // Cache the result (positive or negative)
+  repoVisibilityCache.set(owner, repo, hasAccess);
+  return hasAccess;
+}
+
+/**
+ * Batch check repository access with concurrency limiting
+ */
+export async function batchCheckRepoAccess(
+  primaryOctokit: OctokitLike,
+  fallbackOctokit: OctokitLike,
+  repos: Array<{ owner: string; name: string }>
+): Promise<Map<string, boolean>> {
+  const tasks = repos.map(({ owner, name }) => async () => {
+    const hasAccess = await ensureRepoAccessible(primaryOctokit, fallbackOctokit, owner, name);
+    return { key: `${owner}/${name}`, hasAccess };
+  });
+
+  const results = await limitConcurrency(tasks, MAX_CONCURRENT_REQUESTS);
+
+  const accessMap = new Map<string, boolean>();
+  results.forEach(({ key, hasAccess }) => {
+    accessMap.set(key, hasAccess);
+  });
+
+  return accessMap;
 }
