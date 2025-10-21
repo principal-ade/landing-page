@@ -289,53 +289,13 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
         borderRadius: theme.radii[2],
         overflow: "hidden",
         position: "relative",
-        width: "500px",
-        height: "500px",
+        width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
       }}
       className={className}
     >
-      {/* Clear button - only show when there are accumulated files and not playing */}
-      {hasAccumulatedFiles && !isPlaying && onClearAccumulated && (
-        <div
-          style={{
-            position: "absolute",
-            top: theme.space[2],
-            right: theme.space[2],
-            zIndex: 1000,
-          }}
-        >
-          <button
-            onClick={onClearAccumulated}
-            style={{
-              backgroundColor: theme.colors.backgroundSecondary,
-              color: theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              padding: `${theme.space[1]} ${theme.space[3]}`,
-              fontSize: theme.fontSizes[0],
-              fontWeight: theme.fontWeights.medium,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: theme.space[1],
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = theme.colors.background;
-              e.currentTarget.style.borderColor = theme.colors.primary;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-              e.currentTarget.style.borderColor = theme.colors.border;
-            }}
-          >
-            Clear Highlights
-          </button>
-        </div>
-      )}
-
       {cityData ? (
         <ArchitectureMapHighlightLayers
           cityData={cityData}
