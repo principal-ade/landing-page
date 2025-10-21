@@ -270,7 +270,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 color: theme.colors.accent,
               }}
             >
-              Principal
+              Principal ADE
             </h2>
 
             {/* Logo */}
