@@ -48,6 +48,8 @@ interface RepositoryMapProps {
   accumulatedFiles?: AccumulatedFiles;
   onClearAccumulated?: () => void;
   githubToken?: string | null;
+  lintingErrors?: Set<string>;
+  showLintingErrors?: boolean;
 }
 
 export const RepositoryMap: React.FC<RepositoryMapProps> = ({
@@ -57,8 +59,10 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
   currentEvent,
   isPlaying = false,
   accumulatedFiles,
-  onClearAccumulated,
+  onClearAccumulated: _onClearAccumulated,
   githubToken,
+  lintingErrors,
+  showLintingErrors = false,
 }) => {
   const { theme } = useTheme();
   const [fileSystemTree, setFileSystemTree] = useState<FileTree | null>(null);
@@ -170,20 +174,41 @@ export const RepositoryMap: React.FC<RepositoryMapProps> = ({
     }];
   }, [currentEvent, theme.colors]);
 
+  // Create linting errors highlight layer
+  const lintingErrorsHighlightLayer = useMemo((): HighlightLayer[] => {
+    if (!lintingErrors || lintingErrors.size === 0) {
+      return [];
+    }
+
+    return [{
+      id: 'linting-errors',
+      name: `Linting Errors (${lintingErrors.size})`,
+      color: theme.colors.error, // Red for linting errors
+      enabled: true,
+      opacity: 0.8,
+      priority: 600, // Higher than accumulated files, lower than current event
+      items: Array.from(lintingErrors).map(path => ({
+        path,
+        type: 'file' as const,
+        renderStrategy: 'border' as const, // Use border to show red outline
+      })),
+    }];
+  }, [lintingErrors, theme.colors]);
+
   // Determine if we have any accumulated files
   const hasAccumulatedFiles = accumulatedFiles &&
     (accumulatedFiles.read.size > 0 || accumulatedFiles.edited.size > 0);
 
   // Combine file type layers with event layers (event layers on top)
-  // Hide file type highlighting when playback is active OR when there are accumulated files
+  // Hide file type highlighting when playback is active OR when there are accumulated files OR when showing linting errors
   const highlightLayers = useMemo((): HighlightLayer[] => {
-    if (isPlaying || hasAccumulatedFiles) {
-      // During playback or when showing accumulated results: only show accumulated layers + current event
-      return [...accumulatedHighlightLayers, ...currentEventHighlightLayer];
+    if (isPlaying || hasAccumulatedFiles || showLintingErrors) {
+      // During playback, accumulated results, or linting mode: show accumulated layers + linting errors + current event (NO file type layers)
+      return [...accumulatedHighlightLayers, ...lintingErrorsHighlightLayer, ...currentEventHighlightLayer];
     }
-    // When not playing and no accumulated files: show file type layers + current event
+    // When not playing and no accumulated files and linting off: show file type layers + current event
     return [...fileTypeHighlightLayers, ...currentEventHighlightLayer];
-  }, [fileTypeHighlightLayers, accumulatedHighlightLayers, currentEventHighlightLayer, isPlaying, hasAccumulatedFiles]);
+  }, [fileTypeHighlightLayers, accumulatedHighlightLayers, lintingErrorsHighlightLayer, currentEventHighlightLayer, isPlaying, hasAccumulatedFiles, showLintingErrors]);
 
   // Load repository data
   useEffect(() => {

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useTheme } from "@a24z/industry-theme";
 import { RepositoryMap } from "./repository-map";
 import { EventPlaybackControls } from "./EventPlaybackControls";
 import { EventPlaybackService, PlaybackState, PlaybackSpeed } from "../services/EventPlaybackService";
-import { DynamicFileTree } from "@a24z/dynamic-file-tree";
-import { FileTree } from "@principal-ai/repository-abstraction";
+import { ThemedTerminal, ThemedTerminalRef } from "@principal-ade/industry-themed-terminal";
+import "@principal-ade/industry-themed-terminal/styles.css";
 
 interface SessionModalProps {
   sessionId: string;
@@ -68,9 +68,13 @@ export const SessionModal: React.FC<SessionModalProps> = ({
     read: Set<string>;
     edited: Set<string>;
   }>({ read: new Set(), edited: new Set() });
+  const [showLintingErrors, setShowLintingErrors] = useState(false);
+  const [lintingErrorFiles, setLintingErrorFiles] = useState<Set<string>>(new Set());
 
   const playbackServiceRef = React.useRef<EventPlaybackService | null>(null);
   const previousEventTimestampRef = React.useRef<number | null>(null);
+  const terminalRef = React.useRef<ThemedTerminalRef>(null);
+  const streamingTimeoutsRef = React.useRef<NodeJS.Timeout[]>([]);
 
   // Calculate session timeframe
   const sessionTimeframe = React.useMemo(() => {
@@ -226,6 +230,132 @@ export const SessionModal: React.FC<SessionModalProps> = ({
     previousEventTimestampRef.current = null;
   };
 
+  // Cleanup streaming timeouts
+  React.useEffect(() => {
+    return () => {
+      streamingTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      streamingTimeoutsRef.current = [];
+    };
+  }, []);
+
+  // Write events to terminal as they're played
+  React.useEffect(() => {
+    if (!currentEvent || !terminalRef.current) return;
+
+    const terminal = terminalRef.current;
+    const currentIndex = playbackState.currentIndex;
+
+    // Clear any pending streaming animations
+    streamingTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    streamingTimeoutsRef.current = [];
+
+    // Check if we went backward (user pressed previous or jumped back)
+    // In that case, we should clear terminal and replay from start to current position
+    const previousIndex = previousEventTimestampRef.current;
+    if (previousIndex !== null && currentIndex < previousIndex) {
+      terminal.clear();
+      // Replay all events up to current index (no streaming for catch-up)
+      for (let i = 0; i <= currentIndex && i < events.length; i++) {
+        const event = events[i] as CurrentEvent;
+        writeEventToTerminal(terminal, event, false);
+      }
+    } else {
+      // Normal forward playback, write with streaming effect
+      writeEventToTerminal(terminal, currentEvent, true);
+    }
+
+    previousEventTimestampRef.current = currentIndex;
+  }, [currentEvent, playbackState.currentIndex, events]);
+
+  // Helper function to write a single event to terminal with streaming effect
+  const writeEventToTerminal = (terminal: ThemedTerminalRef, event: CurrentEvent, stream: boolean = true) => {
+    const timestamp = new Date(event.timestampMs).toLocaleTimeString();
+
+    // Try to extract a meaningful event type from various fields
+    // Check both event_type (snake_case) and eventType (camelCase)
+    const eventType = (event as any).event_type || event.eventType || event.tool_name || 'event';
+    const operation = event.operation?.toLowerCase();
+
+    // Collect all lines to write
+    const lines: string[] = [];
+
+    // Format based on event type for better narrative
+    if (operation === 'read') {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m Reading files...`);
+      if (event.normalized_files && event.normalized_files.length > 0) {
+        event.normalized_files.forEach(file => {
+          const displayPath = file.repository?.relativePath || file.displayPath;
+          lines.push(`  \x1b[90m📖\x1b[0m \x1b[32m${displayPath}\x1b[0m`);
+        });
+      }
+    } else if (operation === 'edit' || operation === 'write') {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m ${operation === 'edit' ? 'Editing' : 'Writing'} files...`);
+      if (event.normalized_files && event.normalized_files.length > 0) {
+        event.normalized_files.forEach(file => {
+          const displayPath = file.repository?.relativePath || file.displayPath;
+          lines.push(`  \x1b[90m✎\x1b[0m \x1b[33m${displayPath}\x1b[0m`);
+        });
+      }
+    } else if (eventType.toLowerCase().includes('bash') || eventType.toLowerCase().includes('command')) {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m Running command...`);
+      lines.push(`  \x1b[90m$\x1b[0m \x1b[37m${eventType}\x1b[0m`);
+    } else if (eventType.toLowerCase().includes('think') || eventType.toLowerCase().includes('plan')) {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m Thinking...`);
+      lines.push(`  \x1b[90m💭\x1b[0m \x1b[36m${eventType}\x1b[0m`);
+    } else if (eventType === 'user-prompt-submit') {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m \x1b[34mUser input received\x1b[0m`);
+    } else if (eventType === 'subagent-stop' || eventType === 'stop') {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m \x1b[90mSession ${eventType === 'subagent-stop' ? 'subagent' : 'task'} completed\x1b[0m`);
+    } else if (eventType === 'notification') {
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m \x1b[36mNotification\x1b[0m`);
+    } else {
+      // Generic event
+      lines.push(`\x1b[36m${timestamp}\x1b[0m \x1b[35m▸\x1b[0m \x1b[33m${eventType}\x1b[0m`);
+      if (event.normalized_files && event.normalized_files.length > 0) {
+        event.normalized_files.forEach(file => {
+          const displayPath = file.repository?.relativePath || file.displayPath;
+          lines.push(`  \x1b[90m•\x1b[0m \x1b[32m${displayPath}\x1b[0m`);
+        });
+      }
+    }
+
+    // Show interesting metadata (not the full dump)
+    const interestingKeys = ['description', 'result', 'output', 'error', 'message', 'summary'];
+    interestingKeys.forEach(key => {
+      const value = (event as any)[key];
+      if (value && typeof value === 'string' && value.length > 0) {
+        // Split into lines and show with streaming effect
+        const valueLines = value.split('\n').slice(0, 10); // Limit to 10 lines
+        valueLines.forEach(line => {
+          if (line.trim()) {
+            const truncated = line.length > 100 ? line.slice(0, 97) + '...' : line;
+            lines.push(`  \x1b[90m│\x1b[0m ${truncated}`);
+          }
+        });
+      }
+    });
+
+    lines.push('');
+
+    // Write lines with streaming effect or immediately
+    if (stream) {
+      // Stream line by line with delay
+      lines.forEach((line, index) => {
+        const delay = index * 15; // 15ms per line for smooth streaming
+        const timeout = setTimeout(() => {
+          terminal.writeln(line);
+          if (index === lines.length - 1) {
+            terminal.scrollToBottom();
+          }
+        }, delay);
+        streamingTimeoutsRef.current.push(timeout);
+      });
+    } else {
+      // Write all at once (for backward navigation)
+      lines.forEach(line => terminal.writeln(line));
+    }
+  };
+
   // Playback control handlers
   const handlePlay = useCallback(() => {
     playbackServiceRef.current?.play();
@@ -245,6 +375,7 @@ export const SessionModal: React.FC<SessionModalProps> = ({
 
   const handleGoToStart = useCallback(() => {
     playbackServiceRef.current?.goToStart();
+    terminalRef.current?.clear();
   }, []);
 
   const handleGoToEnd = useCallback(() => {
@@ -255,162 +386,37 @@ export const SessionModal: React.FC<SessionModalProps> = ({
     playbackServiceRef.current?.setSpeed(speed);
   }, []);
 
-  // Build file tree from normalized files in events
-  const fileTree = useMemo((): FileTree => {
-    const allPaths = new Set<string>();
+  // Generate demo linting errors (pick random files from events)
+  React.useEffect(() => {
+    if (events.length === 0) return;
 
+    // Extract all unique file paths from events
+    const allFilePaths = new Set<string>();
     events.forEach(event => {
       const files = (event as any).normalized_files;
       if (Array.isArray(files)) {
         files.forEach((file: any) => {
           const path = file.repository?.relativePath || file.displayPath;
           if (path) {
-            allPaths.add(path);
+            allFilePaths.add(path);
           }
         });
       }
     });
 
-    // Convert Set to sorted array
-    const sortedPaths = Array.from(allPaths).sort();
+    // Pick ~30% of files to have "linting errors" for demo
+    const filePathsArray = Array.from(allFilePaths);
+    const errorCount = Math.max(1, Math.floor(filePathsArray.length * 0.3));
+    const errorFiles = new Set<string>();
 
-    // Build tree structure with proper types
-    interface TempNode {
-      name: string;
-      path: string;
-      children: TempNode[];
-      isFile: boolean;
+    // Randomly select files
+    const shuffled = [...filePathsArray].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < Math.min(errorCount, shuffled.length); i++) {
+      errorFiles.add(shuffled[i]);
     }
 
-    const rootNode: TempNode = {
-      name: repoName || 'root',
-      path: '',
-      children: [],
-      isFile: false,
-    };
-
-    const directories = new Map<string, TempNode>();
-    directories.set('', rootNode);
-
-    sortedPaths.forEach(filePath => {
-      const parts = filePath.split('/');
-      let currentPath = '';
-
-      // Create directories
-      for (let i = 0; i < parts.length - 1; i++) {
-        const parentPath = currentPath;
-        currentPath = currentPath ? `${currentPath}/${parts[i]}` : parts[i];
-
-        if (!directories.has(currentPath)) {
-          const dirNode: TempNode = {
-            name: parts[i],
-            path: currentPath,
-            children: [],
-            isFile: false,
-          };
-
-          const parent = directories.get(parentPath);
-          if (parent) {
-            parent.children.push(dirNode);
-          }
-
-          directories.set(currentPath, dirNode);
-        }
-      }
-
-      // Add file
-      const fileName = parts[parts.length - 1];
-      const parentPath = parts.slice(0, -1).join('/');
-      const parent = directories.get(parentPath);
-
-      if (parent) {
-        parent.children.push({
-          name: fileName,
-          path: filePath,
-          children: [],
-          isFile: true,
-        });
-      }
-    });
-
-    // Convert to proper FileTree format
-    const now = new Date();
-
-    // Build proper DirectoryInfo for root
-    const buildDirectoryInfo = (node: TempNode, depth: number): any => {
-      const childrenNodes = node.children.map(child =>
-        child.isFile
-          ? {
-              path: child.path,
-              name: child.name,
-              extension: child.name.includes('.') ? child.name.split('.').pop() || '' : '',
-              size: 0,
-              lastModified: now,
-              isDirectory: false,
-              relativePath: child.path,
-            }
-          : buildDirectoryInfo(child, depth + 1)
-      );
-
-      const fileCount = childrenNodes.filter((n: any) => !n.isDirectory).length;
-
-      return {
-        path: node.path,
-        name: node.name,
-        children: childrenNodes,
-        fileCount,
-        totalSize: 0,
-        depth,
-        relativePath: node.path,
-      };
-    };
-
-    const root = buildDirectoryInfo(rootNode, 0);
-
-    // Build allFiles and allDirectories arrays
-    const allFileInfos = sortedPaths.map(p => ({
-      path: p,
-      name: p.split('/').pop() || p,
-      extension: p.includes('.') ? p.split('.').pop() || '' : '',
-      size: 0,
-      lastModified: now,
-      isDirectory: false,
-      relativePath: p,
-    }));
-
-    const allDirInfos = Array.from(directories.values()).map(d => ({
-      path: d.path,
-      name: d.name,
-      children: [],
-      fileCount: 0,
-      totalSize: 0,
-      depth: d.path.split('/').filter(p => p).length,
-      relativePath: d.path,
-    }));
-
-    return {
-      sha: 'session-' + sessionId.slice(0, 8),
-      root,
-      allFiles: allFileInfos,
-      allDirectories: allDirInfos,
-      stats: {
-        totalFiles: sortedPaths.length,
-        totalDirectories: directories.size,
-        totalSize: 0,
-        maxDepth: Math.max(...allDirInfos.map(d => d.depth), 0),
-      },
-      metadata: {
-        id: sessionId,
-        timestamp: now,
-        sourceType: 'session-events',
-        sourceInfo: {
-          eventCount: events.length,
-          repoOwner,
-          repoName,
-        },
-      },
-    };
-  }, [events, repoName, sessionId, repoOwner]);
+    setLintingErrorFiles(errorFiles);
+  }, [events]);
 
   return (
     <div
@@ -527,6 +533,57 @@ export const SessionModal: React.FC<SessionModalProps> = ({
 
           {/* Action Buttons */}
           <div style={{ display: "flex", gap: theme.space[2], alignItems: "center" }}>
+            {/* Linting Errors Toggle Button */}
+            {lintingErrorFiles.size > 0 && (
+              <button
+                onClick={() => setShowLintingErrors(!showLintingErrors)}
+                style={{
+                  padding: `${theme.space[2]} ${theme.space[3]}`,
+                  backgroundColor: showLintingErrors ? theme.colors.error : theme.colors.backgroundSecondary,
+                  color: showLintingErrors ? "#FFFFFF" : theme.colors.text,
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: showLintingErrors ? theme.colors.error : theme.colors.border,
+                  borderRadius: theme.radii[1],
+                  fontSize: theme.fontSizes[1],
+                  fontWeight: theme.fontWeights.medium,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: theme.space[1],
+                }}
+                onMouseEnter={(e) => {
+                  if (!showLintingErrors) {
+                    e.currentTarget.style.backgroundColor = theme.colors.background;
+                    e.currentTarget.style.borderColor = theme.colors.error;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!showLintingErrors) {
+                    e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+                    e.currentTarget.style.borderColor = theme.colors.border;
+                  }
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                Linting ({lintingErrorFiles.size})
+              </button>
+            )}
+
             {/* Reset Highlights Button */}
             {accumulatedFiles.read.size > 0 || accumulatedFiles.edited.size > 0 ? (
               <button
@@ -623,57 +680,20 @@ export const SessionModal: React.FC<SessionModalProps> = ({
             flexDirection: "column",
           }}
         >
-          {/* Two-column layout: File Tree (left) and Repository Map (right) */}
+          {/* Two-column layout: Repository Map (left) and Terminal (right) */}
           <div
             style={{
               flex: 1,
               display: "grid",
-              gridTemplateColumns: "350px 1fr",
+              gridTemplateColumns: "1fr 1fr",
               gap: 0,
               overflow: "hidden",
             }}
           >
-            {/* File Tree Column */}
-            <div
-              style={{
-                borderRight: `1px solid ${theme.colors.border}`,
-                backgroundColor: theme.colors.backgroundSecondary,
-                overflow: "auto",
-                padding: theme.space[3],
-              }}
-            >
-              {loading ? (
-                <div style={{ color: theme.colors.textSecondary }}>
-                  Loading files...
-                </div>
-              ) : error ? (
-                <div style={{ color: theme.colors.error }}>{error}</div>
-              ) : (
-                <>
-                  <h3
-                    style={{
-                      fontSize: theme.fontSizes[1],
-                      fontWeight: theme.fontWeights.bold,
-                      color: theme.colors.text,
-                      margin: 0,
-                      marginBottom: theme.space[3],
-                    }}
-                  >
-                    Files Accessed
-                  </h3>
-                  <DynamicFileTree
-                    fileTree={fileTree}
-                    theme={theme}
-                    onFileSelect={(filePath) => console.log('Selected:', filePath)}
-                    padding="12px"
-                  />
-                </>
-              )}
-            </div>
-
             {/* Repository Map Column */}
             <div
               style={{
+                borderRight: `1px solid ${theme.colors.border}`,
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
@@ -702,12 +722,48 @@ export const SessionModal: React.FC<SessionModalProps> = ({
                     accumulatedFiles={accumulatedFiles}
                     onClearAccumulated={handleClearAccumulated}
                     githubToken={githubToken}
+                    lintingErrors={showLintingErrors ? lintingErrorFiles : undefined}
+                    showLintingErrors={showLintingErrors}
                   />
                 </div>
               ) : (
                 <div style={{ color: theme.colors.textSecondary }}>
                   Repository information not available
                 </div>
+              )}
+            </div>
+
+            {/* Terminal Column */}
+            <div
+              style={{
+                backgroundColor: theme.colors.background,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {loading ? (
+                <div style={{
+                  color: theme.colors.textSecondary,
+                  padding: theme.space[4],
+                }}>
+                  Loading events...
+                </div>
+              ) : error ? (
+                <div style={{
+                  color: theme.colors.error,
+                  padding: theme.space[4],
+                }}>{error}</div>
+              ) : (
+                <ThemedTerminal
+                  ref={terminalRef}
+                  theme={theme}
+                  headerTitle="Event Stream"
+                  headerSubtitle={`Session ${sessionId.slice(0, 8)}`}
+                  autoFocus={false}
+                  enableWebLinks={true}
+                  scrollback={10000}
+                />
               )}
             </div>
           </div>
