@@ -3,11 +3,21 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
-import { VerticalTimeline } from "../../components/VerticalTimeline";
-import { SessionModal } from "../../components/SessionModal";
 import { SessionSummary } from "../../components/SessionCard";
+
+// Dynamically import components that use browser-only APIs (xterm)
+const VerticalTimeline = dynamic(
+  () => import("../../components/VerticalTimeline").then(mod => ({ default: mod.VerticalTimeline })),
+  { ssr: false }
+);
+
+const SessionModal = dynamic(
+  () => import("../../components/SessionModal").then(mod => ({ default: mod.SessionModal })),
+  { ssr: false }
+);
 
 interface User {
   id: string;

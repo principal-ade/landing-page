@@ -36,6 +36,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(null);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const timeRulerRef = useRef<HTMLDivElement>(null);
   const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
 
   // Fetch events from API
@@ -132,6 +133,14 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
       behavior: "smooth",
     });
 
+    // Sync TimeRuler scroll
+    if (timeRulerRef.current) {
+      timeRulerRef.current.scrollTo({
+        top: targetScroll,
+        behavior: "smooth",
+      });
+    }
+
     setAutoScrollEnabled(false); // Only auto-scroll once
   }, [sessions.length, autoScrollEnabled]);
 
@@ -139,6 +148,11 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   const handleScroll = () => {
     // User has taken control of scrolling
     setAutoScrollEnabled(false);
+
+    // Sync TimeRuler scroll with session cards scroll
+    if (scrollContainerRef.current && timeRulerRef.current) {
+      timeRulerRef.current.scrollTop = scrollContainerRef.current.scrollTop;
+    }
   };
 
   // Calculate position for a session card
@@ -229,7 +243,12 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
         }}
       >
         {/* Time Ruler */}
-        <TimeRuler startTime={startTime} endTime={endTime} currentTime={now} />
+        <TimeRuler
+          ref={timeRulerRef}
+          startTime={startTime}
+          endTime={endTime}
+          currentTime={now}
+        />
 
         {/* Session Cards Column */}
         <div
