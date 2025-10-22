@@ -8,6 +8,24 @@ interface Event {
   timestampMs: number;
   eventType?: string;
   tool_name?: string;
+  normalized_files?: Array<{
+    originalPath: string;
+    absolutePath: string;
+    displayPath: string;
+    repository?: {
+      gitRoot: string;
+      relativePath: string;
+      remoteUrl?: string;
+      owner?: string;
+      repo?: string;
+    };
+  }>;
+  repository_context?: {
+    gitRoot: string;
+    remoteUrl?: string;
+    owner?: string;
+    repo?: string;
+  };
   [key: string]: unknown;
 }
 
@@ -40,8 +58,23 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
         const data = await response.json();
 
         if (response.ok) {
-          setEvents(data.events || []);
+          const fetchedEvents = data.events || [];
+          setEvents(fetchedEvents);
           setError(null);
+
+          // Debug: Log sample events
+          console.log('[SessionEventTimeline] Sample events:', {
+            count: fetchedEvents.length,
+            samples: fetchedEvents.slice(0, 3).map((e: Event) => ({
+              tool_name: e.tool_name,
+              timestamp: e.timestamp,
+              has_repository_context: !!e.repository_context,
+              repository_context: e.repository_context,
+              has_normalized_files: !!e.normalized_files,
+              normalized_files_count: e.normalized_files?.length || 0,
+              first_file_repo: e.normalized_files?.[0]?.repository
+            }))
+          });
         } else {
           setError(data.message || "Failed to fetch events");
         }
@@ -71,10 +104,28 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
     };
   }, [events]);
 
-  // Get position for an event (0-100%)
+  // Get horizontal position for an event (0-100%)
   const getEventPosition = (timestampMs: number) => {
     if (duration === 0) return 50; // Center if no duration
     return ((timestampMs - startTime) / duration) * 100;
+  };
+
+  // Get vertical position for an event based on repository lane (0-100%)
+  const getEventLanePosition = (event: Event) => {
+    const repoKey = getRepositoryKey(event);
+    const laneIndex = repositories.indexOf(repoKey);
+    const numLanes = repositories.length;
+
+    if (numLanes === 0) return 50; // Center if no lanes
+    if (numLanes === 1) return 50; // Center if only one lane
+
+    // Distribute lanes evenly across the vertical space
+    // Add padding at top and bottom (10% each)
+    const padding = 10;
+    const usableSpace = 100 - (2 * padding);
+    const laneSpacing = usableSpace / (numLanes - 1);
+
+    return padding + (laneIndex * laneSpacing);
   };
 
   // Get color for event type
@@ -90,6 +141,66 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
         return theme.colors.textMuted;
     }
   };
+
+  // Extract repository identifier from event
+  const getRepositoryKey = (event: Event): string => {
+    // Try repository_context first
+    if (event.repository_context?.owner && event.repository_context?.repo) {
+      return `${event.repository_context.owner}/${event.repository_context.repo}`;
+    }
+
+    // Try first normalized_file repository
+    if (event.normalized_files?.[0]?.repository?.owner &&
+        event.normalized_files?.[0]?.repository?.repo) {
+      return `${event.normalized_files[0].repository.owner}/${event.normalized_files[0].repository.repo}`;
+    }
+
+    // Fallback to git root or "Unknown"
+    if (event.repository_context?.gitRoot) {
+      return event.repository_context.gitRoot.split('/').pop() || "Unknown";
+    }
+
+    return "Unknown";
+  };
+
+  // Group events by repository
+  const eventsByRepository = useMemo(() => {
+    const grouped = new Map<string, Event[]>();
+    events.forEach((event) => {
+      const repoKey = getRepositoryKey(event);
+      if (!grouped.has(repoKey)) {
+        grouped.set(repoKey, []);
+      }
+      grouped.get(repoKey)!.push(event);
+    });
+
+    // Debug: Log repository grouping
+    console.log('[SessionEventTimeline] Repository grouping:', {
+      totalEvents: events.length,
+      repositories: Array.from(grouped.keys()),
+      distribution: Array.from(grouped.entries()).map(([repo, evts]) => ({
+        repo,
+        count: evts.length
+      }))
+    });
+
+    return grouped;
+  }, [events]);
+
+  // Get repositories as an ordered array for consistent lane positioning
+  const repositories = useMemo(() => {
+    return Array.from(eventsByRepository.keys()).sort();
+  }, [eventsByRepository]);
+
+  // Calculate dynamic height based on number of repositories
+  const dynamicHeight = useMemo(() => {
+    const minHeight = height;
+    const numRepos = repositories.length;
+
+    // Add 60px for each repository beyond the first 2
+    if (numRepos <= 2) return minHeight;
+    return minHeight + ((numRepos - 2) * 60);
+  }, [repositories.length, height]);
 
   // Group events by tool name
   const eventsByTool = useMemo(() => {
@@ -155,7 +266,7 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
   return (
     <div
       style={{
-        height: `${height}px`,
+        height: `${dynamicHeight}px`,
         position: "relative",
         backgroundColor: theme.colors.background,
         borderRadius: theme.radii[2],
@@ -187,7 +298,7 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
             color: theme.colors.textSecondary,
           }}
         >
-          {events.length} events
+          {events.length} events • {repositories.length} {repositories.length === 1 ? 'repository' : 'repositories'}
           {duration > 0 && (
             <span style={{ marginLeft: theme.space[2] }}>
               • {Math.round(duration / 1000)}s duration
@@ -200,21 +311,50 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
       <div
         style={{
           position: "relative",
-          height: `${height - 60}px`,
+          height: `${dynamicHeight - 60}px`,
         }}
       >
-        {/* Timeline base line */}
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: 0,
-            right: 0,
-            height: "2px",
-            backgroundColor: theme.colors.border,
-            transform: "translateY(-50%)",
-          }}
-        />
+        {/* Timeline lane lines - one for each repository */}
+        {repositories.map((repo, idx) => {
+          const lanePos = repositories.length === 1 ? 50 :
+            10 + (idx * (80 / Math.max(1, repositories.length - 1)));
+          return (
+            <React.Fragment key={repo}>
+              {/* Lane line */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: `${lanePos}%`,
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  backgroundColor: theme.colors.border,
+                  transform: "translateY(-50%)",
+                }}
+              />
+              {/* Repository label */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: `${lanePos}%`,
+                  left: 0,
+                  transform: "translateY(-50%)",
+                  fontSize: theme.fontSizes[0],
+                  color: theme.colors.textSecondary,
+                  backgroundColor: theme.colors.background,
+                  padding: `${theme.space[1]} ${theme.space[2]}`,
+                  borderRadius: theme.radii[1],
+                  border: `1px solid ${theme.colors.border}`,
+                  whiteSpace: "nowrap",
+                  zIndex: 5,
+                }}
+                title={repo}
+              >
+                {repo.length > 25 ? `${repo.substring(0, 25)}...` : repo}
+              </div>
+            </React.Fragment>
+          );
+        })}
 
         {/* Start and end markers */}
         <div
@@ -245,6 +385,7 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
         {/* Event markers */}
         {events.map((event, idx) => {
           const position = getEventPosition(event.timestampMs);
+          const lanePosition = getEventLanePosition(event);
           const isCurrentEvent = currentEvent?.timestampMs === event.timestampMs;
           const isHovered = hoveredEvent?.timestampMs === event.timestampMs;
           const color = getEventColor(event.eventType);
@@ -254,7 +395,7 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
               key={idx}
               style={{
                 position: "absolute",
-                top: "50%",
+                top: `${lanePosition}%`,
                 left: `${position}%`,
                 transform: "translate(-50%, -50%)",
                 cursor: "pointer",
@@ -304,6 +445,9 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
                   <div style={{ fontWeight: theme.fontWeights.bold }}>
                     {event.tool_name || event.eventType || "Event"}
                   </div>
+                  <div style={{ color: theme.colors.textSecondary, fontSize: theme.fontSizes[0] }}>
+                    {getRepositoryKey(event)}
+                  </div>
                   <div style={{ color: theme.colors.textSecondary }}>
                     {new Date(event.timestampMs).toLocaleTimeString()}
                   </div>
@@ -313,7 +457,7 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
           );
         })}
 
-        {/* Tool legend */}
+        {/* Repository legend */}
         <div
           style={{
             position: "absolute",
@@ -326,35 +470,33 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
             fontSize: theme.fontSizes[0],
           }}
         >
-          {Array.from(eventsByTool.keys())
-            .slice(0, 5)
-            .map((tool) => (
+          {repositories.slice(0, 5).map((repo) => (
+            <div
+              key={repo}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: theme.space[1],
+                color: theme.colors.textSecondary,
+              }}
+            >
               <div
-                key={tool}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: theme.space[1],
-                  color: theme.colors.textSecondary,
+                  width: "8px",
+                  height: "8px",
+                  backgroundColor: theme.colors.primary,
+                  borderRadius: "50%",
                 }}
-              >
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    backgroundColor: theme.colors.primary,
-                    borderRadius: "50%",
-                  }}
-                />
-                <span>{tool}</span>
-                <span style={{ color: theme.colors.textMuted }}>
-                  ({eventsByTool.get(tool)!.length})
-                </span>
-              </div>
-            ))}
-          {eventsByTool.size > 5 && (
+              />
+              <span>{repo.length > 20 ? `${repo.substring(0, 20)}...` : repo}</span>
+              <span style={{ color: theme.colors.textMuted }}>
+                ({eventsByRepository.get(repo)!.length})
+              </span>
+            </div>
+          ))}
+          {repositories.length > 5 && (
             <div style={{ color: theme.colors.textMuted }}>
-              +{eventsByTool.size - 5} more
+              +{repositories.length - 5} more
             </div>
           )}
         </div>

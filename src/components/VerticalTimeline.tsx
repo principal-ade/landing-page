@@ -114,6 +114,86 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
     return Array.from(sessionMap.values()).sort((a, b) => b.startTime - a.startTime);
   }, [events]);
 
+  // Group sessions by repository
+  const sessionsByRepository = useMemo(() => {
+    const grouped = new Map<string, SessionSummary[]>();
+
+    sessions.forEach((session) => {
+      const repoKey = session.repoOwner && session.repoName
+        ? `${session.repoOwner}/${session.repoName}`
+        : "Unknown";
+
+      if (!grouped.has(repoKey)) {
+        grouped.set(repoKey, []);
+      }
+      grouped.get(repoKey)!.push(session);
+    });
+
+    return grouped;
+  }, [sessions]);
+
+  // Get repositories as ordered array
+  const repositories = useMemo(() => {
+    return Array.from(sessionsByRepository.keys()).sort();
+  }, [sessionsByRepository]);
+
+  // Check if two sessions overlap in time
+  const sessionsOverlap = (session1: SessionSummary, session2: SessionSummary): boolean => {
+    return session1.startTime < session2.endTime && session2.startTime < session1.endTime;
+  };
+
+  // Assign sub-lanes to sessions to prevent overlap within a repository
+  const assignLanes = (sessions: SessionSummary[]): Array<SessionSummary & { lane: number; totalLanes: number }> => {
+    if (sessions.length === 0) return [];
+
+    // Sort by start time
+    const sorted = [...sessions].sort((a, b) => a.startTime - b.startTime);
+
+    // Track which lane each session is in
+    const sessionLanes: Array<SessionSummary & { lane: number; totalLanes: number }> = [];
+
+    // For each session, find the first available lane
+    sorted.forEach((session) => {
+      // Find all sessions that overlap with this one
+      const overlapping = sessionLanes.filter(s => sessionsOverlap(s, session));
+
+      // Find the first available lane (0, 1, 2, ...)
+      const usedLanes = new Set(overlapping.map(s => s.lane));
+      let lane = 0;
+      while (usedLanes.has(lane)) {
+        lane++;
+      }
+
+      sessionLanes.push({
+        ...session,
+        lane,
+        totalLanes: 1, // Will be updated later
+      });
+    });
+
+    // Calculate total lanes needed (max lane + 1)
+    const maxLane = Math.max(...sessionLanes.map(s => s.lane), 0);
+    const totalLanes = maxLane + 1;
+
+    // Update all sessions with total lanes
+    return sessionLanes.map(s => ({
+      ...s,
+      totalLanes,
+    }));
+  };
+
+  // Assign lanes to sessions in each repository
+  const sessionsWithLanes = useMemo(() => {
+    const result = new Map<string, Array<SessionSummary & { lane: number; totalLanes: number }>>();
+
+    repositories.forEach(repoKey => {
+      const repoSessions = sessionsByRepository.get(repoKey) || [];
+      result.set(repoKey, assignLanes(repoSessions));
+    });
+
+    return result;
+  }, [sessionsByRepository, repositories]);
+
   // Calculate time range
   const now = Date.now();
   const startTime = now - hours * 60 * 60 * 1000;
@@ -205,35 +285,6 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
         backgroundColor: theme.colors.background,
       }}
     >
-      {/* Controls Header */}
-      <div
-        style={{
-          padding: theme.space[3],
-          borderBottom: `1px solid ${theme.colors.border}`,
-          backgroundColor: theme.colors.backgroundSecondary,
-        }}
-      >
-        <div>
-          <div
-            style={{
-              fontSize: theme.fontSizes[1],
-              fontWeight: theme.fontWeights.bold,
-              color: theme.colors.text,
-            }}
-          >
-            {sessions.length} Sessions
-          </div>
-          <div
-            style={{
-              fontSize: theme.fontSizes[0],
-              color: theme.colors.textSecondary,
-            }}
-          >
-            {events.length} total events
-          </div>
-        </div>
-      </div>
-
       {/* Timeline Container */}
       <div
         style={{
@@ -250,14 +301,14 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
           currentTime={now}
         />
 
-        {/* Session Cards Column */}
+        {/* Session Cards Columns - One per repository */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
           style={{
             flex: 1,
             overflowY: "auto",
-            overflowX: "hidden",
+            overflowX: "auto",
             position: "relative",
             WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
           }}
@@ -268,6 +319,9 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
               position: "relative",
               minHeight: "200vh", // Tall enough to scroll through time
               padding: theme.space[3],
+              display: "grid",
+              gridTemplateColumns: `repeat(${repositories.length}, minmax(300px, 1fr))`,
+              gap: theme.space[3],
             }}
           >
             {sessions.length === 0 ? (
@@ -276,40 +330,114 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
                   textAlign: "center",
                   padding: theme.space[6],
                   color: theme.colors.textSecondary,
+                  gridColumn: "1 / -1",
                 }}
               >
                 No sessions found
               </div>
             ) : (
-              sessions.map((session) => {
-                const position = getSessionPosition(session.startTime);
+              repositories.map((repoKey, colIndex) => {
+                const repoSessions = sessionsWithLanes.get(repoKey) || [];
+                const totalLanes = repoSessions[0]?.totalLanes || 1;
 
                 return (
                   <div
-                    key={session.sessionId}
+                    key={repoKey}
                     style={{
-                      position: "absolute",
-                      top: `${position}%`,
-                      left: 0,
-                      right: 0,
-                      paddingRight: theme.space[3],
-                      marginBottom: theme.space[2],
+                      position: "relative",
+                      minHeight: "100%",
                     }}
                   >
-                    <SessionCard
-                      session={session}
-                      onClick={() => {
-                        // Toggle expansion for inline view
-                        setExpandedSessionId(
-                          expandedSessionId === session.sessionId
-                            ? null
-                            : session.sessionId
-                        );
-                        // Call parent callback if provided (for modal)
-                        onSessionClick?.(session);
+                    {/* Repository Column Header */}
+                    <div
+                      style={{
+                        position: "sticky",
+                        top: 0,
+                        backgroundColor: theme.colors.backgroundSecondary,
+                        padding: theme.space[2],
+                        borderRadius: theme.radii[1],
+                        marginBottom: theme.space[2],
+                        border: `1px solid ${theme.colors.border}`,
+                        zIndex: 10,
                       }}
-                      isExpanded={expandedSessionId === session.sessionId}
-                    />
+                    >
+                      {/* Repository name and owner */}
+                      {(() => {
+                        const parts = repoKey.split('/');
+                        const owner = parts[0];
+                        const repo = parts[1] || repoKey; // Fallback to full key if no slash
+
+                        return (
+                          <div style={{ marginBottom: theme.space[1] }}>
+                            <div
+                              style={{
+                                fontSize: theme.fontSizes[2],
+                                fontWeight: theme.fontWeights.bold,
+                                color: theme.colors.text,
+                                fontFamily: "monospace",
+                              }}
+                            >
+                              {repo}
+                            </div>
+                            {parts.length > 1 && (
+                              <div
+                                style={{
+                                  fontSize: theme.fontSizes[0],
+                                  color: theme.colors.textMuted,
+                                  fontFamily: "monospace",
+                                }}
+                              >
+                                {owner}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
+
+                      <div
+                        style={{
+                          fontSize: theme.fontSizes[0],
+                          color: theme.colors.textSecondary,
+                        }}
+                      >
+                        {repoSessions.length} {repoSessions.length === 1 ? 'session' : 'sessions'}
+                      </div>
+                    </div>
+
+                    {/* Sessions in this repository column with sub-lanes */}
+                    {repoSessions.map((session) => {
+                      const position = getSessionPosition(session.startTime);
+                      const laneWidth = 100 / totalLanes; // Percentage width per lane
+                      const leftPosition = session.lane * laneWidth; // Left offset based on lane
+
+                      return (
+                        <div
+                          key={session.sessionId}
+                          style={{
+                            position: "absolute",
+                            top: `${position}%`,
+                            left: `${leftPosition}%`,
+                            width: `${laneWidth}%`,
+                            paddingRight: totalLanes > 1 ? theme.space[1] : 0,
+                          }}
+                        >
+                          <SessionCard
+                            session={session}
+                            onClick={() => {
+                              // Toggle expansion for inline view
+                              setExpandedSessionId(
+                                expandedSessionId === session.sessionId
+                                  ? null
+                                  : session.sessionId
+                              );
+                              // Call parent callback if provided (for modal)
+                              onSessionClick?.(session);
+                            }}
+                            isExpanded={expandedSessionId === session.sessionId}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })

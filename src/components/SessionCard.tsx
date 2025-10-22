@@ -84,12 +84,12 @@ export const SessionCard: React.FC<SessionCardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Header: Time and Duration */}
+      {/* Header: Start Time and Duration */}
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: theme.space[2],
           marginBottom: theme.space[2],
         }}
       >
@@ -100,34 +100,17 @@ export const SessionCard: React.FC<SessionCardProps> = ({
             color: theme.colors.text,
           }}
         >
-          {startTimeText} - {endTimeText}
+          {startTimeText}
         </div>
         <div
           style={{
             fontSize: theme.fontSizes[0],
             color: theme.colors.textSecondary,
-            backgroundColor: theme.colors.backgroundSecondary,
-            padding: "2px 8px",
-            borderRadius: theme.radii[1],
           }}
         >
-          {durationText}
+          • {durationText}
         </div>
       </div>
-
-      {/* Repository Info */}
-      {session.repoOwner && session.repoName && (
-        <div
-          style={{
-            fontSize: theme.fontSizes[1],
-            color: theme.colors.text,
-            marginBottom: theme.space[2],
-            fontFamily: "monospace",
-          }}
-        >
-          {session.repoOwner}/<strong>{session.repoName}</strong>
-        </div>
-      )}
 
       {/* Session ID (truncated) */}
       <div
