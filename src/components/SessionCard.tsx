@@ -51,10 +51,6 @@ export const SessionCard: React.FC<SessionCardProps> = ({
     hour: "numeric",
     minute: "2-digit",
   });
-  const endTimeText = new Date(session.endTime).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-  });
 
   return (
     <div
@@ -118,100 +114,10 @@ export const SessionCard: React.FC<SessionCardProps> = ({
           fontSize: theme.fontSizes[0],
           color: theme.colors.textMuted,
           fontFamily: "monospace",
-          marginBottom: theme.space[2],
         }}
       >
         Session: {session.sessionId.slice(0, 8)}...
       </div>
-
-      {/* Event Count and Types */}
-      <div
-        style={{
-          display: "flex",
-          gap: theme.space[2],
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            fontSize: theme.fontSizes[0],
-            color: theme.colors.textSecondary,
-          }}
-        >
-          {session.eventCount} events
-        </div>
-
-        {/* Tool badges */}
-        {session.tools && session.tools.length > 0 && (
-          <div style={{ display: "flex", gap: theme.space[1], flexWrap: "wrap" }}>
-            {session.tools.slice(0, 3).map((tool, idx) => (
-              <div
-                key={idx}
-                style={{
-                  fontSize: theme.fontSizes[0],
-                  color: theme.colors.accent,
-                  backgroundColor: theme.colors.backgroundSecondary,
-                  padding: "2px 6px",
-                  borderRadius: theme.radii[1],
-                  border: `1px solid ${theme.colors.border}`,
-                }}
-              >
-                {tool}
-              </div>
-            ))}
-            {session.tools.length > 3 && (
-              <div
-                style={{
-                  fontSize: theme.fontSizes[0],
-                  color: theme.colors.textMuted,
-                  padding: "2px 6px",
-                }}
-              >
-                +{session.tools.length - 3} more
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Expanded details */}
-      {isExpanded && session.eventTypes && session.eventTypes.length > 0 && (
-        <div
-          style={{
-            marginTop: theme.space[3],
-            paddingTop: theme.space[3],
-            borderTop: `1px solid ${theme.colors.border}`,
-          }}
-        >
-          <div
-            style={{
-              fontSize: theme.fontSizes[0],
-              color: theme.colors.textSecondary,
-              marginBottom: theme.space[1],
-            }}
-          >
-            Event Types:
-          </div>
-          <div style={{ display: "flex", gap: theme.space[1], flexWrap: "wrap" }}>
-            {session.eventTypes.map((type, idx) => (
-              <div
-                key={idx}
-                style={{
-                  fontSize: theme.fontSizes[0],
-                  color: theme.colors.text,
-                  backgroundColor: theme.colors.backgroundSecondary,
-                  padding: "2px 6px",
-                  borderRadius: theme.radii[1],
-                  border: `1px solid ${theme.colors.border}`,
-                }}
-              >
-                {type}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

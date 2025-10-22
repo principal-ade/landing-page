@@ -23,6 +23,51 @@ interface VerticalTimelineProps {
   onSessionClick?: (session: SessionSummary) => void;
 }
 
+// Check if two sessions overlap in time
+const sessionsOverlap = (session1: SessionSummary, session2: SessionSummary): boolean => {
+  return session1.startTime < session2.endTime && session2.startTime < session1.endTime;
+};
+
+// Assign sub-lanes to sessions to prevent overlap within a repository
+const assignLanes = (sessions: SessionSummary[]): Array<SessionSummary & { lane: number; totalLanes: number }> => {
+  if (sessions.length === 0) return [];
+
+  // Sort by start time
+  const sorted = [...sessions].sort((a, b) => a.startTime - b.startTime);
+
+  // Track which lane each session is in
+  const sessionLanes: Array<SessionSummary & { lane: number; totalLanes: number }> = [];
+
+  // For each session, find the first available lane
+  sorted.forEach((session) => {
+    // Find all sessions that overlap with this one
+    const overlapping = sessionLanes.filter(s => sessionsOverlap(s, session));
+
+    // Find the first available lane (0, 1, 2, ...)
+    const usedLanes = new Set(overlapping.map(s => s.lane));
+    let lane = 0;
+    while (usedLanes.has(lane)) {
+      lane++;
+    }
+
+    sessionLanes.push({
+      ...session,
+      lane,
+      totalLanes: 1, // Will be updated later
+    });
+  });
+
+  // Calculate total lanes needed (max lane + 1)
+  const maxLane = Math.max(...sessionLanes.map(s => s.lane), 0);
+  const totalLanes = maxLane + 1;
+
+  // Update all sessions with total lanes
+  return sessionLanes.map(s => ({
+    ...s,
+    totalLanes,
+  }));
+};
+
 export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   hours = 24,
   refreshInterval = 5000,
@@ -137,51 +182,6 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
     return Array.from(sessionsByRepository.keys()).sort();
   }, [sessionsByRepository]);
 
-  // Check if two sessions overlap in time
-  const sessionsOverlap = (session1: SessionSummary, session2: SessionSummary): boolean => {
-    return session1.startTime < session2.endTime && session2.startTime < session1.endTime;
-  };
-
-  // Assign sub-lanes to sessions to prevent overlap within a repository
-  const assignLanes = (sessions: SessionSummary[]): Array<SessionSummary & { lane: number; totalLanes: number }> => {
-    if (sessions.length === 0) return [];
-
-    // Sort by start time
-    const sorted = [...sessions].sort((a, b) => a.startTime - b.startTime);
-
-    // Track which lane each session is in
-    const sessionLanes: Array<SessionSummary & { lane: number; totalLanes: number }> = [];
-
-    // For each session, find the first available lane
-    sorted.forEach((session) => {
-      // Find all sessions that overlap with this one
-      const overlapping = sessionLanes.filter(s => sessionsOverlap(s, session));
-
-      // Find the first available lane (0, 1, 2, ...)
-      const usedLanes = new Set(overlapping.map(s => s.lane));
-      let lane = 0;
-      while (usedLanes.has(lane)) {
-        lane++;
-      }
-
-      sessionLanes.push({
-        ...session,
-        lane,
-        totalLanes: 1, // Will be updated later
-      });
-    });
-
-    // Calculate total lanes needed (max lane + 1)
-    const maxLane = Math.max(...sessionLanes.map(s => s.lane), 0);
-    const totalLanes = maxLane + 1;
-
-    // Update all sessions with total lanes
-    return sessionLanes.map(s => ({
-      ...s,
-      totalLanes,
-    }));
-  };
-
   // Assign lanes to sessions in each repository
   const sessionsWithLanes = useMemo(() => {
     const result = new Map<string, Array<SessionSummary & { lane: number; totalLanes: number }>>();
@@ -198,6 +198,30 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   const now = Date.now();
   const startTime = now - hours * 60 * 60 * 1000;
   const endTime = now;
+
+  // Generate hour markers for horizontal lines
+  const hourMarkers = useMemo(() => {
+    const markers: number[] = [];
+    const duration = endTime - startTime;
+    const durationHours = duration / (60 * 60 * 1000);
+
+    // Use 1 hour intervals for short durations, 2 hours for longer
+    const intervalHours = durationHours <= 12 ? 1 : 2;
+    const intervalMs = intervalHours * 60 * 60 * 1000;
+    const firstMarkerTime = Math.ceil(startTime / intervalMs) * intervalMs;
+
+    for (let time = firstMarkerTime; time <= endTime; time += intervalMs) {
+      const date = new Date(time);
+      const hrs = date.getHours();
+
+      // For 2-hour intervals, only include even hours
+      if (intervalHours === 1 || hrs % 2 === 0) {
+        markers.push(time);
+      }
+    }
+
+    return markers;
+  }, [startTime, endTime]);
 
   // Auto-scroll to current time on initial load
   useEffect(() => {
@@ -321,9 +345,29 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
               padding: theme.space[3],
               display: "grid",
               gridTemplateColumns: `repeat(${repositories.length}, minmax(300px, 1fr))`,
-              gap: theme.space[3],
+              gap: 0,
             }}
           >
+            {/* Horizontal hour lines */}
+            {hourMarkers.map((markerTime, idx) => {
+              const position = ((markerTime - startTime) / (endTime - startTime)) * 100;
+              return (
+                <div
+                  key={`hour-line-${idx}`}
+                  style={{
+                    position: "absolute",
+                    top: `${position}%`,
+                    left: 0,
+                    right: 0,
+                    height: "1px",
+                    backgroundColor: theme.colors.border,
+                    opacity: 0.3,
+                    pointerEvents: "none",
+                    zIndex: 0,
+                  }}
+                />
+              );
+            })}
             {sessions.length === 0 ? (
               <div
                 style={{
@@ -339,6 +383,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
               repositories.map((repoKey, colIndex) => {
                 const repoSessions = sessionsWithLanes.get(repoKey) || [];
                 const totalLanes = repoSessions[0]?.totalLanes || 1;
+                const isNotLastColumn = colIndex < repositories.length - 1;
 
                 return (
                   <div
@@ -346,6 +391,8 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
                     style={{
                       position: "relative",
                       minHeight: "100%",
+                      padding: `0 ${theme.space[2]}`,
+                      borderRight: isNotLastColumn ? `1px solid ${theme.colors.border}` : undefined,
                     }}
                   >
                     {/* Repository Column Header */}
