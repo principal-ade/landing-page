@@ -74,8 +74,9 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   githubToken = null,
   onSessionClick,
 }) => {
-  const { theme } = useTheme();
+  const { theme} = useTheme();
   const [events, setEvents] = useState<TimelineEvent[]>([]);
+  const [sessionGitActivity, setSessionGitActivity] = useState<Map<string, { hasGitActivity: boolean; commitCount: number; commitMessages: string[]; commitSHAs: string[] }>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(null);
@@ -117,6 +118,71 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
     return () => clearInterval(interval);
   }, [hours, refreshInterval, githubToken]);
 
+  // Fetch git activity for all sessions
+  useEffect(() => {
+    const fetchGitActivity = async () => {
+      if (events.length === 0) {
+        setSessionGitActivity(new Map());
+        return;
+      }
+
+      try {
+        // Get unique session IDs
+        const uniqueSessionIds = new Set<string>();
+        events.forEach(event => {
+          if (event.sessionId) {
+            uniqueSessionIds.add(event.sessionId);
+          }
+        });
+
+        // Fetch git activity for each session
+        const activityPromises = Array.from(uniqueSessionIds).map(async (sessionId) => {
+          try {
+            const response = await fetch(`/api/agent-events/session-git-activity?sessionId=${sessionId}`);
+            if (!response.ok) {
+              return { sessionId, hasGitActivity: false, commitCount: 0, commitMessages: [], commitSHAs: [] };
+            }
+
+            const data = await response.json();
+            return {
+              sessionId,
+              hasGitActivity: data.hasGitCommands || false,
+              commitCount: data.commitCount || 0,
+              commitMessages: data.commitMessages || [],
+              commitSHAs: data.commitSHAs || [],
+            };
+          } catch (error) {
+            console.error(`Error fetching git activity for session ${sessionId}:`, error);
+            return { sessionId, hasGitActivity: false, commitCount: 0, commitMessages: [], commitSHAs: [] };
+          }
+        });
+
+        const activityResults = await Promise.all(activityPromises);
+
+        // Build map of session ID to git activity
+        const activityMap = new Map<string, { hasGitActivity: boolean; commitCount: number; commitMessages: string[]; commitSHAs: string[] }>();
+        activityResults.forEach(result => {
+          activityMap.set(result.sessionId, {
+            hasGitActivity: result.hasGitActivity,
+            commitCount: result.commitCount,
+            commitMessages: result.commitMessages,
+            commitSHAs: result.commitSHAs,
+          });
+        });
+
+        setSessionGitActivity(activityMap);
+      } catch (error) {
+        console.error('Error fetching git activity:', error);
+        setSessionGitActivity(new Map());
+      }
+    };
+
+    fetchGitActivity();
+    // Refresh git activity when events change
+    const interval = setInterval(fetchGitActivity, refreshInterval);
+    return () => clearInterval(interval);
+  }, [events, refreshInterval]);
+
   // Group events into session summaries
   const sessions = useMemo(() => {
     if (events.length === 0) return [];
@@ -127,6 +193,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
       const sessionId = event.sessionId || "unknown";
 
       if (!sessionMap.has(sessionId)) {
+        const gitActivity = sessionGitActivity.get(sessionId);
         sessionMap.set(sessionId, {
           sessionId,
           startTime: event.timestampMs,
@@ -136,6 +203,10 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
           repoName: event.repoName,
           tools: event.toolName ? [event.toolName] : [],
           eventTypes: event.eventType ? [event.eventType] : [],
+          hasGitActivity: gitActivity?.hasGitActivity,
+          commitCount: gitActivity?.commitCount,
+          commitMessages: gitActivity?.commitMessages,
+          commitSHAs: gitActivity?.commitSHAs,
         });
       } else {
         const session = sessionMap.get(sessionId)!;
@@ -157,7 +228,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
 
     // Sort by start time (most recent first)
     return Array.from(sessionMap.values()).sort((a, b) => b.startTime - a.startTime);
-  }, [events]);
+  }, [events, sessionGitActivity]);
 
   // Group sessions by repository
   const sessionsByRepository = useMemo(() => {
@@ -263,6 +334,13 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
   const getSessionPosition = (sessionStartTime: number) => {
     const totalDuration = endTime - startTime;
     return ((sessionStartTime - startTime) / totalDuration) * 100;
+  };
+
+  // Calculate height for a session card based on duration
+  const getSessionHeight = (sessionStartTime: number, sessionEndTime: number) => {
+    const totalDuration = endTime - startTime;
+    const sessionDuration = sessionEndTime - sessionStartTime;
+    return (sessionDuration / totalDuration) * 100;
   };
 
   if (loading) {
@@ -454,6 +532,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
                     {/* Sessions in this repository column with sub-lanes */}
                     {repoSessions.map((session) => {
                       const position = getSessionPosition(session.startTime);
+                      const height = getSessionHeight(session.startTime, session.endTime);
                       const laneWidth = 100 / totalLanes; // Percentage width per lane
                       const leftPosition = session.lane * laneWidth; // Left offset based on lane
 
@@ -463,6 +542,7 @@ export const VerticalTimeline: React.FC<VerticalTimelineProps> = ({
                           style={{
                             position: "absolute",
                             top: `${position}%`,
+                            height: `${height}%`,
                             left: `${leftPosition}%`,
                             width: `${laneWidth}%`,
                             paddingRight: totalLanes > 1 ? theme.space[1] : 0,
