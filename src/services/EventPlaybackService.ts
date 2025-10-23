@@ -10,7 +10,10 @@
  * Inspired by EventHighlightService from electron-app but simplified for web playback.
  */
 
-export type PlaybackSpeed = 0.5 | 1 | 2 | 5;
+export type PlaybackSpeed = number;
+
+export const MIN_PLAYBACK_SPEED = 1;
+export const MAX_PLAYBACK_SPEED = 50;
 
 export interface PlaybackState {
   isPlaying: boolean;
@@ -185,7 +188,12 @@ export class EventPlaybackService {
    * Set playback speed
    */
   setSpeed(speed: PlaybackSpeed): void {
-    this.speed = speed;
+    const numericSpeed = Number(speed);
+    const safeSpeed = Number.isFinite(numericSpeed)
+      ? Math.min(Math.max(numericSpeed, MIN_PLAYBACK_SPEED), MAX_PLAYBACK_SPEED)
+      : MIN_PLAYBACK_SPEED;
+
+    this.speed = safeSpeed;
 
     // If playing, restart interval with new speed
     if (this.isPlaying) {
