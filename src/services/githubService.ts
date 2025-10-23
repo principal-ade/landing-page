@@ -20,7 +20,7 @@ import {
   FileInfo,
   DirectoryInfo,
 } from "@principal-ai/repository-abstraction";
-import { getProxiedImageUrl } from "../utils/avatarUtils";
+// Removed proxy image utility - using direct URLs with Next.js Image remotePatterns
 
 export class GitHubService {
   private baseUrl: string;
@@ -302,7 +302,7 @@ export class GitHubService {
       title: pr.title,
       state: pr.state as "open" | "closed" | "merged",
       author: pr.user.login,
-      authorAvatar: getProxiedImageUrl(pr.user.avatar_url),
+      authorAvatar: pr.user.avatar_url,
       createdAt: pr.created_at,
       updatedAt: pr.updated_at,
       changedFiles: pr.changed_files,

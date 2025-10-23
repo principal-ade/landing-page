@@ -242,9 +242,14 @@ export default function SessionsPage() {
                     alt={user.name}
                     width={isMobile ? 32 : 40}
                     height={isMobile ? 32 : 40}
+                    unoptimized
                     style={{
                       borderRadius: "50%",
                       border: `2px solid ${theme.colors.border}`,
+                    }}
+                    onError={(e) => {
+                      console.error("Failed to load avatar:", user.avatar_url);
+                      e.currentTarget.style.display = "none";
                     }}
                   />
                 )}

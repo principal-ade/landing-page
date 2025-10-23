@@ -540,6 +540,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           >
             Sessions
           </Link>
+          <Link
+            href="/observatory"
+            style={{
+              padding: isMobile ? "8px 16px" : isConstrainedHeight ? "8px 16px" : "10px 20px",
+              fontSize: isMobile ? "14px" : isConstrainedHeight ? "13px" : "15px",
+              fontWeight: "600",
+              backgroundColor: theme.colors.accent,
+              color: theme.colors.background,
+              border: `1px solid ${theme.colors.accent}`,
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textDecoration: "none",
+              width: isMobile ? "100px" : isConstrainedHeight ? "150px" : "200px",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.accent}40`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            Observatory
+          </Link>
         </div>
       </div>
 

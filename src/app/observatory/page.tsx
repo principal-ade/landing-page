@@ -43,17 +43,17 @@ interface TimelineEvent {
 }
 
 interface RepositoryReference {
-  gitRoot?: string;
-  relativePath?: string;
+  gitRoot: string;
+  relativePath: string;
   remoteUrl?: string;
   owner?: string;
   repo?: string;
 }
 
 interface NormalizedFile {
-  originalPath?: string;
-  absolutePath?: string;
-  displayPath?: string;
+  originalPath: string;
+  absolutePath: string;
+  displayPath: string;
   repository?: RepositoryReference;
 }
 
@@ -1110,7 +1110,7 @@ const ObservatoryPage: React.FC = () => {
             <div
               style={{
                 border: `1px solid ${theme.colors.error}`,
-                backgroundColor: theme.colors.errorMuted,
+                backgroundColor: `${theme.colors.error}15`,
                 color: theme.colors.error,
                 padding: theme.space[4],
                 borderRadius: theme.radii[2],
