@@ -11,6 +11,7 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import type { PlaybackSpeed, PlaybackState } from "../services/EventPlaybackService";
+import { MAX_PLAYBACK_SPEED, MIN_PLAYBACK_SPEED } from "../services/EventPlaybackService";
 
 export interface EventPlaybackControlsProps {
   playbackState: PlaybackState;
@@ -41,10 +42,36 @@ export const EventPlaybackControls: React.FC<EventPlaybackControlsProps> = ({
     return null;
   }
 
-  const speedOptions: PlaybackSpeed[] = [0.5, 1, 2, 5];
-
   // Calculate display position (1-indexed for user display)
   const displayPosition = currentIndex >= 0 ? currentIndex + 1 : 0;
+
+  const handleSpeedSliderChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = Number(event.target.value);
+    if (!Number.isFinite(value)) {
+      return;
+    }
+    onSpeedChange(Math.round(value));
+  };
+
+  const handleSpeedInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = Number(event.target.value);
+    if (!Number.isFinite(value)) {
+      onSpeedChange(MIN_PLAYBACK_SPEED);
+      return;
+    }
+
+    const roundedValue = Math.round(value);
+    const clampedValue = Math.min(
+      Math.max(roundedValue, MIN_PLAYBACK_SPEED),
+      MAX_PLAYBACK_SPEED
+    );
+
+    onSpeedChange(clampedValue);
+  };
 
   return (
     <div
@@ -96,48 +123,85 @@ export const EventPlaybackControls: React.FC<EventPlaybackControlsProps> = ({
         </div>
 
         {/* Speed Control */}
-        <div style={{ display: "flex", gap: theme.space[1] }}>
-          {speedOptions.map((speedOption) => (
-            <button
-              key={speedOption}
-              onClick={() => onSpeedChange(speedOption)}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: theme.space[3],
+            minWidth: 220,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: theme.space[1],
+              flex: 1,
+            }}
+          >
+            <label
+              htmlFor="playback-speed"
               style={{
-                padding: `${theme.space[1]} ${theme.space[2]}`,
                 fontSize: theme.fontSizes[0],
-                fontWeight: theme.fontWeights.medium,
-                backgroundColor:
-                  speed === speedOption
-                    ? theme.colors.primary
-                    : "transparent",
-                color:
-                  speed === speedOption
-                    ? theme.colors.background
-                    : theme.colors.text,
-                border: `1px solid ${
-                  speed === speedOption
-                    ? theme.colors.primary
-                    : theme.colors.border
-                }`,
-                borderRadius: theme.radii[1],
-                cursor: "pointer",
-                transition: "all 0.2s ease",
+                color: theme.colors.textSecondary,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: theme.space[2],
               }}
-              onMouseEnter={(e) => {
-                if (speed !== speedOption) {
-                  e.currentTarget.style.backgroundColor =
-                    theme.colors.backgroundSecondary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (speed !== speedOption) {
-                  e.currentTarget.style.backgroundColor = "transparent";
-                }
-              }}
-              title={`${speedOption}x speed`}
             >
-              {speedOption}x
-            </button>
-          ))}
+              <span>Speed</span>
+              <span
+                style={{
+                  fontWeight: theme.fontWeights.semibold,
+                  color: theme.colors.text,
+                }}
+              >
+                {Math.round(speed)}x
+              </span>
+            </label>
+            <input
+              id="playback-speed"
+              type="range"
+              min={MIN_PLAYBACK_SPEED}
+              max={MAX_PLAYBACK_SPEED}
+              step={1}
+              value={Math.min(
+                Math.max(Math.round(speed), MIN_PLAYBACK_SPEED),
+                MAX_PLAYBACK_SPEED
+              )}
+              onChange={handleSpeedSliderChange}
+              style={{
+                width: "100%",
+                accentColor: theme.colors.primary,
+                cursor: "pointer",
+              }}
+            />
+          </div>
+          <input
+            type="number"
+            min={MIN_PLAYBACK_SPEED}
+            max={MAX_PLAYBACK_SPEED}
+            step={1}
+            value={Number.isFinite(speed)
+              ? Math.min(
+                  Math.max(Math.round(speed), MIN_PLAYBACK_SPEED),
+                  MAX_PLAYBACK_SPEED
+                )
+              : MIN_PLAYBACK_SPEED}
+            onChange={handleSpeedInputChange}
+            style={{
+              width: "60px",
+              padding: `${theme.space[1]} ${theme.space[2]}`,
+              borderRadius: theme.radii[1],
+              border: `1px solid ${theme.colors.border}`,
+              backgroundColor: theme.colors.background,
+              color: theme.colors.text,
+              fontSize: theme.fontSizes[1],
+              textAlign: "center",
+            }}
+            aria-label="Playback speed multiplier"
+          />
         </div>
       </div>
 
