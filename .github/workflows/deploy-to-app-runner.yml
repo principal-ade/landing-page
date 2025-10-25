@@ -40,9 +40,11 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
       run: |
         docker build -f Dockerfile \
           --build-arg NPM_TOKEN=$NPM_TOKEN \
+          --build-arg NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

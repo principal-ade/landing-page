@@ -2,6 +2,8 @@ FROM node:20-alpine AS builder
 
 # Accept NPM token as build argument
 ARG NPM_TOKEN
+# Accept Google Analytics ID as build argument
+ARG NEXT_PUBLIC_GA_ID
 
 WORKDIR /app
 
@@ -42,6 +44,9 @@ RUN npm run postinstall || true
 
 # Copy the rest of the application
 COPY . ./
+
+# Set NEXT_PUBLIC_ env vars for build time
+ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 
 # Build the Next.js app
 RUN npm run build
