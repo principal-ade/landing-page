@@ -1,55 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import { WorkOS } from "@workos-inc/node";
 
 export async function POST(request: NextRequest) {
   try {
-    const { state, code_verifier } = await request.json();
+    const { refresh_token } = await request.json();
 
-    if (!state || !code_verifier) {
+    if (!refresh_token) {
       return NextResponse.json(
-        { error: "Missing required parameters: state and code_verifier" },
-        { status: 400 },
-      );
-    }
-
-    // Get the session
-    const session = global.cliAuthSessions?.get(state);
-    if (!session) {
-      return NextResponse.json(
-        { error: "authorization_pending" },
-        { status: 400 },
-      );
-    }
-
-    // Verify this is a WorkOS session
-    if (session.provider !== "workos") {
-      return NextResponse.json(
-        {
-          error: "invalid_provider",
-          error_description: "This session was initiated with a different provider",
-        },
-        { status: 400 },
-      );
-    }
-
-    // Check if we have the code yet
-    if (!session.code) {
-      return NextResponse.json(
-        { error: "authorization_pending" },
-        { status: 400 },
-      );
-    }
-
-    // Verify PKCE challenge
-    const challenge = crypto
-      .createHash("sha256")
-      .update(code_verifier)
-      .digest("base64url");
-
-    if (challenge !== session.code_challenge) {
-      return NextResponse.json(
-        { error: "invalid_grant", error_description: "Invalid code_verifier" },
+        { error: "Missing required parameter: refresh_token" },
         { status: 400 },
       );
     }
@@ -69,12 +27,10 @@ export async function POST(request: NextRequest) {
     // Initialize WorkOS client
     const workos = new WorkOS(process.env.WORKOS_API_KEY);
 
-    // Authenticate with WorkOS using the authorization code
-    const authResponse = await workos.userManagement.authenticateWithCode({
+    // Refresh the access token using WorkOS SDK
+    const authResponse = await workos.userManagement.authenticateWithRefreshToken({
       clientId: process.env.WORKOS_CLIENT_ID,
-      code: session.code,
-      // Note: WorkOS doesn't use PKCE code_verifier in the same way as GitHub
-      // The PKCE verification was already done above for our own security
+      refreshToken: refresh_token,
     });
 
     // Get user profile from WorkOS
@@ -95,7 +51,7 @@ export async function POST(request: NextRequest) {
       githubAccessToken = (authResponse as any).oauthTokens.accessToken;
     }
 
-    console.log("[WorkOS] GitHub token available:", !!githubAccessToken);
+    console.log("[WorkOS Refresh] GitHub token available:", !!githubAccessToken);
 
     // Fetch real GitHub user data using the GitHub token
     let githubUserData = null;
@@ -111,21 +67,18 @@ export async function POST(request: NextRequest) {
         if (userResponse.ok) {
           githubUserData = await userResponse.json();
           console.log(
-            "[WorkOS] GitHub user data fetched:",
+            "[WorkOS Refresh] GitHub user data fetched:",
             githubUserData.login,
           );
         } else {
-          console.warn("[WorkOS] Failed to fetch GitHub user data");
+          console.warn("[WorkOS Refresh] Failed to fetch GitHub user data");
         }
       } catch (error) {
-        console.error("[WorkOS] Error fetching GitHub user data:", error);
+        console.error("[WorkOS Refresh] Error fetching GitHub user data:", error);
       }
     }
 
-    // Clean up the session
-    global.cliAuthSessions.delete(state);
-
-    // Return the token and user info
+    // Return the new token and user info
     // Primary access token should be GitHub token (for backwards compatibility with Electron app)
     return NextResponse.json({
       // Use GitHub token as primary access_token if available (for api.github.com calls)
@@ -168,13 +121,24 @@ export async function POST(request: NextRequest) {
       github_access_token: githubAccessToken, // Also available explicitly
     });
   } catch (error) {
-    console.error("WorkOS token exchange error:", error);
+    console.error("WorkOS token refresh error:", error);
 
     // Handle WorkOS-specific errors
     if (error instanceof Error) {
+      // Check if the refresh token is invalid or expired
+      if (error.message.includes("invalid") || error.message.includes("expired")) {
+        return NextResponse.json(
+          {
+            error: "invalid_grant",
+            error_description: "Refresh token is invalid or expired. Please re-authenticate.",
+          },
+          { status: 401 },
+        );
+      }
+
       return NextResponse.json(
         {
-          error: "token_exchange_failed",
+          error: "token_refresh_failed",
           error_description: error.message,
         },
         { status: 400 },

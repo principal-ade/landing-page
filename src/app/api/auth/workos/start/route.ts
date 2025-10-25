@@ -78,8 +78,9 @@ export async function POST(request: NextRequest) {
       clientId: process.env.WORKOS_CLIENT_ID,
       redirectUri,
       state,
-      // Scopes are configured in WorkOS dashboard, but you can also pass them here:
-      // scope: "read:user user:email repo"
+      // Request offline_access scope to get refresh tokens
+      // This allows the Electron app to refresh tokens without re-authentication
+      providerScopes: ['offline_access'],
     });
 
     console.log('[WorkOS Auth] Generated auth URL:', authorizationUrl);
