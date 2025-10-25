@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -53,6 +54,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${firaCode.variable} antialiased h-full`}
       >
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
         <ClientThemeProvider>
           {children}
         </ClientThemeProvider>

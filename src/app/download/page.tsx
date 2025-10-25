@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
+import { trackDownload } from "../lib/analytics";
 
 interface GitHubRelease {
   id: number;
@@ -464,6 +465,13 @@ function DownloadPageContent() {
                             return asset ? (
                               <a
                                 href={`/api/github/download?assetId=${asset.id}&filename=${encodeURIComponent(asset.name)}`}
+                                onClick={() => {
+                                  trackDownload({
+                                    filename: asset.name,
+                                    platform: selectedPlatform || 'unknown',
+                                    assetId: asset.id,
+                                  });
+                                }}
                                 style={{
                                   display: "inline-flex",
                                   alignItems: "center",
