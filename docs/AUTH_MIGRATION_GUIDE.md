@@ -250,7 +250,7 @@ echo $WORKOS_CLIENT_ID
 
 **Solution**: Configure scopes in WorkOS dashboard:
 1. Go to your connection settings
-2. Add GitHub scopes: `read:user`, `user:email`, `repo`
+2. Add GitHub scopes: `read:user`, `user:email`, `repo`, `read:public_key`
 
 ### Session Expired Errors
 

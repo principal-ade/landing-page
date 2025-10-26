@@ -275,6 +275,7 @@ The authentication flow requests these GitHub scopes:
 - `read:user` - Read user profile information
 - `user:email` - Read user email addresses
 - `repo` - Full repository access (for collaboration features)
+- `read:public_key` - Read SSH public keys
 
 ## Security Considerations
 

@@ -144,6 +144,7 @@ Make sure your GitHub OAuth app (the one for WorkOS) has these scopes:
 read:user
 user:email
 repo (if you need repository access)
+read:public_key
 ```
 
 Configure these in:

@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       `${process.env.NEXTAUTH_URL}/api/auth/cli/callback`,
     );
     githubAuthUrl.searchParams.set("state", state);
-    githubAuthUrl.searchParams.set("scope", "read:user user:email repo");
+    githubAuthUrl.searchParams.set("scope", "read:user user:email repo read:public_key");
 
     // Force re-authorization to show repository grant screen
     if (force_reauth) {

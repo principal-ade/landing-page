@@ -5,7 +5,7 @@
 Your application uses these GitHub OAuth scopes:
 
 ```
-read:user user:email repo
+read:user user:email repo read:public_key
 ```
 
 ## Scope Breakdown
@@ -77,23 +77,41 @@ repo:invite          - Repository invitations
 
 ---
 
+### 4. `read:public_key`
+**What it does**: Read access to user's SSH public keys
+
+**Provides access to**:
+- List user's SSH keys
+- View SSH key details
+- SSH key fingerprints
+
+**Used in your app**:
+- SSH key management features
+- Developer identity verification
+
+**Alternative**: None (required for SSH key access)
+
+---
+
 ## Scope Comparison
 
 ### Current Setup (Permissive)
 ```
-read:user user:email repo
+read:user user:email repo read:public_key
 ```
 - ✅ Works with public repos
 - ✅ Works with private repos
+- ✅ Access to SSH keys
 - ⚠️ Gives write access (not used)
 
 ### Recommended for Public Repos Only
 ```
-read:user user:email public_repo
+read:user user:email public_repo read:public_key
 ```
 - ✅ Works with public repos
 - ❌ No private repo access
 - ✅ No write permissions
+- ✅ Access to SSH keys
 
 ### Recommended for Read-Only Access
 If GitHub had a `read:repo` scope, we'd use it, but they don't.
@@ -110,7 +128,7 @@ You must use `repo` for private repo access, even if read-only.
 3. Click on **GitHub**
 4. In the **Scopes** field, enter:
    ```
-   read:user user:email repo
+   read:user user:email repo read:public_key
    ```
 5. Click **Save**
 
@@ -125,7 +143,7 @@ const authorizationUrl = workos.userManagement.getAuthorizationUrl({
   clientId: process.env.WORKOS_CLIENT_ID,
   redirectUri: `${process.env.NEXTAUTH_URL}/api/auth/workos/callback`,
   state,
-  scope: "read:user user:email repo", // Add this line
+  scope: "read:user user:email repo read:public_key", // Add this line
 });
 ```
 
@@ -143,6 +161,7 @@ This application will be able to:
 ✓ Read your email addresses
 ✓ Access your repositories (public and private)
 ✓ Manage your repositories (create, delete)
+✓ Read your SSH public keys
 ```
 
 **Note**: Even though your app only reads, GitHub's `repo` scope includes write permissions.
@@ -163,11 +182,15 @@ This application will be able to:
 - Read file contents
 - Access private repositories (if needed)
 
+**`read:public_key`**: Required to:
+- Read user's SSH public keys
+- Verify developer identity via SSH keys
+
 ### 2. Consider Scope Reduction
 
 If your users only work with **public repositories**, change to:
 ```
-read:user user:email public_repo
+read:user user:email public_repo read:public_key
 ```
 
 ### 3. Re-authorization on Scope Changes
@@ -229,16 +252,16 @@ console.log('Granted scopes:', grantedScopes);
 
 Use identical scopes in both:
 
-**GitHub OAuth** (legacy):
+**GitHub OAuth** (CLI):
 ```typescript
-// src/app/api/auth/cli/start/route.ts:67
-scope: "read:user user:email repo"
+// src/app/api/auth/cli/start/route.ts:55
+scope: "read:user user:email repo read:public_key"
 ```
 
-**WorkOS** (new):
+**WorkOS** (web):
 ```
 WorkOS Dashboard → GitHub → Scopes:
-read:user user:email repo
+read:user user:email repo read:public_key
 ```
 
 This ensures consistent behavior during migration.
@@ -252,10 +275,11 @@ This ensures consistent behavior during migration.
 | `read:user` | User profile | ✅ Yes | `user` |
 | `user:email` | Email access | ✅ Yes | None |
 | `repo` | Repository access | ⚠️ Maybe | `public_repo` |
+| `read:public_key` | SSH key access | ✅ Yes | None |
 
-**Minimum for public repos**: `read:user user:email public_repo`
+**Minimum for public repos**: `read:user user:email public_repo read:public_key`
 
-**Current (supports private repos)**: `read:user user:email repo`
+**Current (supports private repos)**: `read:user user:email repo read:public_key`
 
 ---
 
