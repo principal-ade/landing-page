@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from "react";
 import { useTheme } from "@a24z/industry-theme";
-import { DynamicFileTree } from "@a24z/dynamic-file-tree";
+import { DynamicFileTree, OrderedFileList } from "@a24z/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 import { ThemedMDXEditor, useThemedMDXEditor } from "@principal-ade/industry-themed-mdx-editor";
 import "@mdxeditor/editor/style.css";
@@ -152,6 +152,7 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
   const [isLoadingTree, setIsLoadingTree] = useState<boolean>(true);
   const [isLoadingFile, setIsLoadingFile] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"ordered" | "dynamic">("ordered");
 
   const loadFileTree = useCallback(async () => {
     setIsLoadingTree(true);
@@ -504,6 +505,69 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
             >
               Branch: {branch || "main"}
             </div>
+            <div
+              style={{
+                marginTop: theme.space[2],
+                display: "flex",
+                alignItems: "center",
+                gap: theme.space[2],
+              }}
+            >
+              <span
+                style={{
+                  fontSize: theme.fontSizes[1],
+                  color: theme.colors.textSecondary,
+                }}
+              >
+                View:
+              </span>
+              <div style={{ display: "flex", gap: theme.space[1] }}>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("ordered")}
+                  style={{
+                    padding: `${theme.space[1]} ${theme.space[2]}`,
+                    border: `1px solid ${
+                      viewMode === "ordered"
+                        ? theme.colors.primary || theme.colors.text
+                        : theme.colors.border
+                    }`,
+                    borderRadius: theme.radii[2],
+                    backgroundColor:
+                      viewMode === "ordered"
+                        ? `${theme.colors.primary || theme.colors.text}15`
+                        : theme.colors.background,
+                    color: theme.colors.text,
+                    cursor: "pointer",
+                    fontSize: theme.fontSizes[1],
+                  }}
+                >
+                  Ordered
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("dynamic")}
+                  style={{
+                    padding: `${theme.space[1]} ${theme.space[2]}`,
+                    border: `1px solid ${
+                      viewMode === "dynamic"
+                        ? theme.colors.primary || theme.colors.text
+                        : theme.colors.border
+                    }`,
+                    borderRadius: theme.radii[2],
+                    backgroundColor:
+                      viewMode === "dynamic"
+                        ? `${theme.colors.primary || theme.colors.text}15`
+                        : theme.colors.background,
+                    color: theme.colors.text,
+                    cursor: "pointer",
+                    fontSize: theme.fontSizes[1],
+                  }}
+                >
+                  Dynamic
+                </button>
+              </div>
+            </div>
           </div>
           {isLoadingTree ? (
             <div
@@ -518,12 +582,24 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
               Loading files...
             </div>
           ) : fileTreeData ? (
-            <DynamicFileTree
-              fileTree={fileTreeData}
-              theme={theme}
-              onFileSelect={(filePath) => loadFileContent(filePath)}
-              padding="12px"
-            />
+            <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
+              {viewMode === "ordered" ? (
+                <OrderedFileList
+                  fileTree={fileTreeData}
+                  theme={theme as any}
+                  onFileSelect={(filePath) => loadFileContent(filePath)}
+                  selectedFile={selectedFile || undefined}
+                  padding="12px"
+                />
+              ) : (
+                <DynamicFileTree
+                  fileTree={fileTreeData}
+                  theme={theme}
+                  onFileSelect={(filePath) => loadFileContent(filePath)}
+                  padding="12px"
+                />
+              )}
+            </div>
           ) : (
             <div
               style={{
