@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
 import { SessionSummary } from "../../components/SessionCard";
+import { useAuth } from "@/hooks/useAuth";
 
 // Dynamically import components that use browser-only APIs (xterm)
 const VerticalTimeline = dynamic(
@@ -19,22 +20,12 @@ const SessionModal = dynamic(
   { ssr: false }
 );
 
-interface User {
-  id: string;
-  email: string;
-  login: string;
-  name: string;
-  avatar_url: string | null;
-  github_access_token?: string | null;
-}
-
 export default function SessionsPage() {
   const { theme } = useTheme();
+  const { user, loading: isLoadingAuth, login, logout } = useAuth();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [selectedSession, setSelectedSession] = useState<SessionSummary | null>(null);
 
   // Add global styles for animations
@@ -56,26 +47,6 @@ export default function SessionsPage() {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/auth/user');
-        const data = await response.json();
-
-        if (data.authenticated && data.user) {
-          setUser(data.user);
-        }
-      } catch (error) {
-        console.error('Error checking auth:', error);
-      } finally {
-        setIsLoadingAuth(false);
-      }
-    };
-
-    checkAuth();
   }, []);
 
   const isMobile = windowWidth < 768;
@@ -101,44 +72,15 @@ export default function SessionsPage() {
       };
 
       const { codeVerifier, codeChallenge } = await generateCodeChallenge();
-      const state = Math.random().toString(36).substring(2, 15);
 
-      // Store for later verification
+      // Store code verifier for later verification
       sessionStorage.setItem("code_verifier", codeVerifier);
-      sessionStorage.setItem("oauth_state", state);
 
-      // Call WorkOS auth start endpoint
-      const response = await fetch("/api/auth/workos/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code_challenge: codeChallenge,
-          state,
-          return_url: window.location.href, // Return to current page after auth
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.auth_url) {
-        window.location.href = data.auth_url;
-      } else {
-        console.error("Failed to get auth URL:", data);
-        alert("Authentication setup failed. Please try again.");
-      }
+      // Call login from auth provider
+      await login(codeChallenge);
     } catch (error) {
       console.error("Login error:", error);
       alert("An error occurred. Please try again.");
-    }
-  };
-
-  // Logout handler
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/user", { method: "DELETE" });
-      setUser(null);
-    } catch (error) {
-      console.error("Logout error:", error);
     }
   };
 
@@ -274,7 +216,7 @@ export default function SessionsPage() {
                 </div>
               </div>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 style={{
                   padding: isMobile ? "8px 12px" : "12px 16px",
                   backgroundColor: theme.colors.backgroundSecondary,

@@ -7,15 +7,7 @@ import { useTheme } from "@a24z/industry-theme";
 import { Logo } from "@a24z/logo-component";
 import { RepositorySelector } from "@/components/RepositorySelector";
 import { MarkdownEditorView } from "@/components/MarkdownEditorView";
-
-interface User {
-  id: string;
-  email: string;
-  login: string;
-  name: string;
-  avatar_url: string | null;
-  github_access_token?: string | null;
-}
+import { useAuth } from "@/hooks/useAuth";
 
 interface SelectedRepository {
   owner: string;
@@ -25,8 +17,7 @@ interface SelectedRepository {
 
 const MarkdownEditorPage: React.FC = () => {
   const { theme } = useTheme();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
+  const { user, loading: isLoadingAuth, login, logout } = useAuth();
   const [selectedRepository, setSelectedRepository] = useState<SelectedRepository | null>(null);
   const [windowWidth, setWindowWidth] = useState<number>(() =>
     typeof window !== "undefined" ? window.innerWidth : 1280
@@ -41,28 +32,6 @@ const MarkdownEditorPage: React.FC = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch("/api/auth/user");
-        const data = await response.json();
-
-        if (data.authenticated && data.user) {
-          setUser(data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (authError) {
-        console.error("[Markdown Editor] Error checking auth", authError);
-        setUser(null);
-      } finally {
-        setIsLoadingAuth(false);
-      }
-    };
-
-    checkAuth();
   }, []);
 
   const handleLogin = useCallback(async () => {
@@ -84,44 +53,24 @@ const MarkdownEditorPage: React.FC = () => {
       };
 
       const { codeVerifier, codeChallenge } = await generateCodeChallenge();
-      const state = Math.random().toString(36).substring(2, 15);
 
       sessionStorage.setItem("code_verifier", codeVerifier);
-      sessionStorage.setItem("oauth_state", state);
 
-      const response = await fetch("/api/auth/workos/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code_challenge: codeChallenge,
-          state,
-          return_url: window.location.href,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.auth_url) {
-        window.location.href = data.auth_url;
-      } else {
-        console.error("[Markdown Editor] Failed to get auth URL", data);
-        alert("Authentication setup failed. Please try again.");
-      }
+      await login(codeChallenge);
     } catch (loginError) {
       console.error("[Markdown Editor] Login error", loginError);
       alert("An error occurred. Please try again.");
     }
-  }, []);
+  }, [login]);
 
   const handleLogout = useCallback(async () => {
     try {
-      await fetch("/api/auth/user", { method: "DELETE" });
-      setUser(null);
+      await logout();
       setSelectedRepository(null);
     } catch (logoutError) {
       console.error("[Markdown Editor] Logout error", logoutError);
     }
-  }, []);
+  }, [logout]);
 
   const handleSelectRepository = useCallback(
     (owner: string, repo: string, branch: string) => {

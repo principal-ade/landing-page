@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
+import { AuthRefreshProvider } from "@/components/providers/AuthRefreshProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const inter = Inter({
@@ -58,7 +59,9 @@ export default function RootLayout({
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
         <ClientThemeProvider>
-          {children}
+          <AuthRefreshProvider>
+            {children}
+          </AuthRefreshProvider>
         </ClientThemeProvider>
       </body>
     </html>
