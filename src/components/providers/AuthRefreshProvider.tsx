@@ -128,18 +128,29 @@ export function AuthRefreshProvider({ children }: { children: React.ReactNode })
   // Login function
   const login = useCallback(async (codeChallenge: string) => {
     try {
+      // Generate state for CSRF protection
+      const state = Math.random().toString(36).substring(2, 15);
+      sessionStorage.setItem("oauth_state", state);
+
       const response = await fetch('/api/auth/workos/start', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code_challenge: codeChallenge }),
+        body: JSON.stringify({
+          code_challenge: codeChallenge,
+          state,
+          return_url: window.location.href,
+        }),
       });
 
       const data = await response.json();
 
-      if (data.authorizationUrl) {
-        window.location.href = data.authorizationUrl;
+      if (data.auth_url) {
+        window.location.href = data.auth_url;
+      } else {
+        console.error('Login failed - no auth URL returned:', data);
+        throw new Error(data.error || 'Failed to get authorization URL');
       }
     } catch (error) {
       console.error('Login failed:', error);
