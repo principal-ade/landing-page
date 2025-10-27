@@ -2,9 +2,10 @@
 
 import React, { useState, useCallback, useMemo } from "react";
 import { useTheme } from "@a24z/industry-theme";
-import { DynamicFileTree, OrderedFileList } from "@a24z/dynamic-file-tree";
+import { GitStatusFileTree, GitOrderedFileList, type GitFileStatus } from "@a24z/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 import { ThemedMDXEditor, useThemedMDXEditor } from "@principal-ade/industry-themed-mdx-editor";
+import { GitManager } from "@/lib/git-manager";
 import "@mdxeditor/editor/style.css";
 import "@principal-ade/industry-themed-mdx-editor/styles.css";
 import {
@@ -142,76 +143,104 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
   repoName,
   branch = "main",
   githubToken,
-  onBack,
 }) => {
   const { theme } = useTheme();
+  const [gitManager, setGitManager] = useState<GitManager | null>(null);
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [fileContent, setFileContent] = useState<string>("");
-  const [fileSha, setFileSha] = useState<string>("");
+  const [dirtyFiles, setDirtyFiles] = useState<GitFileStatus[]>([]);
   const [isLoadingTree, setIsLoadingTree] = useState<boolean>(true);
   const [isLoadingFile, setIsLoadingFile] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"ordered" | "dynamic">("ordered");
+  const [showCommitDialog, setShowCommitDialog] = useState<boolean>(false);
 
-  const loadFileTree = useCallback(async () => {
+  // Initialize GitManager and load file tree
+  const initializeGitManager = useCallback(async () => {
     setIsLoadingTree(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/markdown/files", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          owner: repoOwner,
-          repo: repoName,
-          branch: branch || "main",
-          token: githubToken || undefined,
-        }),
+      // Create GitManager instance
+      const manager = new GitManager({
+        owner: repoOwner,
+        repo: repoName,
+        branch: branch || "main",
+        token: githubToken,
       });
 
-      const data = await response.json();
+      // Initialize (clone or fetch)
+      await manager.initialize();
+      setGitManager(manager);
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to load file tree");
-      }
+      // List markdown files
+      const files = await manager.listMarkdownFiles();
 
-      setFileTree(data.files || []);
+      // Convert flat list to FileNode tree structure
+      const fileNodes = buildFileTree(files);
+      setFileTree(fileNodes);
+
+      // Load dirty state
+      const dirty = await manager.getDirtyFiles();
+      setDirtyFiles(dirty);
     } catch (err) {
-      console.error("Failed to load file tree:", err);
-      setError(err instanceof Error ? err.message : "Failed to load file tree");
+      console.error("Failed to initialize git repository:", err);
+      setError(err instanceof Error ? err.message : "Failed to initialize git repository");
       setFileTree([]);
     } finally {
       setIsLoadingTree(false);
     }
   }, [repoOwner, repoName, branch, githubToken]);
 
+  // Helper to build file tree from flat list
+  const buildFileTree = (files: string[]): FileNode[] => {
+    const root: FileNode = {
+      name: "",
+      path: "",
+      type: "directory",
+      children: [],
+    };
+
+    for (const filePath of files) {
+      const parts = filePath.split("/");
+      let current = root;
+
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        const isFile = i === parts.length - 1;
+        const currentPath = parts.slice(0, i + 1).join("/");
+
+        let child = current.children?.find((c) => c.name === part);
+
+        if (!child) {
+          child = {
+            name: part,
+            path: currentPath,
+            type: isFile ? "file" : "directory",
+            children: isFile ? undefined : [],
+          };
+          current.children = current.children || [];
+          current.children.push(child);
+        }
+
+        current = child;
+      }
+    }
+
+    return root.children || [];
+  };
+
   const loadFileContent = useCallback(
     async (filePath: string) => {
+      if (!gitManager) return;
+
       setIsLoadingFile(true);
       setError(null);
 
       try {
-        const response = await fetch("/api/markdown/content", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            owner: repoOwner,
-            repo: repoName,
-            filePath,
-            branch: branch || "main",
-            token: githubToken || undefined,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to load file content");
-        }
-
-        setFileContent(data.content || "");
-        setFileSha(data.sha || "");
+        const content = await gitManager.readFile(filePath);
+        setFileContent(content);
         setSelectedFile(filePath);
       } catch (err) {
         console.error("Failed to load file content:", err);
@@ -220,56 +249,66 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
         setIsLoadingFile(false);
       }
     },
-    [repoOwner, repoName, branch, githubToken]
+    [gitManager]
   );
 
+  // Save file to local git filesystem (NOT GitHub yet)
   const handleSaveFile = useCallback(
     async (content: string) => {
-      if (!selectedFile || !fileSha) return;
-
-      if (!githubToken) {
-        setError("GitHub token is required to save files. Please provide a token with repo write access.");
-        throw new Error("GitHub token required");
-      }
+      if (!selectedFile || !gitManager) return;
 
       try {
-        const response = await fetch("/api/markdown/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            owner: repoOwner,
-            repo: repoName,
-            filePath: selectedFile,
-            content,
-            branch: branch || "main",
-            sha: fileSha,
-            token: githubToken,
-          }),
-        });
+        // Write to local git filesystem
+        await gitManager.writeFile(selectedFile, content);
 
-        const data = await response.json();
+        // Update dirty state
+        const dirty = await gitManager.getDirtyFiles();
+        setDirtyFiles(dirty);
 
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to save file");
-        }
-
-        // Update SHA after successful save
-        if (data.sha) {
-          setFileSha(data.sha);
-        }
+        console.log("Saved to local git:", selectedFile);
       } catch (err) {
         console.error("Failed to save file:", err);
         setError(err instanceof Error ? err.message : "Failed to save file");
         throw err;
       }
     },
-    [selectedFile, fileSha, githubToken, repoOwner, repoName, branch]
+    [selectedFile, gitManager]
   );
 
-  // Load file tree on mount
+  // Commit and push changes to GitHub
+  const handleCommit = useCallback(
+    async (commitMessage: string) => {
+      if (!gitManager) return;
+
+      if (!githubToken) {
+        setError("GitHub token is required to push changes. Please provide a token with repo write access.");
+        throw new Error("GitHub token required");
+      }
+
+      try {
+        // Author info will be fetched automatically from GitHub
+        await gitManager.commitAndPush({
+          message: commitMessage,
+        });
+
+        // Clear dirty state after successful push
+        setDirtyFiles([]);
+        setShowCommitDialog(false);
+
+        console.log("Successfully committed and pushed to GitHub");
+      } catch (err) {
+        console.error("Failed to commit and push:", err);
+        setError(err instanceof Error ? err.message : "Failed to commit and push");
+        throw err;
+      }
+    },
+    [gitManager, githubToken]
+  );
+
+  // Initialize GitManager on mount
   React.useEffect(() => {
-    loadFileTree();
-  }, [loadFileTree]);
+    initializeGitManager();
+  }, [initializeGitManager]);
 
   // Convert FileNode[] to FileTree format required by DynamicFileTree
   const fileTreeData = useMemo((): FileTree | null => {
@@ -484,7 +523,6 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
                 style={{
                   fontSize: theme.fontSizes[0],
                   color: theme.colors.textSecondary,
-                  fontWeight: theme.fontWeights.normal,
                 }}
               >
                 {branch || "main"}
@@ -494,11 +532,43 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
               style={{
                 fontSize: theme.fontSizes[1],
                 color: theme.colors.textSecondary,
-                marginBottom: theme.space[1],
+                marginBottom: theme.space[2],
               }}
             >
               {repoOwner}
             </div>
+
+            {/* Dirty files count and commit button */}
+            {dirtyFiles.length > 0 && (
+              <div style={{ marginBottom: theme.space[2] }}>
+                <div
+                  style={{
+                    fontSize: theme.fontSizes[1],
+                    color: theme.colors.textSecondary,
+                    marginBottom: theme.space[1],
+                  }}
+                >
+                  {dirtyFiles.length} file{dirtyFiles.length !== 1 ? "s" : ""} modified
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCommitDialog(true)}
+                  style={{
+                    width: "100%",
+                    padding: `${theme.space[2]} ${theme.space[3]}`,
+                    backgroundColor: theme.colors.primary || theme.colors.text,
+                    color: theme.colors.background,
+                    border: "none",
+                    borderRadius: theme.radii[2],
+                    cursor: "pointer",
+                    fontSize: theme.fontSizes[1],
+                    fontWeight: theme.fontWeights.semibold,
+                  }}
+                >
+                  Commit {dirtyFiles.length} file{dirtyFiles.length !== 1 ? "s" : ""}
+                </button>
+              </div>
+            )}
             <div
               style={{
                 marginTop: theme.space[2],
@@ -569,19 +639,21 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
           ) : fileTreeData ? (
             <div style={{ flex: 1, minHeight: 0, width: "100%" }}>
               {viewMode === "ordered" ? (
-                <OrderedFileList
+                <GitOrderedFileList
                   fileTree={fileTreeData}
                   theme={theme as any}
+                  gitStatusData={dirtyFiles}
                   onFileSelect={(filePath) => loadFileContent(filePath)}
                   selectedFile={selectedFile || undefined}
                   padding="12px"
                 />
               ) : (
-                <DynamicFileTree
+                <GitStatusFileTree
                   fileTree={fileTreeData}
                   theme={theme}
+                  gitStatusData={dirtyFiles}
                   onFileSelect={(filePath) => loadFileContent(filePath)}
-                  selectedFile={selectedFile || undefined}
+                  showUnchangedFiles={true}
                   padding="12px"
                 />
               )}
@@ -652,6 +724,203 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
           )}
         </div>
       </div>
+
+      {/* Commit Dialog */}
+      {showCommitDialog && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowCommitDialog(false)}
+        >
+          <div
+            style={{
+              backgroundColor: theme.colors.background,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[3],
+              padding: theme.space[4],
+              maxWidth: "500px",
+              width: "90%",
+              maxHeight: "80vh",
+              overflow: "auto",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2
+              style={{
+                margin: 0,
+                marginBottom: theme.space[3],
+                fontSize: theme.fontSizes[4],
+                fontWeight: theme.fontWeights.bold,
+              }}
+            >
+              Commit Changes
+            </h2>
+
+            {/* Changed files list */}
+            <div style={{ marginBottom: theme.space[3] }}>
+              <div
+                style={{
+                  fontSize: theme.fontSizes[1],
+                  color: theme.colors.textSecondary,
+                  marginBottom: theme.space[2],
+                }}
+              >
+                Files to commit:
+              </div>
+              <div
+                style={{
+                  backgroundColor: theme.colors.backgroundSecondary,
+                  border: `1px solid ${theme.colors.border}`,
+                  borderRadius: theme.radii[2],
+                  padding: theme.space[2],
+                  maxHeight: "200px",
+                  overflow: "auto",
+                }}
+              >
+                {dirtyFiles.map((file) => (
+                  <div
+                    key={file.filePath}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: theme.space[2],
+                      padding: `${theme.space[1]} 0`,
+                      fontSize: theme.fontSizes[1],
+                      fontFamily: theme.fonts?.monospace || "monospace",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color:
+                          file.status === "M"
+                            ? "#f59e0b"
+                            : file.status === "A"
+                            ? "#10b981"
+                            : "#ef4444",
+                        fontWeight: theme.fontWeights.bold,
+                      }}
+                    >
+                      {file.status}
+                    </span>
+                    <span>{file.filePath}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Commit form */}
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const message = formData.get("message") as string;
+
+                if (!message) {
+                  alert("Please enter a commit message");
+                  return;
+                }
+
+                try {
+                  await handleCommit(message);
+                } catch {
+                  // Error is already handled in handleCommit
+                }
+              }}
+            >
+              <div style={{ marginBottom: theme.space[4] }}>
+                <label
+                  htmlFor="commit-message"
+                  style={{
+                    display: "block",
+                    marginBottom: theme.space[1],
+                    fontSize: theme.fontSizes[1],
+                    fontWeight: theme.fontWeights.semibold,
+                  }}
+                >
+                  Commit Message
+                </label>
+                <textarea
+                  id="commit-message"
+                  name="message"
+                  required
+                  placeholder="Update documentation"
+                  autoFocus
+                  style={{
+                    width: "100%",
+                    padding: theme.space[2],
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: theme.radii[2],
+                    backgroundColor: theme.colors.backgroundSecondary,
+                    color: theme.colors.text,
+                    fontSize: theme.fontSizes[2],
+                    fontFamily: "inherit",
+                    resize: "vertical",
+                    minHeight: "100px",
+                  }}
+                />
+                <div
+                  style={{
+                    marginTop: theme.space[1],
+                    fontSize: theme.fontSizes[0],
+                    color: theme.colors.textSecondary,
+                  }}
+                >
+                  Author info will be automatically fetched from your GitHub account
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: theme.space[2],
+                  justifyContent: "flex-end",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowCommitDialog(false)}
+                  style={{
+                    padding: `${theme.space[2]} ${theme.space[3]}`,
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: theme.radii[2],
+                    backgroundColor: theme.colors.background,
+                    color: theme.colors.text,
+                    cursor: "pointer",
+                    fontSize: theme.fontSizes[2],
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    padding: `${theme.space[2]} ${theme.space[3]}`,
+                    border: "none",
+                    borderRadius: theme.radii[2],
+                    backgroundColor: theme.colors.primary || theme.colors.text,
+                    color: theme.colors.background,
+                    cursor: "pointer",
+                    fontSize: theme.fontSizes[2],
+                    fontWeight: theme.fontWeights.semibold,
+                  }}
+                >
+                  Commit & Push to GitHub
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
