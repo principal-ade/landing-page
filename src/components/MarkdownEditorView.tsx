@@ -653,6 +653,7 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
                   theme={theme}
                   gitStatusData={dirtyFiles}
                   onFileSelect={(filePath) => loadFileContent(filePath)}
+                  selectedFile={selectedFile || undefined}
                   showUnchangedFiles={true}
                   padding="12px"
                 />
