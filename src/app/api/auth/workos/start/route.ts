@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
     const workos = new WorkOS(process.env.WORKOS_API_KEY);
 
     // Build WorkOS authorization URL
-    // Note: Scopes should be configured in WorkOS Dashboard under Authentication → GitHub
-    // The scopes used are: read:user, user:email, repo
+    // Note: Scopes are explicitly requested here to ensure correct GitHub permissions
+    // The scopes used are: read:user, user:email, repo, read:public_key
     const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/workos/callback`;
 
     console.log('[WorkOS Auth] Configuration:', {
@@ -78,9 +78,10 @@ export async function POST(request: NextRequest) {
       clientId: process.env.WORKOS_CLIENT_ID,
       redirectUri,
       state,
-      // Request offline_access scope to get refresh tokens
+      // Request offline_access for WorkOS refresh tokens + GitHub scopes
       // This allows the Electron app to refresh tokens without re-authentication
-      providerScopes: ['offline_access'],
+      // and ensures correct GitHub API permissions
+      providerScopes: ['offline_access', 'read:user', 'user:email', 'repo', 'read:public_key'],
     });
 
     console.log('[WorkOS Auth] Generated auth URL:', authorizationUrl);
