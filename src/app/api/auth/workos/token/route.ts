@@ -33,7 +33,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if we have the code yet
+    // Check if tokens are already available (after email verification)
+    if (session.tokens) {
+      console.log("[WorkOS] Returning pre-exchanged tokens for state:", state);
+
+      // Verify PKCE challenge before returning tokens
+      const challenge = crypto
+        .createHash("sha256")
+        .update(code_verifier)
+        .digest("base64url");
+
+      if (challenge !== session.code_challenge) {
+        return NextResponse.json(
+          { error: "invalid_grant", error_description: "Invalid code_verifier" },
+          { status: 400 },
+        );
+      }
+
+      // Clean up the session
+      global.cliAuthSessions.delete(state);
+
+      // Return pre-exchanged tokens
+      return NextResponse.json(session.tokens);
+    }
+
+    // If no pre-exchanged tokens, check if we have the OAuth code yet
     if (!session.code) {
       return NextResponse.json(
         { error: "authorization_pending" },
@@ -41,7 +65,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify PKCE challenge
+    // Verify PKCE challenge before exchanging code
     const challenge = crypto
       .createHash("sha256")
       .update(code_verifier)

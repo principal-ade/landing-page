@@ -270,60 +270,160 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // For CLI flow, return success page
-  return new NextResponse(
-    `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Authentication Successful - WorkOS</title>
-        <style>
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: #f5f5f5;
-            color: #333;
-          }
-          .container {
-            text-align: center;
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-          }
-          h1 { color: #2e7d32; margin-bottom: 1rem; }
-          p { color: #666; margin-bottom: 1rem; }
+  // For CLI flow, check if email verification is required
+  // Initialize WorkOS client
+  const workos = new WorkOS(process.env.WORKOS_API_KEY!);
 
-          @media (prefers-color-scheme: dark) {
+  try {
+    // Try to authenticate to detect if verification is needed
+    // We don't use the result here, just checking for verification requirement
+    await workos.userManagement.authenticateWithCode({
+      clientId: process.env.WORKOS_CLIENT_ID!,
+      code: code,
+    });
+
+    // Success - no verification needed, store code for token exchange
+    session.code = code;
+    global.cliAuthSessions.set(state, session);
+
+    console.log('[WorkOS] CLI flow - Authentication successful, no verification required');
+
+    return new NextResponse(
+      `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Authentication Successful - WorkOS</title>
+          <style>
             body {
-              background: #1a1a1a;
-              color: #e0e0e0;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+              background: #f5f5f5;
+              color: #333;
             }
             .container {
-              background: #2d2d2d;
-              box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+              text-align: center;
+              background: white;
+              padding: 2rem;
+              border-radius: 8px;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             }
-            p { color: #b0b0b0; }
-            h1 { color: #4caf50; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>Authentication Successful!</h1>
-          <p>You can now close this window and return to your terminal.</p>
-          <p><small>This window will close automatically in 3 seconds...</small></p>
-        </div>
-        <script>setTimeout(() => window.close(), 3000);</script>
-      </body>
-    </html>
-    `,
-    {
-      headers: { "Content-Type": "text/html" },
-    },
-  );
+            h1 { color: #2e7d32; margin-bottom: 1rem; }
+            p { color: #666; margin-bottom: 1rem; }
+
+            @media (prefers-color-scheme: dark) {
+              body {
+                background: #1a1a1a;
+                color: #e0e0e0;
+              }
+              .container {
+                background: #2d2d2d;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+              }
+              p { color: #b0b0b0; }
+              h1 { color: #4caf50; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Authentication Successful!</h1>
+            <p>You can now close this window and return to your terminal.</p>
+            <p><small>This window will close automatically in 3 seconds...</small></p>
+          </div>
+          <script>setTimeout(() => window.close(), 3000);</script>
+        </body>
+      </html>
+      `,
+      {
+        headers: { "Content-Type": "text/html" },
+      },
+    );
+  } catch (authError: any) {
+    // Check if email verification is required
+    if (
+      authError?.rawData?.code === "email_verification_required" ||
+      authError?.message?.includes("Email ownership must be verified")
+    ) {
+      console.log("[WorkOS] CLI flow - Email verification required:", {
+        email: authError?.rawData?.email,
+        hasPendingToken: !!authError?.rawData?.pending_authentication_token,
+      });
+
+      // Store the pending token in the session
+      session.pending_auth_token = authError.rawData.pending_authentication_token;
+      session.email = authError.rawData.email;
+      global.cliAuthSessions.set(state, session);
+
+      // Redirect to verification page with state
+      const verifyUrl = `/auth/verify-email?state=${state}&email=${encodeURIComponent(authError.rawData.email || "your email")}`;
+
+      return new NextResponse(
+        `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Email Verification Required - WorkOS</title>
+            <meta http-equiv="refresh" content="0;url=${verifyUrl}">
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background: #f5f5f5;
+                color: #333;
+              }
+              .container {
+                text-align: center;
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+              }
+              h1 { color: #f57c00; margin-bottom: 1rem; }
+              p { color: #666; }
+
+              @media (prefers-color-scheme: dark) {
+                body {
+                  background: #1a1a1a;
+                  color: #e0e0e0;
+                }
+                .container {
+                  background: #2d2d2d;
+                  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                }
+                p { color: #b0b0b0; }
+                h1 { color: #ffa726; }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Email Verification Required</h1>
+              <p>Redirecting to email verification page...</p>
+              <p><small>If you are not redirected, <a href="${verifyUrl}">click here</a>.</small></p>
+            </div>
+          </body>
+        </html>
+        `,
+        {
+          status: 302,
+          headers: {
+            'Location': verifyUrl,
+            'Content-Type': 'text/html',
+          },
+        },
+      );
+    }
+
+    // Re-throw other errors
+    throw authError;
+  }
 }
