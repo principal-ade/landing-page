@@ -17,18 +17,28 @@ interface RoomTokenRequest {
 }
 
 interface RoomTokenPayload {
-  sub: string; // User ID or username
-  repository: string;
-  branch: string;
-  device_id: string; // Required unique device/agent identifier
-  permissions: {
-    canJoin: boolean;
-    canEdit: boolean;
-    canAdmin: boolean;
-  };
+  // Standard OpenID claims
+  sub: string;
+  iss: string;
   iat: number;
   exp: number;
-  iss: string;
+
+  // Traffic controller required fields
+  userId: string;
+  repoId: string;
+  agentId: string;
+  permissions: string[];
+
+  // Additional context fields
+  branch: string;
+
+  // Optional user info for presence display
+  userInfo?: {
+    login: string;
+    email: string;
+    name: string;
+    avatar_url: string;
+  };
 }
 
 export async function POST(request: NextRequest) {
@@ -111,16 +121,42 @@ export async function POST(request: NextRequest) {
       canAdmin: repoData.permissions?.admin || false,
     };
 
-    // Create JWT payload
+    // Transform permissions object to array format for traffic controller
+    const permissionsArray: string[] = [];
+    if (permissions.canJoin) {
+      permissionsArray.push('sync:read');
+    }
+    if (permissions.canEdit) {
+      permissionsArray.push('sync:write', 'sync:broadcast');
+    }
+    if (permissions.canAdmin) {
+      permissionsArray.push('sync:admin');
+    }
+
+    // Create JWT payload with traffic controller format
     const payload: RoomTokenPayload = {
+      // Standard OpenID claims
       sub: user.login,
-      repository: `${owner}/${repo}`,
-      branch,
-      device_id, // Include the unique device identifier
-      permissions,
+      iss: "dev-collab-auth-server",
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour expiry
-      iss: "dev-collab-auth-server",
+
+      // Traffic controller required fields
+      userId: user.login,
+      repoId: `${owner}/${repo}`,
+      agentId: device_id,
+      permissions: permissionsArray,
+
+      // Additional context
+      branch,
+
+      // User info for presence display
+      userInfo: {
+        login: user.login,
+        email: user.email,
+        name: user.name,
+        avatar_url: user.avatar_url,
+      },
     };
 
     // Sign the JWT
@@ -132,7 +168,9 @@ export async function POST(request: NextRequest) {
     const refreshToken = jwt.sign(
       {
         sub: user.login,
-        repository: `${owner}/${repo}`,
+        userId: user.login,
+        repoId: `${owner}/${repo}`,
+        agentId: device_id,
         type: "refresh",
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
