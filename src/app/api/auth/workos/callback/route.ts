@@ -276,17 +276,89 @@ export async function GET(request: NextRequest) {
 
   try {
     // Try to authenticate to detect if verification is needed
-    // We don't use the result here, just checking for verification requirement
-    await workos.userManagement.authenticateWithCode({
+    // IMPORTANT: Store the result because OAuth codes can only be used once
+    const authResponse = await workos.userManagement.authenticateWithCode({
       clientId: process.env.WORKOS_CLIENT_ID!,
       code: code,
     });
 
-    // Success - no verification needed, store code for token exchange
-    session.code = code;
+    // Success - no verification needed
+    // Store the authentication response as tokens for the polling endpoint
+    // Get user profile
+    const userProfile = await workos.userManagement.getUser(
+      authResponse.user.id,
+    );
+
+    // Extract GitHub access token from the authentication response
+    let githubAccessToken: string | null = null;
+    if ((authResponse as any).impersonator?.accessToken) {
+      githubAccessToken = (authResponse as any).impersonator.accessToken;
+    } else if ((authResponse as any).oauthTokens?.accessToken) {
+      githubAccessToken = (authResponse as any).oauthTokens.accessToken;
+    }
+
+    console.log('[WorkOS] CLI flow - GitHub token available:', !!githubAccessToken);
+
+    // Fetch real GitHub user data using the GitHub token
+    let githubUserData = null;
+    if (githubAccessToken) {
+      try {
+        const userResponse = await fetch("https://api.github.com/user", {
+          headers: {
+            Authorization: `Bearer ${githubAccessToken}`,
+            Accept: "application/json",
+          },
+        });
+
+        if (userResponse.ok) {
+          githubUserData = await userResponse.json();
+          console.log(
+            "[WorkOS] CLI flow - GitHub user data fetched:",
+            githubUserData.login,
+          );
+        }
+      } catch (error) {
+        console.error("[WorkOS] CLI flow - Error fetching GitHub user data:", error);
+      }
+    }
+
+    // Store full token data for CLI polling (same format as verify endpoint)
+    session.tokens = {
+      access_token: githubAccessToken || authResponse.accessToken,
+      workos_access_token: authResponse.accessToken,
+      refresh_token: authResponse.refreshToken,
+      expires_in: 3600,
+      token_type: "Bearer",
+      user: githubUserData
+        ? {
+            id: githubUserData.id,
+            email: githubUserData.email || authResponse.user.email,
+            login: githubUserData.login,
+            name:
+              githubUserData.name ||
+              (authResponse.user.firstName && authResponse.user.lastName
+                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+                : authResponse.user.email),
+            avatar_url: githubUserData.avatar_url,
+          }
+        : {
+            id: authResponse.user.id,
+            email: authResponse.user.email,
+            login:
+              authResponse.user.email?.split("@")[0] || authResponse.user.id,
+            name:
+              authResponse.user.firstName && authResponse.user.lastName
+                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+                : authResponse.user.email,
+            avatar_url: userProfile.profilePictureUrl || null,
+          },
+      provider: "workos",
+      workos_user_id: authResponse.user.id,
+      github_access_token: githubAccessToken,
+    };
     global.cliAuthSessions.set(state, session);
 
-    console.log('[WorkOS] CLI flow - Authentication successful, no verification required');
+    console.log('[WorkOS] CLI flow - Authentication successful, tokens stored for polling');
 
     return new NextResponse(
       `
