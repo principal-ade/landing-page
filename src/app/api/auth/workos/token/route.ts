@@ -35,8 +35,6 @@ export async function POST(request: NextRequest) {
 
     // Check if tokens are already available (after email verification)
     if (session.tokens) {
-      console.log("[WorkOS] Returning pre-exchanged tokens for state:", state);
-
       // Verify PKCE challenge before returning tokens
       const challenge = crypto
         .createHash("sha256")
@@ -119,8 +117,6 @@ export async function POST(request: NextRequest) {
       githubAccessToken = (authResponse as any).oauthTokens.accessToken;
     }
 
-    console.log("[WorkOS] GitHub token available:", !!githubAccessToken);
-
     // Fetch real GitHub user data using the GitHub token
     let githubUserData = null;
     if (githubAccessToken) {
@@ -134,12 +130,6 @@ export async function POST(request: NextRequest) {
 
         if (userResponse.ok) {
           githubUserData = await userResponse.json();
-          console.log(
-            "[WorkOS] GitHub user data fetched:",
-            githubUserData.login,
-          );
-        } else {
-          console.warn("[WorkOS] Failed to fetch GitHub user data");
         }
       } catch (error) {
         console.error("[WorkOS] Error fetching GitHub user data:", error);

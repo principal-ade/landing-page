@@ -177,11 +177,6 @@ export async function GET(request: NextRequest) {
           authError?.rawData?.code === "email_verification_required" ||
           authError?.message?.includes("Email ownership must be verified")
         ) {
-          console.log("[WorkOS] Email verification required:", {
-            email: authError?.rawData?.email,
-            hasPendingToken: !!authError?.rawData?.pending_authentication_token,
-          });
-
           // Store the pending token in the session
           session.pending_auth_token = authError.rawData.pending_authentication_token;
           session.email = authError.rawData.email;
@@ -218,8 +213,6 @@ export async function GET(request: NextRequest) {
         githubAccessToken = (authResponse as any).oauthTokens.accessToken;
       }
 
-      console.log('[WorkOS] GitHub token available:', !!githubAccessToken);
-
       // Create user session data
       const userData = {
         id: authResponse.user.id,
@@ -252,15 +245,7 @@ export async function GET(request: NextRequest) {
 
       return response;
     } catch (error) {
-      console.error("Token exchange error:", error);
-      console.error("Error details:", {
-        message: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-        code: code,
-        state: state,
-        workos_client_id: process.env.WORKOS_CLIENT_ID,
-        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/workos/callback`,
-      });
+      console.error("Token exchange error:", error instanceof Error ? error.message : "Unknown error");
 
       // Redirect with error
       const errorUrl = new URL(session.return_url);
@@ -297,8 +282,6 @@ export async function GET(request: NextRequest) {
       githubAccessToken = (authResponse as any).oauthTokens.accessToken;
     }
 
-    console.log('[WorkOS] CLI flow - GitHub token available:', !!githubAccessToken);
-
     // Fetch real GitHub user data using the GitHub token
     let githubUserData = null;
     if (githubAccessToken) {
@@ -312,10 +295,6 @@ export async function GET(request: NextRequest) {
 
         if (userResponse.ok) {
           githubUserData = await userResponse.json();
-          console.log(
-            "[WorkOS] CLI flow - GitHub user data fetched:",
-            githubUserData.login,
-          );
         }
       } catch (error) {
         console.error("[WorkOS] CLI flow - Error fetching GitHub user data:", error);
@@ -357,8 +336,6 @@ export async function GET(request: NextRequest) {
       github_access_token: githubAccessToken,
     };
     global.cliAuthSessions.set(state, session);
-
-    console.log('[WorkOS] CLI flow - Authentication successful, tokens stored for polling');
 
     return new NextResponse(
       `
@@ -421,11 +398,6 @@ export async function GET(request: NextRequest) {
       authError?.rawData?.code === "email_verification_required" ||
       authError?.message?.includes("Email ownership must be verified")
     ) {
-      console.log("[WorkOS] CLI flow - Email verification required:", {
-        email: authError?.rawData?.email,
-        hasPendingToken: !!authError?.rawData?.pending_authentication_token,
-      });
-
       // Store the pending token in the session
       session.pending_auth_token = authError.rawData.pending_authentication_token;
       session.email = authError.rawData.email;

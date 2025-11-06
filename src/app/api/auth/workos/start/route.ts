@@ -66,13 +66,6 @@ export async function POST(request: NextRequest) {
     // The scopes used are: read:user, user:email, repo, read:public_key
     const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/workos/callback`;
 
-    console.log('[WorkOS Auth] Configuration:', {
-      clientId: process.env.WORKOS_CLIENT_ID,
-      redirectUri,
-      provider: 'GitHubOAuth',
-      state,
-    });
-
     const authorizationUrl = workos.userManagement.getAuthorizationUrl({
       provider: "GitHubOAuth", // Using GitHub as the provider through WorkOS
       clientId: process.env.WORKOS_CLIENT_ID,
@@ -83,8 +76,6 @@ export async function POST(request: NextRequest) {
       // and ensures correct GitHub API permissions
       providerScopes: ['offline_access', 'read:user', 'user:email', 'repo', 'read:public_key'],
     });
-
-    console.log('[WorkOS Auth] Generated auth URL:', authorizationUrl);
 
     return NextResponse.json({
       auth_url: authorizationUrl,

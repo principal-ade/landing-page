@@ -60,8 +60,6 @@ export async function POST(request: NextRequest) {
       githubAccessToken = (authResponse as any).oauthTokens.accessToken;
     }
 
-    console.log('[WorkOS Verify] GitHub token available:', !!githubAccessToken);
-
     // Fetch real GitHub user data using the GitHub token
     let githubUserData = null;
     if (githubAccessToken) {
@@ -75,12 +73,6 @@ export async function POST(request: NextRequest) {
 
         if (userResponse.ok) {
           githubUserData = await userResponse.json();
-          console.log(
-            "[WorkOS Verify] GitHub user data fetched:",
-            githubUserData.login,
-          );
-        } else {
-          console.warn("[WorkOS Verify] Failed to fetch GitHub user data");
         }
       } catch (error) {
         console.error("[WorkOS Verify] Error fetching GitHub user data:", error);
@@ -147,11 +139,6 @@ export async function POST(request: NextRequest) {
 
     // DO NOT delete session - keep it for CLI polling to retrieve tokens
     global.cliAuthSessions.set(state, session);
-
-    console.log('[WorkOS Verify] Tokens stored for state:', state, {
-      hasReturnUrl: !!session.return_url,
-      hasGithubToken: !!githubAccessToken,
-    });
 
     // Return appropriate response based on flow type
     if (session.return_url) {
