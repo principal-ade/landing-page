@@ -456,27 +456,31 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
       style={{
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
-        gap: "24px",
+        gap: "32px",
         width: "100%",
-        height: "600px",
+        minHeight: "600px",
+        fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+        letterSpacing: '-0.02em',
       }}
     >
       {/* Repository Selector */}
       <div
         style={{
-          width: isMobile ? "100%" : "250px",
+          width: isMobile ? "100%" : "280px",
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
+          gap: "16px",
         }}
       >
         <h3
           style={{
-            fontSize: "18px",
+            fontSize: "20px",
             fontWeight: "600",
-            color: theme.colors.text,
+            color: "#ffffff",
             marginTop: 0,
-            marginBottom: "12px",
+            marginBottom: "8px",
+            letterSpacing: '-0.02em',
+            fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
           Repositories
@@ -486,31 +490,37 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
             key={repo.id}
             onClick={() => setSelectedRepo(repo.id)}
             style={{
-              padding: "12px 16px",
-              fontSize: "14px",
+              padding: "14px 18px",
+              fontSize: "15px",
               fontWeight: "500",
               backgroundColor:
                 selectedRepo === repo.id
-                  ? theme.colors.primary
-                  : theme.colors.backgroundSecondary,
+                  ? "#00C2FF"
+                  : "rgba(3, 7, 18, 0.5)",
               color:
                 selectedRepo === repo.id
-                  ? theme.colors.background
-                  : theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
+                  ? "#000000"
+                  : "#ffffff",
+              border: selectedRepo === repo.id
+                ? "1px solid #00C2FF"
+                : "1px solid #1f2937",
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease",
               textAlign: "left",
+              letterSpacing: '-0.02em',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
             onMouseEnter={(e) => {
               if (selectedRepo !== repo.id) {
-                e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
+                e.currentTarget.style.backgroundColor = "rgba(6, 182, 212, 0.1)";
+                e.currentTarget.style.borderColor = "rgba(6, 182, 212, 0.3)";
               }
             }}
             onMouseLeave={(e) => {
               if (selectedRepo !== repo.id) {
-                e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+                e.currentTarget.style.backgroundColor = "rgba(3, 7, 18, 0.5)";
+                e.currentTarget.style.borderColor = "#1f2937";
               }
             }}
           >
