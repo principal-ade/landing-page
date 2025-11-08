@@ -48,7 +48,7 @@ function extractBashCommand(toolInput: string): string | null {
   try {
     const input = JSON.parse(toolInput);
     return input.command || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -186,8 +186,8 @@ export async function GET(request: NextRequest) {
           if (!repositoryContext) {
             repositoryContext = ctx;
           }
-        } catch (error) {
-          console.error('Failed to parse repository_context:', error);
+        } catch (_error) {
+          console.error('Failed to parse repository_context:', _error);
         }
       });
     }

@@ -102,6 +102,7 @@ export function AuthRefreshProvider({ children }: { children: React.ReactNode })
       console.error('Token refresh error:', error);
       return false;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Setup automatic token refresh (refresh every 50 minutes, tokens expire in 60 minutes)

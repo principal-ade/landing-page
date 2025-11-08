@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Section } from '../Section';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import Image from 'next/image';
 
 /**
  * The Section component is the building block for landing page sections.

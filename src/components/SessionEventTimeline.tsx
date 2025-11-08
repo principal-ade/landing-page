@@ -202,19 +202,6 @@ export const SessionEventTimeline: React.FC<SessionEventTimelineProps> = ({
     return minHeight + ((numRepos - 2) * 60);
   }, [repositories.length, height]);
 
-  // Group events by tool name
-  const eventsByTool = useMemo(() => {
-    const grouped = new Map<string, Event[]>();
-    events.forEach((event) => {
-      const tool = event.tool_name || "Other";
-      if (!grouped.has(tool)) {
-        grouped.set(tool, []);
-      }
-      grouped.get(tool)!.push(event);
-    });
-    return grouped;
-  }, [events]);
-
   if (loading) {
     return (
       <div
