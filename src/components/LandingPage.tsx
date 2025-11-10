@@ -482,8 +482,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           >
             Download Alpha
           </a>
-          <Link
-            href="/blog/pitch-deck"
+          <a
+            href="https://principal-ai-vmmsup2.gamma.site/"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               padding: isMobile ? "8px 16px" : isConstrainedHeight ? "8px 16px" : "10px 20px",
               fontSize: isMobile ? "14px" : isConstrainedHeight ? "13px" : "15px",
@@ -510,7 +512,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             }}
           >
             PitchDeck
-          </Link>
+          </a>
           <Link
             href="/sessions"
             style={{
