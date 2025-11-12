@@ -23,6 +23,7 @@ interface PresenceTokenPayload {
 
   // Traffic controller required fields
   userId: string;
+  roomId: string; // Required for room join authorization
   agentId: string;
   permissions: string[];
 
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     // Create permissions for presence-only connection
     const permissionsArray = ["presence:read", "presence:write"];
 
-    // Create JWT payload for presence-only connection (no repoId)
+    // Create JWT payload for presence-only connection
     const payload: PresenceTokenPayload = {
       // Standard OpenID claims
       sub: user.login,
@@ -77,6 +78,7 @@ export async function POST(request: NextRequest) {
 
       // Traffic controller required fields
       userId: user.login,
+      roomId: "__global_presence__", // Authorize access to global presence room
       agentId: device_id,
       permissions: permissionsArray,
 
