@@ -239,12 +239,14 @@ export async function GET(request: NextRequest) {
       const response = NextResponse.redirect(redirectUrl.toString());
 
       // Store user data in a secure HTTP-only cookie
+      // Set domain to allow subdomain access (e.g., app.principal-ade.com)
       response.cookies.set("workos_session", JSON.stringify(userData), {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: "/",
+        domain: process.env.NODE_ENV === "production" ? ".principal-ade.com" : undefined,
       });
 
       return response;
