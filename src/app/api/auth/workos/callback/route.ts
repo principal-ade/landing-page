@@ -231,8 +231,12 @@ export async function GET(request: NextRequest) {
       // Clean up the session
       global.cliAuthSessions.delete(state);
 
+      // Build redirect URL with state parameter
+      const redirectUrl = new URL(session.return_url);
+      redirectUrl.searchParams.set("state", state);
+
       // Set session cookie and redirect
-      const response = NextResponse.redirect(session.return_url);
+      const response = NextResponse.redirect(redirectUrl.toString());
 
       // Store user data in a secure HTTP-only cookie
       response.cookies.set("workos_session", JSON.stringify(userData), {
