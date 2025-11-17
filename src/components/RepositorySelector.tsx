@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useTheme } from "@a24z/industry-theme";
 import { Octokit } from "@octokit/rest";
 
@@ -266,12 +267,12 @@ export const RepositorySelector: React.FC<RepositorySelectorProps> = ({
                   gap: theme.space[2],
                 }}
               >
-                <img
+                <Image
                   src={repo.owner.avatar_url}
                   alt={repo.owner.login}
+                  width={32}
+                  height={32}
                   style={{
-                    width: "32px",
-                    height: "32px",
                     borderRadius: "50%",
                   }}
                 />

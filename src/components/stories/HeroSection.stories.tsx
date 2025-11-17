@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
+import Link from 'next/link';
 import { useTheme } from '@a24z/industry-theme';
 import { motion } from 'framer-motion';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
@@ -14,7 +15,7 @@ import { useThemeSwitcher } from '../providers/ClientThemeProvider';
  * - Call-to-action buttons with neural blue gradient
  */
 
-interface HeroSectionProps {}
+type HeroSectionProps = Record<string, never>;
 
 // Mock Logo component for Storybook - Neural Blue Wireframe Sphere with Animation
 const MockLogo: React.FC<{ width: number; height: number }> = ({ width, height }) => {
@@ -411,7 +412,7 @@ const HeroSection: React.FC<HeroSectionProps> = () => {
         >
           Watch Demo
         </a>
-        <a
+        <Link
           href="/blog/pitch-deck"
           style={{
             padding: isMobile ? '6px 12px' : isConstrainedHeight ? '8px 14px' : '10px 16px',
@@ -442,7 +443,7 @@ const HeroSection: React.FC<HeroSectionProps> = () => {
           }}
         >
           Pitch Deck
-        </a>
+        </Link>
       </div>
 
     </div>

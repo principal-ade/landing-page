@@ -1,36 +1,32 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import { About } from '../About';
 import { AboutV2 } from '../AboutV2';
 import { LivingDocumentationSection } from '../LivingDocumentationSection';
 import { PrincipalFolder } from '../PrincipalFolder';
 import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
 import { FeaturesAndBenefitsV2 } from '../FeaturesAndBenefitsV2';
-import { WhoWeAre } from '../WhoWeAre';
-import { WhoWeAreV2 } from '../WhoWeAreV2';
 import { JoinTheAlpha } from '../JoinTheAlpha';
 
 /**
- * About Principal AI Section
+ * About Principal AI Section V2
  *
- * Simple, focused messaging explaining Principal AI's mission and positioning:
- * - Infrastructure for the next generation of AI development
- * - Focus on understanding over speed
- * - Living Documentation as the core differentiator
- * - Team philosophy and values
+ * More concise and visual version with:
+ * - Condensed About section with icon-based key points
+ * - Visual-focused sections
+ * - Better visual hierarchy and spacing
  *
  * This section can be used on landing pages, about pages, or as a footer section.
  */
 
 const meta = {
   title: 'Landing Page/About Section',
-  component: About,
+  component: AboutV2,
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'About section explaining Principal AI\'s mission to build infrastructure for trustworthy AI development through Living Documentation.',
+        component: 'About section V2 explaining Principal AI\'s mission to build infrastructure for trustworthy AI development through Living Documentation.',
       },
     },
     backgrounds: {
@@ -48,60 +44,35 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof About>;
+} satisfies Meta<typeof AboutV2>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default About section.
+ * Default About section V2.
  *
- * Key messaging:
- * 1. **Infrastructure positioning**: "We're building the infrastructure for the next generation of AI development"
- * 2. **Problem framing**: Speed vs. Understanding - everyone builds faster tools, we build trust
- * 3. **Solution**: Living Documentation as infrastructure for transparent, confident AI development
- * 4. **Team values**: Better infrastructure over faster tools
- *
- * Design features:
- * - Centered layout with max-width for readability
- * - Progressive disclosure through paragraph breaks
- * - Cyan highlight on final statement for emphasis
- * - Responsive typography and spacing
+ * More concise and visual version with:
+ * - Condensed About section with icon-based key points
+ * - Visual-focused sections
+ * - Better visual hierarchy and spacing
  */
 export const Default: Story = {
   args: {},
 };
 
 /**
- * About section with Living Documentation explanation.
+ * Complete About page layout with all sections.
  *
- * Combines the About section with the Living Documentation Section
- * to show both the mission and the detailed explanation of what Living Documentation is.
+ * Combines the About section V2 with all related sections:
+ * - AboutV2
+ * - Living Documentation Section
+ * - Principal Folder
+ * - Agentic Workspace
+ * - Features and Benefits
+ * - Join The Alpha
  */
-export const WithLivingDocumentation: Story = {
-  render: () => (
-    <div style={{ background: '#000000' }}>
-      <About />
-      <LivingDocumentationSection />
-      <PrincipalFolder />
-      <AgenticWorkspaceForV2 />
-      <FeaturesAndBenefitsV2 />
-      <WhoWeAre />
-      <JoinTheAlpha />
-    </div>
-  ),
-};
-
-/**
- * Version 2 of the complete About page layout.
- *
- * More concise and visual version with:
- * - Condensed About section with icon-based key points
- * - Visual-focused sections
- * - Same powerful sections but with tighter, more scannable content
- * - Better visual hierarchy and spacing
- */
-export const Version2: Story = {
+export const CompletePage: Story = {
   render: () => (
     <div style={{ background: '#000000' }}>
       <AboutV2 />

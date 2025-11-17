@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
@@ -148,7 +149,7 @@ export const Navigation: React.FC = () => {
         }}
       >
         {/* Logo and Brand */}
-        <a
+        <Link
           href="/"
           style={{
             display: 'flex',
@@ -197,7 +198,7 @@ export const Navigation: React.FC = () => {
               AI
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div

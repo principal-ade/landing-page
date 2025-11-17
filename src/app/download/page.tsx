@@ -10,7 +10,7 @@ import {
   Info,
 } from "lucide-react";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 import { trackDownload } from "../lib/analytics";
 
 interface GitHubRelease {

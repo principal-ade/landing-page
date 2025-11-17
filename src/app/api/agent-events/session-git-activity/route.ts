@@ -48,7 +48,7 @@ function extractBashCommand(toolInput: string): string | null {
   try {
     const input = JSON.parse(toolInput);
     return input.command || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

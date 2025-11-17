@@ -21,18 +21,13 @@ const config: StorybookConfig = {
   ],
   async viteFinal(config) {
     return mergeConfig(config, {
-      resolve: {
-        alias: {
-          '@a24z/logo-component': '/Users/julieallen/Desktop/Principal web/landing-page/node_modules/@a24z/logo-component/dist/esm/index.js',
-        },
-      },
       optimizeDeps: {
         include: [
           '@a24z/industry-theme',
           '@a24z/dynamic-file-tree',
           '@principal-ai/repository-abstraction',
+          '@principal-ai/logo-component',
         ],
-        exclude: ['@a24z/logo-component'],
       },
     });
   },

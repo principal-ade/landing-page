@@ -1,13 +1,11 @@
 import React from "react";
-import { useTheme } from "@a24z/industry-theme";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 import { CheckCircle2 } from "lucide-react";
 
 // Minimal Navigation
 const MinimalNavigation: React.FC = () => {
-  const { theme } = useTheme();
   const { currentTheme, setCurrentTheme, availableThemes } = useThemeSwitcher();
 
   const handleLogoClick = () => {

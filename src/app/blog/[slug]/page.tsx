@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useTheme } from "@a24z/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
 import Link from "next/link";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 import { useThemeSwitcher } from "@/components/providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
 import mermaid from "mermaid";

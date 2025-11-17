@@ -1,159 +1,13 @@
 import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Logo } from "@principal-ai/logo-component";
 import { useTheme } from "@a24z/industry-theme";
-import { motion, AnimatePresence } from "framer-motion";
-import { useThemeSwitcher } from "./providers/ClientThemeProvider";
-import { Logo } from "@a24z/logo-component";
 import {
   CheckCircle2,
-  ArrowRight,
-  Download,
-  Play,
   ChevronDown,
-  X,
-  Code2,
-  GitBranch,
-  Zap,
 } from "lucide-react";
 
-// Video Modal Component
-const VideoModal: React.FC<{
-  isOpen: boolean;
-  onClose: () => void;
-  videoId: string;
-}> = ({ isOpen, onClose, videoId }) => {
-  const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
-  const isMobile = windowWidth < 768;
-  const isTablet = windowWidth >= 768 && windowWidth < 1024;
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0, 0, 0, 0.9)",
-              zIndex: 9998,
-              cursor: "pointer",
-            }}
-          />
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: 9999,
-              width: isMobile ? "calc(100vw - 32px)" : isTablet ? "calc(100vw - 80px)" : "90vw",
-              maxWidth: isTablet ? "900px" : "1200px",
-              maxHeight: isMobile ? "calc(100vh - 100px)" : "90vh",
-              padding: "0",
-            }}
-          >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              style={{
-                position: "absolute",
-                top: isMobile ? "-50px" : isTablet ? "-55px" : "-60px",
-                right: isMobile ? "0" : isTablet ? "0" : "0",
-                background: "rgba(0, 194, 255, 0.2)",
-                border: "2px solid #00C2FF",
-                borderRadius: "50%",
-                width: isMobile ? "44px" : isTablet ? "48px" : "48px",
-                height: isMobile ? "44px" : isTablet ? "48px" : "48px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                color: "#00C2FF",
-                transition: "all 0.2s ease",
-                zIndex: 10000,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(0, 194, 255, 0.3)";
-                e.currentTarget.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(0, 194, 255, 0.2)";
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <X size={isMobile ? 24 : isTablet ? 28 : 28} />
-            </button>
-            {/* YouTube Embed */}
-            <div
-              style={{
-                width: "100%",
-                paddingBottom: "56.25%", // 16:9 aspect ratio
-                position: "relative",
-                borderRadius: isMobile ? "8px" : isTablet ? "10px" : "12px",
-                overflow: "hidden",
-                boxShadow: isMobile
-                  ? "0 10px 40px rgba(0, 194, 255, 0.3)"
-                  : isTablet
-                    ? "0 15px 50px rgba(0, 194, 255, 0.35)"
-                    : "0 20px 60px rgba(0, 194, 255, 0.3)",
-              }}
-            >
-              <iframe
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: 0,
-                }}
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                title="Principal AI Demo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-};
 
 // Minimal Navigation Component
 const MinimalNavigation: React.FC = () => {
@@ -196,7 +50,7 @@ const MinimalNavigation: React.FC = () => {
         }}
       >
         {/* Logo/Brand */}
-        <a
+        <Link
           href="/"
           style={{
             display: "flex",
@@ -221,7 +75,7 @@ const MinimalNavigation: React.FC = () => {
           >
             AI
           </span>
-        </a>
+        </Link>
 
         {/* Nav Links */}
         <div
@@ -251,7 +105,7 @@ const MinimalNavigation: React.FC = () => {
           >
             About
           </a>
-          <a
+          <Link
             href="/blog"
             style={{
               color: "#d1d5db",
@@ -270,7 +124,7 @@ const MinimalNavigation: React.FC = () => {
             }}
           >
             Blog
-          </a>
+          </Link>
           <a
             href="https://app.principal-ade.com/"
             target="_blank"
@@ -1296,139 +1150,6 @@ const FAQSection: React.FC = () => {
 };
 
 // About Principal AI Section
-const AboutSection: React.FC = () => {
-  const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const isMobile = windowWidth < 768;
-  const isTablet = windowWidth >= 768 && windowWidth < 1024;
-
-  const keyPoints = [
-    {
-      icon: Code2,
-      text: "Documentation is Core Infrastructure",
-    },
-    {
-      icon: GitBranch,
-      text: "Context Belongs in Git, Not SaaS",
-    },
-    {
-      icon: Zap,
-      text: "AI Needs Understanding, Not Just Speed",
-    },
-  ];
-
-  return (
-    <div
-      style={{
-        background: "linear-gradient(180deg, #000000 0%, #0a1628 100%)",
-        padding: isTablet ? "60px 32px" : isMobile ? "50px 20px" : "80px 20px",
-        borderTop: "1px solid rgba(0, 194, 255, 0.2)",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          textAlign: "center",
-        }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2
-            style={{
-              fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
-              fontWeight: "700",
-              margin: "0 0 60px 0",
-              color: "#0066FF",
-              fontFamily:
-                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              letterSpacing: "-0.02em",
-              lineHeight: "1.2",
-              wordWrap: "break-word",
-              overflowWrap: "break-word",
-            }}
-          >
-            At <span style={{ fontWeight: "700", color: "#ffffff" }}>Principal</span>
-            <span
-              style={{
-                fontWeight: "300",
-                background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              AI
-            </span> we believe:
-          </h2>
-
-          {/* Key Points */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: isTablet || isMobile ? "1fr" : "repeat(3, 1fr)",
-              gap: isTablet ? "20px" : "24px",
-              marginTop: "48px",
-            }}
-          >
-            {keyPoints.map((point, index) => {
-              const Icon = point.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  style={{
-                    background: "rgba(0, 194, 255, 0.05)",
-                    border: "1px solid rgba(0, 194, 255, 0.2)",
-                    borderRadius: "12px",
-                    padding: isTablet ? "24px" : "28px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "16px",
-                  }}
-                >
-                  <Icon
-                    size={isTablet ? 36 : 40}
-                    color="#00C2FF"
-                  />
-                  <p
-                    style={{
-                      fontSize: isTablet ? "16px" : "17px",
-                      color: "#ffffff",
-                      fontWeight: "500",
-                      margin: 0,
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    {point.text}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
-};
 
 export const LivingDocHomepage: React.FC = () => {
   return (

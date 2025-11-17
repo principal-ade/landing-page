@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { useTheme } from '@a24z/industry-theme';
 import { motion } from 'framer-motion';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
@@ -401,7 +402,7 @@ const HeroSection: React.FC = () => {
         >
           Watch Demo
         </a>
-        <a
+        <Link
           href="/blog/pitch-deck"
           style={{
             padding: isMobile ? '6px 12px' : isConstrainedHeight ? '8px 14px' : '10px 16px',
@@ -432,7 +433,7 @@ const HeroSection: React.FC = () => {
           }}
         >
           Pitch Deck
-        </a>
+        </Link>
       </div>
     </div>
   );
