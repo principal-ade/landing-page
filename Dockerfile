@@ -34,6 +34,7 @@ RUN npm install \
     @next/swc-linux-x64-musl \
     @tailwindcss/oxide-linux-x64-musl \
     lightningcss-linux-x64-musl \
+    @libsql/linux-x64-musl \
     --save-optional --force
 
 # Now rebuild all native dependencies for the current platform
