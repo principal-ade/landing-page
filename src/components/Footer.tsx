@@ -17,7 +17,7 @@ const footerSections: FooterSection[] = [
     title: 'Resources',
     links: [
       { label: 'Blog', href: '/blog' },
-      { label: 'Pitch Deck', href: '/blog/pitch-deck' },
+      { label: 'Documentation', href: '/docs' },
       { label: 'API Reference', href: '/api' },
       { label: 'Support', href: '/support' },
     ],
@@ -27,8 +27,8 @@ const footerSections: FooterSection[] = [
     links: [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
-      { label: 'Privacy', href: '/privacy' },
-      { label: 'Terms', href: '/terms' },
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
     ],
   },
 ];
