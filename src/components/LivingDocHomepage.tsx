@@ -206,7 +206,7 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "100px 20px 60px 20px" : "140px 20px 100px 20px",
+        padding: isMobile ? "50px 20px 60px 20px" : "70px 20px 100px 20px",
       }}
     >
       {/* Circular gradient */}
@@ -254,13 +254,28 @@ const HeroSection: React.FC = () => {
           padding: isMobile ? "0 20px" : "0 40px",
         }}
       >
-        {/* Brand Name with Logo */}
+        {/* Logo */}
+        <div
+          style={{
+            margin: "0 0 24px 0",
+          }}
+        >
+          <Logo
+            width={isMobile ? 80 : isConstrainedHeight ? 96 : 120}
+            height={isMobile ? 80 : isConstrainedHeight ? 96 : 120}
+            color="#00C2FF"
+            particleColor="#0098CC"
+            opacity={0.9}
+          />
+        </div>
+
+        {/* Brand Name */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "12px",
-            fontSize: isMobile ? "20px" : isConstrainedHeight ? "24px" : "28px",
+            fontSize: isMobile ? "28px" : isConstrainedHeight ? "32px" : "36px",
             fontWeight: "600",
             margin: "0 0 40px 0",
             textAlign: "center",
@@ -269,15 +284,6 @@ const HeroSection: React.FC = () => {
               'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
-          <div>
-            <Logo
-              width={isMobile ? 40 : isConstrainedHeight ? 48 : 56}
-              height={isMobile ? 40 : isConstrainedHeight ? 48 : 56}
-              color="#00C2FF"
-              particleColor="#0098CC"
-              opacity={0.9}
-            />
-          </div>
           <span style={{ fontWeight: "600", color: "#ffffff" }}>Principal</span>
           <span
             style={{
