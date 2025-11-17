@@ -10,7 +10,7 @@ import React, {
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 
 import { RepositoryMap } from "@/components/repository-map";
 import { EventPlaybackControls } from "@/components/EventPlaybackControls";

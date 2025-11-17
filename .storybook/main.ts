@@ -21,18 +21,13 @@ const config: StorybookConfig = {
   ],
   async viteFinal(config) {
     return mergeConfig(config, {
-      resolve: {
-        alias: {
-          // Add any problematic packages here if needed
-        },
-      },
       optimizeDeps: {
         include: [
           '@a24z/industry-theme',
           '@a24z/dynamic-file-tree',
           '@principal-ai/repository-abstraction',
+          '@principal-ai/logo-component',
         ],
-        exclude: ['@a24z/logo-component'],
       },
     });
   },

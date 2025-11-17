@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { LandingPage } from "../components/LandingPage";
+import { CompleteLivingDocWebsite } from "../components/CompleteLivingDocWebsite";
 
 export default function HomePage() {
   return (
     <>
-      <LandingPage onExploreGithub={() => {}} />
+      <CompleteLivingDocWebsite />
     </>
   );
 }

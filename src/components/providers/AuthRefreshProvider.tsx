@@ -51,6 +51,28 @@ export function AuthRefreshProvider({ children }: { children: React.ReactNode })
     }
   }, []);
 
+  // Logout function
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/auth/user', {
+        method: 'DELETE',
+      });
+
+      setUser(null);
+
+      // Clear refresh timer
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+        refreshTimerRef.current = null;
+      }
+
+      // Redirect to home page
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }, [router]);
+
   // Refresh tokens before they expire
   const refreshTokens = useCallback(async () => {
     try {
@@ -102,10 +124,10 @@ export function AuthRefreshProvider({ children }: { children: React.ReactNode })
       console.error('Token refresh error:', error);
       return false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [logout]);
 
   // Setup automatic token refresh (refresh every 50 minutes, tokens expire in 60 minutes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const setupTokenRefresh = useCallback(() => {
     // Clear existing timer
     if (refreshTimerRef.current) {
@@ -158,28 +180,6 @@ export function AuthRefreshProvider({ children }: { children: React.ReactNode })
       throw error;
     }
   }, []);
-
-  // Logout function
-  const logout = useCallback(async () => {
-    try {
-      await fetch('/api/auth/user', {
-        method: 'DELETE',
-      });
-
-      setUser(null);
-
-      // Clear refresh timer
-      if (refreshTimerRef.current) {
-        clearInterval(refreshTimerRef.current);
-        refreshTimerRef.current = null;
-      }
-
-      // Redirect to home page
-      router.push('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  }, [router]);
 
   // Manual refresh function (exposed to consumers)
   const refreshAuth = useCallback(async () => {

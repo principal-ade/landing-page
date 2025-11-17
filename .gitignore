@@ -39,3 +39,6 @@ next-env.d.ts
 .openrouter-usage.json
 *storybook.log
 storybook-static
+
+# npm authentication
+.npmrc

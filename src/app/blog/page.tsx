@@ -3,7 +3,7 @@
 import React from "react";
 import { useTheme } from "@a24z/industry-theme";
 import Link from "next/link";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 
 interface BlogPost {
   slug: string;
