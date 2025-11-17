@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 import { CheckCircle2 } from "lucide-react";
 
 // Minimal Navigation

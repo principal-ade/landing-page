@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@a24z/logo-component";
+import { Logo } from "@principal-ai/logo-component";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "./ThemedSlidePresentationBook";
 import { parseMarkdownIntoPresentation } from "themed-markdown";
