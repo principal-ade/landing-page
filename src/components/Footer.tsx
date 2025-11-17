@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -40,6 +40,47 @@ const socialLinks = [
 ];
 
 export const Footer: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email) {
+      setStatus('error');
+      setMessage('Please enter your email');
+      return;
+    }
+
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, source: 'footer' }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus('success');
+        setMessage('Successfully subscribed!');
+        setEmail('');
+      } else {
+        setStatus('error');
+        setMessage(data.error || 'Failed to subscribe');
+      }
+    } catch {
+      setStatus('error');
+      setMessage('Failed to subscribe. Please try again.');
+    }
+  };
+
   return (
     <footer
       style={{
@@ -219,57 +260,79 @@ export const Footer: React.FC = () => {
             <form
               style={{
                 display: 'flex',
+                flexDirection: 'column',
                 gap: '12px',
               }}
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
-              <input
-                type="email"
-                placeholder="Enter your email"
-                style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  background: 'rgba(0, 0, 0, 0.5)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '6px',
-                  color: '#ffffff',
-                  fontSize: '14px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#00C2FF';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                }}
-              />
-              <button
-                type="submit"
-                style={{
-                  padding: '12px 24px',
-                  background: '#00C2FF',
-                  color: '#000000',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Subscribe
-              </button>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={status === 'loading'}
+                  style={{
+                    flex: 1,
+                    padding: '12px 16px',
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '6px',
+                    color: '#ffffff',
+                    fontSize: '14px',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    outline: 'none',
+                    opacity: status === 'loading' ? 0.6 : 1,
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = '#00C2FF';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  style={{
+                    padding: '12px 24px',
+                    background: status === 'loading' ? '#999' : '#00C2FF',
+                    color: '#000000',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    transition: 'all 0.2s ease',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (status !== 'loading') {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+                </button>
+              </div>
+              {message && (
+                <p
+                  style={{
+                    color: status === 'success' ? '#4ade80' : '#f87171',
+                    fontSize: '12px',
+                    margin: 0,
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  {message}
+                </p>
+              )}
             </form>
           </div>
         </div>
