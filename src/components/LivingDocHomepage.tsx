@@ -273,8 +273,8 @@ const HeroSection: React.FC = () => {
             <Logo
               width={isMobile ? 40 : isConstrainedHeight ? 48 : 56}
               height={isMobile ? 40 : isConstrainedHeight ? 48 : 56}
-              color={theme.colors.primary}
-              particleColor={theme.colors.primary}
+              color="#00C2FF"
+              particleColor="#0098CC"
               opacity={0.9}
             />
           </div>
