@@ -776,7 +776,7 @@ const TryLivingDocSection: React.FC = () => {
             }}
           >
             <a
-              href="https://app.principal-ade.com/"
+              href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -812,7 +812,9 @@ const TryLivingDocSection: React.FC = () => {
               Add it to your project
             </a>
             <a
-              href="/download"
+              href="https://app.principal-ade.com"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 padding: isTablet
                   ? "18px 36px"
