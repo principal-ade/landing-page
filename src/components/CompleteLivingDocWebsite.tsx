@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { Logo } from '@principal-ai/logo-component';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
 import { LivingDocHomepage } from './LivingDocHomepage';
 import { AboutV2 } from './AboutV2';
@@ -10,75 +11,6 @@ import { AgenticWorkspaceForV2 } from './AgenticWorkspaceForV2';
 import { FeaturesAndBenefitsV2 } from './FeaturesAndBenefitsV2';
 import { JoinTheAlpha } from './JoinTheAlpha';
 import { Footer } from './Footer';
-
-// Mock Logo component with Animation
-const MockLogo: React.FC<{ width: number; height: number }> = ({ width, height }) => {
-  return (
-    <motion.div
-      style={{
-        width,
-        height,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, #00C2FF30, #0098CC20, transparent)',
-        border: '2px solid #00C2FF',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        boxShadow: '0 0 20px #00C2FF40',
-      }}
-      animate={{
-        boxShadow: [
-          '0 0 20px #00C2FF40',
-          '0 0 30px #00C2FF60',
-          '0 0 20px #00C2FF40',
-        ],
-      }}
-      transition={{
-        duration: 2,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    >
-      <motion.div
-        style={{
-          position: 'absolute',
-          width: '70%',
-          height: '70%',
-          border: '1.5px solid #00C2FF80',
-          borderRadius: '50%',
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-      />
-      <motion.div
-        style={{
-          position: 'absolute',
-          width: '40%',
-          height: '40%',
-          border: '1.5px solid #00C2FF60',
-          borderRadius: '50%',
-        }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
-      />
-      <motion.div
-        style={{
-          position: 'absolute',
-          width: '12%',
-          height: '12%',
-          background: '#00C2FF',
-          borderRadius: '50%',
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.6, 1, 0.6],
-        }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </motion.div>
-  );
-};
 
 type Page = 'home' | 'about';
 
@@ -165,7 +97,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              <MockLogo width={32} height={32} />
+              <Logo width={32} height={32} />
             </div>
             <div
               style={{
