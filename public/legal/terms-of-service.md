@@ -206,7 +206,7 @@ Key points:
 
 You may terminate your account at any time by:
 - Using the account deletion feature in your account settings
-- Contacting us at support@principal-ade.com
+- Contacting us at info@noetic-labs.com
 
 Upon termination:
 - Your access to the Services will cease
@@ -302,7 +302,7 @@ Except for disputes that qualify for small claims court, any dispute arising fro
 - Limited discovery
 - No class actions
 
-**Opt-Out:** You may opt out of arbitration by sending written notice to legal@principal-ade.com within 30 days of first accepting these Terms.
+**Opt-Out:** You may opt out of arbitration by sending written notice to info@noetic-labs.com within 30 days of first accepting these Terms.
 
 ### Class Action Waiver
 
@@ -317,7 +317,7 @@ This arbitration agreement does not apply to:
 
 ### Informal Resolution
 
-Before filing arbitration, you agree to first contact us at legal@principal-ade.com to attempt informal resolution. We will attempt to resolve disputes within 60 days.
+Before filing arbitration, you agree to first contact us at info@noetic-labs.com to attempt informal resolution. We will attempt to resolve disputes within 60 days.
 
 ## General Provisions
 
@@ -354,7 +354,7 @@ We are not liable for delays or failures in performance due to causes beyond our
 
 Notices to you may be sent to your email address on file. Notices to us should be sent to:
 
-**Email:** legal@principal-ade.com
+**Email:** info@noetic-labs.com
 **Mail:** Principal AI, Legal Department
 [Add physical address when established]
 
@@ -374,15 +374,15 @@ Provisions that by their nature should survive termination will survive, includi
 
 For questions about these Terms:
 
-**Email:** legal@principal-ade.com
+**Email:** info@noetic-labs.com
 **Website:** https://principal-ade.com/contact
-**Support:** support@principal-ade.com
+**Support:** info@noetic-labs.com
 
 For security issues:
-**Email:** security@principal-ade.com
+**Email:** info@noetic-labs.com
 
 For privacy concerns:
-**Email:** privacy@principal-ade.com
+**Email:** info@noetic-labs.com
 
 ---
 
