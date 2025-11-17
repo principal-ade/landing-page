@@ -238,7 +238,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
               Watch Demo
             </a>
             <a
-              href="/download"
+              href="https://principal-ade.com/download"
               style={{
                 padding: '8px 16px',
                 fontSize: '14px',
@@ -369,7 +369,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
                     Watch Demo
                   </a>
                   <a
-                    href="/download"
+                    href="https://principal-ade.com/download"
                     style={{
                       padding: '12px 16px',
                       fontSize: '14px',
