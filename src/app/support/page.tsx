@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
-import { Mail, Book, FileText, HelpCircle, Clock } from "lucide-react";
+import { Mail, HelpCircle, Clock } from "lucide-react";
 
 // Minimal Navigation Component (matching homepage)
 const MinimalNavigation: React.FC = () => {
@@ -178,12 +178,6 @@ const faqs = [
   },
 ];
 
-const quickLinks = [
-  { icon: Book, label: "Documentation", href: "/docs" },
-  { icon: FileText, label: "Blog", href: "/blog" },
-  { icon: Mail, label: "Contact", href: "/contact" },
-];
-
 export default function SupportPage() {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
@@ -342,79 +336,6 @@ export default function SupportPage() {
               >
                 We typically respond within 24-48 hours during business days
               </p>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div style={{ marginBottom: "60px" }}>
-            <h2
-              style={{
-                fontSize: "28px",
-                fontWeight: "600",
-                color: "#ffffff",
-                marginBottom: "32px",
-                textAlign: "center",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              }}
-            >
-              Quick Links
-            </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-                gap: "24px",
-                maxWidth: "900px",
-                margin: "0 auto",
-              }}
-            >
-              {quickLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "16px",
-                      padding: "24px",
-                      background: "rgba(0, 194, 255, 0.05)",
-                      border: "1px solid rgba(0, 194, 255, 0.2)",
-                      borderRadius: "12px",
-                      textDecoration: "none",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background =
-                        "rgba(0, 194, 255, 0.1)";
-                      e.currentTarget.style.borderColor = "#00C2FF";
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background =
-                        "rgba(0, 194, 255, 0.05)";
-                      e.currentTarget.style.borderColor =
-                        "rgba(0, 194, 255, 0.2)";
-                      e.currentTarget.style.transform = "translateY(0)";
-                    }}
-                  >
-                    <Icon size={32} style={{ color: "#00C2FF" }} />
-                    <span
-                      style={{
-                        fontSize: "18px",
-                        fontWeight: "500",
-                        color: "#ffffff",
-                        fontFamily:
-                          'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                      }}
-                    >
-                      {link.label}
-                    </span>
-                  </Link>
-                );
-              })}
             </div>
           </div>
 
