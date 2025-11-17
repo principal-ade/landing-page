@@ -358,7 +358,18 @@ const HeroSection: React.FC = () => {
             maxWidth: "740px",
           }}
         >
-          Principal AI has{" "}
+          Principal{" "}
+          <span
+            style={{
+              background: "linear-gradient(135deg, #00C2FF, #0098CC)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            AI
+          </span>{" "}
+          has{" "}
           <span
             style={{
               color: "#00C2FF",
