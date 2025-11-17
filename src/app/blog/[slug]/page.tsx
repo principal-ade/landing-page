@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { useTheme } from "@a24z/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
 import Link from "next/link";
-import { Logo } from "@principal-ai/logo-component";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import { useThemeSwitcher } from "@/components/providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
 import mermaid from "mermaid";
@@ -134,68 +135,37 @@ export default function BlogPostPage() {
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         backgroundColor: theme.colors.background,
       }}
     >
-      {/* Header with Logo */}
+      <Navigation />
+
+      {/* Controls Toolbar */}
       <div
         style={{
           flexShrink: 0,
           borderBottom: `1px solid ${theme.colors.border}`,
           backgroundColor: theme.colors.backgroundSecondary,
+          position: "sticky",
+          top: "64px",
+          zIndex: 100,
         }}
       >
         <div
           style={{
 	    maxWidth: "80%",
             margin: "0 auto",
-            padding: 0,
+            padding: "12px 16px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: "16px",
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <Link
-              href="/blog"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                textDecoration: "none",
-                transition: "transform 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <Logo
-                width={isMobile ? 60 : 80}
-                height={isMobile ? 60 : 80}
-                color={theme.colors.primary}
-                particleColor={theme.colors.accent}
-                opacity={0.9}
-              />
-            </Link>
-            <div>
-              <h1
-                style={{
-                  fontSize: isMobile ? "24px" : "32px",
-                  fontWeight: "700",
-                  color: theme.colors.text,
-                  margin: 0,
-                }}
-              >
-                Principal ADE
-              </h1>
-            </div>
-          </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {/* View Mode Toggle for pitch-deck */}
             {slug === "pitch-deck" && !isMobile && (
@@ -398,10 +368,12 @@ export default function BlogPostPage() {
         </div>
       </div>
 
+      {/* Main Content */}
       <div
         style={{
           flex: 1,
           overflow: "auto",
+          paddingTop: "20px",
         }}
       >
 

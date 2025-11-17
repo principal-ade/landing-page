@@ -3,7 +3,155 @@
 import React from "react";
 import { useTheme } from "@a24z/industry-theme";
 import Link from "next/link";
-import { Logo } from "@principal-ai/logo-component";
+import { Footer } from "../../components/Footer";
+
+// Minimal Navigation Component (matching homepage)
+const MinimalNavigation: React.FC = () => {
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024,
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+  const isTablet = windowWidth >= 768 && windowWidth < 1024;
+
+  return (
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        background: "rgba(0, 0, 0, 0.8)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid rgba(0, 194, 255, 0.2)",
+        padding: isTablet ? "18px 32px" : isMobile ? "14px 20px" : "16px 24px",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {/* Logo/Brand */}
+        <Link
+          href="/"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            textDecoration: "none",
+            fontSize: isTablet ? "22px" : isMobile ? "18px" : "20px",
+            fontWeight: "600",
+            fontFamily:
+              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+          }}
+        >
+          <span style={{ color: "#ffffff" }}>Principal</span>
+          <span
+            style={{
+              fontWeight: "300",
+              background: "linear-gradient(135deg, #00C2FF, #0098CC)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            AI
+          </span>
+        </Link>
+
+        {/* Nav Links */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: isTablet ? "28px" : isMobile ? "20px" : "32px",
+          }}
+        >
+          <Link
+            href="/about"
+            style={{
+              color: "#d1d5db",
+              textDecoration: "none",
+              fontSize: isTablet ? "15px" : isMobile ? "13px" : "14px",
+              fontWeight: "500",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#00C2FF";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#d1d5db";
+            }}
+          >
+            About
+          </Link>
+          <Link
+            href="/blog"
+            style={{
+              color: "#00C2FF",
+              textDecoration: "none",
+              fontSize: isTablet ? "15px" : isMobile ? "13px" : "14px",
+              fontWeight: "500",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: "color 0.2s ease",
+            }}
+          >
+            Blog
+          </Link>
+          <a
+            href="https://principal-ade.com/download"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: isTablet
+                ? "10px 24px"
+                : isMobile
+                  ? "8px 18px"
+                  : "8px 20px",
+              background: "#00C2FF",
+              color: "#000000",
+              textDecoration: "none",
+              fontSize: isTablet ? "15px" : isMobile ? "13px" : "14px",
+              fontWeight: "600",
+              borderRadius: isTablet ? "7px" : "6px",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow =
+                "0 4px 12px rgba(0, 194, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            Download Alpha
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
 interface BlogPost {
   slug: string;
@@ -46,71 +194,35 @@ export default function BlogPage() {
     <div
       style={{
         minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
         backgroundColor: theme.colors.background,
       }}
     >
-      {/* Header with Logo */}
-      <div
-        style={{
-          borderBottom: `1px solid ${theme.colors.border}`,
-          backgroundColor: theme.colors.backgroundSecondary,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-          }}
-        >
-          <Link
-            href="/"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none",
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <Logo
-              width={isMobile ? 60 : 80}
-              height={isMobile ? 60 : 80}
-              color={theme.colors.primary}
-              particleColor={theme.colors.accent}
-              opacity={0.9}
-            />
-          </Link>
-          <div>
-            <h1
-              style={{
-                fontSize: isMobile ? "24px" : "32px",
-                fontWeight: "700",
-                color: theme.colors.text,
-                margin: 0,
-              }}
-            >
-              Blog
-            </h1>
-          </div>
-        </div>
-      </div>
+      <MinimalNavigation />
 
       <div
         style={{
+          flex: 1,
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: isMobile ? "40px 20px" : "60px 40px",
+          padding: isMobile ? "104px 20px 40px 20px" : "124px 40px 60px 40px",
+          width: "100%",
         }}
       >
+        {/* Page Title */}
+        <h1
+          style={{
+            fontSize: isMobile ? "32px" : "48px",
+            fontWeight: "700",
+            color: theme.colors.text,
+            marginBottom: isMobile ? "32px" : "48px",
+            textAlign: "center",
+          }}
+        >
+          Blog
+        </h1>
+
         {/* Loading State */}
         {loading && (
           <div
@@ -216,6 +328,8 @@ export default function BlogPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 }
