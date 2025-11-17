@@ -1,7 +1,23 @@
 import { motion } from "framer-motion";
 import { User, Users, Code2, Lightbulb, MessageSquare, Target } from "lucide-react";
+import React from "react";
 
 export function AgenticWorkspaceForV2() {
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+  const isTablet = windowWidth >= 768 && windowWidth < 1024;
+
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
@@ -78,18 +94,7 @@ export function AgenticWorkspaceForV2() {
             overflowWrap: 'break-word',
           }}
         >
-          Our{" "}
-          <span
-            style={{
-              background: 'linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Agentic Workspace
-          </span>
-          {" "}is ideal for:
+          Perfect for:
         </h2>
       </motion.div>
 
@@ -97,8 +102,8 @@ export function AgenticWorkspaceForV2() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '24px',
+          gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+          gap: isMobile ? '20px' : '24px',
           marginBottom: '80px'
         }}
       >
@@ -119,7 +124,7 @@ export function AgenticWorkspaceForV2() {
                 backgroundColor: 'rgba(3, 7, 18, 0.5)',
                 border: `1px solid #1f2937`,
                 borderRadius: '12px',
-                padding: '32px',
+                padding: '24px',
                 height: '100%',
                 transition: 'all 0.3s ease',
               }}
@@ -131,28 +136,28 @@ export function AgenticWorkspaceForV2() {
               {/* Icon */}
               <div
                 style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '50%',
                   backgroundColor: bgColor,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginBottom: '24px',
+                  marginBottom: '16px',
                   transition: 'all 0.3s ease',
                 }}
               >
-                <Icon style={{ width: '24px', height: '24px', color: iconColor }} />
+                <Icon style={{ width: '20px', height: '20px', color: iconColor }} />
               </div>
 
               {/* Title */}
-              <div style={{ marginBottom: '16px' }}>
+              <div style={{ marginBottom: '12px' }}>
                 <h3
                   style={{
                     color: '#ffffff',
-                    fontSize: '1.25rem',
+                    fontSize: '1.125rem',
                     fontWeight: '600',
-                    marginBottom: '8px',
+                    marginBottom: '6px',
                     letterSpacing: '-0.02em',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
@@ -163,7 +168,7 @@ export function AgenticWorkspaceForV2() {
                   style={{
                     color: iconColor,
                     fontStyle: 'italic',
-                    fontSize: '0.95rem',
+                    fontSize: '0.875rem',
                     letterSpacing: '-0.02em',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                     margin: '0',
@@ -177,8 +182,8 @@ export function AgenticWorkspaceForV2() {
               <p
                 style={{
                   color: '#9ca3af',
-                  lineHeight: '1.6',
-                  fontSize: '0.95rem',
+                  lineHeight: '1.5',
+                  fontSize: '0.875rem',
                   letterSpacing: '-0.02em',
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   margin: '0',

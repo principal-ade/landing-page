@@ -3,6 +3,7 @@ import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
 import { CompleteWebsite, FullPageLayout } from '../FullPageLayout';
 import { CompleteLandingPage } from '../CompleteLandingPage';
+import { CompleteLivingDocWebsite } from '../CompleteLivingDocWebsite';
 
 /**
  * Complete Website with Navigation and Footer
@@ -100,6 +101,29 @@ export const EmptyLayout: StoryObj = {
           </div>
         </div>
       </FullPageLayout>
+    </ClientThemeProvider>
+  ),
+};
+
+/**
+ * Living Documentation Focused Website
+ *
+ * Complete website with navigation between:
+ * - Home: Living Doc Homepage (Simplified)
+ * - About: About Section V2 with all sections
+ *
+ * Features:
+ * - Click navigation links to switch between pages
+ * - Smooth page transitions
+ * - Living Documentation as the primary entry point
+ * - Full About page with team info and beliefs
+ *
+ * Try clicking "About" in the navigation to see the full about page!
+ */
+export const LivingDocFocused: StoryObj = {
+  render: () => (
+    <ClientThemeProvider>
+      <CompleteLivingDocWebsite />
     </ClientThemeProvider>
   ),
 };

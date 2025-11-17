@@ -358,7 +358,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               lineHeight: "1.6",
             }}
           >
-            And it means we eliminate third-party tool costs while making context<br/>
+            And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context<br/>
             version-controlled and agent-accessible.
           </p>
           </div>
@@ -783,7 +783,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 lineHeight: "1.7",
                 margin: "16px 0 0 0",
               }}>
-                And it means we eliminate third-party tool costs while making context
+                And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context
                 version-controlled and agent-accessible.
               </p>
             </div>
@@ -1802,8 +1802,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               }}
             >
               Every other tool stores context in the cloud. We store it in Git.
-              That's not a feature difference—it's architectural. And it means we eliminate
-              third-party tool costs while making context version-controlled and agent-accessible.
+              That's not a feature difference—it's architectural. And it means <span style={{ color: '#00C2FF' }}>we eliminate
+              third-party tool costs</span> while making context version-controlled and agent-accessible.
             </p>
             <p
               style={{
@@ -1901,7 +1901,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 marginBottom: "32px",
               }}
             >
-              And it means we eliminate third-party tool costs while making context<br/>
+              And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context<br/>
               version-controlled and agent-accessible.
             </p>
             <p

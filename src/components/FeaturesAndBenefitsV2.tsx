@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { RefreshCw, FolderGit2, PenTool, Map, Eye, Zap } from "lucide-react";
+import { RefreshCw, FolderGit2, FileText, Smartphone, Boxes, GitBranch } from "lucide-react";
 
 export function FeaturesAndBenefitsV2() {
   const fadeIn = {
@@ -11,39 +11,39 @@ export function FeaturesAndBenefitsV2() {
 
   const features = [
     {
-      icon: RefreshCw,
-      title: "Auto-Sync",
-      tagline: "Always up to date",
+      icon: FileText,
+      title: "Living Documentation",
+      tagline: "Docs that auto-sync with code",
       color: "#00C2FF",
+    },
+    {
+      icon: Smartphone,
+      title: "Mobile Access",
+      tagline: "Your full workspace, anywhere",
+      color: "#0099FF",
+    },
+    {
+      icon: Boxes,
+      title: "Multi-Project Workspaces",
+      tagline: "Agents reason across all repos",
+      color: "#00C2FF",
+    },
+    {
+      icon: GitBranch,
+      title: "Auto-Sync Collaboration",
+      tagline: "Zero merge conflicts",
+      color: "#0099FF",
     },
     {
       icon: FolderGit2,
-      title: "Unified Workspace",
-      tagline: "One place for everything",
-      color: "#0099FF",
-    },
-    {
-      icon: PenTool,
-      title: "Excalidraw Integration",
-      tagline: "Visual planning, versioned",
+      title: "Universal Project Manager",
+      tagline: "All your repos in one place",
       color: "#00C2FF",
     },
     {
-      icon: Map,
-      title: "City View",
-      tagline: "See your codebase",
-      color: "#0099FF",
-    },
-    {
-      icon: Eye,
-      title: "Agent Transparency",
-      tagline: "Watch agents work in real-time",
-      color: "#00C2FF",
-    },
-    {
-      icon: Zap,
-      title: "Vibe Coding Hub",
-      tagline: "Code in flow",
+      icon: RefreshCw,
+      title: "Live Team Collaboration",
+      tagline: "See who's working where",
       color: "#0099FF",
     },
   ];
@@ -218,7 +218,7 @@ export function FeaturesAndBenefitsV2() {
             maxWidth: '600px',
           }}
         >
-          Multi-repo intelligence • AI refactoring • Enterprise governance
+          Quality Lenses • Browser Preview • Slack Integration • Agent Mail
         </p>
       </motion.div>
     </div>

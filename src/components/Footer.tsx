@@ -14,30 +14,11 @@ interface FooterSection {
 
 const footerSections: FooterSection[] = [
   {
-    title: 'Platform',
-    links: [
-      { label: 'Features', href: '/features' },
-      { label: 'Workspace', href: '/workspace' },
-      { label: 'Documentation', href: '/docs' },
-      { label: 'Changelog', href: '/changelog' },
-    ],
-  },
-  {
-    title: 'Solutions',
-    links: [
-      { label: 'For Developers', href: '/?audience=developers' },
-      { label: 'For Teams', href: '/?audience=teams' },
-      { label: 'For Enterprise', href: '/enterprise' },
-      { label: 'Use Cases', href: '/use-cases' },
-    ],
-  },
-  {
     title: 'Resources',
     links: [
       { label: 'Blog', href: '/blog' },
       { label: 'Pitch Deck', href: '/blog/pitch-deck' },
       { label: 'API Reference', href: '/api' },
-      { label: 'Community', href: '/community' },
       { label: 'Support', href: '/support' },
     ],
   },
@@ -45,7 +26,6 @@ const footerSections: FooterSection[] = [
     title: 'Company',
     links: [
       { label: 'About', href: '/about' },
-      { label: 'Careers', href: '/careers' },
       { label: 'Contact', href: '/contact' },
       { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },
@@ -111,7 +91,7 @@ export const Footer: React.FC = () => {
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
-              The Universal Workspace for Agentic Work. Build, orchestrate, and review AI development with perfect context.
+              The Universal Workspace for Agentic Work.
             </p>
 
             {/* Social Links */}

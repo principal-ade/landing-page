@@ -97,7 +97,7 @@ export const WithLivingDocumentation: Story = {
  *
  * More concise and visual version with:
  * - Condensed About section with icon-based key points
- * - Visual-focused Who We Are section
+ * - Visual-focused sections
  * - Same powerful sections but with tighter, more scannable content
  * - Better visual hierarchy and spacing
  */
@@ -109,7 +109,6 @@ export const Version2: Story = {
       <PrincipalFolder />
       <AgenticWorkspaceForV2 />
       <FeaturesAndBenefitsV2 />
-      <WhoWeAreV2 />
       <JoinTheAlpha />
     </div>
   ),

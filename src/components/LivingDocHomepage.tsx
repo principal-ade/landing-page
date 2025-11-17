@@ -331,7 +331,7 @@ const HeroSection: React.FC = () => {
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
-  const isConstrainedHeight = windowHeight < 900;
+  const isConstrainedHeight = windowHeight < 850;
 
   const gridBackground = `
     linear-gradient(${theme.colors.border}40 1px, transparent 1px),
@@ -442,21 +442,21 @@ const HeroSection: React.FC = () => {
         <h1
           style={{
             fontSize: isMobile
-              ? "28px"
+              ? "32px"
               : isConstrainedHeight
                 ? "56px"
                 : isTablet
-                  ? "64px"
-                  : "80px",
-            fontWeight: "700",
-            margin: "0 auto 32px auto",
+                  ? "68px"
+                  : "84px",
+            fontWeight: "600",
+            margin: "0 auto 40px auto",
             textAlign: "center",
             width: "100%",
-            maxWidth: isMobile ? "100%" : "1100px",
-            letterSpacing: isMobile ? "-0.01em" : "-0.03em",
+            maxWidth: isMobile ? "100%" : "1000px",
+            letterSpacing: isMobile ? "-0.015em" : "-0.028em",
             fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            lineHeight: isMobile ? "1.3" : "1.1",
+              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            lineHeight: isMobile ? "1.2" : "1.05",
             background:
               "linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)",
             WebkitBackgroundClip: "text",
@@ -464,7 +464,6 @@ const HeroSection: React.FC = () => {
             backgroundClip: "text",
             wordWrap: "break-word",
             overflowWrap: "break-word",
-            hyphens: "auto",
           }}
         >
           The Universal Workspace for Agentic Work
@@ -473,30 +472,30 @@ const HeroSection: React.FC = () => {
         {/* Subheading */}
         <p
           style={{
-            fontSize: isMobile ? "18px" : "20px",
+            fontSize: isMobile ? "17px" : "21px",
             fontWeight: "400",
-            margin: "0 0 24px 0",
-            color: "#d1d5db",
-            lineHeight: "1.6",
-            letterSpacing: "-0.01em",
+            margin: "0 0 20px 0",
+            color: "rgba(255, 255, 255, 0.7)",
+            lineHeight: "1.5",
+            letterSpacing: "-0.011em",
             fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            maxWidth: "800px",
+              '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            maxWidth: "740px",
           }}
         >
           Every workspace has a core technology. Slack has channels. Figma has multiplayer.
         </p>
         <p
           style={{
-            fontSize: isMobile ? "20px" : "24px",
-            fontWeight: "600",
+            fontSize: isMobile ? "19px" : "24px",
+            fontWeight: "500",
             margin: "0",
             color: "#ffffff",
-            lineHeight: "1.4",
-            letterSpacing: "-0.02em",
+            lineHeight: "1.3",
+            letterSpacing: "-0.015em",
             fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            maxWidth: "800px",
+              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            maxWidth: "740px",
           }}
         >
           Principal AI has{" "}
@@ -514,12 +513,12 @@ const HeroSection: React.FC = () => {
   );
 };
 
-// Living Documentation Hero Section
+// Living Documentation Section
 const LivingDocSection: React.FC = () => {
-  const [isVideoModalOpen, setIsVideoModalOpen] = React.useState(false);
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
+  const [hoveredBenefit, setHoveredBenefit] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -533,295 +532,318 @@ const LivingDocSection: React.FC = () => {
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
   const benefits = [
-    "Your AI reads accurate context, not stale docs from last quarter",
-    "Stop guessing which docs broke when you changed that function",
-    "Reviewers see exactly what code the AI referenced",
-    "Onboard new engineers in hours, not weeks",
+    "Auto-sync with every commit",
+    "Version-controlled in Git",
+    "AI-ready context",
+    "Never goes stale",
   ];
 
   return (
-    <>
-      <VideoModal
-        isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
-        videoId="6GKPWCVs2tU"
-      />
-      <div
-        style={{
-          background: "linear-gradient(180deg, #0a1628 0%, #000000 100%)",
-          padding: isTablet
-            ? "80px 32px"
-            : isMobile
-              ? "60px 20px"
-              : "100px 20px",
-        }}
-      >
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          {/* Main Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: "center", marginBottom: "80px" }}
+    <div
+      style={{
+        background: "linear-gradient(180deg, #0a1628 0%, #000000 100%)",
+        padding: isTablet ? "80px 32px" : isMobile ? "60px 20px" : "100px 20px",
+      }}
+    >
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{ textAlign: "center" }}
+        >
+          <h2
+            style={{
+              fontSize: "clamp(2.25rem, 6vw, 3.75rem)",
+              fontWeight: "700",
+              margin: "0 0 32px 0",
+              color: "#ffffff",
+              letterSpacing: "-0.02em",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              lineHeight: "1.1",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+            }}
           >
-            <h2
+            Living{" "}
+            <span
               style={{
-                fontSize: "clamp(2.25rem, 6vw, 3.75rem)",
-                fontWeight: "700",
-                margin: "0 0 32px 0",
-                color: "#ffffff",
-                letterSpacing: "-0.02em",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                lineHeight: "1.1",
-                wordWrap: "break-word",
-                overflowWrap: "break-word",
+                background:
+                  "linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
               }}
             >
-              Living{" "}
-              <span
-                style={{
-                  background:
-                    "linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Documentation
-              </span>
-            </h2>
-            <p
-              style={{
-                fontSize: isMobile ? "18px" : isTablet ? "20px" : "24px",
-                color: "#ffffff",
-                maxWidth: "900px",
-                margin: "0 auto 24px auto",
-                lineHeight: isMobile ? "1.5" : "1.6",
-                fontWeight: "500",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              }}
-            >
-              Documentation linked directly to your code. When code changes, you know instantly which docs are affected.
-            </p>
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : isTablet ? "18px" : "20px",
-                color: "#00C2FF",
-                maxWidth: "900px",
-                margin: "0 auto 48px auto",
-                lineHeight: isMobile ? "1.5" : "1.6",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              }}
-            >
-              Everyone knows what changed. Everyone stays aligned.
-            </p>
+              Documentation
+            </span>
+          </h2>
+          <p
+            style={{
+              fontSize: isMobile ? "18px" : isTablet ? "20px" : "24px",
+              color: "#ffffff",
+              maxWidth: "900px",
+              margin: "0 auto 24px auto",
+              lineHeight: isMobile ? "1.5" : "1.6",
+              fontWeight: "500",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Documentation linked directly to your code. When code changes, you know instantly which docs are affected.
+          </p>
+          <p
+            style={{
+              fontSize: isMobile ? "16px" : isTablet ? "18px" : "20px",
+              color: "#00C2FF",
+              maxWidth: "900px",
+              margin: "0 auto 48px auto",
+              lineHeight: isMobile ? "1.5" : "1.6",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Up-to-date context for your team. Up-to-date understanding for your AI.
+          </p>
 
-            {/* Benefits Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: isMobile ? "16px" : "20px",
-                marginBottom: isMobile ? "48px" : "60px",
-              }}
-            >
-              {benefits.map((benefit, i) => (
+          {/* Benefits Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+              gap: isMobile ? "16px" : "20px",
+              maxWidth: "820px",
+              margin: "0 auto 80px auto",
+            }}
+          >
+            {benefits.map((benefit, i) => {
+              const isHovered = hoveredBenefit === i;
+              return (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1],
+                    delay: i * 0.1
+                  }}
+                  onMouseEnter={() => setHoveredBenefit(i)}
+                  onMouseLeave={() => setHoveredBenefit(null)}
                   style={{
-                    background: "rgba(0, 194, 255, 0.05)",
-                    border: "1px solid rgba(0, 194, 255, 0.2)",
-                    borderRadius: isMobile ? "10px" : "12px",
-                    padding: isMobile ? "20px" : "24px",
+                    background: isHovered
+                      ? "rgba(0, 194, 255, 0.08)"
+                      : "rgba(0, 194, 255, 0.04)",
+                    border: `1px solid ${isHovered ? "rgba(0, 194, 255, 0.3)" : "rgba(0, 194, 255, 0.15)"}`,
+                    borderRadius: "14px",
+                    padding: isMobile ? "20px" : "24px 28px",
                     display: "flex",
                     alignItems: "center",
-                    gap: isMobile ? "12px" : "16px",
+                    gap: isMobile ? "14px" : "18px",
                     textAlign: "left",
+                    cursor: "default",
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    transform: isHovered ? "translateY(-2px)" : "translateY(0)",
+                    boxShadow: isHovered
+                      ? "0 6px 24px rgba(0, 194, 255, 0.1)"
+                      : "none",
                   }}
                 >
-                  <CheckCircle2
-                    size={24}
-                    color="#00C2FF"
-                    style={{ flexShrink: 0 }}
-                  />
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "10px",
+                      background: isHovered
+                        ? "rgba(0, 194, 255, 0.12)"
+                        : "rgba(0, 194, 255, 0.06)",
+                      flexShrink: 0,
+                      transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  >
+                    <CheckCircle2
+                      size={20}
+                      color="#00C2FF"
+                      strokeWidth={1.5}
+                    />
+                  </div>
                   <span
                     style={{
-                      fontSize: isMobile ? "15px" : "16px",
-                      color: "#d1d5db",
-                      lineHeight: isMobile ? "1.5" : "1.6",
+                      fontSize: isMobile ? "15px" : "17px",
+                      color: "#ffffff",
+                      fontWeight: "500",
                       fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                        '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                      letterSpacing: "-0.011em",
+                      lineHeight: "1.4",
                     }}
                   >
                     {benefit}
                   </span>
                 </motion.div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
 
-            {/* How Principal AI Enables Living Documentation */}
-            <div
+          {/* How Principal AI Enables Living Documentation */}
+          <div
+            style={{
+              background: "rgba(0, 0, 0, 0.4)",
+              border: "1px solid rgba(0, 194, 255, 0.3)",
+              borderRadius: "16px",
+              padding: isTablet
+                ? "50px 32px"
+                : isMobile
+                  ? "40px 24px"
+                  : "60px 40px",
+              textAlign: "left",
+            }}
+          >
+            <h3
               style={{
-                background: "rgba(0, 0, 0, 0.4)",
-                border: "1px solid rgba(0, 194, 255, 0.3)",
-                borderRadius: "16px",
-                padding: isTablet
-                  ? "50px 32px"
-                  : isMobile
-                    ? "40px 24px"
-                    : "60px 40px",
-                marginBottom: isTablet ? "50px" : "60px",
-                textAlign: "left",
+                fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
+                fontWeight: "600",
+                margin: "0 0 32px 0",
+                color: "#ffffff",
+                fontFamily:
+                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                textAlign: "center",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
               }}
             >
-              <h3
-                style={{
-                  fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
-                  fontWeight: "600",
-                  margin: "0 0 32px 0",
-                  color: "#ffffff",
-                  fontFamily:
-                    'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  textAlign: "center",
-                  wordWrap: "break-word",
-                  overflowWrap: "break-word",
-                }}
-              >
-                How Principal AI Makes It Possible
-              </h3>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: isTablet
-                    ? "repeat(2, 1fr)"
-                    : "repeat(auto-fit, minmax(300px, 1fr))",
-                  gap: isTablet ? "28px" : isMobile ? "24px" : "32px",
-                }}
-              >
-                <div>
-                  <h4
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      color: "#00C2FF",
-                      marginBottom: "12px",
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    CodebaseViews
-                  </h4>
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "#d1d5db",
-                      lineHeight: "1.7",
-                      margin: 0,
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Link documentation directly to specific files and code
-                    sections. Principal AI validates these links automatically,
-                    so you always know what's current.
-                  </p>
-                </div>
-                <div>
-                  <h4
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      color: "#00C2FF",
-                      marginBottom: "12px",
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Automated Staleness Detection
-                  </h4>
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "#d1d5db",
-                      lineHeight: "1.7",
-                      margin: 0,
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Every code change is analyzed. If documentation becomes
-                    outdated, you know immediately—before it causes problems.
-                  </p>
-                </div>
-                <div>
-                  <h4
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      color: "#00C2FF",
-                      marginBottom: "12px",
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Git-Based Workspace
-                  </h4>
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "#d1d5db",
-                      lineHeight: "1.7",
-                      margin: 0,
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Everything lives in your repository. No external tools, no
-                    broken workflows. Living Documentation integrates with how
-                    you already work.
-                  </p>
-                </div>
-                <div>
-                  <h4
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "600",
-                      color: "#00C2FF",
-                      marginBottom: "12px",
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    AI-Powered Context
-                  </h4>
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "#d1d5db",
-                      lineHeight: "1.7",
-                      margin: 0,
-                      fontFamily:
-                        'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    }}
-                  >
-                    Your AI agents get the right context automatically. No more
-                    hallucinations from stale docs. No more searching for the
-                    right files.
-                  </p>
-                </div>
+              How Principal AI Makes It Possible
+            </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isTablet
+                  ? "repeat(2, 1fr)"
+                  : "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: isTablet ? "28px" : isMobile ? "24px" : "32px",
+              }}
+            >
+              <div>
+                <h4
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    color: "#00C2FF",
+                    marginBottom: "12px",
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  CodebaseViews
+                </h4>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    color: "#d1d5db",
+                    lineHeight: "1.7",
+                    margin: 0,
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Link documentation directly to specific files and code
+                  sections. Principal AI validates these links automatically,
+                  so you always know what's current.
+                </p>
+              </div>
+              <div>
+                <h4
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    color: "#00C2FF",
+                    marginBottom: "12px",
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Automated Staleness Detection
+                </h4>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    color: "#d1d5db",
+                    lineHeight: "1.7",
+                    margin: 0,
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Every code change is analyzed. If documentation becomes
+                  outdated, you know immediately—before it causes problems.
+                </p>
+              </div>
+              <div>
+                <h4
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    color: "#00C2FF",
+                    marginBottom: "12px",
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Git-Based Workspace
+                </h4>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    color: "#d1d5db",
+                    lineHeight: "1.7",
+                    margin: 0,
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Everything lives in your repository. No external tools, no
+                  broken workflows. Living Documentation integrates with how
+                  you already work.
+                </p>
+              </div>
+              <div>
+                <h4
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    color: "#00C2FF",
+                    marginBottom: "12px",
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  AI-Powered Context
+                </h4>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    color: "#d1d5db",
+                    lineHeight: "1.7",
+                    margin: 0,
+                    fontFamily:
+                      'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Your AI agents get the right context automatically. No more
+                  hallucinations from stale docs. No more searching for the
+                  right files.
+                </p>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -1417,7 +1439,6 @@ export const LivingDocHomepage: React.FC = () => {
       <SeeHowItWorksSection />
       <LivingDocSection />
       <FAQSection />
-      <AboutSection />
     </div>
   );
 };

@@ -192,7 +192,7 @@ export function LivingDocumentationSection() {
               </span>
             </p>
             <p style={{ margin: '0' }}>
-              And it means we eliminate third-party tool costs while making context version-controlled
+              And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context version-controlled
               and agent-accessible.
             </p>
           </div>

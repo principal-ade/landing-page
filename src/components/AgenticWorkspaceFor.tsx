@@ -82,18 +82,7 @@ export function AgenticWorkspaceFor() {
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
-          Our{" "}
-          <span
-            style={{
-              background: 'linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Agentic Workspace
-          </span>
-          {" "}is ideal for:
+          Perfect for:
         </h2>
       </motion.div>
 
