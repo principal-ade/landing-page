@@ -23,7 +23,7 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       resolve: {
         alias: {
-          // Add any problematic packages here if needed
+          '@a24z/logo-component': '/Users/julieallen/Desktop/Principal web/landing-page/node_modules/@a24z/logo-component/dist/esm/index.js',
         },
       },
       optimizeDeps: {

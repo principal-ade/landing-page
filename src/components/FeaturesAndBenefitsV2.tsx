@@ -79,12 +79,14 @@ export function FeaturesAndBenefitsV2() {
         </div>
         <h2
           style={{
-            fontSize: 'clamp(2.5rem, 5vw, 3.75rem)',
+            fontSize: 'clamp(1.75rem, 5vw, 3.75rem)',
             fontWeight: '700',
             margin: '0',
             color: '#ffffff',
             letterSpacing: '-0.02em',
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
           }}
         >
           Features & Benefits
