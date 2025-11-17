@@ -20,15 +20,15 @@ As engineering teams grow, they face several challenges:
 
 Browse all your projects from one interface:
 
-- See recent activity across all repositories
-- Understand project structures at a glance
-- Quick access to documentation and key files
+* See recent activity across all repositories
+* Understand project structures at a glance
+* Quick access to documentation and key files
 
 ### Git-Native Memory
 
 We store important context directly in your git repositories:
 
-```
+```markdown
 your-project/
 ├── .principleMD/
 │   ├── notes/
@@ -42,17 +42,17 @@ your-project/
 
 This means:
 
-- Context is versioned with your code
-- Team members automatically get context when they clone
-- No separate database or service to maintain
+* Context is versioned with your code
+* Team members automatically get context when they clone
+* No separate database or service to maintain
 
 ### Agent Integration
 
 AI agents need context to be helpful. Principal ADE provides:
 
-- Automatic context gathering from repositories
-- Sharing context between different agents
-- Persistent memory across sessions
+* Automatic context gathering from repositories
+* Sharing context between different agents
+* Persistent memory across sessions
 
 ## Best Practices
 
@@ -80,10 +80,10 @@ This means we will need to...
 
 Keep a high-level README that explains:
 
-- What the project does
-- How to get started
-- Key architectural concepts
-- Where to find more information
+* What the project does
+* How to get started
+* Key architectural concepts
+* Where to find more information
 
 ### 3. Use Agent Notes
 
@@ -108,11 +108,11 @@ Results: 50% improvement in response time
 
 We're working on even more ways to maintain and share context:
 
-- **Automatic documentation generation** from code
-- **Cross-repository insights** to understand dependencies
-- **Team knowledge graphs** to visualize expertise
-- **AI-powered context suggestions** based on what you're working on
+* **Automatic documentation generation** from code
+* **Cross-repository insights** to understand dependencies
+* **Team knowledge graphs** to visualize expertise
+* **AI-powered context suggestions** based on what you're working on
 
----
+***
 
 *Engineering context is too important to leave to chance. Try Principal ADE and experience the difference that proper context management makes.*

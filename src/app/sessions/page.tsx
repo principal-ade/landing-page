@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@principal-ai/logo-component";
+import { Logo } from "@a24z/logo-component";
 import { SessionSummary } from "../../components/SessionCard";
 import { useAuth } from "@/hooks/useAuth";
 

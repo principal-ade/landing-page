@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@principal-ai/logo-component";
+import { Logo } from "@a24z/logo-component";
 import { RepositorySelector } from "@/components/RepositorySelector";
 import { MarkdownEditorView } from "@/components/MarkdownEditorView";
 import { useAuth } from "@/hooks/useAuth";
