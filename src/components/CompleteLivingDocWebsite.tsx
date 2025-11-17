@@ -239,6 +239,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
             </a>
             <a
               href="https://principal-ade.com/download"
+              className="download-alpha-btn"
               style={{
                 padding: '8px 16px',
                 fontSize: '14px',
@@ -400,6 +401,11 @@ export const CompleteLivingDocWebsite: React.FC = () => {
               display: flex !important;
             }
             .mobile-menu-btn {
+              display: none !important;
+            }
+          }
+          @media (max-width: 1279px) {
+            .download-alpha-btn {
               display: none !important;
             }
           }
