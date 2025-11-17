@@ -126,7 +126,7 @@ const MinimalNavigation: React.FC = () => {
             Blog
           </Link>
           <a
-            href="https://app.principal-ade.com/"
+            href="https://principal-ade.com/download"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -206,7 +206,7 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "50px 20px 60px 20px" : "70px 20px 100px 20px",
+        padding: isMobile ? "80px 20px 60px 20px" : "100px 20px 100px 20px",
       }}
     >
       {/* Circular gradient */}
@@ -257,7 +257,7 @@ const HeroSection: React.FC = () => {
         {/* Logo */}
         <div
           style={{
-            margin: "0 0 24px 0",
+            margin: "0 0 20px 0",
           }}
         >
           <Logo
@@ -267,35 +267,6 @@ const HeroSection: React.FC = () => {
             particleColor="#0098CC"
             opacity={0.9}
           />
-        </div>
-
-        {/* Brand Name */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            fontSize: isMobile ? "28px" : isConstrainedHeight ? "32px" : "36px",
-            fontWeight: "600",
-            margin: "0 0 40px 0",
-            textAlign: "center",
-            letterSpacing: "-0.02em",
-            fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-          }}
-        >
-          <span style={{ fontWeight: "600", color: "#ffffff" }}>Principal</span>
-          <span
-            style={{
-              fontWeight: "300",
-              background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            AI
-          </span>
         </div>
 
         {/* Main Headline */}
