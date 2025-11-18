@@ -590,7 +590,7 @@ function DownloadPageContent() {
                   >
                     Need help or have questions? Contact our{" "}
                     <a
-                      href="mailto:info@noetic-labs.com"
+                      href="mailto:info@noetic-labs.ai"
                       style={{
                         color: theme.colors.primary,
                         textDecoration: "underline",

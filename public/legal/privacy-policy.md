@@ -160,7 +160,7 @@ Depending on your location, you may have the following rights:
 
 **Opt-Out:** Unsubscribe from marketing communications at any time.
 
-To exercise these rights, contact us at info@noetic-labs.com.
+To exercise these rights, contact us at info@noetic-labs.ai.
 
 ## Children's Privacy
 
@@ -228,7 +228,7 @@ If you are a California resident, you have additional rights under the Californi
 - Right to deletion of personal information
 - Right to non-discrimination for exercising CCPA rights
 
-We do not sell personal information. To exercise your rights, contact info@noetic-labs.com.
+We do not sell personal information. To exercise your rights, contact info@noetic-labs.ai.
 
 ## EU/EEA Privacy Rights
 
@@ -240,7 +240,7 @@ If you are located in the EU/EEA, you have rights under the General Data Protect
 - Legitimate interests (to improve Services)
 - Legal obligations (to comply with laws)
 
-**Data Protection Officer:** For GDPR inquiries, contact info@noetic-labs.com.
+**Data Protection Officer:** For GDPR inquiries, contact info@noetic-labs.ai.
 
 **Supervisory Authority:** You have the right to lodge a complaint with your local data protection authority.
 
@@ -257,10 +257,10 @@ Your continued use of our Services after changes become effective constitutes ac
 
 If you have questions about this Privacy Policy or our data practices, please contact us:
 
-**Email:** info@noetic-labs.com
+**Email:** info@noetic-labs.ai
 **Website:** https://principal-ade.com/contact
 
-For data subject requests, please email: info@noetic-labs.com with "Privacy Request" in the subject line.
+For data subject requests, please email: info@noetic-labs.ai with "Privacy Request" in the subject line.
 
 ---
 

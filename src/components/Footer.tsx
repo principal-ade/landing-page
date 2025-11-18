@@ -37,7 +37,7 @@ const socialLinks = [
   { icon: Github, href: 'https://github.com/principal-ai', label: 'GitHub' },
   { icon: Twitter, href: 'https://x.com/principal_ade', label: 'X' },
   { icon: Linkedin, href: 'https://linkedin.com/company/principalai', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:info@noetic-labs.com', label: 'Email' },
+  { icon: Mail, href: 'mailto:info@noetic-labs.ai', label: 'Email' },
 ];
 
 export const Footer: React.FC = () => {

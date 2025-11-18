@@ -144,10 +144,10 @@ export default function DemoPage() {
           >
             Something went wrong. Please try again or email us directly at{" "}
             <a
-              href="mailto:info@noetic-labs.com"
+              href="mailto:info@noetic-labs.ai"
               style={{ color: "#ff4d4d", textDecoration: "underline" }}
             >
-              info@noetic-labs.com
+              info@noetic-labs.ai
             </a>
           </div>
         )}
@@ -490,10 +490,10 @@ export default function DemoPage() {
         >
           Or email us directly at{" "}
           <a
-            href="mailto:info@noetic-labs.com"
+            href="mailto:info@noetic-labs.ai"
             style={{ color: "#00C2FF", textDecoration: "underline" }}
           >
-            info@noetic-labs.com
+            info@noetic-labs.ai
           </a>
         </p>
       </div>

@@ -138,7 +138,7 @@ export default function SupportPage() {
                   Email Support
                 </h2>
                 <a
-                  href="mailto:info@noetic-labs.com"
+                  href="mailto:info@noetic-labs.ai"
                   style={{
                     fontSize: "18px",
                     color: "#00C2FF",
@@ -154,7 +154,7 @@ export default function SupportPage() {
                     e.currentTarget.style.color = "#00C2FF";
                   }}
                 >
-                  info@noetic-labs.com
+                  info@noetic-labs.ai
                 </a>
               </div>
             </div>
@@ -284,7 +284,7 @@ export default function SupportPage() {
               Our support team is here to assist you
             </p>
             <a
-              href="mailto:info@noetic-labs.com"
+              href="mailto:info@noetic-labs.ai"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
