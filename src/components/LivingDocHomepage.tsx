@@ -48,7 +48,7 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "80px 20px 60px 20px" : "100px 20px 100px 20px",
+        padding: isMobile ? "40px 20px 60px 20px" : "50px 20px 100px 20px",
       }}
     >
       {/* Circular gradient */}
@@ -84,7 +84,6 @@ const HeroSection: React.FC = () => {
       <div
         style={{
           width: "100%",
-          maxWidth: "900px",
           margin: "0 auto",
           textAlign: "center",
           position: "relative",
@@ -99,7 +98,7 @@ const HeroSection: React.FC = () => {
         {/* Logo */}
         <div
           style={{
-            margin: "0 0 20px 0",
+            margin: "0",
           }}
         >
           <Logo
@@ -139,7 +138,7 @@ const HeroSection: React.FC = () => {
             overflowWrap: "break-word",
           }}
         >
-          Universal Workspace<br />for<br />Agentic Work
+          The Universal Workspace<br />for Agentic Work
         </h1>
 
         {/* Subheading */}
