@@ -73,7 +73,7 @@ export const WhoWeAreV2: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Engineers and builders who've lived the pain. We've shipped AI products at scale, led technical communications at major tech companies, and experienced the frustration of AI development with inadequate tools.
+            Engineers and builders who've lived the pain of navigating ai assisted work. We've shipped AI products at scale, led technical communications at major tech companies, and experienced the frustration of AI development with inadequate tools.
           </p>
           <p
             style={{
@@ -87,7 +87,7 @@ export const WhoWeAreV2: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Building the infrastructure we wish existed.
+            So we built the fix.
           </p>
         </motion.div>
       </div>

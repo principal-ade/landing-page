@@ -86,7 +86,7 @@ export const WhoWeAre: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            We're building the infrastructure we wish existed when we were solving these problems ourselves.
+            So we built the fix.
           </p>
         </motion.div>
       </div>

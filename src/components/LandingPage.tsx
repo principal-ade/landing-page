@@ -358,7 +358,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               lineHeight: "1.6",
             }}
           >
-            And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context<br/>
+            And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool complexity</span> while making context<br/>
             version-controlled and agent-accessible.
           </p>
           </div>
@@ -791,7 +791,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         id="whats-different"
         textPosition="right"
         background="secondary"
-        title="Living Documentation is the Key to Context Engineering"
+        title="Living Documentation is the Key to Context Engineering and by extension agentic work."
         description={
           <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
             <div style={{
@@ -816,7 +816,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 lineHeight: "1.7",
                 margin: "16px 0 0 0",
               }}>
-                And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context
+                And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool complexity</span> while making context
                 version-controlled and agent-accessible.
               </p>
             </div>
@@ -1934,7 +1934,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 marginBottom: "32px",
               }}
             >
-              And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool costs</span> while making context<br/>
+              And it means <span style={{ color: '#00C2FF' }}>we eliminate third-party tool complexity</span> while making context<br/>
               version-controlled and agent-accessible.
             </p>
             <p
@@ -1982,7 +1982,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               }}
             >
               Principal-ade: The universal workspace for agentic work.<br/>
-              Living documentation is the key to context engineering.
+              Living documentation is the key to context engineering and by extension agentic work.
             </p>
           </div>
         }
