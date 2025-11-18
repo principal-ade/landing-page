@@ -433,7 +433,7 @@ const LivingDocSection: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Documentation linked directly to your code. When code changes, you know instantly which docs are affected.
+            Documentation linked directly to your code. When code changes, you understand the context that is affected.
           </p>
           <p
             style={{
@@ -594,7 +594,7 @@ const LivingDocSection: React.FC = () => {
                   }}
                 >
                   Link documentation directly to specific files and code
-                  sections. Principal AI validates these links automatically,
+                  sections. Your coding agent will validate these links automatically,
                   so you always know what's current.
                 </p>
               </div>
@@ -622,7 +622,7 @@ const LivingDocSection: React.FC = () => {
                   }}
                 >
                   Every code change is analyzed. If documentation becomes
-                  outdated, you know immediately—before it causes problems.
+                  outdated, it's fixed immediately before it causes problems.
                 </p>
               </div>
               <div>
@@ -648,7 +648,7 @@ const LivingDocSection: React.FC = () => {
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
                 >
-                  Everything lives in your repository. No external tools, no
+                  Your agent is a git savant, so help him by putting everything in your repository. No external tools, no
                   broken workflows. Living Documentation integrates with how
                   you already work.
                 </p>
@@ -752,7 +752,7 @@ const TryLivingDocSection: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Add Living Documentation to your projects in minutes. No commitment required. Experience the
+            Add Living Documentation to your projects in minutes. It's as easy as adding linting. Experience the
             difference yourself.
           </p>
           <div
@@ -800,39 +800,6 @@ const TryLivingDocSection: React.FC = () => {
               Add it to your project
             </a>
             <a
-              href="https://app.principal-ade.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                padding: isTablet
-                  ? "18px 36px"
-                  : isMobile
-                    ? "14px 28px"
-                    : "16px 32px",
-                fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
-                fontWeight: "600",
-                background: "transparent",
-                color: "#00C2FF",
-                border: "2px solid #00C2FF",
-                borderRadius: isTablet ? "9px" : "8px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                textDecoration: "none",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(0, 194, 255, 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-              }}
-            >
-              Take a tour
-            </a>
-            <a
               href="#video-section"
               style={{
                 padding: isTablet
@@ -863,7 +830,7 @@ const TryLivingDocSection: React.FC = () => {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              Watch Video
+              Watch demo
             </a>
           </div>
         </motion.div>
@@ -1001,8 +968,22 @@ const FAQSection: React.FC = () => {
     },
     {
       question: "How long does setup take?",
-      answer:
-        "Less than 5 minutes. Try the Web ADE instantly in your browser, or download the desktop app and connect your repository. No complex configuration, no external dependencies. Living Documentation starts working immediately.",
+      answer: (
+        <>
+          Less than 5 minutes. Just give your agent this link{" "}
+          <a
+            href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#00C2FF",
+              textDecoration: "underline",
+            }}
+          >
+            https://www.npmjs.com/package/@principal-ai/alexandria-cli
+          </a>
+        </>
+      ),
     },
     {
       question: "How does staleness detection work?",
