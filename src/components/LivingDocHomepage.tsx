@@ -6,6 +6,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { LivingDocsTourSection } from "./LivingDocsTourSection";
+import { trackButtonClick, trackVideoPlay } from "@/lib/analytics";
 const HeroSection: React.FC = () => {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
@@ -438,6 +439,7 @@ const LivingDocSection: React.FC = () => {
                 href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackButtonClick('Add to Project', 'https://www.npmjs.com/package/@principal-ai/alexandria-cli')}
                 style={{
                   padding: isTablet
                     ? "18px 36px"
@@ -472,6 +474,7 @@ const LivingDocSection: React.FC = () => {
               </a>
               <a
                 href="/demo"
+                onClick={() => trackButtonClick('Book a Demo', '/demo')}
                 style={{
                   padding: isTablet
                     ? "18px 36px"
@@ -576,6 +579,7 @@ const LivingDocSection: React.FC = () => {
             style={{
               flex: isMobile ? "1" : "0 0 500px",
               maxWidth: isMobile ? "100%" : "500px",
+              width: isMobile ? "100%" : "auto",
             }}
           >
             <div
@@ -583,6 +587,7 @@ const LivingDocSection: React.FC = () => {
                 position: "relative",
                 paddingBottom: "56.25%", // 16:9 aspect ratio
                 height: 0,
+                width: "100%",
                 overflow: "hidden",
                 borderRadius: "12px",
                 border: "1px solid rgba(0, 194, 255, 0.2)",
@@ -590,10 +595,12 @@ const LivingDocSection: React.FC = () => {
               }}
             >
               <iframe
-                src="https://www.youtube.com/embed/6GKPWCVs2tU?rel=0&modestbranding=1"
+                src="https://www.youtube.com/embed/6GKPWCVs2tU?rel=0&modestbranding=1&enablejsapi=1"
                 title="Living Documentation Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                onClick={() => trackVideoPlay('Living Documentation Demo')}
+                onMouseEnter={() => trackVideoPlay('Living Documentation Demo')}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -647,9 +654,11 @@ const LivingDocSection: React.FC = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isTablet
-                  ? "repeat(2, 1fr)"
-                  : "repeat(auto-fit, minmax(300px, 1fr))",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : isTablet
+                    ? "repeat(2, 1fr)"
+                    : "repeat(2, 1fr)",
                 gap: isTablet ? "28px" : isMobile ? "24px" : "32px",
               }}
             >
@@ -662,6 +671,8 @@ const LivingDocSection: React.FC = () => {
                     marginBottom: "12px",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   CodebaseViews
@@ -674,6 +685,8 @@ const LivingDocSection: React.FC = () => {
                     margin: 0,
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Link documentation directly to specific files and code
@@ -690,6 +703,8 @@ const LivingDocSection: React.FC = () => {
                     marginBottom: "12px",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Automated Staleness Detection
@@ -702,6 +717,8 @@ const LivingDocSection: React.FC = () => {
                     margin: 0,
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Every code change is analyzed. If documentation becomes
@@ -717,6 +734,8 @@ const LivingDocSection: React.FC = () => {
                     marginBottom: "12px",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Git-Based Workspace
@@ -729,6 +748,8 @@ const LivingDocSection: React.FC = () => {
                     margin: 0,
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Your agent is a git savant, so help him by putting everything in your repository. No external tools, no
@@ -745,6 +766,8 @@ const LivingDocSection: React.FC = () => {
                     marginBottom: "12px",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   AI-Powered Context
@@ -757,6 +780,8 @@ const LivingDocSection: React.FC = () => {
                     margin: 0,
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   Your AI agents get the right context automatically. No more
@@ -858,6 +883,7 @@ const TryLivingDocSection: React.FC = () => {
                 href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackButtonClick('Add to Project', 'https://www.npmjs.com/package/@principal-ai/alexandria-cli')}
                 style={{
                   padding: isTablet
                     ? "18px 36px"
@@ -892,6 +918,7 @@ const TryLivingDocSection: React.FC = () => {
               </a>
               <a
                 href="/demo"
+                onClick={() => trackButtonClick('Book a Demo', '/demo')}
                 style={{
                   padding: isTablet
                     ? "18px 36px"

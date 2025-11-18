@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download } from 'lucide-react';
+import { trackButtonClick } from '@/lib/analytics';
 
 export const JoinTheAlpha: React.FC = () => {
   const [windowWidth, setWindowWidth] = React.useState(
@@ -78,6 +79,7 @@ export const JoinTheAlpha: React.FC = () => {
               href="https://app.principal-ade.com/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackButtonClick('Try in Browser', 'https://app.principal-ade.com/')}
               style={{
                 padding: isTablet
                   ? "18px 36px"
@@ -114,6 +116,7 @@ export const JoinTheAlpha: React.FC = () => {
             </a>
             <a
               href="/download"
+              onClick={() => trackButtonClick('Download Alpha - Join', '/download')}
               style={{
                 padding: isTablet
                   ? "18px 36px"

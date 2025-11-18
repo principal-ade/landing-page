@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
+import { trackButtonClick, trackNavigation } from '@/lib/analytics';
 
 // Mock Logo component with Animation
 const MockLogo: React.FC<{ width: number; height: number }> = ({ width, height }) => {
@@ -218,6 +219,7 @@ export const Navigation: React.FC = () => {
             >
               <a
                 href={link.href}
+                onClick={() => trackNavigation(link.label)}
                 style={{
                   color: '#ffffff',
                   textDecoration: 'none',
@@ -318,6 +320,7 @@ export const Navigation: React.FC = () => {
         >
           <a
             href="/demo"
+            onClick={() => trackButtonClick('Watch Demo', '/demo')}
             style={{
               padding: '8px 16px',
               fontSize: '14px',
@@ -343,6 +346,7 @@ export const Navigation: React.FC = () => {
           </a>
           <a
             href="/download"
+            onClick={() => trackButtonClick('Download Alpha - Nav', '/download')}
             style={{
               padding: '8px 16px',
               fontSize: '14px',
@@ -404,6 +408,7 @@ export const Navigation: React.FC = () => {
                 <div key={link.label}>
                   <a
                     href={link.href}
+                    onClick={() => trackNavigation(link.label)}
                     style={{
                       color: '#ffffff',
                       textDecoration: 'none',
@@ -439,6 +444,7 @@ export const Navigation: React.FC = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '20px' }}>
                 <a
                   href="/demo"
+                  onClick={() => trackButtonClick('Watch Demo', '/demo')}
                   style={{
                     padding: '12px 16px',
                     fontSize: '14px',
@@ -456,6 +462,7 @@ export const Navigation: React.FC = () => {
                 </a>
                 <a
                   href="/download"
+                  onClick={() => trackButtonClick('Download Alpha - Nav', '/download')}
                   style={{
                     padding: '12px 16px',
                     fontSize: '14px',

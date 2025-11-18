@@ -38,3 +38,15 @@ export const trackNavigation = (section: string) => {
     section: section,
   });
 };
+
+export const trackVideoPlay = (videoTitle: string) => {
+  trackEvent('video_play', {
+    video_title: videoTitle,
+  });
+};
+
+export const trackTourOpen = (source: string = 'button') => {
+  trackEvent('tour_open', {
+    source: source,
+  });
+};

@@ -7,6 +7,7 @@ import { useTheme } from "@principal-ade/industry-theme";
 import { X } from "lucide-react";
 import "@principal-ade/living-documentation-tour/styles.css";
 import "driver.js/dist/driver.css";
+import { trackTourOpen } from "@/lib/analytics";
 
 // Dynamically import the tour component to avoid SSR issues
 const TourableEditorLayout = dynamic(
@@ -108,7 +109,10 @@ export const LivingDocsTourSection: React.FC = () => {
               </p>
 
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  trackTourOpen('button');
+                  setIsModalOpen(true);
+                }}
                 style={{
                   padding: "16px 32px",
                   fontSize: "18px",
@@ -148,7 +152,10 @@ export const LivingDocsTourSection: React.FC = () => {
               <img
                 src="/tour-image.png"
                 alt="Living Documentation Tour Preview"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  trackTourOpen('image');
+                  setIsModalOpen(true);
+                }}
                 style={{
                   width: "100%",
                   height: "auto",
