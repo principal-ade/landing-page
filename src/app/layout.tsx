@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import { AuthRefreshProvider } from "@/components/providers/AuthRefreshProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import { Header } from "@/components/Header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -60,6 +61,7 @@ export default function RootLayout({
         )}
         <ClientThemeProvider>
           <AuthRefreshProvider>
+            <Header />
             {children}
           </AuthRefreshProvider>
         </ClientThemeProvider>

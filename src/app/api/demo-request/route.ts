@@ -1,63 +1,68 @@
 import { NextRequest, NextResponse } from "next/server";
+import { S3DemoRequests } from '@/lib/s3-demo-requests';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { name, email, company, teamSize, preferredDateTime, message } = body;
 
-    // Validate required fields
     if (!name || !email) {
       return NextResponse.json(
-        { error: "Name and email are required" },
+        { error: 'Name and email are required' },
         { status: 400 }
       );
     }
 
-    // Create email content
-    const emailContent = `
-New Demo Request
+    // Initialize demo requests
+    const demoRequests = new S3DemoRequests();
 
-Name: ${name}
-Email: ${email}
-Company: ${company || "Not provided"}
-Team Size: ${teamSize || "Not provided"}
-Preferred Date/Time: ${preferredDateTime || "Not provided"}
-
-Message:
-${message || "No message provided"}
-
----
-Sent from Principal AI Demo Request Form
-    `.trim();
-
-    // Send email using a simple mailto fallback
-    // In production, you would use a service like SendGrid, AWS SES, or Resend
-    console.log("Demo request received:", emailContent);
-
-    // For now, we'll return success and you can check your server logs
-    // You can replace this with actual email sending logic
-
-    // TODO: Integrate with email service
-    // Example with Resend:
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // await resend.emails.send({
-    //   from: 'noreply@principal-ai.com',
-    //   to: 'info@noetic-labs.com',
-    //   subject: `Demo Request from ${name}`,
-    //   text: emailContent,
-    // });
-
-    return NextResponse.json(
+    // Submit the demo request
+    const demoRequest = await demoRequests.submitDemoRequest(
       {
-        success: true,
-        message: "Demo request received. We'll be in touch soon!"
+        name,
+        email,
+        company,
+        teamSize,
+        preferredDateTime,
+        message,
       },
-      { status: 200 }
+      {
+        userAgent: request.headers.get('user-agent'),
+        referer: request.headers.get('referer'),
+        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+      }
     );
-  } catch (error) {
-    console.error("Error processing demo request:", error);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Demo request submitted successfully',
+      request: {
+        id: demoRequest.id,
+        name: demoRequest.name,
+        email: demoRequest.email,
+        submittedAt: demoRequest.submittedAt,
+      },
+    }, { status: 200 });
+
+  } catch (error: any) {
+    console.error('Demo request error:', error);
+
+    if (error.message === 'Invalid email format') {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      );
+    }
+
+    if (error.message === 'Name is required') {
+      return NextResponse.json(
+        { error: 'Name is required' },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { error: "Failed to process demo request" },
+      { error: 'Failed to submit demo request' },
       { status: 500 }
     );
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { DESKTOP_APP_CONFIG, getGitHubApiUrl } from "@/config/desktop-app";
+import { getGitHubApiUrl } from "@/config/desktop-app";
 
 // This token should ONLY have read access to releases
 // Create it with minimal permissions: public_repo (for public) or repo (for private)
@@ -8,79 +8,25 @@ const RELEASES_ONLY_TOKEN = process.env.GITHUB_RELEASES_READONLY_TOKEN;
 
 export async function GET() {
   try {
-    // Ensure this token is only used for releases
-    if (!RELEASES_ONLY_TOKEN) {
-      const isDevelopment = process.env.NODE_ENV === "development";
-
-      if (isDevelopment) {
-        console.log("========================================");
-        console.log("🔧 DEVELOPMENT MODE - Download Feature");
-        console.log("========================================");
-        console.log(
-          "The download button requires GITHUB_RELEASES_READONLY_TOKEN to be set.",
-        );
-        console.log(
-          `In production, this would fetch releases from: ${DESKTOP_APP_CONFIG.github.fullRepo}`,
-        );
-        console.log("");
-        console.log("To enable downloads in development:");
-        console.log("1. Create a GitHub token with read access to releases");
-        console.log(
-          "2. Add to .env.local: GITHUB_RELEASES_READONLY_TOKEN=your_token",
-        );
-        console.log("========================================");
-
-        // Return mock data in development for testing UI
-        return NextResponse.json([
-          {
-            id: 1,
-            tag_name: "v1.0.0-dev",
-            name: "Development Release (Mock)",
-            body: "This is mock data shown in development mode",
-            published_at: new Date().toISOString(),
-            assets: [
-              {
-                id: 1,
-                name: "Specktor-1.0.0-dev.dmg",
-                browser_download_url: "#",
-                size: 100000000,
-              },
-              {
-                id: 2,
-                name: "Specktor-1.0.0-dev.exe",
-                browser_download_url: "#",
-                size: 80000000,
-              },
-              {
-                id: 3,
-                name: "Specktor-1.0.0-dev.AppImage",
-                browser_download_url: "#",
-                size: 90000000,
-              },
-            ],
-          },
-        ]);
-      }
-
-      console.error("[SECURITY] Missing GITHUB_RELEASES_READONLY_TOKEN");
-      return NextResponse.json(
-        { error: "Releases access not configured" },
-        { status: 500 },
-      );
-    }
-
     // SECURITY: This endpoint ONLY fetches releases, nothing else
     const ALLOWED_ENDPOINT = getGitHubApiUrl('releases');
 
-    // Fetch releases from your private repository
-    const response = await fetch(ALLOWED_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${RELEASES_ONLY_TOKEN}`,
-        Accept: "application/vnd.github.v3+json",
-        // Add rate limit info to help with debugging
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    });
+    // Build headers - token is optional for public repositories
+    const headers: HeadersInit = {
+      Accept: "application/vnd.github.v3+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    };
+
+    // Add authorization header if token is available (for private repos or higher rate limits)
+    if (RELEASES_ONLY_TOKEN) {
+      headers.Authorization = `Bearer ${RELEASES_ONLY_TOKEN}`;
+    }
+
+    console.log(`Fetching releases from: ${ALLOWED_ENDPOINT}`);
+    console.log(`Using token: ${RELEASES_ONLY_TOKEN ? 'Yes (masked)' : 'No (public access)'}`);
+
+    // Fetch releases from the repository (works for public repos without token)
+    const response = await fetch(ALLOWED_ENDPOINT, { headers });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -94,8 +40,17 @@ export async function GET() {
       }
 
       if (response.status === 401) {
+        // If we got a 401 and we're using a token, the token is invalid
+        if (RELEASES_ONLY_TOKEN) {
+          console.error("Invalid GitHub token detected. Please check GITHUB_RELEASES_READONLY_TOKEN");
+          return NextResponse.json(
+            { error: "Invalid GitHub token. Please check your environment variables or remove the token to use public access." },
+            { status: 401 },
+          );
+        }
+        // 401 without a token is unusual for public repos
         return NextResponse.json(
-          { error: "Invalid GitHub token" },
+          { error: "Authentication failed accessing GitHub API" },
           { status: 401 },
         );
       }
@@ -125,13 +80,13 @@ export async function GET() {
     }));
 
     // Add cache headers to reduce API calls
-    const headers = new Headers();
-    headers.set(
+    const responseHeaders = new Headers();
+    responseHeaders.set(
       "Cache-Control",
       "public, s-maxage=300, stale-while-revalidate=600",
     );
 
-    return NextResponse.json(sanitizedReleases, { headers });
+    return NextResponse.json(sanitizedReleases, { headers: responseHeaders });
   } catch (error) {
     console.error("[SECURITY] Error in releases endpoint:", error);
     // Don't expose internal error details

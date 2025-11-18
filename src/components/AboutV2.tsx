@@ -39,7 +39,6 @@ export const AboutV2: React.FC = () => {
       style={{
         background: "linear-gradient(180deg, #000000 0%, #0a1628 100%)",
         padding: isTablet ? "100px 40px" : isMobile ? "64px 24px" : "120px 40px",
-        borderTop: "1px solid rgba(0, 194, 255, 0.12)",
       }}
     >
       <div

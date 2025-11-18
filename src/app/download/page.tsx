@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import {
   Download,
   Monitor,
@@ -10,7 +9,6 @@ import {
   Info,
 } from "lucide-react";
 import { useTheme } from "@a24z/industry-theme";
-import { Logo } from "@principal-ai/logo-component";
 import { trackDownload } from "../lib/analytics";
 
 interface GitHubRelease {
@@ -139,62 +137,9 @@ function DownloadPageContent() {
         minHeight: "100vh",
         backgroundColor: theme.colors.background,
         color: theme.colors.text,
+        paddingTop: "100px",
       }}
     >
-      {/* Logo in top left as back button */}
-      <Link
-        href="/"
-        style={{
-          position: "fixed",
-          top: "20px",
-          left: "20px",
-          zIndex: 1000,
-          textDecoration: "none",
-          transition: "transform 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.05)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-      >
-        <Logo
-          width={isMobile ? 50 : 60}
-          height={isMobile ? 50 : 60}
-          color={theme.colors.primary}
-          particleColor={theme.colors.accent}
-          opacity={0.9}
-        />
-      </Link>
-
-      {/* Logo in top right */}
-      <Link
-        href="/"
-        style={{
-          position: "fixed",
-          top: "20px",
-          right: "20px",
-          zIndex: 1000,
-          textDecoration: "none",
-          transition: "transform 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.05)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-      >
-        <Logo
-          width={isMobile ? 50 : 60}
-          height={isMobile ? 50 : 60}
-          color={theme.colors.primary}
-          particleColor={theme.colors.accent}
-          opacity={0.9}
-        />
-      </Link>
-
       <div
         style={{
           maxWidth: "1200px",
@@ -589,7 +534,7 @@ function DownloadPageContent() {
                     </p>
                     <button
                       onClick={() => {
-                        window.open("https://discord.gg/TGf9SVFZ", "_blank");
+                        window.open("https://discord.gg/G3qdcC2DXq", "_blank");
                       }}
                       style={{
                         padding: isMobile ? "10px 20px" : "12px 24px",

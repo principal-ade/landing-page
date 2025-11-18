@@ -225,12 +225,13 @@ export const Footer: React.FC = () => {
             borderRadius: '12px',
             padding: '32px',
             marginBottom: '60px',
+            overflow: 'hidden',
           }}
         >
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
               gap: '24px',
               alignItems: 'center',
             }}
@@ -263,10 +264,11 @@ export const Footer: React.FC = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '12px',
+                width: '100%',
               }}
               onSubmit={handleSubmit}
             >
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <input
                   type="email"
                   placeholder="Enter your email"
@@ -274,13 +276,14 @@ export const Footer: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={status === 'loading'}
                   style={{
-                    flex: 1,
-                    padding: '12px 16px',
+                    flex: '1 1 150px',
+                    minWidth: '0',
+                    padding: '8px 10px',
                     background: 'rgba(0, 0, 0, 0.5)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '6px',
                     color: '#ffffff',
-                    fontSize: '14px',
+                    fontSize: '13px',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                     outline: 'none',
                     opacity: status === 'loading' ? 0.6 : 1,
@@ -296,12 +299,13 @@ export const Footer: React.FC = () => {
                   type="submit"
                   disabled={status === 'loading'}
                   style={{
-                    padding: '12px 24px',
+                    flex: '0 0 auto',
+                    padding: '8px 16px',
                     background: status === 'loading' ? '#999' : '#00C2FF',
                     color: '#000000',
                     border: 'none',
                     borderRadius: '6px',
-                    fontSize: '14px',
+                    fontSize: '13px',
                     fontWeight: '600',
                     cursor: status === 'loading' ? 'not-allowed' : 'pointer',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
