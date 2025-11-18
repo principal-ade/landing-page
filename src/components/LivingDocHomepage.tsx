@@ -1,15 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Logo } from "@principal-ai/logo-component";
-import { useTheme } from "@principal-ade/industry-theme";
 import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
 import { LivingDocsTourSection } from "./LivingDocsTourSection";
 const HeroSection: React.FC = () => {
-  const { theme } = useTheme();
-
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -31,8 +28,8 @@ const HeroSection: React.FC = () => {
   const isConstrainedHeight = windowHeight < 850;
 
   const gridBackground = `
-    linear-gradient(${theme.colors.border}40 1px, transparent 1px),
-    linear-gradient(90deg, ${theme.colors.border}40 1px, transparent 1px)
+    linear-gradient(rgba(0, 194, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 194, 255, 0.25) 1px, transparent 1px)
   `;
 
   return (
@@ -375,7 +372,249 @@ const LivingDocSection: React.FC = () => {
               );
             })}
           </div>
+        </motion.div>
+      </div>
 
+      {/* Living Docs Tour Section */}
+      <LivingDocsTourSection />
+
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 20px" }}>
+        {/* Try Living Documentation CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{
+            maxWidth: "900px",
+            margin: "80px auto 80px auto",
+            textAlign: "center",
+          }}
+        >
+          <h3
+            style={{
+              fontSize: isMobile ? "28px" : isTablet ? "32px" : "36px",
+              fontWeight: "600",
+              margin: "0 0 24px 0",
+              color: "#ffffff",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+            }}
+          >
+            Get Started
+          </h3>
+          <p
+            style={{
+              fontSize: isTablet ? "17px" : isMobile ? "16px" : "18px",
+              color: "#d1d5db",
+              maxWidth: "700px",
+              margin: "0 auto 40px auto",
+              lineHeight: "1.7",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Add Living Documentation to your projects in minutes. It's as easy as adding linting. And it's free. Experience the
+            difference yourself.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: isTablet ? "18px" : "20px",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                gap: isTablet ? "14px" : "16px",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <a
+                href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: isTablet
+                    ? "18px 36px"
+                    : isMobile
+                      ? "14px 28px"
+                      : "16px 32px",
+                  fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
+                  fontWeight: "600",
+                  background: "linear-gradient(135deg, #0055DD, #003399)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: isTablet ? "9px" : "8px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  fontFamily:
+                    'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0, 102, 255, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                Add it to your project
+              </a>
+              <a
+                href="/demo"
+                style={{
+                  padding: isTablet
+                    ? "18px 36px"
+                    : isMobile
+                      ? "14px 28px"
+                      : "16px 32px",
+                  fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
+                  fontWeight: "600",
+                  background: "transparent",
+                  color: "#00C2FF",
+                  border: "2px solid #00C2FF",
+                  borderRadius: isTablet ? "9px" : "8px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  fontFamily:
+                    'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(0, 194, 255, 0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                Book a Demo
+              </a>
+            </div>
+            <a
+              href="#video-section"
+              style={{
+                color: "#d1d5db",
+                fontSize: isMobile ? "14px" : "15px",
+                textDecoration: "none",
+                fontFamily:
+                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                transition: "color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#00C2FF";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#d1d5db";
+              }}
+            >
+              Watch two minute demo ↓
+            </a>
+          </div>
+        </motion.div>
+
+        {/* See How It Works Video Section */}
+        <motion.div
+          id="video-section"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{
+            marginTop: "80px",
+            scrollMarginTop: "80px",
+            display: "flex",
+            alignItems: "center",
+            gap: "60px",
+            flexDirection: isMobile ? "column" : "row",
+          }}
+        >
+          {/* Left side: Text */}
+          <div style={{ flex: 1 }}>
+            <h3
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+                fontWeight: "600",
+                margin: "0 0 16px 0",
+                color: "#ffffff",
+                fontFamily:
+                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                letterSpacing: "-0.02em",
+                lineHeight: "1.2",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
+              }}
+            >
+              See How It Works
+            </h3>
+
+            <p
+              style={{
+                fontSize: "18px",
+                color: "#9ca3af",
+                lineHeight: "1.6",
+                fontFamily:
+                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              }}
+            >
+              Watch how Living Documentation keeps your team in sync and your AI agents informed.
+            </p>
+          </div>
+
+          {/* Right side: Video Container */}
+          <div
+            style={{
+              flex: isMobile ? "1" : "0 0 500px",
+              maxWidth: isMobile ? "100%" : "500px",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                paddingBottom: "56.25%", // 16:9 aspect ratio
+                height: 0,
+                overflow: "hidden",
+                borderRadius: "12px",
+                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: "#0a1628",
+              }}
+            >
+              <iframe
+                src="https://www.youtube.com/embed/6GKPWCVs2tU?rel=0&modestbranding=1"
+                title="Living Documentation Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  border: "none",
+                }}
+              />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 20px", marginTop: "100px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{ textAlign: "center" }}
+        >
           {/* How Principal AI Enables Living Documentation */}
           <div
             style={{
@@ -596,7 +835,7 @@ const TryLivingDocSection: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Add Living Documentation to your projects in minutes. It's as easy as adding linting. Experience the
+            Add Living Documentation to your projects in minutes. It's as easy as adding linting. And it's free. Experience the
             difference yourself.
           </p>
           <div
@@ -996,9 +1235,6 @@ export const LivingDocHomepage: React.FC = () => {
   return (
     <div>
       <HeroSection />
-      <TryLivingDocSection />
-      <LivingDocsTourSection />
-      <SeeHowItWorksSection />
       <LivingDocSection />
       <FAQSection />
     </div>
