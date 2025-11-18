@@ -11,21 +11,57 @@ function VerifyEmailForm() {
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   const state = searchParams.get("state");
   const email = searchParams.get("email");
 
+  // Check session validity on mount
   useEffect(() => {
     if (!state) {
       setError("Invalid verification session. Please start the login process again.");
+      setIsCheckingSession(false);
+      return;
     }
+
+    // Verify session is still valid on the server
+    async function checkSession() {
+      try {
+        const response = await fetch("/api/auth/workos/verify/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ state }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setError(data.error_description || "Session expired. Please start the login process again.");
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+        // Don't set error here - allow user to try submitting
+      } finally {
+        setIsCheckingSession(false);
+      }
+    }
+
+    checkSession();
   }, [state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!verificationCode.trim()) {
+    const cleanCode = verificationCode.trim();
+
+    // Client-side validation
+    if (!cleanCode) {
       setError("Please enter the verification code");
+      return;
+    }
+
+    if (!/^\d{6}$/.test(cleanCode)) {
+      setError("Verification code must be exactly 6 digits");
       return;
     }
 
@@ -38,7 +74,7 @@ function VerifyEmailForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           state,
-          verificationCode: verificationCode.trim(),
+          verificationCode: cleanCode,
         }),
       });
 
@@ -50,11 +86,7 @@ function VerifyEmailForm() {
         return;
       }
 
-      // Store session data in cookie
-      if (data.sessionData) {
-        document.cookie = `workos_session=${JSON.stringify(data.sessionData)}; path=/; max-age=${60 * 60 * 24 * 7}; samesite=lax`;
-      }
-
+      // Cookie is now set server-side via HTTP-only cookie
       // Redirect to return URL or home
       window.location.href = data.return_url || "/live-events";
     } catch (error) {
@@ -63,6 +95,42 @@ function VerifyEmailForm() {
       setIsSubmitting(false);
     }
   };
+
+  // Handle code input to only allow digits
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow digits and limit to 6 characters
+    if (/^\d{0,6}$/.test(value)) {
+      setVerificationCode(value);
+      // Clear error when user starts typing
+      if (error) setError("");
+    }
+  };
+
+  // Show loading state while checking session
+  if (isCheckingSession) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: theme.colors.background,
+          padding: "20px",
+        }}
+      >
+        <div
+          style={{
+            fontSize: theme.fontSizes[2],
+            color: theme.colors.textSecondary,
+          }}
+        >
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -124,11 +192,15 @@ function VerifyEmailForm() {
             <input
               id="code"
               type="text"
+              inputMode="numeric"
+              pattern="\d{6}"
+              maxLength={6}
               value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder="Enter 6-digit code"
+              onChange={handleCodeChange}
+              placeholder="000000"
               disabled={isSubmitting}
               autoFocus
+              autoComplete="one-time-code"
               style={{
                 width: "100%",
                 padding: "12px",
@@ -162,7 +234,7 @@ function VerifyEmailForm() {
 
           <button
             type="submit"
-            disabled={isSubmitting || !verificationCode.trim()}
+            disabled={isSubmitting || verificationCode.length !== 6}
             style={{
               width: "100%",
               padding: "12px",
@@ -172,8 +244,8 @@ function VerifyEmailForm() {
               border: "none",
               backgroundColor: theme.colors.primary,
               color: theme.colors.background,
-              cursor: isSubmitting ? "not-allowed" : "pointer",
-              opacity: isSubmitting || !verificationCode.trim() ? 0.5 : 1,
+              cursor: isSubmitting || verificationCode.length !== 6 ? "not-allowed" : "pointer",
+              opacity: isSubmitting || verificationCode.length !== 6 ? 0.5 : 1,
             }}
           >
             {isSubmitting ? "Verifying..." : "Verify Email"}

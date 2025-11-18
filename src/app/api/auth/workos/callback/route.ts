@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WorkOS } from "@workos-inc/node";
-
-// Initialize if not exists
-if (!global.cliAuthSessions) {
-  global.cliAuthSessions = new Map();
-}
+import { getValidSession, setSession, deleteSession } from "@/lib/auth-session-manager";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -83,8 +79,8 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Get the session
-  const session = global.cliAuthSessions.get(state);
+  // Get and validate session (checks expiration automatically)
+  const session = getValidSession(state);
   if (!session) {
     return new NextResponse(
       `
@@ -156,7 +152,7 @@ export async function GET(request: NextRequest) {
 
   // Store the code with the session
   session.code = code;
-  global.cliAuthSessions.set(state, session);
+  setSession(state, session);
 
   // If this is a web flow (has return_url), exchange token and redirect
   if (session.return_url) {
@@ -180,7 +176,7 @@ export async function GET(request: NextRequest) {
           // Store the pending token in the session
           session.pending_auth_token = authError.rawData.pending_authentication_token;
           session.email = authError.rawData.email;
-          global.cliAuthSessions.set(state, session);
+          setSession(state, session);
 
           // Redirect to verification page with state
           const verifyUrl = new URL(session.return_url);
@@ -229,7 +225,7 @@ export async function GET(request: NextRequest) {
       };
 
       // Clean up the session
-      global.cliAuthSessions.delete(state);
+      deleteSession(state);
 
       // Build redirect URL with state parameter
       const redirectUrl = new URL(session.return_url);
@@ -341,7 +337,7 @@ export async function GET(request: NextRequest) {
       workos_user_id: authResponse.user.id,
       github_access_token: githubAccessToken,
     };
-    global.cliAuthSessions.set(state, session);
+    setSession(state, session);
 
     return new NextResponse(
       `
@@ -407,7 +403,7 @@ export async function GET(request: NextRequest) {
       // Store the pending token in the session
       session.pending_auth_token = authError.rawData.pending_authentication_token;
       session.email = authError.rawData.email;
-      global.cliAuthSessions.set(state, session);
+      setSession(state, session);
 
       // Redirect to verification page with state
       const verifyUrl = `/auth/verify-email?state=${state}&email=${encodeURIComponent(authError.rawData.email || "your email")}`;

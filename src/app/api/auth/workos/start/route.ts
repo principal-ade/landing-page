@@ -1,23 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WorkOS } from "@workos-inc/node";
-
-// Initialize if not exists
-if (!global.cliAuthSessions) {
-  global.cliAuthSessions = new Map();
-}
-
-// Clean up old sessions periodically
-if (!global.cliAuthCleanupInterval) {
-  global.cliAuthCleanupInterval = setInterval(() => {
-    const now = Date.now();
-    for (const [key, session] of global.cliAuthSessions.entries()) {
-      if (now - session.created_at > 5 * 60 * 1000) {
-        // 5 minutes
-        global.cliAuthSessions.delete(key);
-      }
-    }
-  }, 60 * 1000); // Check every minute
-}
+import { setSession } from "@/lib/auth-session-manager";
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store the challenge with the state and optional return URL
-    global.cliAuthSessions.set(state, {
+    setSession(state, {
       code_challenge,
       created_at: Date.now(),
       provider: "workos",

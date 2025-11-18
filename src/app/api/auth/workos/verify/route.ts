@@ -1,5 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { WorkOS } from "@workos-inc/node";
+import { getValidSession, setSession } from "@/lib/auth-session-manager";
+
+/**
+ * Map WorkOS error codes to user-friendly messages
+ */
+function getErrorMessage(error: any): string {
+  const errorCode = error?.rawData?.code || error?.code;
+  const errorMessage = error?.message || "";
+
+  // Map common WorkOS error codes
+  switch (errorCode) {
+    case "invalid_verification_code":
+      return "The verification code is incorrect. Please check your email and try again.";
+    case "verification_code_expired":
+      return "This verification code has expired. Please request a new one.";
+    case "too_many_attempts":
+      return "Too many failed attempts. Please wait a few minutes and try again.";
+    case "email_verification_required":
+      return "Email verification is required to continue.";
+    default:
+      // Check for specific error messages
+      if (errorMessage.includes("expired")) {
+        return "This verification code has expired. Please request a new one.";
+      }
+      if (errorMessage.includes("invalid") || errorMessage.includes("incorrect")) {
+        return "The verification code is incorrect. Please check your email and try again.";
+      }
+      return "Failed to verify email. Please check the code and try again.";
+  }
+}
+
+/**
+ * Validate verification code format
+ */
+function isValidVerificationCode(code: string): boolean {
+  // WorkOS verification codes are typically 6 digits
+  return /^\d{6}$/.test(code);
+}
 
 /**
  * POST /api/auth/workos/verify
@@ -16,8 +54,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the session
-    const session = global.cliAuthSessions?.get(state);
+    // Validate verification code format
+    const cleanCode = verificationCode.trim();
+    if (!isValidVerificationCode(cleanCode)) {
+      return NextResponse.json(
+        {
+          error: "invalid_format",
+          error_description: "Verification code must be 6 digits."
+        },
+        { status: 400 },
+      );
+    }
+
+    // Get and validate session (checks expiration automatically)
+    const session = getValidSession(state);
     if (!session) {
       return NextResponse.json(
         { error: "Session expired. Please start the login process again." },
@@ -38,7 +88,7 @@ export async function POST(request: NextRequest) {
     // Complete email verification
     const authResponse = await workos.userManagement.authenticateWithEmailVerification({
       clientId: process.env.WORKOS_CLIENT_ID!,
-      code: verificationCode,
+      code: cleanCode,
       pendingAuthenticationToken: session.pending_auth_token,
     });
 
@@ -138,12 +188,12 @@ export async function POST(request: NextRequest) {
     };
 
     // DO NOT delete session - keep it for CLI polling to retrieve tokens
-    global.cliAuthSessions.set(state, session);
+    setSession(state, session);
 
     // Return appropriate response based on flow type
     if (session.return_url) {
-      // Web flow - return session data for cookie setting
-      return NextResponse.json({
+      // Web flow - set HTTP-only cookie and return redirect URL
+      const response = NextResponse.json({
         success: true,
         user: {
           id: userData.id,
@@ -152,9 +202,20 @@ export async function POST(request: NextRequest) {
           name: userData.name,
           avatar_url: userData.avatar_url,
         },
-        sessionData: userData,
         return_url: session.return_url,
       });
+
+      // Set secure HTTP-only cookie (not accessible to JavaScript)
+      response.cookies.set("workos_session", JSON.stringify(userData), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+        domain: process.env.NODE_ENV === "production" ? ".principal-ade.com" : undefined,
+      });
+
+      return response;
     } else {
       // CLI flow - return simple success message
       // The Electron app will poll /token endpoint to get the tokens
@@ -169,8 +230,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "verification_failed",
-        error_description:
-          error?.message || "Failed to verify email. Please check the code and try again.",
+        error_description: getErrorMessage(error),
       },
       { status: 400 },
     );

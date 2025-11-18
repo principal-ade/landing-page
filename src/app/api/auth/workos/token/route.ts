@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { WorkOS } from "@workos-inc/node";
+import { getValidSession, deleteSession } from "@/lib/auth-session-manager";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,8 +14,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the session
-    const session = global.cliAuthSessions?.get(state);
+    // Get and validate session (checks expiration automatically)
+    const session = getValidSession(state);
     if (!session) {
       return NextResponse.json(
         { error: "authorization_pending" },
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Clean up the session
-      global.cliAuthSessions.delete(state);
+      deleteSession(state);
 
       // Return pre-exchanged tokens
       return NextResponse.json(session.tokens);
@@ -137,7 +138,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Clean up the session
-    global.cliAuthSessions.delete(state);
+    deleteSession(state);
 
     // Return the token and user info
     // Primary access token should be GitHub token (for backwards compatibility with Electron app)
