@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Logo } from "@principal-ai/logo-component";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import {
   CheckCircle2,
   ChevronDown,
@@ -103,8 +103,8 @@ const HeroSection: React.FC = () => {
           }}
         >
           <Logo
-            width={isMobile ? 80 : isConstrainedHeight ? 96 : 120}
-            height={isMobile ? 80 : isConstrainedHeight ? 96 : 120}
+            width={isMobile ? 100 : isConstrainedHeight ? 140 : 180}
+            height={isMobile ? 100 : isConstrainedHeight ? 140 : 180}
             color="#00C2FF"
             particleColor="#0098CC"
             opacity={0.9}
@@ -139,7 +139,7 @@ const HeroSection: React.FC = () => {
             overflowWrap: "break-word",
           }}
         >
-          The Universal Workspace for Agentic Work
+          Universal Workspace<br />for<br />Agentic Work
         </h1>
 
         {/* Subheading */}

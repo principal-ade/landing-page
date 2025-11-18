@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { DynamicFileTree } from "@a24z/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
-import { Theme } from "@a24z/industry-theme";
+import { Theme } from "@principal-ade/industry-theme";
 
 interface Event {
   timestamp: string;

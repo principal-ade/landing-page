@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useMemo } from "react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { GitStatusFileTree, GitOrderedFileList, type GitFileStatus } from "@a24z/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 import { ThemedMDXEditor, useThemedMDXEditor } from "@principal-ade/industry-themed-mdx-editor";

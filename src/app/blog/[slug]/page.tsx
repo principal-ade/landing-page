@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
 import Link from "next/link";
 import { Navigation } from "@/components/Navigation";

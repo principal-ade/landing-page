@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import { motion } from 'framer-motion';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
 import { CheckCircle2, ArrowRight, Download, Play, AlertCircle, Zap, GitBranch, Code2 } from 'lucide-react';

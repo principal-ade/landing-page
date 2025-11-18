@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { TimeRuler } from "./TimeRuler";
 import { SessionCard, SessionSummary } from "./SessionCard";
 

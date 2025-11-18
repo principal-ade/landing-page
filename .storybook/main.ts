@@ -23,7 +23,7 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       optimizeDeps: {
         include: [
-          '@a24z/industry-theme',
+          '@principal-ade/industry-theme',
           '@a24z/dynamic-file-tree',
           '@principal-ai/repository-abstraction',
           '@principal-ai/logo-component',

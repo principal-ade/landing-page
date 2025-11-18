@@ -8,7 +8,7 @@ import {
   Package,
   Info,
 } from "lucide-react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { trackDownload } from "../lib/analytics";
 
 interface GitHubRelease {

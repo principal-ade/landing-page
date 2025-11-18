@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { ChevronDown } from "lucide-react";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 

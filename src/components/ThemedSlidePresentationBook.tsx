@@ -6,7 +6,7 @@ import {
   SlidePresentationBookProps,
   ThemeProvider,
 } from "themed-markdown";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
 

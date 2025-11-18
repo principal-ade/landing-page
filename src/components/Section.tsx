@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface SectionProps {
   id: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { RepositoryMap } from "./repository-map";
 import { EventPlaybackControls } from "./EventPlaybackControls";
 import { EventPlaybackService, PlaybackState, PlaybackSpeed } from "../services/EventPlaybackService";

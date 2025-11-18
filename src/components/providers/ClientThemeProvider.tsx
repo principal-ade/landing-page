@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ThemeProvider, Theme } from "@a24z/industry-theme";
+import { ThemeProvider, Theme } from "@principal-ade/industry-theme";
 import {
   terminalTheme,
   regalTheme,
@@ -11,9 +11,11 @@ import {
   defaultMarkdownTheme,
   defaultEditorTheme,
   defaultTerminalTheme,
-} from "@a24z/industry-theme";
+  landingPageTheme,
+} from "@principal-ade/industry-theme";
 
 export const themes: Record<string, Theme> = {
+  "landing-page": landingPageTheme,
   terminal: terminalTheme,
   regal: regalTheme,
   matrix: matrixTheme,
@@ -50,7 +52,7 @@ export default function ClientThemeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [currentTheme, setCurrentTheme] = React.useState("slate");
+  const [currentTheme, setCurrentTheme] = React.useState("landing-page");
   const [isHydrated, setIsHydrated] = React.useState(false);
 
   // Load theme from localStorage on mount

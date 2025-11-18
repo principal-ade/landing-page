@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Theme } from "@a24z/industry-theme";
+import { Theme } from "@principal-ade/industry-theme";
 import { MultiFileTree, parseUnifiedPath } from "@a24z/dynamic-file-tree";
 import { FileTree, LoadedFileTreeSource, FileTreeSource } from "@principal-ai/repository-abstraction";
 

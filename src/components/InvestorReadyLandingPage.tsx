@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Download, Sparkles, FolderGit2, Zap, Check, X } from "lucide-react";
 import { Logo } from "@principal-ai/logo-component";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { useThemeSwitcher } from "./providers/ClientThemeProvider";
 import { trackDownload, trackButtonClick } from "@/lib/analytics";
 

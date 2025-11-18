@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useTheme } from "@a24z/industry-theme";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Logo } from "@principal-ai/logo-component";
 import { SessionSummary } from "../../components/SessionCard";
 import { useAuth } from "@/hooks/useAuth";

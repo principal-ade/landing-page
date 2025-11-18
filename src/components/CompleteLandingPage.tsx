@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import { motion } from 'framer-motion';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
 import { ContextEngineering } from './ContextEngineering';
