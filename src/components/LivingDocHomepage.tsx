@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
+import { LivingDocsTourSection } from "./LivingDocsTourSection";
 const HeroSection: React.FC = () => {
   const { theme } = useTheme();
 
@@ -996,6 +997,7 @@ export const LivingDocHomepage: React.FC = () => {
     <div>
       <HeroSection />
       <TryLivingDocSection />
+      <LivingDocsTourSection />
       <SeeHowItWorksSection />
       <LivingDocSection />
       <FAQSection />
