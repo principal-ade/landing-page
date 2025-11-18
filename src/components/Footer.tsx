@@ -19,6 +19,7 @@ const footerSections: FooterSection[] = [
       { label: 'Blog', href: '/blog' },
       { label: 'Documentation', href: '/docs' },
       { label: 'Support', href: '/support' },
+      { label: 'Book a Demo', href: '/demo' },
     ],
   },
   {
@@ -36,7 +37,7 @@ const socialLinks = [
   { icon: Github, href: 'https://github.com/principal-ai', label: 'GitHub' },
   { icon: Twitter, href: 'https://x.com/principal_ade', label: 'X' },
   { icon: Linkedin, href: 'https://linkedin.com/company/principalai', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:hello@principal.ai', label: 'Email' },
+  { icon: Mail, href: 'mailto:info@noetic-labs.com', label: 'Email' },
 ];
 
 export const Footer: React.FC = () => {

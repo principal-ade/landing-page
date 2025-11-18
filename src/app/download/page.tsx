@@ -643,7 +643,17 @@ function DownloadPageContent() {
                       margin: 0,
                     }}
                   >
-                    Need help or have questions? Contact our support team.
+                    Need help or have questions? Contact our{" "}
+                    <a
+                      href="mailto:info@noetic-labs.com"
+                      style={{
+                        color: theme.colors.primary,
+                        textDecoration: "underline",
+                      }}
+                    >
+                      support team
+                    </a>
+                    .
                   </p>
                 </div>
               </>

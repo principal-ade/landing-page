@@ -116,6 +116,34 @@ const MinimalNavigation: React.FC = () => {
             Blog
           </Link>
           <a
+            href="/demo"
+            style={{
+              padding: isTablet
+                ? "10px 24px"
+                : isMobile
+                  ? "8px 18px"
+                  : "8px 20px",
+              background: "transparent",
+              color: "#00C2FF",
+              border: "1px solid #00C2FF",
+              textDecoration: "none",
+              fontSize: isTablet ? "15px" : isMobile ? "13px" : "14px",
+              fontWeight: "600",
+              borderRadius: isTablet ? "7px" : "6px",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(0, 194, 255, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            Book a Demo
+          </a>
+          <a
             href="https://principal-ade.com/download"
             target="_blank"
             rel="noopener noreferrer"

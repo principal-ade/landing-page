@@ -85,7 +85,7 @@ export const AboutV2: React.FC = () => {
               fontWeight: "400",
             }}
           >
-            Engineers and builders who've lived the pain of navigating ai assisted work. We've shipped AI products at scale, led technical communications at major tech companies, and experienced the frustration of AI development with inadequate tools.
+            Engineers and builders who've lived the pain of navigating AI-assisted work. We've shipped AI products at scale, led technical communications at major tech companies, and experienced the frustration of AI development with inadequate tools.
           </p>
           <p
             style={{

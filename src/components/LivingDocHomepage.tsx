@@ -126,6 +126,34 @@ const MinimalNavigation: React.FC = () => {
             Blog
           </Link>
           <a
+            href="/demo"
+            style={{
+              padding: isTablet
+                ? "10px 24px"
+                : isMobile
+                  ? "8px 18px"
+                  : "8px 20px",
+              background: "transparent",
+              color: "#00C2FF",
+              border: "1px solid #00C2FF",
+              textDecoration: "none",
+              fontSize: isTablet ? "15px" : isMobile ? "13px" : "14px",
+              fontWeight: "600",
+              borderRadius: isTablet ? "7px" : "6px",
+              fontFamily:
+                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(0, 194, 255, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            Book a Demo
+          </a>
+          <a
             href="https://principal-ade.com/download"
             target="_blank"
             rel="noopener noreferrer"
@@ -343,12 +371,14 @@ const HeroSection: React.FC = () => {
           has{" "}
           <span
             style={{
-              color: "#00C2FF",
+              background: "linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
-            Living Documentation
+            Living Documentation.
           </span>
-          .
         </p>
       </div>
     </div>
@@ -758,79 +788,105 @@ const TryLivingDocSection: React.FC = () => {
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               gap: isTablet ? "18px" : "20px",
-              justifyContent: "center",
-              flexWrap: "wrap",
+              alignItems: "center",
             }}
           >
-            <a
-              href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
-              target="_blank"
-              rel="noopener noreferrer"
+            <div
               style={{
-                padding: isTablet
-                  ? "18px 36px"
-                  : isMobile
-                    ? "14px 28px"
-                    : "16px 32px",
-                fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
-                fontWeight: "600",
-                background: "#00C2FF",
-                color: "#000000",
-                border: "none",
-                borderRadius: isTablet ? "9px" : "8px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                textDecoration: "none",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0, 194, 255, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
+                display: "flex",
+                gap: isTablet ? "14px" : "16px",
+                justifyContent: "center",
+                flexWrap: "wrap",
               }}
             >
-              Add it to your project
-            </a>
+              <a
+                href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: isTablet
+                    ? "18px 36px"
+                    : isMobile
+                      ? "14px 28px"
+                      : "16px 32px",
+                  fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
+                  fontWeight: "600",
+                  background: "linear-gradient(135deg, #0055DD, #003399)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: isTablet ? "9px" : "8px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  fontFamily:
+                    'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0, 102, 255, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                Add it to your project
+              </a>
+              <a
+                href="/demo"
+                style={{
+                  padding: isTablet
+                    ? "18px 36px"
+                    : isMobile
+                      ? "14px 28px"
+                      : "16px 32px",
+                  fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
+                  fontWeight: "600",
+                  background: "transparent",
+                  color: "#00C2FF",
+                  border: "2px solid #00C2FF",
+                  borderRadius: isTablet ? "9px" : "8px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  fontFamily:
+                    'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(0, 194, 255, 0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
+                Book a Demo
+              </a>
+            </div>
             <a
               href="#video-section"
               style={{
-                padding: isTablet
-                  ? "18px 36px"
-                  : isMobile
-                    ? "14px 28px"
-                    : "16px 32px",
-                fontSize: isTablet ? "17px" : isMobile ? "15px" : "16px",
-                fontWeight: "600",
-                background: "linear-gradient(135deg, #0066FF, #0044CC)",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: isTablet ? "9px" : "8px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
+                color: "#d1d5db",
+                fontSize: isMobile ? "14px" : "15px",
                 textDecoration: "none",
                 fontFamily:
                   'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                transition: "all 0.2s ease",
+                transition: "color 0.2s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 102, 255, 0.4)";
+                e.currentTarget.style.color = "#00C2FF";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.color = "#d1d5db";
               }}
             >
-              Watch demo
+              Watch two minute demo ↓
             </a>
           </div>
         </motion.div>
@@ -907,9 +963,9 @@ const SeeHowItWorksSection: React.FC = () => {
             }}
           >
             <iframe
-              src="https://www.youtube.com/embed/6GKPWCVs2tU"
+              src="https://www.youtube.com/embed/6GKPWCVs2tU?rel=0&modestbranding=1"
               title="Living Documentation Demo"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               style={{
                 position: "absolute",
