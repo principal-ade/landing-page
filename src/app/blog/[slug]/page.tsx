@@ -4,10 +4,7 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useTheme } from "@principal-ade/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
-import Link from "next/link";
-import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { useThemeSwitcher } from "@/components/providers/ClientThemeProvider";
 import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
@@ -16,12 +13,10 @@ export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { theme } = useTheme();
-  const { currentTheme, setCurrentTheme, availableThemes } = useThemeSwitcher();
   const [content, setContent] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [isClient, setIsClient] = React.useState(false);
-  const [fontSizeScale, setFontSizeScale] = React.useState(1);
   const [viewMode, setViewMode] = React.useState<"book" | "single">("book");
   const [slides, setSlides] = React.useState<string[]>([]);
   const [windowWidth, setWindowWidth] = React.useState(
@@ -33,31 +28,6 @@ export default function BlogPostPage() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // Load font size from localStorage
-  React.useEffect(() => {
-    const savedFontSize = localStorage.getItem("blogFontSizeScale");
-    if (savedFontSize) {
-      setFontSizeScale(parseFloat(savedFontSize));
-    }
-  }, []);
-
-  const increaseFontSize = () => {
-    const newScale = Math.min(fontSizeScale + 0.1, 2);
-    setFontSizeScale(newScale);
-    localStorage.setItem("blogFontSizeScale", newScale.toString());
-  };
-
-  const decreaseFontSize = () => {
-    const newScale = Math.max(fontSizeScale - 0.1, 0.5);
-    setFontSizeScale(newScale);
-    localStorage.setItem("blogFontSizeScale", newScale.toString());
-  };
-
-  const resetFontSize = () => {
-    setFontSizeScale(1);
-    localStorage.setItem("blogFontSizeScale", "1");
-  };
 
   // Prevent scroll on mount
   React.useEffect(() => {
@@ -141,239 +111,12 @@ export default function BlogPostPage() {
         backgroundColor: theme.colors.background,
       }}
     >
-      <Navigation />
-
-      {/* Controls Toolbar */}
-      <div
-        style={{
-          flexShrink: 0,
-          borderBottom: `1px solid ${theme.colors.border}`,
-          backgroundColor: theme.colors.backgroundSecondary,
-          position: "sticky",
-          top: "64px",
-          zIndex: 100,
-        }}
-      >
-        <div
-          style={{
-	    maxWidth: "80%",
-            margin: "0 auto",
-            padding: "12px 16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "16px",
-            flexWrap: "wrap",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            {/* View Mode Toggle for pitch-deck */}
-            {slug === "pitch-deck" && !isMobile && (
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    color: theme.colors.textSecondary,
-                    fontWeight: "500",
-                  }}
-                >
-                  View:
-                </span>
-                <button
-                  onClick={() => setViewMode("book")}
-                  style={{
-                    padding: "8px 16px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    backgroundColor: viewMode === "book" ? theme.colors.primary : "transparent",
-                    color: viewMode === "book" ? theme.colors.background : theme.colors.text,
-                    border: `1px solid ${viewMode === "book" ? theme.colors.primary : theme.colors.border}`,
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  Slides
-                </button>
-                <button
-                  onClick={() => setViewMode("single")}
-                  style={{
-                    padding: "8px 16px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    backgroundColor: viewMode === "single" ? theme.colors.primary : "transparent",
-                    color: viewMode === "single" ? theme.colors.background : theme.colors.text,
-                    border: `1px solid ${viewMode === "single" ? theme.colors.primary : theme.colors.border}`,
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  Document
-                </button>
-              </div>
-            )}
-
-            {/* Theme Selector */}
-            {!isMobile && (
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    color: theme.colors.textSecondary,
-                    fontWeight: "500",
-                  }}
-                >
-                  Theme:
-                </span>
-                <select
-                  value={currentTheme}
-                  onChange={(e) => setCurrentTheme(e.target.value)}
-                  style={{
-                    padding: "8px 12px",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    backgroundColor: theme.colors.backgroundSecondary,
-                    color: theme.colors.text,
-                    border: `1px solid ${theme.colors.border}`,
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.primary;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.border;
-                  }}
-                >
-                  {availableThemes.map((themeName) => (
-                    <option key={themeName} value={themeName}>
-                      {themeName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            {/* Font Size Controls */}
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <button
-                onClick={decreaseFontSize}
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  backgroundColor: "transparent",
-                  color: theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  lineHeight: "1",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.primary;
-                  e.currentTarget.style.color = theme.colors.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.border;
-                  e.currentTarget.style.color = theme.colors.text;
-                }}
-              >
-                A−
-              </button>
-              <button
-                onClick={resetFontSize}
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  backgroundColor: "transparent",
-                  color: theme.colors.textSecondary,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  lineHeight: "1",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.primary;
-                  e.currentTarget.style.color = theme.colors.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.border;
-                  e.currentTarget.style.color = theme.colors.textSecondary;
-                }}
-                title="Reset font size"
-              >
-                Reset
-              </button>
-              <button
-                onClick={increaseFontSize}
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  backgroundColor: "transparent",
-                  color: theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  lineHeight: "1",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.primary;
-                  e.currentTarget.style.color = theme.colors.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.border;
-                  e.currentTarget.style.color = theme.colors.text;
-                }}
-              >
-                A+
-              </button>
-            </div>
-
-            <Link
-              href="/blog"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: isMobile ? "8px 16px" : "10px 20px",
-                fontSize: isMobile ? "14px" : "15px",
-                fontWeight: "600",
-                backgroundColor: "transparent",
-                color: theme.colors.text,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: "8px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = theme.colors.primary;
-                e.currentTarget.style.color = theme.colors.primary;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = theme.colors.border;
-                e.currentTarget.style.color = theme.colors.text;
-              }}
-            >
-              Back to List
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div
         style={{
           flex: 1,
           overflow: "auto",
-          paddingTop: "20px",
+          paddingTop: "84px",
         }}
       >
 
@@ -473,17 +216,15 @@ export default function BlogPostPage() {
                     showFullscreenButton={true}
                     containerHeight="100%"
                     theme={theme}
-                    fontSizeScale={fontSizeScale}
                   />
                 </div>
               </div>
             ) : (
               <DocumentView
                 content={content}
-                fontSizeScale={fontSizeScale}
                 transparentBackground={true}
                 theme={theme}
-                maxWidth="70%"
+                maxWidth={isMobile ? "95%" : "70%"}
               />
             )}
           </div>
