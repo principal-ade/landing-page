@@ -7,7 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import { randomBytes } from "crypto";
 
 // JWT secret - in production, use a proper secret management system
@@ -39,6 +39,7 @@ interface RoomTokenPayload {
 
   // Additional context fields
   branch: string;
+  clientType: 'desktop' | 'web';
 
   // Optional user info for presence display
   userInfo?: {
@@ -159,6 +160,7 @@ export async function POST(request: NextRequest) {
 
       // Additional context
       branch,
+      clientType: 'web',
 
       // User info for presence display
       userInfo: {

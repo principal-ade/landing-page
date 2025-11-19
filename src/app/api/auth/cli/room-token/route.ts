@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 // JWT secret - in production, use a proper secret management system
 function getJWTSecret(): string {
@@ -31,6 +31,7 @@ interface RoomTokenPayload {
 
   // Additional context fields
   branch: string;
+  clientType: 'desktop' | 'web';
 
   // Optional user info for presence display
   userInfo?: {
@@ -149,6 +150,7 @@ export async function POST(request: NextRequest) {
 
       // Additional context
       branch,
+      clientType: 'desktop',
 
       // User info for presence display
       userInfo: {
