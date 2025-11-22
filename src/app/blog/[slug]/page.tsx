@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTheme } from "@principal-ade/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
-import { Footer } from "@/components/Footer";
 import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
@@ -17,7 +17,7 @@ export default function BlogPostPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [isClient, setIsClient] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState<"book" | "single">("book");
+  const [viewMode, _setViewMode] = React.useState<"book" | "single">("book");
   const [slides, setSlides] = React.useState<string[]>([]);
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
@@ -173,11 +173,11 @@ export default function BlogPostPage() {
                 fontWeight: "600",
                 transition: "all 0.2s ease",
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.currentTarget.style.transform = "translateY(-2px)";
                 e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.currentTarget.style.transform = "translateY(0)";
                 e.currentTarget.style.boxShadow = "none";
               }}

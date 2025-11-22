@@ -24,7 +24,7 @@ const config: StorybookConfig = {
       optimizeDeps: {
         include: [
           '@principal-ade/industry-theme',
-          '@a24z/dynamic-file-tree',
+          '@principal-ade/dynamic-file-tree',
           '@principal-ai/repository-abstraction',
           '@principal-ai/logo-component',
         ],

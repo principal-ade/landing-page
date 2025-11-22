@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import { CompleteWebsite, FullPageLayout } from '../FullPageLayout';
-import { CompleteLandingPage } from '../CompleteLandingPage';
+import { CompleteWebsite } from '../FullPageLayout';
 import { CompleteLivingDocWebsite } from '../CompleteLivingDocWebsite';
 
 /**
@@ -44,7 +43,6 @@ const meta = {
 } satisfies Meta<typeof CompleteWebsite>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 /**
  * Living Documentation Focused Website

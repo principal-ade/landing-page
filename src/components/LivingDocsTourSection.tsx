@@ -3,7 +3,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useTheme } from "@principal-ade/industry-theme";
 import { X } from "lucide-react";
 import "@principal-ade/living-documentation-tour/styles.css";
 import "driver.js/dist/driver.css";
@@ -19,7 +18,6 @@ const TourableEditorLayout = dynamic(
 );
 
 export const LivingDocsTourSection: React.FC = () => {
-  const { theme } = useTheme();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const [windowWidth, setWindowWidth] = React.useState(

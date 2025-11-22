@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { Theme } from "@principal-ade/industry-theme";
-import { MultiFileTree, parseUnifiedPath } from "@a24z/dynamic-file-tree";
+import { MultiFileTree, parseUnifiedPath } from "@principal-ade/dynamic-file-tree";
 import { FileTree, LoadedFileTreeSource, FileTreeSource } from "@principal-ai/repository-abstraction";
 
 interface Repository {

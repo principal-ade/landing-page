@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { DynamicFileTree } from "@a24z/dynamic-file-tree";
+import { DynamicFileTree } from "@principal-ade/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 import { Theme } from "@principal-ade/industry-theme";
 
@@ -203,7 +203,6 @@ export const SessionFileTree: React.FC<SessionFileTreeProps> = ({
         fileTree={fileTree}
         theme={theme}
         onFileSelect={(filePath) => onFileSelect?.(filePath)}
-        padding="12px"
       />
     </>
   );

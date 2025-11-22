@@ -141,12 +141,11 @@ export async function POST(request: NextRequest) {
     deleteSession(state);
 
     // Return the token and user info
-    // Primary access token should be GitHub token (for backwards compatibility with Electron app)
     return NextResponse.json({
-      // Use GitHub token as primary access_token if available (for api.github.com calls)
-      access_token: githubAccessToken || authResponse.accessToken,
+      // GitHub token for GitHub API calls (may be null if WorkOS didn't return it)
+      github_access_token: githubAccessToken,
 
-      // Keep WorkOS token available for WorkOS API calls
+      // WorkOS token for session management (always present)
       workos_access_token: authResponse.accessToken,
       refresh_token: authResponse.refreshToken,
       expires_in: 3600, // Token lifetime in seconds (1 hour)
@@ -180,7 +179,6 @@ export async function POST(request: NextRequest) {
 
       provider: "workos",
       workos_user_id: authResponse.user.id,
-      github_access_token: githubAccessToken, // Also available explicitly
     });
   } catch (error) {
     console.error("WorkOS token exchange error:", error);

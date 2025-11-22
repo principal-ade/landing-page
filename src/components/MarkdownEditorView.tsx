@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from "react";
 import { useTheme } from "@principal-ade/industry-theme";
-import { GitStatusFileTree, GitOrderedFileList, type GitFileStatus } from "@a24z/dynamic-file-tree";
+import { GitStatusFileTree, GitOrderedFileList, type GitFileStatus } from "@principal-ade/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 import { ThemedMDXEditor, useThemedMDXEditor } from "@principal-ade/industry-themed-mdx-editor";
 import { GitManager } from "@/lib/git-manager";
@@ -655,7 +655,6 @@ export const MarkdownEditorView: React.FC<MarkdownEditorViewProps> = ({
                   onFileSelect={(filePath) => loadFileContent(filePath)}
                   selectedFile={selectedFile || undefined}
                   showUnchangedFiles={true}
-                  padding="12px"
                 />
               )}
             </div>

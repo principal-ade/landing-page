@@ -12,13 +12,13 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@a24z/dynamic-file-tree": "^0.1.20",
     "@a24z/observability-sdk": "^0.5.3",
     "@aws-sdk/client-s3": "^3.932.0",
     "@isomorphic-git/lightning-fs": "^4.6.2",
     "@libsql/client": "^0.15.15",
     "@mdxeditor/editor": "^3.47.0",
     "@octokit/rest": "^22.0.0",
+    "@principal-ade/dynamic-file-tree": "^0.1.27",
     "@principal-ade/industry-theme": "^0.1.1",
     "@principal-ade/industry-themed-mdx-editor": "^0.1.12",
     "@principal-ade/industry-themed-terminal": "^0.1.0",

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Theme } from "@principal-ade/industry-theme";
-import { DynamicFileTree, DirectoryFilterInput, DirectoryFilter, filterFileTreeByPaths } from "@a24z/dynamic-file-tree";
+import { DynamicFileTree, DirectoryFilterInput, DirectoryFilter, filterFileTreeByPaths } from "@principal-ade/dynamic-file-tree";
 import { FileTree } from "@principal-ai/repository-abstraction";
 
 interface DynamicFileTreeSectionProps {
