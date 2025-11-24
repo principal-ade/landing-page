@@ -209,16 +209,61 @@ export async function GET(request: NextRequest) {
         githubAccessToken = (authResponse as any).oauthTokens.accessToken;
       }
 
-      // Create user session data
+      // Fetch GitHub user data - REQUIRED for web flow
+      if (!githubAccessToken) {
+        throw new Error(
+          "GitHub access token not available. Please ensure 'Return OAuth provider tokens' is enabled in WorkOS Dashboard."
+        );
+      }
+
+      let githubUserData = null;
+      try {
+        const userResponse = await fetch("https://api.github.com/user", {
+          headers: {
+            Authorization: `Bearer ${githubAccessToken}`,
+            Accept: "application/json",
+          },
+        });
+
+        if (!userResponse.ok) {
+          throw new Error(`GitHub API returned ${userResponse.status}`);
+        }
+
+        githubUserData = await userResponse.json();
+      } catch (error) {
+        console.error("[WorkOS] Web flow - Error fetching GitHub user data:", error);
+        throw new Error(
+          "Failed to fetch GitHub user data. Authentication cannot proceed without valid GitHub credentials."
+        );
+      }
+
+      if (!githubUserData || !githubUserData.login) {
+        throw new Error("GitHub user data is missing required fields (login)");
+      }
+
+      // Cache GitHub user data for future token refreshes
+      if (!global.githubUserCache) {
+        global.githubUserCache = new Map();
+      }
+      global.githubUserCache.set(authResponse.user.id, {
+        id: githubUserData.id,
+        email: githubUserData.email,
+        login: githubUserData.login,
+        name: githubUserData.name,
+        avatar_url: githubUserData.avatar_url,
+      });
+
+      // Create user session data with REAL GitHub data
       const userData = {
-        id: authResponse.user.id,
-        email: authResponse.user.email,
-        login: authResponse.user.email?.split("@")[0] || authResponse.user.id,
+        id: githubUserData.id, // Real GitHub ID
+        email: githubUserData.email || authResponse.user.email,
+        login: githubUserData.login, // Real GitHub username - REQUIRED
         name:
-          authResponse.user.firstName && authResponse.user.lastName
+          githubUserData.name ||
+          (authResponse.user.firstName && authResponse.user.lastName
             ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-            : authResponse.user.email,
-        avatar_url: userProfile.profilePictureUrl || null,
+            : authResponse.user.email),
+        avatar_url: githubUserData.avatar_url,
         access_token: authResponse.accessToken,
         refresh_token: authResponse.refreshToken,
         github_access_token: githubAccessToken,
@@ -285,54 +330,67 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch real GitHub user data using the GitHub token
-    let githubUserData = null;
-    if (githubAccessToken) {
-      try {
-        const userResponse = await fetch("https://api.github.com/user", {
-          headers: {
-            Authorization: `Bearer ${githubAccessToken}`,
-            Accept: "application/json",
-          },
-        });
-
-        if (userResponse.ok) {
-          githubUserData = await userResponse.json();
-        }
-      } catch (error) {
-        console.error("[WorkOS] CLI flow - Error fetching GitHub user data:", error);
-      }
+    if (!githubAccessToken) {
+      throw new Error(
+        "GitHub access token not available. Please ensure 'Return OAuth provider tokens' is enabled in WorkOS Dashboard."
+      );
     }
+
+    let githubUserData = null;
+    try {
+      const userResponse = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${githubAccessToken}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error(`GitHub API returned ${userResponse.status}`);
+      }
+
+      githubUserData = await userResponse.json();
+    } catch (error) {
+      console.error("[WorkOS] CLI flow - Error fetching GitHub user data:", error);
+      throw new Error(
+        "Failed to fetch GitHub user data. Authentication cannot proceed without valid GitHub credentials."
+      );
+    }
+
+    if (!githubUserData || !githubUserData.login) {
+      throw new Error("GitHub user data is missing required fields (login)");
+    }
+
+    // Cache GitHub user data for future token refreshes (keyed by WorkOS user ID)
+    if (!global.githubUserCache) {
+      global.githubUserCache = new Map();
+    }
+    global.githubUserCache.set(authResponse.user.id, {
+      id: githubUserData.id,
+      email: githubUserData.email,
+      login: githubUserData.login,
+      name: githubUserData.name,
+      avatar_url: githubUserData.avatar_url,
+    });
 
     // Store full token data for CLI polling (same format as verify endpoint)
     session.tokens = {
-      access_token: githubAccessToken || authResponse.accessToken,
+      access_token: githubAccessToken,
       workos_access_token: authResponse.accessToken,
       refresh_token: authResponse.refreshToken,
       expires_in: 3600,
       token_type: "Bearer",
-      user: githubUserData
-        ? {
-            id: githubUserData.id,
-            email: githubUserData.email || authResponse.user.email,
-            login: githubUserData.login,
-            name:
-              githubUserData.name ||
-              (authResponse.user.firstName && authResponse.user.lastName
-                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-                : authResponse.user.email),
-            avatar_url: githubUserData.avatar_url,
-          }
-        : {
-            id: authResponse.user.id,
-            email: authResponse.user.email,
-            login:
-              authResponse.user.email?.split("@")[0] || authResponse.user.id,
-            name:
-              authResponse.user.firstName && authResponse.user.lastName
-                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-                : authResponse.user.email,
-            avatar_url: userProfile.profilePictureUrl || null,
-          },
+      user: {
+        id: githubUserData.id,
+        email: githubUserData.email || authResponse.user.email,
+        login: githubUserData.login, // Real GitHub username - REQUIRED
+        name:
+          githubUserData.name ||
+          (authResponse.user.firstName && authResponse.user.lastName
+            ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
+            : authResponse.user.email),
+        avatar_url: githubUserData.avatar_url,
+      },
       provider: "workos",
       workos_user_id: authResponse.user.id,
       github_access_token: githubAccessToken,

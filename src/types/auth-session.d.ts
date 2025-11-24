@@ -32,6 +32,13 @@ export interface AuthSession {
 declare global {
   var cliAuthSessions: Map<string, AuthSession>;
   var cliAuthCleanupInterval: NodeJS.Timeout;
+  var githubUserCache: Map<string, {
+    id: number;
+    email: string;
+    login: string;
+    name: string;
+    avatar_url: string;
+  }>;
 }
 
 export {};

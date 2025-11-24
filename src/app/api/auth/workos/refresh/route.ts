@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       githubAccessToken = (authResponse as any).oauthTokens.accessToken;
     }
 
-    // Fetch real GitHub user data using the GitHub token
+    // Fetch real GitHub user data using the GitHub token if available
     let githubUserData = null;
     if (githubAccessToken) {
       try {
@@ -64,15 +64,50 @@ export async function POST(request: NextRequest) {
 
         if (userResponse.ok) {
           githubUserData = await userResponse.json();
+
+          // Update cache with fresh data
+          if (!global.githubUserCache) {
+            global.githubUserCache = new Map();
+          }
+          global.githubUserCache.set(authResponse.user.id, {
+            id: githubUserData.id,
+            email: githubUserData.email,
+            login: githubUserData.login,
+            name: githubUserData.name,
+            avatar_url: githubUserData.avatar_url,
+          });
         }
       } catch (error) {
         console.error("[WorkOS Refresh] Error fetching GitHub user data:", error);
       }
     }
 
-    // Return the new token and user info
+    // If we didn't get fresh GitHub data, try to use cached data
+    if (!githubUserData) {
+      if (!global.githubUserCache) {
+        global.githubUserCache = new Map();
+      }
+
+      const cachedGithubUser = global.githubUserCache.get(authResponse.user.id);
+
+      if (!cachedGithubUser) {
+        return NextResponse.json(
+          {
+            error: "github_data_unavailable",
+            error_description:
+              "GitHub user data is not available and no cached data exists. Please re-authenticate.",
+          },
+          { status: 401 }
+        );
+      }
+
+      githubUserData = cachedGithubUser;
+      console.log("[WorkOS Refresh] Using cached GitHub user data for:", cachedGithubUser.login);
+    }
+
+    // Return the new token and user info with REAL GitHub data (fresh or cached)
     return NextResponse.json({
-      // GitHub token for GitHub API calls (may be null if WorkOS didn't return it)
+      // GitHub token for GitHub API calls (may be null on refresh)
       github_access_token: githubAccessToken,
 
       // WorkOS token for session management (always present)
@@ -81,31 +116,14 @@ export async function POST(request: NextRequest) {
       expires_in: 3600, // Token lifetime in seconds (1 hour)
       token_type: "Bearer",
 
-      // Use real GitHub user data if available, fallback to WorkOS data
-      user: githubUserData
-        ? {
-            id: githubUserData.id, // Real GitHub ID (number)
-            email: githubUserData.email || authResponse.user.email,
-            login: githubUserData.login, // Real GitHub username
-            name:
-              githubUserData.name ||
-              (authResponse.user.firstName && authResponse.user.lastName
-                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-                : authResponse.user.email),
-            avatar_url: githubUserData.avatar_url,
-          }
-        : {
-            // Fallback to WorkOS data if GitHub fetch failed
-            id: authResponse.user.id,
-            email: authResponse.user.email,
-            login:
-              authResponse.user.email?.split("@")[0] || authResponse.user.id,
-            name:
-              authResponse.user.firstName && authResponse.user.lastName
-                ? `${authResponse.user.firstName} ${authResponse.user.lastName}`
-                : authResponse.user.email,
-            avatar_url: userProfile.profilePictureUrl || null,
-          },
+      // Always use real GitHub data (never fallback to email snippet)
+      user: {
+        id: githubUserData.id, // Real GitHub ID (number)
+        email: githubUserData.email || authResponse.user.email,
+        login: githubUserData.login, // Real GitHub username - REQUIRED
+        name: githubUserData.name || authResponse.user.email,
+        avatar_url: githubUserData.avatar_url,
+      },
 
       provider: "workos",
       workos_user_id: authResponse.user.id,
