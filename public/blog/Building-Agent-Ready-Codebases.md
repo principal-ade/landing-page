@@ -5,7 +5,7 @@
 
 Bug filed. Agent fixes it. Tests pass. Patch ships in two hours. This is possible today. So why isn't it happening?
 
-As @EnoReyes put it in his talk Making Your Codebase Agent-Ready: "The ceiling for AI performance is not the model; the ceiling is your organization's validation throughput."
+As @EnoReyes put it in his talk Making Codebases "Agent-Ready": "The ceiling for AI performance is not the model; the ceiling is your organization's validation throughput."
 
 We've watched agents generate clean, passing code that still misses the mark entirely. The issue isn't execution. It's intent.
 
