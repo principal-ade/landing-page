@@ -33,11 +33,6 @@ export async function POST(request: NextRequest) {
       refreshToken: refresh_token,
     });
 
-    // Get user profile from WorkOS
-    const userProfile = await workos.userManagement.getUser(
-      authResponse.user.id,
-    );
-
     // Extract GitHub access token from the authentication response
     // When "Return GitHub OAuth tokens" is enabled in WorkOS Dashboard,
     // the GitHub access token will be available in the response

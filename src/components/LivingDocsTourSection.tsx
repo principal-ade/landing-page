@@ -3,6 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { X } from "lucide-react";
 import "@principal-ade/living-documentation-tour/styles.css";
 import "driver.js/dist/driver.css";
@@ -145,23 +146,22 @@ export const LivingDocsTourSection: React.FC = () => {
               style={{
                 flex: windowWidth < 768 ? "1" : "0 0 400px",
                 maxWidth: windowWidth < 768 ? "100%" : "400px",
+                position: "relative",
               }}
             >
-              <img
-                src="/tour-image.png"
-                alt="Living Documentation Tour Preview"
+              <div
                 onClick={() => {
                   trackTourOpen('image');
                   setIsModalOpen(true);
                 }}
                 style={{
                   width: "100%",
-                  height: "auto",
                   borderRadius: "12px",
                   border: "1px solid rgba(0, 194, 255, 0.2)",
                   boxShadow: "0 8px 32px rgba(0, 194, 255, 0.15)",
                   cursor: "pointer",
                   transition: "transform 0.2s, box-shadow 0.2s",
+                  overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "scale(1.02)";
@@ -173,7 +173,18 @@ export const LivingDocsTourSection: React.FC = () => {
                   e.currentTarget.style.boxShadow =
                     "0 8px 32px rgba(0, 194, 255, 0.15)";
                 }}
-              />
+              >
+                <Image
+                  src="/tour-image.png"
+                  alt="Living Documentation Tour Preview"
+                  width={400}
+                  height={300}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
+              </div>
             </div>
           </motion.div>
         </div>

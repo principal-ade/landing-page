@@ -191,11 +191,6 @@ export async function GET(request: NextRequest) {
         throw authError;
       }
 
-      // Get user profile
-      const userProfile = await workos.userManagement.getUser(
-        authResponse.user.id,
-      );
-
       // Extract GitHub access token from the authentication response
       // When "Return GitHub OAuth tokens" is enabled in WorkOS Dashboard,
       // the GitHub access token will be available in the response
@@ -316,11 +311,6 @@ export async function GET(request: NextRequest) {
 
     // Success - no verification needed
     // Store the authentication response as tokens for the polling endpoint
-    // Get user profile
-    const userProfile = await workos.userManagement.getUser(
-      authResponse.user.id,
-    );
-
     // Extract GitHub access token from the authentication response
     let githubAccessToken: string | null = null;
     if ((authResponse as any).impersonator?.accessToken) {
