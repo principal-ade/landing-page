@@ -15,7 +15,7 @@ And when agents generate code in seconds, the human understanding of "what we me
 
 The fault line isn't syntax or logic. It's intent mismatch.
 
-## The Unreliable Narrator Problem
+## Stop Trusting Guesswork
 
 Becoming "agent-ready" is about preparing your agent to do the best job it can, but before you send it on its way, do you have a way to validate the intent?
 
