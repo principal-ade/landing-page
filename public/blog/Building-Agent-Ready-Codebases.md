@@ -49,7 +49,7 @@ Agents need to know the project context: architecture, constraints, business rul
 
 The Alexandria CLI manages this context inside the Principal AI ecosystem, using MemoryPalace under the hood.
 
-It syncs context into Git as Living Documentation. It evolves with the code, not separately. Teams can even run: `alexandria coverage` to measure how much of the project has validated context and intent.
+It syncs context into Git as Living Documentation. It evolves with the code, not separately. Teams can even run: [`alexandria coverage`](https://www.npmjs.com/package/@principal-ai/alexandria-cli) to measure how much of the project has validated context and intent.
 
 ### 2. Visual Validation & Drift Detection
 
