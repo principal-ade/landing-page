@@ -79,3 +79,132 @@ body {
 .flip-card-back {
   transform: rotateY(180deg);
 }
+
+/* ========================================
+   Apple-Inspired Blog Post Design System
+   ======================================== */
+
+/* Container - wider reading width */
+.blog-post-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Headline (H1) - Maximum impact, pure white */
+.blog-post-content h1 {
+  font-size: 2.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 12px !important;
+  margin-top: 40px !important;
+}
+
+/* Metadata (date/author) - Subtle, doesn't compete */
+.blog-post-content h1 + p,
+.blog-post-content h1 + p em {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  letter-spacing: 0.01em !important;
+  margin-bottom: 36px !important;
+  font-style: normal !important;
+}
+
+/* Subheads (H2) - Clear hierarchy, slightly softer than headline */
+.blog-post-content h2 {
+  font-size: 1.375rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.3 !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  margin-top: 40px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Subheads (H3) - Tertiary level */
+.blog-post-content h3 {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  margin-top: 32px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Body copy - Comfortable reading, softer white */
+.blog-post-content p {
+  font-size: 0.9375rem !important;
+  font-weight: 300 !important;
+  line-height: 1.7 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-bottom: 20px !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Bold text in body - Slightly brighter for emphasis */
+.blog-post-content strong {
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Links - Subtle accent */
+.blog-post-content a {
+  color: #6BB8FF !important;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.blog-post-content a:hover {
+  opacity: 0.8 !important;
+}
+
+/* Lists - Consistent with body copy */
+.blog-post-content ul,
+.blog-post-content ol {
+  font-size: 0.9375rem !important;
+  font-weight: 300 !important;
+  line-height: 1.7 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-bottom: 20px !important;
+  padding-left: 24px !important;
+}
+
+.blog-post-content li {
+  margin-bottom: 8px !important;
+}
+
+/* Blockquotes - Distinctive but subtle */
+.blog-post-content blockquote {
+  border-left: 3px solid rgba(255, 255, 255, 0.2) !important;
+  padding-left: 24px !important;
+  margin: 32px 0 !important;
+  font-style: italic !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Code blocks - Subtle background */
+.blog-post-content code {
+  background: rgba(255, 255, 255, 0.08) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.9em !important;
+}
+
+/* Fade in animation */
+.blog-post-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

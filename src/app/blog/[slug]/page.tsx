@@ -9,6 +9,52 @@ import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentatio
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
 
+// Process blog content to extract and reformat metadata
+function processContent(rawContent: string): { content: string; date: string; author: string } {
+  let date = "";
+  let author = "";
+
+  // Extract date
+  const dateMatch = rawContent.match(/\*\*Published:\*\*\s+(.+)$/m);
+  if (dateMatch) {
+    date = dateMatch[1].trim();
+  }
+
+  // Extract author
+  const authorMatch = rawContent.match(/\*\*Author:\*\*\s+(.+)$/m);
+  if (authorMatch) {
+    author = authorMatch[1].trim();
+    // Hide author if it's "Principal Team"
+    if (author.toLowerCase().includes("principal team")) {
+      author = "";
+    }
+  }
+
+  // Remove the metadata lines from content
+  let content = rawContent
+    .replace(/\*\*Published:\*\*\s+.+$/m, "")
+    .replace(/\*\*Author:\*\*\s+.+$/m, "");
+
+  // Build the new metadata line
+  const metadataParts: string[] = [];
+  if (date) metadataParts.push(date);
+  if (author) metadataParts.push(author);
+
+  if (metadataParts.length > 0) {
+    // Insert metadata after the title (first # heading)
+    const titleMatch = content.match(/^(#\s+.+)$/m);
+    if (titleMatch) {
+      const metadataLine = `\n\n*${metadataParts.join(" • ")}*\n`;
+      content = content.replace(titleMatch[0], titleMatch[0] + metadataLine);
+    }
+  }
+
+  // Clean up extra blank lines
+  content = content.replace(/\n{3,}/g, "\n\n");
+
+  return { content, date, author };
+}
+
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -77,7 +123,8 @@ export default function BlogPostPage() {
         return res.json();
       })
       .then((data) => {
-        setContent(data.content || "");
+        const { content: processedContent } = processContent(data.content || "");
+        setContent(processedContent);
 
         // If this is the pitch-deck, parse it into slides
         if (slug === "pitch-deck") {
@@ -108,7 +155,7 @@ export default function BlogPostPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.backgroundSecondary,
       }}
     >
       {/* Main Content */}
@@ -220,12 +267,14 @@ export default function BlogPostPage() {
                 </div>
               </div>
             ) : (
-              <DocumentView
-                content={content}
-                transparentBackground={true}
-                theme={theme}
-                maxWidth={isMobile ? "95%" : "70%"}
-              />
+              <div className="blog-post-content">
+                <DocumentView
+                  content={content}
+                  transparentBackground={true}
+                  theme={theme}
+                  maxWidth={isMobile ? "95%" : "70%"}
+                />
+              </div>
             )}
           </div>
         )}

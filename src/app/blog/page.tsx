@@ -153,14 +153,15 @@ export default function BlogPage() {
                   <div
                     style={{
                       display: "flex",
-                      gap: "16px",
+                      alignItems: "center",
                       marginBottom: "16px",
                       fontSize: "14px",
                       color: theme.colors.textSecondary,
                     }}
                   >
                     {post.date && <span>{post.date}</span>}
-                    {post.author && <span>• {post.author}</span>}
+                    {post.author && <span style={{ margin: "0 10px" }}>•</span>}
+                    {post.author && <span>{post.author}</span>}
                   </div>
                   <p
                     style={{
