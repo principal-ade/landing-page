@@ -60,7 +60,7 @@ export async function GET() {
     }
 
     const files = fs.readdirSync(blogDir);
-    const markdownFiles = files.filter(file => file.endsWith('.md'));
+    const markdownFiles = files.filter(file => file.endsWith('.md') && !file.startsWith('_'));
 
     const posts: BlogPost[] = markdownFiles.map(filename => {
       const filePath = path.join(blogDir, filename);
