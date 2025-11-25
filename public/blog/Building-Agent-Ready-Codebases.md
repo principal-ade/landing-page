@@ -1,7 +1,7 @@
 # Intent-Driven Development: Building Agent-Ready Codebases
 
 **Author:** Principal Team
-**Published:** November 25, 2025
+**Published:** November 24, 2025
 
 Bug filed. Agent fixes it. Tests pass. Patch ships in two hours. This is possible today. So why isn't it happening?
 
