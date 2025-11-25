@@ -1,7 +1,7 @@
 # Intent-Driven Development: Building Agent-Ready Codebases
 
 **Author:** Principal Team
-**Published:** November 24, 2025
+**Published:** November 25, 2025
 
 Bug filed. Agent fixes it. Tests pass. Patch ships in two hours. This is possible today. So why isn't it happening?
 
@@ -56,10 +56,11 @@ It syncs context into Git as Living Documentation. It evolves with the code, not
 Our Visual Validation Core Library, which will launch Thursday, provides the engine behind visual validation graphs that overlay log activity.
 
 This is framework-agnostic logic that:
-- compares intent vs implementation
-- flags unintended behaviors
-- surfaces misalignment visually, by processing logs for you
-- alerts you before misaligned code ships
+
+* compares intent vs implementation
+* flags unintended behaviors
+* surfaces misalignment visually, by processing logs for you
+* alerts you before misaligned code ships
 
 Visual validation matters when agents write your code. When humans no longer read every line, you need visual truth surfaces. Maps of where meaning holds and where it's slipping.
 
@@ -68,9 +69,10 @@ Visual validation matters when agents write your code. When humans no longer rea
 In an IDD world, developers aren't just writing code.
 
 They're shaping the environment:
-- encoding intent
-- defining constraints
-- maintaining strict feedback loops
-- setting the standards agents work within
+
+* encoding intent
+* defining constraints
+* maintaining strict feedback loops
+* setting the standards agents work within
 
 This environment improves agent output. Better agent output gives developers more time to refine the environment.
