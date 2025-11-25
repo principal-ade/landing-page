@@ -4,7 +4,7 @@
 
 ## When Your Developer Lies Beautifully
 
-Your agent has done this before: *This code passes the tests and is production ready. Yay!*
+Your agent has done this before: This code passes the tests and is production ready. Yay!
 
 And it was also completely wrong.
 
