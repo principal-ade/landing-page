@@ -1,6 +1,5 @@
 # Why We Named It Principal AI
 
-**Author:** Principal Team
 **Published:** November 25, 2025
 
 The name wasn't subtle. We didn't workshop fifty options or run surveys. We called it Principal AI because that's the role everyone is about to play.

@@ -1,6 +1,5 @@
 # The Unreliable Narrator Problem in Agentic Development
 
-**Author:** Principal Team
 **Published:** November 25, 2025
 
 ## When Your Developer Lies Beautifully
