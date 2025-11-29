@@ -45,34 +45,26 @@ export default function BlogPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: theme.colors.background,
+        height: "100vh",
+        paddingTop: "72px",
+        boxSizing: "border-box",
       }}
     >
       <div
         style={{
-          flex: 1,
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: isMobile ? "124px 20px 40px 20px" : "144px 40px 60px 40px",
-          width: "100%",
+          height: "100%",
+          overflow: "auto",
+          backgroundColor: theme.colors.background,
         }}
       >
-        {/* Page Title */}
-        <h1
+        <div
           style={{
-            fontSize: isMobile ? "32px" : "48px",
-            fontWeight: "700",
-            color: theme.colors.text,
-            marginBottom: isMobile ? "32px" : "48px",
-            textAlign: "center",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: isMobile ? "40px 20px" : "60px 40px",
+            width: "100%",
           }}
         >
-          Blog
-        </h1>
-
         {/* Loading State */}
         {loading && (
           <div
@@ -178,9 +170,10 @@ export default function BlogPage() {
             ))}
           </div>
         )}
-      </div>
+        </div>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 }

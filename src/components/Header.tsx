@@ -2,13 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
+  const pathname = usePathname();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isBlogPage = pathname?.startsWith('/blog');
+  const isAboutPage = pathname?.startsWith('/about');
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,8 +34,7 @@ export const Header: React.FC = () => {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: 'rgba(0, 0, 0, 0.8)',
-        backdropFilter: 'blur(10px)',
+        background: '#000000',
         borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
         padding: isTablet ? '18px 32px' : isMobile ? '14px 20px' : '16px 24px',
       }}
@@ -45,31 +49,50 @@ export const Header: React.FC = () => {
         }}
       >
         {/* Logo/Brand */}
-        <Link
-          href="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            textDecoration: 'none',
-            fontSize: isTablet ? '22px' : isMobile ? '18px' : '20px',
-            fontWeight: '600',
-            fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-          }}
-        >
-          <span style={{ color: '#ffffff' }}>Principal</span>
-          <span
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Link
+            href="/"
             style={{
-              fontWeight: '300',
-              background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none',
+              fontSize: isTablet ? '22px' : isMobile ? '18px' : '20px',
+              fontWeight: '600',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            AI
-          </span>
-        </Link>
+            <span style={{ color: '#ffffff' }}>Principal</span>
+            <span
+              style={{
+                fontWeight: '300',
+                background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              AI
+            </span>
+          </Link>
+          {isMobile && (isBlogPage || isAboutPage) && (
+            <>
+              <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
+              <Link
+                href={isBlogPage ? '/blog' : '/about'}
+                style={{
+                  color: '#00C2FF',
+                  textDecoration: 'none',
+                  fontSize: '18px',
+                  fontWeight: '500',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                }}
+              >
+                {isBlogPage ? 'Blog' : 'About'}
+              </Link>
+            </>
+          )}
+        </div>
 
         {/* Desktop Nav Links */}
         <div
@@ -82,8 +105,9 @@ export const Header: React.FC = () => {
           <Link
             href="/about"
             style={{
-              color: '#d1d5db',
-              textDecoration: 'none',
+              color: isAboutPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isAboutPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
               fontSize: isTablet ? '15px' : '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -93,7 +117,9 @@ export const Header: React.FC = () => {
               e.currentTarget.style.color = '#00C2FF';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#d1d5db';
+              if (!isAboutPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
             }}
           >
             About
@@ -101,8 +127,9 @@ export const Header: React.FC = () => {
           <Link
             href="/blog"
             style={{
-              color: '#d1d5db',
-              textDecoration: 'none',
+              color: isBlogPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isBlogPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
               fontSize: isTablet ? '15px' : '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -112,7 +139,9 @@ export const Header: React.FC = () => {
               e.currentTarget.style.color = '#00C2FF';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#d1d5db';
+              if (!isBlogPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
             }}
           >
             Blog
@@ -209,8 +238,9 @@ export const Header: React.FC = () => {
             href="/about"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: '#d1d5db',
-              textDecoration: 'none',
+              color: isAboutPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isAboutPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
               fontSize: '16px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -222,8 +252,9 @@ export const Header: React.FC = () => {
             href="/blog"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: '#d1d5db',
-              textDecoration: 'none',
+              color: isBlogPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isBlogPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
               fontSize: '16px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',

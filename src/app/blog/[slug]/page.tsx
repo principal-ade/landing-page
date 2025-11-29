@@ -152,132 +152,129 @@ export default function BlogPostPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: theme.colors.backgroundSecondary,
+        height: "100vh",
+        paddingTop: "72px",
+        boxSizing: "border-box",
       }}
     >
-      {/* Main Content */}
       <div
         style={{
-          flex: 1,
+          height: "100%",
           overflow: "auto",
-          paddingTop: "84px",
+          backgroundColor: theme.colors.backgroundSecondary,
         }}
       >
+      {/* Loading State */}
+      {loading && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "60px 20px",
+            color: theme.colors.textSecondary,
+          }}
+        >
+          Loading blog post...
+        </div>
+      )}
 
-        {/* Loading State */}
-        {loading && (
-          <div
+      {/* Error State */}
+      {error && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "60px 20px",
+          }}
+        >
+          <h1
             style={{
-              textAlign: "center",
-              padding: "60px 20px",
+              fontSize: "36px",
+              fontWeight: "700",
+              color: theme.colors.text,
+              marginBottom: "16px",
+            }}
+          >
+            Blog Post Not Found
+          </h1>
+          <p
+            style={{
+              fontSize: "18px",
               color: theme.colors.textSecondary,
+              marginBottom: "24px",
             }}
           >
-            Loading blog post...
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div
+            The blog post you&apos;re looking for doesn&apos;t exist.
+          </p>
+          <Link
+            href="/blog"
             style={{
-              textAlign: "center",
-              padding: "60px 20px",
+              display: "inline-block",
+              padding: "12px 24px",
+              backgroundColor: theme.colors.primary,
+              color: theme.colors.background,
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontSize: "16px",
+              fontWeight: "600",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
+            }}
+            onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            <h1
-              style={{
-                fontSize: "36px",
-                fontWeight: "700",
-                color: theme.colors.text,
-                marginBottom: "16px",
-              }}
-            >
-              Blog Post Not Found
-            </h1>
-            <p
-              style={{
-                fontSize: "18px",
-                color: theme.colors.textSecondary,
-                marginBottom: "24px",
-              }}
-            >
-              The blog post you&apos;re looking for doesn&apos;t exist.
-            </p>
-            <Link
-              href="/blog"
-              style={{
-                display: "inline-block",
-                padding: "12px 24px",
-                backgroundColor: theme.colors.primary,
-                color: theme.colors.background,
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontSize: "16px",
-                fontWeight: "600",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              Back to Blog
-            </Link>
-          </div>
-        )}
+            Back to Blog
+          </Link>
+        </div>
+      )}
 
-        {/* Blog Content */}
-        {!loading && !error && content && (
-          <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in", paddingTop: "20px" }}>
-            {slug === "pitch-deck" && viewMode === "book" && slides.length > 0 ? (
+      {/* Blog Content */}
+      {!loading && !error && content && (
+        <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in" }}>
+          {slug === "pitch-deck" && viewMode === "book" && slides.length > 0 ? (
+            <div style={{
+              width: "100%",
+              height: "calc(100vh - 120px)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "20px"
+            }}>
               <div style={{
-                width: "100%",
-                height: "calc(100vh - 120px)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "20px"
+                width: "90%",
+                height: "100%",
+                maxWidth: "1400px",
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: "12px",
+                overflow: "hidden",
+                backgroundColor: theme.colors.background,
               }}>
-                <div style={{
-                  width: "90%",
-                  height: "100%",
-                  maxWidth: "1400px",
-                  border: `2px solid ${theme.colors.border}`,
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                  backgroundColor: theme.colors.background,
-                }}>
-                  <ThemedSlidePresentationBook
-                    slides={slides}
-                    viewMode="single"
-                    showNavigation={true}
-                    showSlideCounter={true}
-                    showFullscreenButton={true}
-                    containerHeight="100%"
-                    theme={theme}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="blog-post-content">
-                <DocumentView
-                  content={content}
-                  transparentBackground={true}
+                <ThemedSlidePresentationBook
+                  slides={slides}
+                  viewMode="single"
+                  showNavigation={true}
+                  showSlideCounter={true}
+                  showFullscreenButton={true}
+                  containerHeight="100%"
                   theme={theme}
-                  maxWidth={isMobile ? "95%" : "70%"}
                 />
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className="blog-post-content">
+              <DocumentView
+                content={content}
+                transparentBackground={true}
+                theme={theme}
+                maxWidth="100%"
+              />
+            </div>
+          )}
+        </div>
+      )}
       </div>
     </div>
   );
