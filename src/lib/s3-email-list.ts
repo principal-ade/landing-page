@@ -17,10 +17,10 @@ export class S3PrincipalAIEmailList {
   private prefix = 'email-list/';
 
   constructor(bucketName?: string, region?: string) {
-    this.bucketName = bucketName || process.env.EMAIL_LIST_S3_BUCKET || process.env.ORBIT_S3_BUCKET || '';
+    this.bucketName = bucketName || process.env.EMAIL_LIST_S3_BUCKET || '';
 
     if (!this.bucketName) {
-      throw new Error('S3 bucket name is required. Set EMAIL_LIST_S3_BUCKET or ORBIT_S3_BUCKET environment variable.');
+      throw new Error('S3 bucket name is required. Set EMAIL_LIST_S3_BUCKET environment variable.');
     }
 
     // App Runner will use IAM role-based access - no credentials needed

@@ -37,16 +37,8 @@ run:
     # ======================================
     # S3 Buckets
     # ======================================
-    - name: S3_GIT_MOSAICS
-      value: "git-mosaics"
-    - name: FEEDBACK_S3_BUCKET
-      value: "git-gallery-feedback"  # TODO: Update with your feedback bucket
-    - name: ORBIT_S3_BUCKET
-      value: "git-gallery-orbit"  # TODO: Update with your orbit bucket
-    - name: FILETREE_CACHE_BUCKET
-      value: "code-cosmos-filetree-cache"
-    - name: AWS_S3_BUCKET
-      value: "code-city-licenses"  # Legacy - for license validation
+    - name: EMAIL_LIST_S3_BUCKET
+      value: "your-email-list-bucket"  # TODO: Update with your bucket for newsletter/demo requests
     
     # ======================================
     # GitHub Configuration
@@ -61,22 +53,4 @@ run:
     # - name: GITHUB_RELEASES_READONLY_TOKEN
     #   value: "your_releases_token"
     
-    # ======================================
-    # Authentication
-    # ======================================
-    - name: NEXTAUTH_URL
-      value: "https://git-gallery.com"  # TODO: Update with your production domain
-    # TODO: Store these in AWS Secrets Manager
-    # - name: NEXTAUTH_SECRET
-    #   value: "your_nextauth_secret"
-    # - name: ROOM_TOKEN_SECRET
-    #   value: "your_room_secret"
-    
-    # ======================================
-    # Admin Configuration (Optional)
-    # ======================================
-    # TODO: Store these in AWS Secrets Manager if using admin features
-    # - name: ORBIT_ADMIN_SECRET
-    #   value: "your_admin_secret"
-    # - name: ADMIN_API_KEY
-    #   value: "your_api_key"
+    # Note: Authentication is handled by the auth-server service

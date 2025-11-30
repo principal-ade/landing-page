@@ -1,38 +1,16 @@
 {
   "version": "1.0.0",
-  "lastUpdated": 1763393649818,
-  "tasks": {
-    "task-1763393649817-0z0988jz1": {
-      "id": "task-1763393649817-0z0988jz1",
-      "status": "pending",
-      "priority": "normal",
-      "directoryPath": "",
-      "senderId": "landing-page",
-      "tags": [
-        "feature",
-        "database",
-        "api",
-        "newsletter",
-        "frontend"
-      ],
-      "receivedAt": 1763393649817,
-      "updatedAt": 1763393649817,
-      "filePath": "active/task-1763393649817-0z0988jz1.task.md"
-    }
-  },
+  "lastUpdated": 1764469445338,
+  "tasks": {},
   "byStatus": {
-    "pending": [
-      "task-1763393649817-0z0988jz1"
-    ],
+    "pending": [],
     "acknowledged": [],
     "in_progress": [],
     "completed": [],
     "failed": []
   },
   "bySender": {
-    "landing-page": [
-      "task-1763393649817-0z0988jz1"
-    ]
+    "landing-page": []
   },
   "byADE": {}
 }

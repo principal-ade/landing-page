@@ -362,8 +362,8 @@ export const InvestorReadyLandingPage: React.FC<InvestorReadyLandingPageProps> =
               Download Alpha
             </Link>
             <Link
-              href="/sessions"
-              onClick={() => trackButtonClick('View Sessions', '/sessions')}
+              href="/blog"
+              onClick={() => trackButtonClick('Read Blog', '/blog')}
               className="inline-flex items-center gap-2 px-10 py-5 text-xl font-semibold rounded-lg transition-all duration-200 hover:scale-105"
               style={{
                 background: 'transparent',
@@ -371,7 +371,7 @@ export const InvestorReadyLandingPage: React.FC<InvestorReadyLandingPageProps> =
                 border: `2px solid ${theme.colors.primary}`,
               }}
             >
-              View Sessions
+              Read Blog
             </Link>
           </div>
 

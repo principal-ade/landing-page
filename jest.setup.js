@@ -1,9 +1,6 @@
 // Mock environment variables
 process.env.AWS_REGION = 'us-east-1'
-process.env.FEEDBACK_S3_BUCKET = 'test-bucket'
-process.env.GITHUB_CLIENT_ID = 'test-client-id'
-process.env.GITHUB_CLIENT_SECRET = 'test-client-secret'
-process.env.ORBIT_ADMIN_SECRET = 'test-admin-secret'
+process.env.EMAIL_LIST_S3_BUCKET = 'test-bucket'
 
 // Mock AWS SDK
 jest.mock('@aws-sdk/client-s3', () => {

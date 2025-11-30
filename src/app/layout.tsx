@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
-import { AuthRefreshProvider } from "@/components/providers/AuthRefreshProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Header } from "@/components/Header";
 
@@ -60,10 +59,8 @@ export default function RootLayout({
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
         <ClientThemeProvider>
-          <AuthRefreshProvider>
-            <Header />
-            {children}
-          </AuthRefreshProvider>
+          <Header />
+          {children}
         </ClientThemeProvider>
       </body>
     </html>
