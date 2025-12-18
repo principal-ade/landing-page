@@ -93,7 +93,7 @@ export const VisualSupervision: React.FC = () => {
               letterSpacing: "-0.01em",
             }}
           >
-            Visual supervision and living documentation working together in Git.
+            Maps without context are just pretty pictures. Visual supervision paired with living documentation. That's how you actually understand a codebase.
           </motion.p>
         </div>
 

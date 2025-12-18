@@ -57,9 +57,7 @@ export const GalleryCTA: React.FC = () => {
               letterSpacing: "-0.01em",
             }}
           >
-            Browse curated collections of popular open-source projects.
-            <br />
-            See Architecture, File City, and Quality Radar on real code.
+            Test drive on code you know. Quality Radar, File City, and Architecture applied to React, Next.js, Kubernetes, and more.
           </p>
           <a
             href="#gallery"

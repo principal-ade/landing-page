@@ -154,7 +154,7 @@ const HeroSection: React.FC = () => {
         >
           Agents write code faster than you can review it.
           <br />
-          Principal AI gives you supervision through visual maps and living documentation.
+          Visual diagrams and living docs give you supervision at scale.
         </p>
       </div>
     </div>
