@@ -8,10 +8,11 @@ export const GalleryCTA: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
   const galleryImages = [
-    '/gallery-file-city-full.png',
-    '/gallery-file-city-detail.png',
-    '/gallery-architecture.png',
-    '/gallery-architecture-packages.png',
+    '/gallery-cline-3.png',
+    '/gallery-cline-7.png',
+    '/gallery-cline-8.png',
+    '/gallery-cline-9.png',
+    '/gallery-cline-10.png',
   ];
 
   React.useEffect(() => {
@@ -99,8 +100,7 @@ export const GalleryCTA: React.FC = () => {
               margin: "0 auto 40px auto",
               borderRadius: "12px",
               overflow: "hidden",
-              border: "1px solid rgba(6, 182, 212, 0.2)",
-              background: "rgba(6, 182, 212, 0.05)",
+              background: "#000000",
               aspectRatio: "16 / 9",
             }}
           >
@@ -109,17 +109,19 @@ export const GalleryCTA: React.FC = () => {
                 key={currentImageIndex}
                 src={galleryImages[currentImageIndex]}
                 alt="Gallery preview"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.7, ease: "easeInOut" }}
+                exit={{ opacity: 1 }}
+                transition={{ duration: 0 }}
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
+                  objectPosition: "top",
                   position: "absolute",
                   top: 0,
                   left: 0,
+                  transform: "scale(0.95)",
                 }}
               />
             </AnimatePresence>

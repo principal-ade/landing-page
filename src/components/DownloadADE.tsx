@@ -494,7 +494,7 @@ export const DownloadADE: React.FC = () => {
               </p>
             </div>
 
-            {/* Integrated Chat */}
+            {/* Integrated Terminal */}
             <div
               style={{
                 background: "#242424",
@@ -526,7 +526,8 @@ export const DownloadADE: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  <polyline points="4 17 10 11 4 5" />
+                  <line x1="12" y1="19" x2="20" y2="19" />
                 </svg>
               </div>
               <h4
@@ -540,7 +541,7 @@ export const DownloadADE: React.FC = () => {
                   letterSpacing: "-0.01em",
                 }}
               >
-                Integrated Chat
+                Integrated Terminal
               </h4>
               <p
                 style={{
@@ -554,7 +555,7 @@ export const DownloadADE: React.FC = () => {
                   margin: "0",
                 }}
               >
-                Talk to Claude with full codebase context
+                Agent-agnostic development
               </p>
             </div>
 
