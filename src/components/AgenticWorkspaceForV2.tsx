@@ -210,9 +210,7 @@ export function AgenticWorkspaceForV2() {
         {...fadeIn}
       >
         <p style={{ margin: '0' }}>
-          Context that <span style={{ color: '#06b6d4' }}>lives</span> with your code,
-          <br />
-          not <span style={{ color: '#6b7280' }}>buried</span> in Notion.
+          A picture is worth a <span style={{ color: '#06b6d4' }}>thousand lines of code</span>.
         </p>
       </motion.div>
     </div>

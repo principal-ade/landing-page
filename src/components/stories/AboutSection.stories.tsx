@@ -113,9 +113,8 @@ export const CompletePageV3: Story = {
     <div style={{ background: '#000000' }}>
       <AboutV3 />
       <LivingDocumentationSection />
-      <PrincipalFolder />
-      <AgenticWorkspaceForV2 />
       <WhyTeamsUse />
+      <AgenticWorkspaceForV2 />
       <JoinTheAlpha />
       <FAQSection />
     </div>

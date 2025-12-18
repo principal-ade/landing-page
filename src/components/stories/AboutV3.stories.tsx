@@ -3,7 +3,6 @@ import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
 import { AboutV3 } from '../AboutV3';
 import { LivingDocumentationSection } from '../LivingDocumentationSection';
-import { PrincipalFolder } from '../PrincipalFolder';
 import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
 import { WhyTeamsUse } from '../WhyTeamsUse';
 import { JoinTheAlpha } from '../JoinTheAlpha';
@@ -68,9 +67,8 @@ export const Default: Story = {
  * Full page layout for testing content flow:
  * - AboutV3 (experimental)
  * - Living Documentation Section
- * - Principal Folder
- * - Agentic Workspace
  * - Why Teams Use Principal AI (NEW)
+ * - Agentic Workspace
  * - Join The Alpha
  * - FAQ Section
  */
@@ -79,9 +77,8 @@ export const CompletePage: Story = {
     <div style={{ background: '#000000' }}>
       <AboutV3 />
       <LivingDocumentationSection />
-      <PrincipalFolder />
-      <AgenticWorkspaceForV2 />
       <WhyTeamsUse />
+      <AgenticWorkspaceForV2 />
       <JoinTheAlpha />
       <FAQSection />
     </div>
