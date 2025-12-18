@@ -68,16 +68,34 @@ export const StartingPoint: React.FC = () => {
             style={{
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
               fontWeight: "600",
-              margin: "0",
-              color: "#ffffff",
+              margin: "0 0 16px 0",
+              color: "#06b6d4",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               letterSpacing: "-0.02em",
               lineHeight: "1.1",
             }}
           >
-            Get Started with Your Own Code
+            Do It
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{
+              fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
+              fontWeight: "500",
+              color: "#a0aec0",
+              lineHeight: "1.3",
+              margin: "0",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Get Started with Your Own Code
+          </motion.p>
         </div>
 
         {/* Onboarding Steps Grid */}

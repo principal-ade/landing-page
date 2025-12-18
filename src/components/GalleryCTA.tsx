@@ -24,27 +24,42 @@ export const GalleryCTA: React.FC = () => {
         background: "#0a0e1a",
       }}
     >
-      <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          style={{ textAlign: "center" }}
         >
           <h2
             style={{
-              fontSize: isMobile ? "28px" : isTablet ? "36px" : "42px",
+              fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
               fontWeight: "600",
-              margin: "0 0 24px 0",
-              color: "#ffffff",
+              margin: "0 0 16px 0",
+              color: "#06b6d4",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               letterSpacing: "-0.02em",
               lineHeight: "1.1",
             }}
           >
-            See What Principal AI Can Do
+            See It
           </h2>
+          <p
+            style={{
+              fontSize: isMobile ? "24px" : isTablet ? "28px" : "32px",
+              fontWeight: "500",
+              color: "#a0aec0",
+              lineHeight: "1.3",
+              marginBottom: "24px",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Explore on Real Codebases
+          </p>
           <p
             style={{
               fontSize: isMobile ? "17px" : "20px",
@@ -57,7 +72,7 @@ export const GalleryCTA: React.FC = () => {
               letterSpacing: "-0.01em",
             }}
           >
-            Test drive on code you know. Quality Radar, File City, and Architecture applied to React, Next.js, Kubernetes, and more.
+            Browse popular open-source projects and instantly see code quality, structure, and architecture.
           </p>
           <a
             href="#gallery"
@@ -87,7 +102,7 @@ export const GalleryCTA: React.FC = () => {
               e.currentTarget.style.boxShadow = "0 4px 14px rgba(6, 182, 212, 0.4)";
             }}
           >
-            Explore the Gallery →
+            Explore Gallery →
           </a>
         </motion.div>
       </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
 import { CompleteWebsite } from '../FullPageLayout';
 import { CompleteLivingDocWebsite } from '../CompleteLivingDocWebsite';
+import { CompleteLivingDocWebsiteV2 } from '../CompleteLivingDocWebsiteV2';
 
 /**
  * Complete Website with Navigation and Footer
@@ -86,6 +87,30 @@ export const LivingDocFocusedCopy: StoryObj = {
   render: () => (
     <ClientThemeProvider>
       <CompleteLivingDocWebsite />
+    </ClientThemeProvider>
+  ),
+};
+
+/**
+ * Living Documentation Focused Website V2 (Experimental)
+ *
+ * Experimental duplicate for making changes to the landing page layout.
+ * This version can be edited without affecting the original.
+ *
+ * Use this to:
+ * - Test removing Living Documentation section from landing page
+ * - Experiment with new section ordering
+ * - Try different content flows
+ * - Get feedback before updating the main version
+ *
+ * Complete website with navigation between:
+ * - Home: Living Doc Homepage (can be modified)
+ * - About: About Section V2 with all sections
+ */
+export const LivingDocFocusedV2Experimental: StoryObj = {
+  render: () => (
+    <ClientThemeProvider>
+      <CompleteLivingDocWebsiteV2 />
     </ClientThemeProvider>
   ),
 };

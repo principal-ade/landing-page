@@ -93,7 +93,7 @@ export const VisualSupervision: React.FC = () => {
               letterSpacing: "-0.01em",
             }}
           >
-            Maps without context are just pretty pictures. Visual supervision paired with living documentation. That's how you actually understand a codebase.
+            Maps without context are just pretty pictures. Visual supervision paired with documentation that stays current, that's how you actually understand a codebase.
           </motion.p>
         </div>
 
@@ -265,8 +265,8 @@ export const VisualSupervision: React.FC = () => {
             marginTop: "80px",
           }}
         >
-          Not just visuals.{" "}
-          <span style={{ color: "#06b6d4" }}>Orientation.</span>
+          Optimized for agent understanding.{" "}
+          <span style={{ color: "#06b6d4" }}>Built for human understanding.</span>
         </motion.p>
       </div>
     </section>

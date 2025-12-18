@@ -63,7 +63,7 @@ export const JoinTheAlpha: React.FC = () => {
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Be among the first to experience Living Documentation. Add it to your project in minutes and see the difference yourself.
+            Explore real codebases in the Gallery. Or download the full ADE and try it on your own projects.
           </p>
 
           {/* CTA Buttons */}
@@ -76,10 +76,8 @@ export const JoinTheAlpha: React.FC = () => {
             }}
           >
             <a
-              href="https://app.principal-ade.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackButtonClick('Try in Browser', 'https://app.principal-ade.com/')}
+              href="#gallery"
+              onClick={() => trackButtonClick('Explore Gallery', '#gallery')}
               style={{
                 padding: isTablet
                   ? "18px 36px"
@@ -111,7 +109,7 @@ export const JoinTheAlpha: React.FC = () => {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              Try in Browser
+              Explore Gallery
               <ArrowRight size={20} />
             </a>
             <a
