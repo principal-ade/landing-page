@@ -7,6 +7,7 @@ import { PrincipalFolder } from '../PrincipalFolder';
 import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
 import { FeaturesAndBenefitsV2 } from '../FeaturesAndBenefitsV2';
 import { JoinTheAlpha } from '../JoinTheAlpha';
+import { FAQSection } from '../LivingDocHomepage';
 
 /**
  * About Principal AI Section V2
@@ -71,6 +72,7 @@ export const Default: Story = {
  * - Agentic Workspace
  * - Features and Benefits
  * - Join The Alpha
+ * - FAQ Section
  */
 export const CompletePage: Story = {
   render: () => (
@@ -81,6 +83,7 @@ export const CompletePage: Story = {
       <AgenticWorkspaceForV2 />
       <FeaturesAndBenefitsV2 />
       <JoinTheAlpha />
+      <FAQSection />
     </div>
   ),
 };

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useTheme } from "@principal-ade/industry-theme";
 import { FileTree, DirectoryInfo, FileInfo } from "@principal-ai/repository-abstraction";
-import { DynamicFileTreeSection } from "./DynamicFileTreeSection";
 import { MultiFileTreeSection } from "./MultiFileTreeSection";
 
 interface EngineeringContextSectionProps {
@@ -528,18 +527,6 @@ export const EngineeringContextSection: React.FC<EngineeringContextSectionProps>
           </button>
         ))}
       </div>
-
-      {/* File Tree Viewer */}
-      {currentRepo && (
-        <DynamicFileTreeSection
-          fileTree={currentRepo.tree}
-          theme={theme}
-          title={currentRepo.name}
-          onFileSelect={(filePath) => {
-            console.log("Selected file:", filePath);
-          }}
-        />
-      )}
     </div>
   );
 };

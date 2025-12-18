@@ -159,12 +159,12 @@ export function LivingDocumentationSection() {
         >
           <h2
             style={{
-              fontSize: 'clamp(1.75rem, 5vw, 3.75rem)',
-              fontWeight: '700',
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: '600',
               color: '#ffffff',
-              lineHeight: '1.2',
+              lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               margin: '0',
               wordWrap: 'break-word',
               overflowWrap: 'break-word',
@@ -178,11 +178,12 @@ export function LivingDocumentationSection() {
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
-              fontSize: 'clamp(1.125rem, 2vw, 1.25rem)',
+              fontSize: 'clamp(1rem, 2vw, 1.25rem)',
               color: '#d1d5db',
               lineHeight: '1.6',
-              letterSpacing: '-0.02em',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              letterSpacing: '-0.01em',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontWeight: '400',
             }}
           >
             <p style={{ margin: '0' }}>

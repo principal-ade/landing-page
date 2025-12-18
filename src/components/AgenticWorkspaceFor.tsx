@@ -13,9 +13,9 @@ export function AgenticWorkspaceFor() {
     {
       icon: User,
       title: "Solo Developers",
-      subtitle: "Your Personal Time Machine",
+      subtitle: "Define Intent, Validate Agents",
       description:
-        'Never say "I forgot why I built it this way." The "why" behind every decision, timestamped and searchable. When you come back to code after 6 months, the context comes back too.',
+        "Stop reading every line agents write. Define intent upfront, validate alignment visually, measure coverage. The 'why' behind every decision returns when you do.",
       color: "cyan",
     },
     {
@@ -23,15 +23,15 @@ export function AgenticWorkspaceFor() {
       title: "Small Teams",
       subtitle: "Shared Memory Without Meetings",
       description:
-        'Your team\'s shared brain lives in git, not in someone\'s head. New devs read the decision history instead of asking "why" 50 times. When someone leaves, their reasoning doesn\'t leave with them.',
+        "Team knowledge lives in git. New devs read decision history. Context outlasts turnover. When agents work overnight, you wake up to validated results.",
       color: "blue",
     },
     {
       icon: Code2,
       title: "Engineering",
-      subtitle: "Architecture as Context",
+      subtitle: "Architecture as Living Context",
       description:
-        'Your architecture decisions inform future code, not just explain past code. Agents check /docs/architecture.md before proposing rewrites. "Why we chose PostgreSQL" is explicit and searchable.',
+        "Architecture decisions inform future code, not just explain past code. Agents check docs before proposing changes. Visual validation catches drift before it ships.",
       color: "cyan",
     },
     {
@@ -39,7 +39,7 @@ export function AgenticWorkspaceFor() {
       title: "Product",
       subtitle: "Specs That Reflect Reality",
       description:
-        "Your specs stay synchronized with reality, not frozen in time. Code changes → spec gets flagged. Spec updates → agents notify engineers. Intent is preserved from user research → implementation.",
+        "Specs stay synchronized with reality, not frozen in time. Code changes flag specs. Agents implement at machine speed. You ship with confidence.",
       color: "blue",
     },
     {
@@ -47,7 +47,7 @@ export function AgenticWorkspaceFor() {
       title: "Communications",
       subtitle: "Brand as Code",
       description:
-        "Your brand voice is code, not a Google Doc that gets out of sync. AI agents reference /comms/messaging.md when writing copy. Change the messaging doc → agents flag which pages need updates.",
+        "Brand voice is versioned, not out of sync. Agents reference messaging when writing copy. Change the doc, agents flag which pages need updates.",
       color: "cyan",
     },
     {
@@ -55,7 +55,7 @@ export function AgenticWorkspaceFor() {
       title: "Leadership",
       subtitle: "Strategy That Cascades",
       description:
-        'Your strategy isn\'t a PDF—it\'s context that informs every line of code. OKRs connect to features. Market research informs architecture. "Show me all AI decisions from Q4" is one query, not archaeology.',
+        "Strategy informs every line of code. OKRs connect to features. Track validation throughput as your key metric. Scale agentic development safely.",
       color: "blue",
     },
   ];
@@ -196,7 +196,7 @@ export function AgenticWorkspaceFor() {
         {...fadeIn}
       >
         <p>
-          Context that <span style={{ color: '#06b6d4' }}>lives</span> with your code,
+          Intent that <span style={{ color: '#06b6d4' }}>evolves</span> with your code,
           <br />
           not <span style={{ color: '#6b7280' }}>buried</span> in Notion.
         </p>
