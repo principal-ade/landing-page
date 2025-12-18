@@ -24,14 +24,14 @@ export const StartingPoint: React.FC = () => {
       description: "Point Principal View at any GitHub repository. Generate Quality Radar to see your codebase quality instantly.",
       action: null,
       href: null,
-      code: "npx principal-view analyze <github-url>",
+      code: "npx @principal-ai/quality-lens-cli init",
     },
     {
       title: "2. Add Living Documentation",
       description: "Install Alexandria to unlock full metrics. Keep documentation synced with code and give AI agents grounded context.",
       action: null,
       href: null,
-      code: "npm install alexandria-cli",
+      code: "npx @principal-ai/alexandria-cli init",
     },
     {
       title: "3. Download Principal ADE",
