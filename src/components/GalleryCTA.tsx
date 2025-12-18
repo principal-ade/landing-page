@@ -6,13 +6,14 @@ export const GalleryCTA: React.FC = () => {
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   const galleryImages = [
-    '/gallery-cline-3.png',
-    '/gallery-cline-7.png',
-    '/gallery-cline-8.png',
-    '/gallery-cline-9.png',
-    '/gallery-cline-10.png',
+    '/gallery-opencode-1.png',
+    '/gallery-opencode-2.png',
+    '/gallery-opencode-3.png',
+    '/gallery-opencode-4.png',
+    '/gallery-opencode-5.png',
   ];
 
   React.useEffect(() => {
@@ -24,11 +25,13 @@ export const GalleryCTA: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
+    if (isPaused) return;
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -141,7 +144,10 @@ export const GalleryCTA: React.FC = () => {
               {galleryImages.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentImageIndex(index)}
+                  onClick={() => {
+                    setCurrentImageIndex(index);
+                    setIsPaused(true);
+                  }}
                   style={{
                     width: "8px",
                     height: "8px",
