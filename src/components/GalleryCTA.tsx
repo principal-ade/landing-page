@@ -1,10 +1,18 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const GalleryCTA: React.FC = () => {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  const galleryImages = [
+    '/gallery-file-city-full.png',
+    '/gallery-file-city-detail.png',
+    '/gallery-architecture.png',
+    '/gallery-architecture-packages.png',
+  ];
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -12,6 +20,13 @@ export const GalleryCTA: React.FC = () => {
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   const isMobile = windowWidth < 768;
@@ -74,6 +89,75 @@ export const GalleryCTA: React.FC = () => {
           >
             Browse popular open-source projects and instantly see code quality, structure, and architecture.
           </p>
+
+          {/* Gallery Carousel */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "900px",
+              margin: "0 auto 40px auto",
+              borderRadius: "12px",
+              overflow: "hidden",
+              border: "1px solid rgba(6, 182, 212, 0.2)",
+              background: "rgba(6, 182, 212, 0.05)",
+              aspectRatio: "16 / 9",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentImageIndex}
+                src={galleryImages[currentImageIndex]}
+                alt="Gallery preview"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            </AnimatePresence>
+
+            {/* Carousel indicators */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "16px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                gap: "8px",
+                zIndex: 10,
+              }}
+            >
+              {galleryImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    border: "none",
+                    background: index === currentImageIndex
+                      ? "#06b6d4"
+                      : "rgba(255, 255, 255, 0.4)",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    padding: 0,
+                  }}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
           <a
             href="#gallery"
             style={{
