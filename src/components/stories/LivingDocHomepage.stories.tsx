@@ -103,3 +103,25 @@ export const Simplified: Story = {
     },
   },
 };
+
+/**
+ * Complete Website Story
+ *
+ * Full landing page with all sections in the optimized order:
+ * 1. Hero - The Universal Workspace for Agentic Work
+ * 2. Starting Point - Choose your entry point (Gallery featured)
+ * 3. Living Documentation - Git-native context layer
+ * 4. Visual Supervision - Quality Radar, File City, Architecture
+ *
+ * This is the complete experience showing the full conversion funnel.
+ */
+export const CompleteWebsite: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'The complete landing page with all sections in the optimized funnel order.',
+      },
+    },
+  },
+};

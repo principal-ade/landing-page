@@ -20,25 +20,25 @@ export const VisualSupervision: React.FC = () => {
 
   const views = [
     {
-      image: "/architecture-example.png",
-      title: "Architecture",
-      subtitle: "See how it connects",
-      description: "Auto-generated diagrams showing modules, packages, and dependencies. Understand the system at a glance.",
-      link: "See examples in Gallery",
+      image: "/quality-radar-example.png",
+      title: "Quality Radar",
+      subtitle: "Know before you invest",
+      description: "A Carfax report for code. Six dimensions to know if it's solid before you invest developer time.",
+      link: "Gallery: Explore real codebases →",
     },
     {
       image: "/file-city-example.png",
       title: "File City",
       subtitle: "Navigate the landscape",
       description: "Files and directories as a living city map. See size, complexity, and composition in seconds.",
-      link: "See examples in Gallery",
+      link: "Gallery: Explore real codebases →",
     },
     {
-      image: "/quality-radar-example.png",
-      title: "Quality Radar",
-      subtitle: "Know before you invest",
-      description: "A Carfax report for code. Six dimensions to know if it's solid before you invest developer time.",
-      link: "See examples in Gallery",
+      image: "/architecture-example.png",
+      title: "Architecture",
+      subtitle: "See how it connects",
+      description: "Auto-generated diagrams showing modules, packages, and dependencies. Understand the system at a glance.",
+      link: "Gallery: Explore real codebases →",
     },
   ];
 
@@ -67,7 +67,7 @@ export const VisualSupervision: React.FC = () => {
             style={{
               fontSize: isMobile ? "32px" : isTablet ? "40px" : "48px",
               fontWeight: "600",
-              margin: "0 0 32px 0",
+              margin: "0 0 24px 0",
               color: "#ffffff",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -75,7 +75,7 @@ export const VisualSupervision: React.FC = () => {
               lineHeight: "1.1",
             }}
           >
-            You Can't Read Every Line Anymore
+            Not just visuals. <span style={{ color: "#06b6d4" }}>Orientation.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -87,49 +87,13 @@ export const VisualSupervision: React.FC = () => {
               fontWeight: "400",
               color: "#a0aec0",
               lineHeight: "1.6",
-              marginBottom: "16px",
+              margin: "0",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               letterSpacing: "-0.01em",
             }}
           >
-            There's too much. Moving too fast.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{
-              fontSize: isMobile ? "17px" : "20px",
-              fontWeight: "400",
-              color: "#ffffff",
-              lineHeight: "1.6",
-              marginBottom: "32px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.01em",
-            }}
-          >
-            But you still need to know what's there.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            style={{
-              fontSize: isMobile ? "15px" : "17px",
-              fontWeight: "400",
-              color: "#a0aec0",
-              lineHeight: "1.6",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Architecture shows dependencies. File City shows composition. Quality Radar shows, well, quality.
-            Auto-generated. Always current. Built for supervision, not review.
+            Visual supervision and living documentation working together in Git.
           </motion.p>
         </div>
 

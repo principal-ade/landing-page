@@ -18,32 +18,24 @@ export const StartingPoint: React.FC = () => {
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
-  const featuredPath = {
-    title: "Explore the Gallery",
-    description: "Explore curated collections of popular open-source projects. See Architecture, File City, and Quality Radar on real code.",
-    action: "Browse Gallery",
-    href: "#gallery",
-    badge: "Recommended",
-  };
-
-  const otherPaths = [
+  const onboardingSteps = [
     {
-      title: "Analyze Your Own Repo",
-      description: "Point Principal View at any GitHub repository. Generate architecture and quality insights in minutes.",
+      title: "1. See Your Codebase Quality",
+      description: "Point Principal View at any GitHub repository. Generate Quality Radar to see your codebase quality instantly.",
       action: null,
       href: null,
       code: "npx principal-view analyze <github-url>",
     },
     {
-      title: "Add Living Documentation",
-      description: "Install Alexandria to keep documentation synced with code. Give AI agents grounded, always-current context.",
+      title: "2. Add Living Documentation",
+      description: "Install Alexandria to unlock full metrics. Keep documentation synced with code and give AI agents grounded context.",
       action: null,
       href: null,
       code: "npm install alexandria-cli",
     },
     {
-      title: "Download Principal ADE",
-      description: "A native Agentic Development Environment to get the most out of Living Docs, Auto-Architecture, File City, Quality Radar, and your favorite agents too.",
+      title: "3. Download Principal ADE",
+      description: "Get the full experience with File City and Architecture diagrams. A native Agentic Development Environment built for supervision.",
       action: "Download Principal ADE",
       href: "#download",
       code: null,
@@ -63,9 +55,9 @@ export const StartingPoint: React.FC = () => {
         <div
           style={{
             textAlign: "center",
-            marginBottom: "64px",
+            marginBottom: "48px",
             maxWidth: "768px",
-            margin: "0 auto 64px auto",
+            margin: "0 auto 48px auto",
           }}
         >
           <motion.h2
@@ -84,125 +76,11 @@ export const StartingPoint: React.FC = () => {
               lineHeight: "1.1",
             }}
           >
-            Choose Your Starting Point
+            Get Started with Your Own Code
           </motion.h2>
         </div>
 
-        {/* Featured Path - Gallery */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          onMouseEnter={() => setHoveredCard(0)}
-          onMouseLeave={() => setHoveredCard(null)}
-          style={{
-            border: `2px solid ${hoveredCard === 0 ? "rgba(6, 182, 212, 0.6)" : "rgba(6, 182, 212, 0.4)"}`,
-            borderRadius: "16px",
-            padding: isMobile ? "40px 32px" : "48px 40px",
-            background: hoveredCard === 0 ? "rgba(6, 182, 212, 0.08)" : "rgba(6, 182, 212, 0.05)",
-            transition: "all 0.3s ease",
-            marginBottom: "48px",
-            position: "relative",
-          }}
-        >
-          {/* Recommended Badge */}
-          <div
-            style={{
-              position: "absolute",
-              top: "16px",
-              right: "16px",
-              background: "#06b6d4",
-              color: "#000000",
-              padding: "6px 12px",
-              borderRadius: "6px",
-              fontSize: "12px",
-              fontWeight: "600",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            }}
-          >
-            {featuredPath.badge}
-          </div>
-
-          <h3
-            style={{
-              fontSize: isMobile ? "24px" : "28px",
-              fontWeight: "600",
-              color: "#ffffff",
-              marginBottom: "16px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.02em",
-              lineHeight: "1.1",
-            }}
-          >
-            {featuredPath.title}
-          </h3>
-          <p
-            style={{
-              fontSize: "17px",
-              fontWeight: "400",
-              color: "#d1d5db",
-              lineHeight: "1.6",
-              marginBottom: "32px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {featuredPath.description}
-          </p>
-          <a
-            href={featuredPath.href}
-            style={{
-              display: "inline-block",
-              width: isMobile ? "100%" : "auto",
-              padding: "16px 32px",
-              color: "#000000",
-              textAlign: "center",
-              textDecoration: "none",
-              fontSize: "15px",
-              fontWeight: "600",
-              background: "#06b6d4",
-              borderRadius: "8px",
-              transition: "all 0.2s ease",
-              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.01em",
-              boxSizing: "border-box",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#22d3ee";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#06b6d4";
-            }}
-          >
-            {featuredPath.action} →
-          </a>
-        </motion.div>
-
-        {/* Other Ways to Start */}
-        <div style={{ marginBottom: "32px" }}>
-          <h3
-            style={{
-              fontSize: isMobile ? "17px" : "20px",
-              fontWeight: "400",
-              color: "#a0aec0",
-              marginBottom: "24px",
-              textAlign: "center",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              letterSpacing: "-0.01em",
-              lineHeight: "1.6",
-            }}
-          >
-            Other ways to start
-          </h3>
-        </div>
-
-        {/* Other Paths Grid */}
+        {/* Onboarding Steps Grid */}
         <div
           style={{
             display: "grid",
@@ -210,8 +88,8 @@ export const StartingPoint: React.FC = () => {
             gap: "20px",
           }}
         >
-          {otherPaths.map((path, index) => {
-            const isHovered = hoveredCard === index + 1;
+          {onboardingSteps.map((path, index) => {
+            const isHovered = hoveredCard === index;
 
             return (
               <motion.div
@@ -219,8 +97,8 @@ export const StartingPoint: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
-                onMouseEnter={() => setHoveredCard(index + 1)}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
                 style={{
                   border: `1px solid ${isHovered ? "rgba(6, 182, 212, 0.4)" : "rgba(255, 255, 255, 0.1)"}`,
@@ -332,28 +210,6 @@ export const StartingPoint: React.FC = () => {
             );
           })}
         </div>
-
-        {/* Bottom tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          style={{
-            textAlign: "center",
-            fontSize: isMobile ? "17px" : "20px",
-            fontWeight: "400",
-            color: "#ffffff",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            letterSpacing: "-0.01em",
-            lineHeight: "1.6",
-            marginTop: "64px",
-          }}
-        >
-          Optimized for Agents.{" "}
-          <span style={{ color: "#06b6d4" }}>Designed for humans.</span>
-        </motion.p>
 
       </div>
     </section>

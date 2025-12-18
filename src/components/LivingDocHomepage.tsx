@@ -8,6 +8,8 @@ import {
 import { VisualSupervision } from "./VisualSupervision";
 import { StartingPoint } from "./StartingPoint";
 import { LivingDocumentationSection } from "./LivingDocumentationSection";
+import { GalleryCTA } from "./GalleryCTA";
+import { TransitionSection } from "./TransitionSection";
 import { trackButtonClick, trackVideoPlay } from "@/lib/analytics";
 const HeroSection: React.FC = () => {
   const [windowWidth, setWindowWidth] = React.useState(
@@ -150,9 +152,9 @@ const HeroSection: React.FC = () => {
             maxWidth: "740px",
           }}
         >
-          Where humans direct and agents build.
+          Agents write code faster than you can review it.
           <br />
-          See your codebase. Supervise your agents. Ship with confidence.
+          Principal AI gives you supervision through visual maps and living documentation.
         </p>
       </div>
     </div>
@@ -859,9 +861,10 @@ export const LivingDocHomepage: React.FC = () => {
   return (
     <div>
       <HeroSection />
-      <LivingDocumentationSection />
-      <VisualSupervision />
+      <GalleryCTA />
       <StartingPoint />
+      <VisualSupervision />
+      <LivingDocumentationSection />
     </div>
   );
 };

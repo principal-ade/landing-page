@@ -66,3 +66,26 @@ export const LivingDocFocused: StoryObj = {
     </ClientThemeProvider>
   ),
 };
+
+/**
+ * Living Documentation Focused Website (Copy)
+ *
+ * Duplicate of the Living Documentation Focused Website for comparison.
+ *
+ * Complete website with navigation between:
+ * - Home: Living Doc Homepage (Simplified)
+ * - About: About Section V2 with all sections
+ *
+ * Features:
+ * - Click navigation links to switch between pages
+ * - Smooth page transitions
+ * - Living Documentation as the primary entry point
+ * - Full About page with team info and beliefs
+ */
+export const LivingDocFocusedCopy: StoryObj = {
+  render: () => (
+    <ClientThemeProvider>
+      <CompleteLivingDocWebsite />
+    </ClientThemeProvider>
+  ),
+};
