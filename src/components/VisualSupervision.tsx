@@ -22,21 +22,18 @@ export const VisualSupervision: React.FC = () => {
     {
       image: "/quality-radar-example.png",
       title: "Quality Radar",
-      subtitle: "Know before you invest",
       description: "A Carfax report for code. Six dimensions to know if it's solid before you invest developer time.",
       link: "Gallery: Explore real codebases →",
     },
     {
       image: "/file-city-example.png",
       title: "File City",
-      subtitle: "Navigate the landscape",
       description: "Files and directories as a living city map. See size, complexity, and composition in seconds.",
       link: "Gallery: Explore real codebases →",
     },
     {
       image: "/architecture-example.png",
       title: "Architecture",
-      subtitle: "See how it connects",
       description: "Auto-generated diagrams showing modules, packages, and dependencies. Understand the system at a glance.",
       link: "Gallery: Explore real codebases →",
     },
@@ -163,7 +160,7 @@ export const VisualSupervision: React.FC = () => {
                       fontSize: isMobile ? "24px" : "28px",
                       fontWeight: "600",
                       color: "#ffffff",
-                      marginBottom: "12px",
+                      marginBottom: "20px",
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       letterSpacing: "-0.02em",
@@ -172,22 +169,6 @@ export const VisualSupervision: React.FC = () => {
                   >
                     {view.title}
                   </h3>
-
-                  {/* Subtitle */}
-                  <p
-                    style={{
-                      fontSize: isMobile ? "15px" : "17px",
-                      fontWeight: "400",
-                      color: "#06b6d4",
-                      marginBottom: "20px",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                      letterSpacing: "-0.01em",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    {view.subtitle}
-                  </p>
 
                   {/* Description */}
                   <p

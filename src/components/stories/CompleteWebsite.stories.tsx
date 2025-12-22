@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
 import { CompleteWebsite } from '../FullPageLayout';
-import { CompleteLivingDocWebsite } from '../CompleteLivingDocWebsite';
 import { CompleteLivingDocWebsiteV2 } from '../CompleteLivingDocWebsiteV2';
 
 /**
@@ -46,53 +45,7 @@ const meta = {
 export default meta;
 
 /**
- * Living Documentation Focused Website
- *
- * Complete website with navigation between:
- * - Home: Living Doc Homepage (Simplified)
- * - About: About Section V2 with all sections
- *
- * Features:
- * - Click navigation links to switch between pages
- * - Smooth page transitions
- * - Living Documentation as the primary entry point
- * - Full About page with team info and beliefs
- *
- * Try clicking "About" in the navigation to see the full about page!
- */
-export const LivingDocFocused: StoryObj = {
-  render: () => (
-    <ClientThemeProvider>
-      <CompleteLivingDocWebsite />
-    </ClientThemeProvider>
-  ),
-};
-
-/**
- * Living Documentation Focused Website (Copy)
- *
- * Duplicate of the Living Documentation Focused Website for comparison.
- *
- * Complete website with navigation between:
- * - Home: Living Doc Homepage (Simplified)
- * - About: About Section V2 with all sections
- *
- * Features:
- * - Click navigation links to switch between pages
- * - Smooth page transitions
- * - Living Documentation as the primary entry point
- * - Full About page with team info and beliefs
- */
-export const LivingDocFocusedCopy: StoryObj = {
-  render: () => (
-    <ClientThemeProvider>
-      <CompleteLivingDocWebsite />
-    </ClientThemeProvider>
-  ),
-};
-
-/**
- * Living Documentation Focused Website V2 (Experimental)
+ * December18
  *
  * Experimental duplicate for making changes to the landing page layout.
  * This version can be edited without affecting the original.
@@ -107,7 +60,7 @@ export const LivingDocFocusedCopy: StoryObj = {
  * - Home: Living Doc Homepage (can be modified)
  * - About: About Section V2 with all sections
  */
-export const LivingDocFocusedV2Experimental: StoryObj = {
+export const December18: StoryObj = {
   render: () => (
     <ClientThemeProvider>
       <CompleteLivingDocWebsiteV2 />

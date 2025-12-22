@@ -52,40 +52,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default About section V3 (Experimental).
- *
- * Starting point for new content experiments.
- * Currently identical to V2 but ready for modifications.
- */
-export const Default: Story = {
-  args: {},
-};
-
-/**
- * Complete About page V3 with all sections.
- *
- * Full page layout for testing content flow:
- * - AboutV3 (experimental)
- * - Living Documentation Section
- * - Why Teams Use Principal AI (NEW)
- * - Agentic Workspace
- * - Join The Alpha
- * - FAQ Section
- */
-export const CompletePage: Story = {
-  render: () => (
-    <div style={{ background: '#000000' }}>
-      <AboutV3 />
-      <LivingDocumentationSection />
-      <WhyTeamsUse />
-      <AgenticWorkspaceForV2 />
-      <JoinTheAlpha />
-      <FAQSection />
-    </div>
-  ),
-};
-
-/**
  * About V3 Only (for focused editing).
  *
  * Isolated view of just the About section for easier editing and review.
