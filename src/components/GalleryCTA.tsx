@@ -167,7 +167,7 @@ export const GalleryCTA: React.FC = () => {
           </div>
 
           <a
-            href="#gallery"
+            href="https://app.principal-ade.com"
             style={{
               display: "inline-block",
               padding: isMobile ? "18px 40px" : "20px 48px",

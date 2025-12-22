@@ -76,8 +76,8 @@ export const JoinTheAlpha: React.FC = () => {
             }}
           >
             <a
-              href="#gallery"
-              onClick={() => trackButtonClick('Explore Gallery', '#gallery')}
+              href="https://app.principal-ade.com"
+              onClick={() => trackButtonClick('Explore Gallery', 'https://app.principal-ade.com')}
               style={{
                 padding: isTablet
                   ? "18px 36px"
