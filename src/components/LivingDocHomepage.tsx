@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { VisualSupervision } from "./VisualSupervision";
 import { StartingPoint } from "./StartingPoint";
-import { LivingDocumentationSection } from "./LivingDocumentationSection";
 import { GalleryCTA } from "./GalleryCTA";
 import { TransitionSection } from "./TransitionSection";
 import { trackButtonClick, trackVideoPlay } from "@/lib/analytics";
@@ -864,7 +863,6 @@ export const LivingDocHomepage: React.FC = () => {
       <GalleryCTA />
       <StartingPoint />
       <VisualSupervision />
-      <LivingDocumentationSection />
     </div>
   );
 };
