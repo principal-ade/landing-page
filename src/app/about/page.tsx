@@ -1,24 +1,24 @@
 "use client";
 
 import React from "react";
-import { AboutV2 } from "../../components/AboutV2";
+import { AboutV3 } from "../../components/AboutV3";
 import { LivingDocumentationSection } from "../../components/LivingDocumentationSection";
-import { PrincipalFolder } from "../../components/PrincipalFolder";
+import { WhyTeamsUse } from "../../components/WhyTeamsUse";
 import { AgenticWorkspaceForV2 } from "../../components/AgenticWorkspaceForV2";
-import { FeaturesAndBenefitsV2 } from "../../components/FeaturesAndBenefitsV2";
 import { JoinTheAlpha } from "../../components/JoinTheAlpha";
+import { FAQSection } from "../../components/LivingDocHomepage";
 import { Footer } from "../../components/Footer";
 
 export default function AboutPage() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#000000" }}>
       <main style={{ flex: 1, paddingTop: "80px" }}>
-        <AboutV2 />
+        <AboutV3 />
         <LivingDocumentationSection />
-        <PrincipalFolder />
+        <WhyTeamsUse />
         <AgenticWorkspaceForV2 />
-        <FeaturesAndBenefitsV2 />
         <JoinTheAlpha />
+        <FAQSection />
       </main>
       <Footer />
     </div>
