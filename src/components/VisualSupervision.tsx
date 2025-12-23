@@ -206,7 +206,9 @@ export const VisualSupervision: React.FC = () => {
 
                   {/* Link */}
                   <a
-                    href="#gallery"
+                    href="https://app.principal-ade.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                       fontSize: "15px",
                       fontWeight: "400",
@@ -220,7 +222,7 @@ export const VisualSupervision: React.FC = () => {
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    {view.link} →
+                    {view.link}
                   </a>
                 </div>
               </motion.div>
