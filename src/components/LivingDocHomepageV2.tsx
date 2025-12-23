@@ -151,9 +151,9 @@ const HeroSection: React.FC = () => {
             maxWidth: "740px",
           }}
         >
-          Agents write code faster than you can review it.
+          Machine-readable for agents.
           <br />
-          Stay in control with visual supervision and living documentation.
+          Visual for humans.
         </p>
       </div>
     </div>
