@@ -701,25 +701,6 @@ export const FAQSection: React.FC = () => {
         "Principal AI works with any Git-based project. Living Documentation supports all major languages including JavaScript/TypeScript, Python, Java, Go, Rust, and more. Framework-agnostic—works with React, Next.js, Django, Spring, and any codebase structure.",
     },
     {
-      question: "How long does setup take?",
-      answer: (
-        <>
-          Less than 5 minutes. Just give your agent this link{" "}
-          <a
-            href="https://www.npmjs.com/package/@principal-ai/alexandria-cli"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: "#00C2FF",
-              textDecoration: "underline",
-            }}
-          >
-            https://www.npmjs.com/package/@principal-ai/alexandria-cli
-          </a>
-        </>
-      ),
-    },
-    {
       question: "How does staleness detection work?",
       answer:
         "Principal AI validates documentation-to-code links on every commit. When code changes affect linked documentation, you get immediate notifications. CodebaseViews track file dependencies, so you always know what needs updating before it becomes a problem.",

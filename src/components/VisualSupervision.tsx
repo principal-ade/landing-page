@@ -229,28 +229,6 @@ export const VisualSupervision: React.FC = () => {
             );
           })}
         </div>
-
-        {/* Bottom tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          style={{
-            textAlign: "center",
-            fontSize: isMobile ? "17px" : "20px",
-            fontWeight: "400",
-            color: "#ffffff",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            letterSpacing: "-0.01em",
-            lineHeight: "1.6",
-            marginTop: "80px",
-          }}
-        >
-          Optimized for agent understanding.{" "}
-          <span style={{ color: "#06b6d4" }}>Built for human understanding.</span>
-        </motion.p>
       </div>
     </section>
   );
