@@ -45,7 +45,7 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
       question: "HOW IS IT SHAPED?",
       title: "Architecture Diagrams",
       description:
-        "Auto-generated from your code showing modules, packages, and dependencies. Understand the system at a glance.",
+        "Generated from your code showing modules, packages, and dependencies. Understand the system at a glance.",
       screenshotUrl: "/architecture-diagram.png",
       linkText: "Gallery: Explore real codebases",
       label: "System Overview",
