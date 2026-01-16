@@ -30,12 +30,6 @@ The `Section` component is the **primary building block** for adding new section
 - **MobileLayout** - Preview mobile responsive layout
 - **WithRichContent** - Section with JSX/rich content
 
-### 2. EngineeringContextSection
-
-**Location:** `src/components/stories/EngineeringContextSection.stories.tsx`
-
-Showcases the file tree viewer for multiple repositories. Has both single-tree and multi-tree viewing modes.
-
 ## How to Add a New Section to the Landing Page
 
 1. **Start Storybook:**

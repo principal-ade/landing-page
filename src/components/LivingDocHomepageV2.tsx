@@ -5,9 +5,6 @@ import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
-import { VisualSupervision } from "./VisualSupervision";
-import { StartingPoint } from "./StartingPoint";
-import { GalleryCTA } from "./GalleryCTA";
 import { TransitionSection } from "./TransitionSection";
 import { trackButtonClick, trackVideoPlay } from "@/lib/analytics";
 const HeroSection: React.FC = () => {
@@ -32,8 +29,8 @@ const HeroSection: React.FC = () => {
   const isConstrainedHeight = windowHeight < 850;
 
   const gridBackground = `
-    linear-gradient(rgba(0, 194, 255, 0.25) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 194, 255, 0.25) 1px, transparent 1px)
+    linear-gradient(rgba(0, 194, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 194, 255, 0.08) 1px, transparent 1px)
   `;
 
   return (
@@ -50,20 +47,20 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "40px 20px 60px 20px" : "50px 20px 100px 20px",
+        padding: isMobile ? "60px 20px 40px 20px" : "80px 20px 60px 20px",
       }}
     >
-      {/* Circular gradient */}
+      {/* Subtle circular gradient */}
       <div
         style={{
           position: "absolute",
-          top: isConstrainedHeight ? "calc(50% - 50px)" : "calc(50% - 120px)",
+          top: "30%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "200%",
-          height: "200%",
+          width: "150%",
+          height: "150%",
           background:
-            "radial-gradient(circle at center, transparent 0%, #00C2FF20 25%, #0098CC30 50%)",
+            "radial-gradient(circle at center, rgba(0, 194, 255, 0.08) 0%, transparent 50%)",
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -71,36 +68,19 @@ const HeroSection: React.FC = () => {
 
       <div
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "radial-gradient(circle at center, transparent 0%, #000000 100%)",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
-
-      <div
-        style={{
           width: "100%",
+          maxWidth: "1200px",
           margin: "0 auto",
-          textAlign: "center",
           position: "relative",
           zIndex: 2,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
           padding: isMobile ? "0 20px" : "0 40px",
         }}
       >
-        {/* Logo */}
+        {/* Logo - Centered above everything */}
         <div
           style={{
-            margin: "0",
+            margin: "0 auto 48px auto",
+            textAlign: "center",
           }}
         >
           <Logo
@@ -112,49 +92,88 @@ const HeroSection: React.FC = () => {
           />
         </div>
 
-        {/* Main Headline */}
-        <h1
+        {/* Centered Single Column Layout - No Image */}
+        <div
           style={{
-            fontSize: isMobile ? "40px" : isTablet ? "56px" : "72px",
-            fontWeight: "600",
-            margin: "0 auto 40px auto",
+            maxWidth: "980px",
+            margin: "0 auto",
             textAlign: "center",
-            width: "100%",
-            maxWidth: isMobile ? "100%" : "1000px",
-            letterSpacing: "-0.02em",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            lineHeight: "1.1",
-            background:
-              "linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            wordWrap: "break-word",
-            overflowWrap: "break-word",
           }}
         >
-          The Universal Workspace<br />for Agentic Work
-        </h1>
+          {/* Main Headline */}
+          <h1
+            style={{
+              fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
+              fontWeight: "600",
+              margin: "0 0 28px 0",
+              textAlign: "center",
+              letterSpacing: "-0.04em",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              lineHeight: "1.05",
+              color: "#ffffff",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+            }}
+          >
+            A picture is worth a thousand <span style={{ color: "#00C2FF", fontWeight: "600" }}>lines of code</span>
+          </h1>
 
-        {/* Subheading */}
-        <p
-          style={{
-            fontSize: isMobile ? "17px" : "20px",
-            fontWeight: "400",
-            margin: "0",
-            color: "#ffffff",
-            lineHeight: "1.6",
-            letterSpacing: "-0.01em",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            maxWidth: "740px",
-          }}
-        >
-          Machine-readable for agents.
-          <br />
-          Visual for humans.
-        </p>
+          {/* Subheading */}
+          <p
+            style={{
+              fontSize: isMobile ? "17px" : "21px",
+              fontWeight: "400",
+              margin: "0 auto 48px auto",
+              color: "#86868b",
+              lineHeight: "1.47",
+              letterSpacing: "0.007em",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              textAlign: "center",
+              maxWidth: "700px",
+            }}
+          >
+            Principal is a visual-first environment for understanding, building, and validating complex codebases and agent-built systems.
+          </p>
+
+          {/* Single CTA */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <a
+              href="https://principal.dev/gallery"
+              style={{
+                backgroundColor: "#0071e3",
+                color: "#ffffff",
+                padding: isMobile ? "14px 32px" : "16px 40px",
+                borderRadius: "980px",
+                fontSize: isMobile ? "17px" : "19px",
+                fontWeight: "400",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                cursor: "pointer",
+                border: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#0077ed";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#0071e3";
+              }}
+            >
+              Get Early Access
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -288,12 +307,6 @@ const LivingDocSection: React.FC = () => {
           </ul>
         </motion.div>
       </div>
-
-      {/* Visual Supervision Section */}
-      <VisualSupervision />
-
-      {/* Starting Point Section */}
-      <StartingPoint />
 
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 20px", marginTop: "100px" }}>
         <motion.div
@@ -841,9 +854,6 @@ export const LivingDocHomepageV2: React.FC = () => {
   return (
     <div>
       <HeroSection />
-      <GalleryCTA />
-      <StartingPoint />
-      <VisualSupervision />
     </div>
   );
 };

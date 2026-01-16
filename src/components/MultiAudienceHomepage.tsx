@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTheme } from '@principal-ade/industry-theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useThemeSwitcher } from './providers/ClientThemeProvider';
-import { ContextEngineering } from './ContextEngineering';
 import { PrincipalFolder } from './PrincipalFolder';
 import { LivingDocumentationSection } from './LivingDocumentationSection';
 import { FeaturesAndBenefitsV2 } from './FeaturesAndBenefitsV2';
@@ -240,25 +239,38 @@ const HeroSection: React.FC<{ selectedAudience: Audience; onAudienceChange: (aud
             </span>
           </div>
 
+          {/* Tagline */}
+          <div
+            style={{
+              fontSize: isMobile ? '11px' : '13px',
+              fontWeight: '600',
+              letterSpacing: '0.15em',
+              color: '#00C2FF',
+              textTransform: 'uppercase',
+              marginBottom: isMobile ? '20px' : '24px',
+              textAlign: 'center',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            THE BEHAVIOR LAYER FOR SOFTWARE
+          </div>
+
           {/* Main Headline */}
           <h1
             style={{
-              fontSize: isMobile ? '40px' : isConstrainedHeight ? '56px' : isTablet ? '64px' : '80px',
-              fontWeight: '700',
+              fontSize: isMobile ? '28px' : isConstrainedHeight ? '40px' : isTablet ? '44px' : '48px',
+              fontWeight: '600',
               margin: '0 auto',
               textAlign: 'center',
               width: '100%',
               maxWidth: '1100px',
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.025em',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              lineHeight: '1.1',
-              background: 'linear-gradient(90deg, #00D9FF 0%, #0099FF 50%, #0066FF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              lineHeight: '1.15',
+              color: '#ffffff',
             }}
           >
-            The Universal Workspace for Agentic Work
+            A picture is worth a thousand <span style={{ color: '#0099FF', fontWeight: '600' }}>lines of code</span>
           </h1>
         </div>
       </div>
@@ -275,12 +287,12 @@ const HeroSection: React.FC<{ selectedAudience: Audience; onAudienceChange: (aud
       >
         <p
           style={{
-            fontSize: isMobile ? '16px' : isConstrainedHeight ? '17px' : '18px',
+            fontSize: isMobile ? '15px' : '17px',
             fontWeight: '400',
             margin: '0 0 24px 0',
             color: '#d1d5db',
             lineHeight: '1.7',
-            letterSpacing: '-0.02em',
+            letterSpacing: '-0.011em',
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
@@ -288,17 +300,82 @@ const HeroSection: React.FC<{ selectedAudience: Audience; onAudienceChange: (aud
         </p>
         <p
           style={{
-            fontSize: isMobile ? '16px' : isConstrainedHeight ? '17px' : '18px',
+            fontSize: isMobile ? '15px' : '17px',
             fontWeight: '500',
-            margin: '0',
+            margin: '0 0 32px 0',
             color: '#ffffff',
             lineHeight: '1.7',
-            letterSpacing: '-0.02em',
+            letterSpacing: '-0.011em',
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
           Just like Slack created the workspace for team communication, Principal AI creates the workspace for AI development.
         </p>
+
+        {/* CTA Buttons */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '16px',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <a
+            href="https://principal.dev/gallery"
+            style={{
+              backgroundColor: '#0099FF',
+              color: '#ffffff',
+              padding: isMobile ? '12px 24px' : '14px 28px',
+              borderRadius: '8px',
+              fontSize: isMobile ? '15px' : '16px',
+              fontWeight: '600',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'background-color 0.2s ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#0088EE';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0099FF';
+            }}
+          >
+            Get Your Repo Mapped
+            <span style={{ fontSize: '18px' }}>→</span>
+          </a>
+          <a
+            href="https://principal.dev/gallery"
+            style={{
+              backgroundColor: '#1e3a5f',
+              color: '#ffffff',
+              padding: isMobile ? '12px 24px' : '14px 28px',
+              borderRadius: '8px',
+              fontSize: isMobile ? '15px' : '16px',
+              fontWeight: '600',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              border: 'none',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'background-color 0.2s ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#2a4d7a';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#1e3a5f';
+            }}
+          >
+            Explore the Gallery
+          </a>
+        </div>
       </div>
 
       {/* Audience Selector */}
@@ -365,10 +442,12 @@ const DeveloperContent: React.FC = () => {
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2
               style={{
-                fontSize: '48px',
-                fontWeight: '700',
+                fontSize: '40px',
+                fontWeight: '600',
                 margin: '0 0 20px 0',
                 color: '#ffffff',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.15',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
@@ -376,7 +455,7 @@ const DeveloperContent: React.FC = () => {
             </h2>
             <p
               style={{
-                fontSize: '20px',
+                fontSize: '17px',
                 color: '#d1d5db',
                 maxWidth: '800px',
                 margin: '0 auto 40px auto',
@@ -448,11 +527,13 @@ const DeveloperContent: React.FC = () => {
           <div style={{ marginBottom: '80px' }}>
             <h3
               style={{
-                fontSize: '32px',
+                fontSize: '28px',
                 fontWeight: '600',
                 margin: '0 0 40px 0',
                 color: '#ffffff',
                 textAlign: 'center',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.15',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
@@ -522,11 +603,13 @@ const DeveloperContent: React.FC = () => {
           <div style={{ marginBottom: '80px' }}>
             <h3
               style={{
-                fontSize: '32px',
+                fontSize: '28px',
                 fontWeight: '600',
                 margin: '0 0 40px 0',
                 color: '#ffffff',
                 textAlign: 'center',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.15',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
@@ -685,10 +768,12 @@ const DeveloperContent: React.FC = () => {
           >
             <h3
               style={{
-                fontSize: '32px',
+                fontSize: '28px',
                 fontWeight: '600',
                 margin: '0 0 16px 0',
                 color: '#ffffff',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.15',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
@@ -696,7 +781,7 @@ const DeveloperContent: React.FC = () => {
             </h3>
             <p
               style={{
-                fontSize: '18px',
+                fontSize: '17px',
                 color: '#d1d5db',
                 maxWidth: '800px',
                 margin: '0 auto 32px auto',
@@ -742,9 +827,6 @@ const DeveloperContent: React.FC = () => {
       </div>
 
       {/* Existing sections */}
-      <div style={{ backgroundColor: '#0a1628' }}>
-        <ContextEngineering />
-      </div>
       <div style={{ backgroundColor: '#111827' }}>
         <PrincipalFolder />
       </div>
@@ -768,10 +850,12 @@ const TeamContent: React.FC = () => {
       <div style={{ backgroundColor: '#0a1628', padding: '60px 20px', textAlign: 'center' }}>
         <h2
           style={{
-            fontSize: '36px',
-            fontWeight: '700',
+            fontSize: '32px',
+            fontWeight: '600',
             margin: '0 0 20px 0',
             color: '#ffffff',
+            letterSpacing: '-0.025em',
+            lineHeight: '1.15',
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >
@@ -779,10 +863,11 @@ const TeamContent: React.FC = () => {
         </h2>
         <p
           style={{
-            fontSize: '18px',
+            fontSize: '17px',
             color: '#d1d5db',
             maxWidth: '800px',
             margin: '0 auto 40px auto',
+            lineHeight: '1.6',
             fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
           }}
         >

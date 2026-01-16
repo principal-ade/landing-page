@@ -6,7 +6,7 @@ import { LivingDocumentationSection } from '../LivingDocumentationSection';
 import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
 import { WhyTeamsUse } from '../WhyTeamsUse';
 import { JoinTheAlpha } from '../JoinTheAlpha';
-import { FAQSection } from '../LivingDocHomepage';
+import { FAQSection } from '../FAQSection';
 
 /**
  * About Principal AI Section V2

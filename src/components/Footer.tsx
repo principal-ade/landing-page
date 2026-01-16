@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
-              The Universal Workspace for Agentic Work.
+              A picture is worth a thousand <span style={{ color: '#0099FF' }}>lines of code</span>.
             </p>
 
             {/* Social Links */}
@@ -280,7 +280,7 @@ export const Footer: React.FC = () => {
                     padding: '8px 10px',
                     background: 'rgba(0, 0, 0, 0.5)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '6px',
+                    borderRadius: '8px',
                     color: '#ffffff',
                     fontSize: '13px',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -303,7 +303,7 @@ export const Footer: React.FC = () => {
                     background: status === 'loading' ? '#999' : '#00C2FF',
                     color: '#000000',
                     border: 'none',
-                    borderRadius: '6px',
+                    borderRadius: '8px',
                     fontSize: '13px',
                     fontWeight: '600',
                     cursor: status === 'loading' ? 'not-allowed' : 'pointer',

@@ -268,7 +268,7 @@ export const Navigation: React.FC = () => {
                       style={{
                         display: 'block',
                         padding: '12px 16px',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         textDecoration: 'none',
                         transition: 'background 0.2s ease',
                       }}
@@ -328,7 +328,7 @@ export const Navigation: React.FC = () => {
               color: '#00C2FF',
               background: 'transparent',
               border: '1px solid rgba(0, 194, 255, 0.3)',
-              borderRadius: '6px',
+              borderRadius: '8px',
               textDecoration: 'none',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'all 0.2s ease',
@@ -354,7 +354,7 @@ export const Navigation: React.FC = () => {
               color: '#000000',
               background: '#00C2FF',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: '8px',
               textDecoration: 'none',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'all 0.2s ease',

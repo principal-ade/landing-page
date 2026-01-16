@@ -6,7 +6,7 @@ import { LivingDocumentationSection } from "../../components/LivingDocumentation
 import { WhyTeamsUse } from "../../components/WhyTeamsUse";
 import { AgenticWorkspaceForV2 } from "../../components/AgenticWorkspaceForV2";
 import { JoinTheAlpha } from "../../components/JoinTheAlpha";
-import { FAQSection } from "../../components/LivingDocHomepage";
+import { FAQSection } from "../../components/FAQSection";
 import { Footer } from "../../components/Footer";
 
 export default function AboutPage() {
