@@ -80,7 +80,8 @@ const HeroSection: React.FC = () => {
         <div
           style={{
             margin: "0 auto 48px auto",
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <Logo
