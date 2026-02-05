@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AboutV3 } from "../../components/AboutV3";
+import { About } from "../../components/About";
 import { LivingDocumentationSection } from "../../components/LivingDocumentationSection";
 import { WhyTeamsUse } from "../../components/WhyTeamsUse";
 import { AgenticWorkspaceForV2 } from "../../components/AgenticWorkspaceForV2";
@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#000000" }}>
       <main style={{ flex: 1, paddingTop: "80px" }}>
-        <AboutV3 />
+        <About />
         <LivingDocumentationSection />
         <WhyTeamsUse />
         <AgenticWorkspaceForV2 />

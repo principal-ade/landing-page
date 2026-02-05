@@ -14,7 +14,7 @@ import {
   landingPageTheme,
 } from "@principal-ade/industry-theme";
 
-export const themes: Record<string, Theme> = {
+const themes: Record<string, Theme> = {
   "landing-page": landingPageTheme,
   terminal: terminalTheme,
   regal: regalTheme,

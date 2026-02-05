@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import { AboutV3 } from '../AboutV3';
+import { About } from '../About';
 import { LivingDocumentationSection } from '../LivingDocumentationSection';
 import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
 import { WhyTeamsUse } from '../WhyTeamsUse';
@@ -21,7 +21,7 @@ import { FAQSection } from '../FAQSection';
 
 const meta = {
   title: 'Landing Page/About Section',
-  component: AboutV3,
+  component: About,
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -44,7 +44,7 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof AboutV3>;
+} satisfies Meta<typeof About>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -58,7 +58,7 @@ type Story = StoryObj<typeof meta>;
 export const AboutDecember18: Story = {
   render: () => (
     <div style={{ background: '#000000' }}>
-      <AboutV3 />
+      <About />
       <LivingDocumentationSection />
       <WhyTeamsUse />
       <AgenticWorkspaceForV2 />
