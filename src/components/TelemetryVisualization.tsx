@@ -10,7 +10,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
 }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [isPlaying, setIsPlaying] = React.useState(false);
 
   const handlePlayClick = () => {
     setIsModalOpen(true);
@@ -18,7 +17,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
     setTimeout(() => {
       if (videoRef.current) {
         videoRef.current.play();
-        setIsPlaying(true);
       }
     }, 100);
   };
@@ -29,7 +27,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
       videoRef.current.currentTime = 0;
     }
     setIsModalOpen(false);
-    setIsPlaying(false);
   };
 
   return (
@@ -303,8 +300,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 controls
                 autoPlay
                 muted
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
               >
                 <source src="/Telemetry3.mp4" type="video/mp4" />
                 Your browser does not support the video tag.

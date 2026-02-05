@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface SeeTheShapeProps {
   isMobile?: boolean;
@@ -270,11 +271,14 @@ export const SeeTheShape: React.FC<SeeTheShapeProps> = ({ isMobile = false }) =>
             borderRadius: '16px',
             padding: '24px',
             backdropFilter: 'blur(8px)',
+            position: 'relative',
           }}
         >
-          <img
+          <Image
             src="/tldraw-example.png"
             alt="File City visualization"
+            width={800}
+            height={600}
             style={{
               width: '100%',
               height: 'auto',

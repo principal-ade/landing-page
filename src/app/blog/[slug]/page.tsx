@@ -65,15 +65,6 @@ export default function BlogPostPage() {
   const [isClient, setIsClient] = React.useState(false);
   const [viewMode, _setViewMode] = React.useState<"book" | "single">("book");
   const [slides, setSlides] = React.useState<string[]>([]);
-  const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024
-  );
-
-  React.useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // Prevent scroll on mount
   React.useEffect(() => {
@@ -146,8 +137,6 @@ export default function BlogPostPage() {
         setLoading(false);
       });
   }, [slug]);
-
-  const isMobile = windowWidth < 768;
 
   return (
     <div

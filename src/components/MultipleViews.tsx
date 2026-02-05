@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface ViewShowcaseProps {
   icon: string;
@@ -8,7 +9,6 @@ interface ViewShowcaseProps {
   description: string;
   screenshotUrl: string;
   linkText: string;
-  label: string;
   index: number;
   imageScale?: number;
 }
@@ -27,7 +27,6 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
         "A Carfax report for code. Six dimensions to know if it's solid before you invest developer time.",
       screenshotUrl: "/quality-radar.png",
       linkText: "Gallery: Explore real codebases",
-      label: "gemini-cli",
       imageScale: 1.2,
     },
     {
@@ -38,7 +37,6 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
         "Files and directories as a living city map. See size, complexity, and composition in seconds.",
       screenshotUrl: "/file-city.png",
       linkText: "Gallery: Explore real codebases",
-      label: "gemini-cli",
     },
     {
       icon: "🔷",
@@ -48,7 +46,6 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
         "Generated from your code showing modules, packages, and dependencies. Understand the system at a glance.",
       screenshotUrl: "/architecture-diagram.png",
       linkText: "Gallery: Explore real codebases",
-      label: "System Overview",
     },
   ];
 
@@ -132,7 +129,6 @@ function ViewShowcase({
   description,
   screenshotUrl,
   linkText,
-  label,
   imageScale = 1,
   index,
 }: ViewShowcaseProps) {
@@ -169,12 +165,11 @@ function ViewShowcase({
           overflow: "hidden",
         }}
       >
-        <img
+        <Image
           src={screenshotUrl}
           alt={`${title} visualization`}
+          fill
           style={{
-            width: "100%",
-            height: "100%",
             objectFit: "cover",
             opacity: 0.6,
             transform: `scale(${imageScale})`,
