@@ -51,16 +51,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ height: "100%" }}>
+    <html lang="en">
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased h-full`}
+        className={`${inter.variable} ${firaCode.variable} antialiased`}
+        style={{ overflow: 'hidden', height: '100vh' }}
       >
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
         <ClientThemeProvider>
           <Header />
-          {children}
+          <div style={{
+            height: '100vh',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            paddingTop: '70px'
+          }}>
+            {children}
+          </div>
         </ClientThemeProvider>
       </body>
     </html>

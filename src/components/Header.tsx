@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
 
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleResize = () => {
@@ -146,55 +147,59 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <Link
-            href="/demo"
-            style={{
-              padding: isTablet ? '10px 24px' : '8px 20px',
-              background: 'transparent',
-              color: '#00C2FF',
-              border: '1px solid #00C2FF',
-              textDecoration: 'none',
-              fontSize: isTablet ? '15px' : '14px',
-              fontWeight: '600',
-              borderRadius: '8px',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'all 0.2s ease',
-              whiteSpace: 'nowrap',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 194, 255, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-            }}
-          >
-            Book a Demo
-          </Link>
-          <Link
-            href="/download"
-            style={{
-              padding: isTablet ? '10px 24px' : '8px 20px',
-              background: '#00C2FF',
-              color: '#000000',
-              textDecoration: 'none',
-              fontSize: isTablet ? '15px' : '14px',
-              fontWeight: '600',
-              borderRadius: '8px',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'all 0.2s ease',
-              whiteSpace: 'nowrap',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Download Alpha
-          </Link>
+          {!isHomePage && (
+            <>
+              <Link
+                href="/demo"
+                style={{
+                  padding: isTablet ? '10px 24px' : '8px 20px',
+                  background: 'transparent',
+                  color: '#00C2FF',
+                  border: '1px solid #00C2FF',
+                  textDecoration: 'none',
+                  fontSize: isTablet ? '15px' : '14px',
+                  fontWeight: '600',
+                  borderRadius: '8px',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 194, 255, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                }}
+              >
+                Book a Demo
+              </Link>
+              <Link
+                href="/download"
+                style={{
+                  padding: isTablet ? '10px 24px' : '8px 20px',
+                  background: '#00C2FF',
+                  color: '#000000',
+                  textDecoration: 'none',
+                  fontSize: isTablet ? '15px' : '14px',
+                  fontWeight: '600',
+                  borderRadius: '8px',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Download Alpha
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger Menu Button */}
@@ -262,41 +267,45 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <Link
-            href="/demo"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              padding: '12px 24px',
-              background: 'transparent',
-              color: '#00C2FF',
-              border: '1px solid #00C2FF',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: '600',
-              borderRadius: '6px',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              textAlign: 'center',
-            }}
-          >
-            Book a Demo
-          </Link>
-          <Link
-            href="/download"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              padding: '12px 24px',
-              background: '#00C2FF',
-              color: '#000000',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: '600',
-              borderRadius: '6px',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              textAlign: 'center',
-            }}
-          >
-            Download Alpha
-          </Link>
+          {!isHomePage && (
+            <>
+              <Link
+                href="/demo"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  padding: '12px 24px',
+                  background: 'transparent',
+                  color: '#00C2FF',
+                  border: '1px solid #00C2FF',
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  borderRadius: '6px',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  textAlign: 'center',
+                }}
+              >
+                Book a Demo
+              </Link>
+              <Link
+                href="/download"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  padding: '12px 24px',
+                  background: '#00C2FF',
+                  color: '#000000',
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  borderRadius: '6px',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  textAlign: 'center',
+                }}
+              >
+                Download Alpha
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>

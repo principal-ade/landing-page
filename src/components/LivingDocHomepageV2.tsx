@@ -8,6 +8,12 @@ const HeroSection: React.FC = () => {
   const [windowHeight, setWindowHeight] = React.useState(
     typeof window !== "undefined" ? window.innerHeight : 768,
   );
+  const [mode, setMode] = React.useState<"development" | "production">("development");
+  const [displayMode, setDisplayMode] = React.useState<"development" | "production">("development");
+  const [showHeadlineLine2, setShowHeadlineLine2] = React.useState(false);
+  const [showSubheadingLine1, setShowSubheadingLine1] = React.useState(false);
+  const [showSubheadingLine2, setShowSubheadingLine2] = React.useState(false);
+  const [showButton, setShowButton] = React.useState(false);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -17,6 +23,46 @@ const HeroSection: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  React.useEffect(() => {
+    // Initial page load - start animation sequence immediately
+    const timer1 = setTimeout(() => setShowHeadlineLine2(true), 800);
+    const timer2 = setTimeout(() => setShowSubheadingLine1(true), 2300);
+    const timer3 = setTimeout(() => setShowSubheadingLine2(true), 3800);
+    const timer4 = setTimeout(() => setShowButton(true), 5300);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    // Reset all states immediately (no fade out, just disappear)
+    setShowHeadlineLine2(false);
+    setShowSubheadingLine1(false);
+    setShowSubheadingLine2(false);
+    setShowButton(false);
+
+    // Update content immediately
+    setDisplayMode(mode);
+
+    // Start animation sequence (first line is always visible)
+    const timer1 = setTimeout(() => setShowHeadlineLine2(true), 800);
+    const timer2 = setTimeout(() => setShowSubheadingLine1(true), 2300);
+    const timer3 = setTimeout(() => setShowSubheadingLine2(true), 3800);
+    const timer4 = setTimeout(() => setShowButton(true), 5300);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+  }, [mode]);
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -41,7 +87,7 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "60px 20px 40px 20px" : "80px 20px 60px 20px",
+        padding: isMobile ? "12px 20px 40px 20px" : "24px 20px 60px 20px",
       }}
     >
       {/* Subtle circular gradient */}
@@ -73,7 +119,7 @@ const HeroSection: React.FC = () => {
         {/* Logo - Centered above everything */}
         <div
           style={{
-            margin: "0 auto 48px auto",
+            margin: "0 auto 12px auto",
             display: "flex",
             justifyContent: "center",
           }}
@@ -87,6 +133,65 @@ const HeroSection: React.FC = () => {
           />
         </div>
 
+        {/* Mode Toggle - Below Logo */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "24px",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              background: "rgba(0, 194, 255, 0.1)",
+              border: "1px solid rgba(0, 194, 255, 0.3)",
+              borderRadius: "8px",
+              padding: "4px",
+              gap: "4px",
+            }}
+          >
+            <button
+              onClick={() => setMode("development")}
+              style={{
+                padding: isMobile ? "8px 16px" : "10px 20px",
+                fontSize: isMobile ? "13px" : "14px",
+                fontWeight: "500",
+                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                background: mode === "development" ? "#00C2FF" : "transparent",
+                color: mode === "development" ? "#000000" : "#ffffff",
+                flex: "1",
+                minWidth: isMobile ? "100px" : "120px",
+              }}
+            >
+              Development
+            </button>
+            <button
+              onClick={() => setMode("production")}
+              style={{
+                padding: isMobile ? "8px 16px" : "10px 20px",
+                fontSize: isMobile ? "13px" : "14px",
+                fontWeight: "500",
+                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                background: mode === "production" ? "#00C2FF" : "transparent",
+                color: mode === "production" ? "#000000" : "#ffffff",
+                flex: "1",
+                minWidth: isMobile ? "100px" : "120px",
+              }}
+            >
+              Production
+            </button>
+          </div>
+        </div>
+
         {/* Centered Single Column Layout - No Image */}
         <div
           style={{
@@ -96,58 +201,101 @@ const HeroSection: React.FC = () => {
           }}
         >
           {/* Main Headline */}
-          <h1
-            style={{
-              fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
-              fontWeight: "600",
-              margin: "0 0 28px 0",
-              textAlign: "center",
-              letterSpacing: "-0.04em",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              lineHeight: "1.05",
-              color: "#ffffff",
-              wordWrap: "break-word",
-              overflowWrap: "break-word",
-            }}
-          >
-            A picture is worth a thousand <span style={{ color: "#00C2FF", fontWeight: "600" }}>lines of code</span>
-          </h1>
+          <div style={{ margin: "0 0 28px 0" }}>
+            <div
+              style={{
+                fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
+                fontWeight: "600",
+                textAlign: "center",
+                letterSpacing: "-0.04em",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                lineHeight: "1.05",
+                color: "#00C2FF",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
+              }}
+            >
+              Is a picture worth
+            </div>
+            <div
+              style={{
+                fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
+                fontWeight: "600",
+                textAlign: "center",
+                letterSpacing: "-0.04em",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                lineHeight: "1.05",
+                color: "#86868b",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
+                opacity: showHeadlineLine2 ? 1 : 0,
+                transform: showHeadlineLine2 ? "translateY(0)" : "translateY(20px)",
+                transition: showHeadlineLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+              }}
+            >
+              a thousand {displayMode === "development" ? "lines of code" : "logs"}
+            </div>
+          </div>
 
           {/* Subheading */}
-          <p
-            style={{
-              fontSize: isMobile ? "17px" : "21px",
-              fontWeight: "400",
-              margin: "0 auto 48px auto",
-              color: "#86868b",
-              lineHeight: "1.47",
-              letterSpacing: "0.007em",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              textAlign: "center",
-              maxWidth: "700px",
-            }}
-          >
-            Principal is a visual-first environment for understanding, building, and validating complex codebases and agent-built systems.
-          </p>
+          <div style={{ margin: "0 auto 48px auto", maxWidth: "700px" }}>
+            <div
+              style={{
+                fontSize: isMobile ? "17px" : "21px",
+                fontWeight: "400",
+                color: "#ffffff",
+                lineHeight: "1.47",
+                letterSpacing: "0.007em",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                textAlign: "center",
+                opacity: showSubheadingLine1 ? 1 : 0,
+                transform: showSubheadingLine1 ? "translateY(0)" : "translateY(20px)",
+                transition: showSubheadingLine1 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+              }}
+            >
+              {displayMode === "development" ? "Understand agent-built systems with" : "Understanding production systems through"}
+            </div>
+            <div
+              style={{
+                fontSize: isMobile ? "17px" : "21px",
+                fontWeight: "400",
+                color: "#00C2FF",
+                lineHeight: "1.47",
+                letterSpacing: "0.007em",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                textAlign: "center",
+                opacity: showSubheadingLine2 ? 1 : 0,
+                transform: showSubheadingLine2 ? "translateY(0)" : "translateY(20px)",
+                transition: showSubheadingLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+              }}
+            >
+              {displayMode === "development" ? "story-based development" : "story-based telemetry"}
+            </div>
+          </div>
 
           {/* Single CTA */}
           <div
             style={{
               display: "flex",
               justifyContent: "center",
+              opacity: showButton ? 1 : 0,
+              transform: showButton ? "translateY(0)" : "translateY(20px)",
+              transition: showButton ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
             }}
           >
             <a
-              href="https://principal.dev/gallery"
+              href={displayMode === "development" ? "/download" : "/demo"}
               style={{
-                backgroundColor: "#0071e3",
-                color: "#ffffff",
+                backgroundColor: "#00C2FF",
+                color: "#000000",
                 padding: isMobile ? "14px 32px" : "16px 40px",
-                borderRadius: "980px",
+                borderRadius: "8px",
                 fontSize: isMobile ? "17px" : "19px",
-                fontWeight: "400",
+                fontWeight: "600",
                 textDecoration: "none",
                 display: "inline-flex",
                 alignItems: "center",
@@ -159,13 +307,13 @@ const HeroSection: React.FC = () => {
                 border: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0077ed";
+                e.currentTarget.style.backgroundColor = "#00d4ff";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0071e3";
+                e.currentTarget.style.backgroundColor = "#00C2FF";
               }}
             >
-              Get Early Access
+              {displayMode === "development" ? "Download Alpha" : "Book a Demo"}
             </a>
           </div>
         </div>

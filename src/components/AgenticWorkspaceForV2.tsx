@@ -210,7 +210,7 @@ export function AgenticWorkspaceForV2() {
         {...fadeIn}
       >
         <p style={{ margin: '0' }}>
-          A picture is worth a <span style={{ color: '#06b6d4' }}>thousand lines of code</span>.
+          A picture is worth a<br /><span style={{ color: '#06b6d4' }}>thousand lines of code</span>.
         </p>
       </motion.div>
     </div>
