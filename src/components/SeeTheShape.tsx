@@ -35,6 +35,18 @@ export const SeeTheShape: React.FC<SeeTheShapeProps> = ({ isMobile = false }) =>
       >
         {/* Left Column - Content and Form */}
         <div>
+          <p
+            style={{
+              fontFamily: "monospace",
+              fontSize: "11px",
+              color: "#ec4899",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              marginBottom: "24px",
+            }}
+          >
+            Visual Understanding
+          </p>
           <h1
             style={{
               fontSize: isMobile ? '28px' : '40px',
@@ -47,88 +59,20 @@ export const SeeTheShape: React.FC<SeeTheShapeProps> = ({ isMobile = false }) =>
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            See the shape of your codebase
+            Your codebase is a city. Take the tour.
           </h1>
           <p
             style={{
               fontSize: isMobile ? '15px' : '16px',
               fontWeight: '400',
               color: '#9ca3af',
-              margin: '0 0 24px 0',
-              lineHeight: '1.6',
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            }}
-          >
-            You don't really know what you've built until you can see it.
-          </p>
-          <p
-            style={{
-              fontSize: isMobile ? '15px' : '16px',
-              fontWeight: '400',
-              color: '#9ca3af',
-              margin: '0 0 16px 0',
-              lineHeight: '1.6',
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            }}
-          >
-            Principal turns your repository into a living map showing:
-          </p>
-          <ul
-            style={{
-              fontSize: isMobile ? '15px' : '16px',
-              fontWeight: '400',
-              color: '#9ca3af',
-              margin: '0 0 16px 0',
-              paddingLeft: '24px',
-              lineHeight: '1.8',
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            }}
-          >
-            <li>Structure</li>
-            <li>Size</li>
-            <li>Complexity</li>
-            <li>Composition</li>
-            <li>What's changing</li>
-          </ul>
-          <p
-            style={{
-              fontSize: isMobile ? '15px' : '16px',
-              fontWeight: '400',
-              color: '#9ca3af',
-              margin: '0 0 16px 0',
-              lineHeight: '1.6',
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            }}
-          >
-            All at once.
-          </p>
-          <p
-            style={{
-              fontSize: isMobile ? '15px' : '16px',
-              fontWeight: '500',
-              color: '#ffffff',
               margin: '0 0 40px 0',
               lineHeight: '1.6',
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            <span
-              style={{
-                background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                fontWeight: "600",
-              }}
-            >
-              File City
-            </span>{" "}
-            is not a metaphor. It's a navigable model of your system.
+            3,762 files. 645 folders. Understood in seconds. File City turns any repository into an interactive map — structure, composition, complexity, what's changing — all visible at once. Agents explore alongside you. Hover to inspect. Click to open. No more guessing what got built.
           </p>
 
           {/* Form Card */}
@@ -151,7 +95,7 @@ export const SeeTheShape: React.FC<SeeTheShapeProps> = ({ isMobile = false }) =>
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Get your repo mapped for free
+              Get your repo mapped free →
             </h2>
             <p
               style={{
@@ -164,7 +108,7 @@ export const SeeTheShape: React.FC<SeeTheShapeProps> = ({ isMobile = false }) =>
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Drop your GitHub URL. We'll generate your File City and send it to you.
+              Drop your GitHub URL. We'll generate yours and send it to you.
             </p>
 
             <form onSubmit={handleSubmit}>

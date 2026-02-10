@@ -63,7 +63,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 marginBottom: "24px",
               }}
             >
-              Telemetry Visualization
+              Production Monitoring
             </p>
             <h2
               style={{
@@ -77,9 +77,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Watch behavior,
-              <br />
-              not just code
+              See the story, not the logs
             </h2>
             <p
               style={{
@@ -91,20 +89,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Code is the script. Execution is the performance. Our{" "}
-              <span
-                style={{
-                  background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  fontWeight: "600",
-                }}
-              >
-                Execution Reel
-              </span>
-              {" "}turns agent activity into something you can actually watch: intent, execution, and
-              outcome in one view.
+              System Stories turn production behavior into something you can actually read. Expected vs. actual. Where it diverged. Why it broke. <strong style={{ fontWeight: "700", color: "#ffffff" }}>Root cause in minutes, not hours.</strong>
             </p>
 
             {/* CTA Button */}
@@ -174,7 +159,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               }}
               muted
             >
-              <source src="/Telemetry3.mp4" type="video/mp4" />
+              <source src="/SystemStories.mov" type="video/mp4" />
             </video>
 
             {/* Play Button Overlay */}
@@ -301,7 +286,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 autoPlay
                 muted
               >
-                <source src="/Telemetry3.mp4" type="video/mp4" />
+                <source src="/SystemStories.mov" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

@@ -47,7 +47,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Get Mapped Now
+              See Your Codebase
             </h3>
             <p
               style={{
@@ -59,7 +59,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              See your codebase as a city. Free File City visualization for any public GitHub repo.
+              Your repo as a city. Free for any public GitHub repo.
             </p>
             <a
               href="/map"
@@ -76,6 +76,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 transition: "all 0.2s ease",
+                marginTop: "auto",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#00d4ff";
@@ -129,7 +130,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Complete Principal ADE: Execution Reels, visual supervision, and living documentation.
+              System Stories, File City, Quality Radar — story-based development from code to production.
             </p>
             <a
               href="/waitlist"
@@ -147,6 +148,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 transition: "all 0.2s ease",
+                marginTop: "auto",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "#ffffff";
@@ -157,7 +159,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ isMobile = false }) => {
                 e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
-              Join Waitlist
+              Get Early Access
             </a>
           </motion.div>
         </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { LivingDocHomepageV2 } from './LivingDocHomepageV2';
 import { TelemetryVisualization } from './TelemetryVisualization';
-import { ANewMedium } from './ANewMedium';
 import { SeeTheShape } from './SeeTheShape';
 import { MultipleViews } from './MultipleViews';
 import { AgentShift } from './AgentShift';
@@ -25,16 +24,6 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           <LivingDocHomepageV2 />
         </div>
 
-        {/* The Call to Action - Dark Gradient with Teal Glow */}
-        <div style={{
-          background: 'radial-gradient(ellipse at center, rgba(0, 194, 255, 0.04) 0%, transparent 50%), linear-gradient(180deg, #060a0f 0%, #0a0d12 50%, #060a0f 100%)',
-          paddingTop: '120px',
-          paddingBottom: '120px',
-          position: 'relative'
-        }}>
-          <SeeTheShape />
-        </div>
-
         {/* The Experience - Show don't tell - Navy Blue */}
         <div style={{
           background: '#1b263b',
@@ -45,6 +34,16 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           <TelemetryVisualization />
         </div>
 
+        {/* The Call to Action - Dark Gradient with Teal Glow */}
+        <div style={{
+          background: 'radial-gradient(ellipse at center, rgba(0, 194, 255, 0.04) 0%, transparent 50%), linear-gradient(180deg, #060a0f 0%, #0a0d12 50%, #060a0f 100%)',
+          paddingTop: '120px',
+          paddingBottom: '120px',
+          position: 'relative'
+        }}>
+          <SeeTheShape />
+        </div>
+
         {/* The Capabilities - Almost Black */}
         <div style={{
           background: '#0a0c10',
@@ -52,38 +51,6 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           paddingBottom: '140px'
         }}>
           <MultipleViews />
-        </div>
-
-        {/* The Workflow - Dark Blue */}
-        <div style={{
-          background: '#0f1729',
-          paddingTop: '140px',
-          paddingBottom: '140px',
-          position: 'relative'
-        }}>
-          {/* Subtle top glow */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '800px',
-            height: '1px',
-            background: 'linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.5), transparent)',
-            pointerEvents: 'none'
-          }} />
-          <ANewMedium />
-          {/* Subtle bottom glow */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '800px',
-            height: '1px',
-            background: 'linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.5), transparent)',
-            pointerEvents: 'none'
-          }} />
         </div>
 
         {/* The Agent Shift - Problem Statement - Deep Blue-Gray */}
