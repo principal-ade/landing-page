@@ -98,7 +98,6 @@ function GameContent() {
   const showDeployQuestion = flowState === 'deploy-question';
   const showDeployButtons = flowState === 'deploy-question';
   const showCostInfo = flowState === 'cost-info';
-  const showCostContinueButton = flowState === 'cost-info';
   const continueClicked = flowState === 'deployed-running' || flowState === 'incident-active' || flowState === 'incident-resolved';
 
   // Typewriter text for start screen
@@ -117,8 +116,87 @@ function GameContent() {
   const deployQuestion = useTypewriter(flowState === 'deploy-question' ? deployQuestionText : '', TIMINGS.TYPEWRITER.QUESTION, 0);
 
   // Typewriter text for cost info (after deployment)
-  const costInfoText = "On average, production incidents cost companies $225 per second in lost revenue and engineering time.";
-  const costInfo = useTypewriter(flowState === 'cost-info' ? costInfoText : '', TIMINGS.TYPEWRITER.QUESTION, 0);
+  const [costInfoLine2Ready, setCostInfoLine2Ready] = useState(false);
+  const [costInfoLine3Ready, setCostInfoLine3Ready] = useState(false);
+  const costInfoLine1Text = "Once you deploy to production it can be hard to remember what your code looks like or see into its execution.";
+  const costInfoLine2Text = "Using conventional telemetry can often not be as useful in practice as it is in theory.";
+  const costInfoLine3Text = "On average, production incidents cost companies $225 per second in lost revenue and engineering time.";
+
+  const costInfoLine1 = useTypewriter(flowState === 'cost-info' ? costInfoLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+  const costInfoLine2 = useTypewriter(costInfoLine2Ready ? costInfoLine2Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+  const costInfoLine3 = useTypewriter(costInfoLine3Ready ? costInfoLine3Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+
+  // Show second cost info line after first completes
+  useEffect(() => {
+    if (flowState === 'cost-info' && costInfoLine1.isComplete && !costInfoLine2Ready) {
+      const timer = setTimeout(() => setCostInfoLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
+      return () => clearTimeout(timer);
+    } else if (flowState !== 'cost-info') {
+      setCostInfoLine2Ready(false);
+    }
+  }, [flowState, costInfoLine1.isComplete, costInfoLine2Ready]);
+
+  // Show third cost info line after second completes
+  useEffect(() => {
+    if (flowState === 'cost-info' && costInfoLine2.isComplete && !costInfoLine3Ready) {
+      const timer = setTimeout(() => setCostInfoLine3Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_3);
+      return () => clearTimeout(timer);
+    } else if (flowState !== 'cost-info') {
+      setCostInfoLine3Ready(false);
+    }
+  }, [flowState, costInfoLine2.isComplete, costInfoLine3Ready]);
+
+  // Typewriter text for deployed running phase
+  const [deployedLine2Ready, setDeployedLine2Ready] = useState(false);
+  const deployedLine1Text = "✓ Deployed successfully";
+  const deployedLine2Text = "Users are flowing through. Revenue is coming in. Everything is working perfectly...";
+
+  const deployedLine1 = useTypewriter(flowState === 'deployed-running' ? deployedLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+  const deployedLine2 = useTypewriter(deployedLine2Ready ? deployedLine2Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+
+  // Show second deployed line after first completes
+  useEffect(() => {
+    if (flowState === 'deployed-running' && deployedLine1.isComplete && !deployedLine2Ready) {
+      const timer = setTimeout(() => setDeployedLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
+      return () => clearTimeout(timer);
+    } else if (flowState !== 'deployed-running') {
+      setDeployedLine2Ready(false);
+    }
+  }, [flowState, deployedLine1.isComplete, deployedLine2Ready]);
+
+  // Typewriter text for incident phase
+  const [incidentLine2Ready, setIncidentLine2Ready] = useState(false);
+  const [showIncidentCostBox, setShowIncidentCostBox] = useState(false);
+  const incidentLine1Text = "🚨 INCIDENT: Users can't complete checkout";
+  const incidentLine2Regular = "Find the blockage in production. Click cells to inspect the system.";
+  const incidentLine2Principal = "With story based telemetry, we ensure your codebase has the telemetry necessary to understand what is supposed to happen.";
+
+  const incidentLine1 = useTypewriter(flowState === 'incident-active' ? incidentLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+  const incidentLine2 = useTypewriter(
+    incidentLine2Ready ? (mode === 'principal' ? incidentLine2Principal : incidentLine2Regular) : '',
+    TIMINGS.TYPEWRITER.BODY_TEXT,
+    0
+  );
+
+  // Show second incident line after first completes
+  useEffect(() => {
+    if (flowState === 'incident-active' && incidentLine1.isComplete && !incidentLine2Ready) {
+      const timer = setTimeout(() => setIncidentLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
+      return () => clearTimeout(timer);
+    } else if (flowState !== 'incident-active') {
+      setIncidentLine2Ready(false);
+    }
+  }, [flowState, incidentLine1.isComplete, incidentLine2Ready]);
+
+  // Show cost box after second incident line completes
+  useEffect(() => {
+    if (flowState === 'incident-active' && incidentLine2.isComplete && !showIncidentCostBox) {
+      const timer = setTimeout(() => setShowIncidentCostBox(true), 300);
+      return () => clearTimeout(timer);
+    } else if (flowState !== 'incident-active') {
+      setShowIncidentCostBox(false);
+    }
+  }, [flowState, incidentLine2.isComplete, showIncidentCostBox]);
 
   // Typewriter text for testing phase
   const showTestingText = flowState === 'testing-intro';
@@ -854,12 +932,12 @@ function GameContent() {
                   lineHeight: 1.6,
                   fontFamily: theme.fonts.body,
                   opacity: 0.9,
-                  marginBottom: "24px",
-                  minHeight: '3em',
+                  marginBottom: "16px",
+                  minHeight: '1.6em',
                 }}
               >
-                {costInfo.displayedText}
-                {costInfo.displayedText && !costInfo.isComplete && (
+                {costInfoLine1.displayedText}
+                {costInfoLine1.displayedText && !costInfoLine1.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -871,8 +949,56 @@ function GameContent() {
                 )}
               </p>
 
-              {/* Continue button */}
-              {showCostContinueButton && (
+              <p
+                style={{
+                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
+                  color: theme.colors.text,
+                  lineHeight: 1.6,
+                  fontFamily: theme.fonts.body,
+                  opacity: 0.9,
+                  marginBottom: "16px",
+                  minHeight: '1.6em',
+                }}
+              >
+                {costInfoLine2.displayedText}
+                {costInfoLine2.displayedText && !costInfoLine2.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
+              </p>
+
+              <p
+                style={{
+                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
+                  color: theme.colors.text,
+                  lineHeight: 1.6,
+                  fontFamily: theme.fonts.body,
+                  opacity: 0.9,
+                  marginBottom: "24px",
+                  minHeight: '1.6em',
+                }}
+              >
+                {costInfoLine3.displayedText}
+                {costInfoLine3.displayedText && !costInfoLine3.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
+              </p>
+
+              {/* Continue button - show after third line completes */}
+              {costInfoLine3.isComplete && (
                 <button
                   onClick={() => setFlowState('deployed-running')}
                   style={{
@@ -927,9 +1053,20 @@ function GameContent() {
                   opacity: 0.9,
                   marginBottom: "16px",
                   fontWeight: theme.fontWeights.bold,
+                  minHeight: '1.6em',
                 }}
               >
-                ✓ Deployed successfully
+                {deployedLine1.displayedText}
+                {deployedLine1.displayedText && !deployedLine1.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
               </p>
               <p
                 style={{
@@ -938,9 +1075,20 @@ function GameContent() {
                   lineHeight: 1.5,
                   fontFamily: theme.fonts.body,
                   opacity: 0.7,
+                  minHeight: '1.5em',
                 }}
               >
-                Users are flowing through. Revenue is coming in. Everything is working perfectly...
+                {deployedLine2.displayedText}
+                {deployedLine2.displayedText && !deployedLine2.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
               </p>
             </div>
           )}
@@ -969,9 +1117,20 @@ function GameContent() {
                   opacity: 0.9,
                   marginBottom: "16px",
                   fontWeight: theme.fontWeights.bold,
+                  minHeight: '1.6em',
                 }}
               >
-                🚨 INCIDENT: Users can't complete checkout
+                {incidentLine1.displayedText}
+                {incidentLine1.displayedText && !incidentLine1.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
               </p>
               <p
                 style={{
@@ -981,20 +1140,31 @@ function GameContent() {
                   fontFamily: theme.fonts.body,
                   opacity: 0.9,
                   marginBottom: "16px",
+                  minHeight: '1.5em',
                 }}
               >
-                {mode === 'principal'
-                  ? 'Principal AI is analyzing telemetry data to locate the blockage...'
-                  : 'Find the blockage in production. Click cells to inspect the system.'}
+                {incidentLine2.displayedText}
+                {incidentLine2.displayedText && !incidentLine2.isComplete && (
+                  <span
+                    style={{
+                      animation: 'blink 1s infinite',
+                      marginLeft: '2px',
+                    }}
+                  >
+                    |
+                  </span>
+                )}
               </p>
-              <div
-                style={{
-                  padding: "16px",
-                  backgroundColor: `${theme.colors.error}15`,
-                  borderRadius: "8px",
-                  border: `1px solid ${theme.colors.error}30`,
-                }}
-              >
+              {showIncidentCostBox && (
+                <div
+                  style={{
+                    padding: "16px",
+                    backgroundColor: `${theme.colors.error}15`,
+                    borderRadius: "8px",
+                    border: `1px solid ${theme.colors.error}30`,
+                    animation: 'fadeIn 0.5s ease-in',
+                  }}
+                >
                 <p
                   style={{
                     fontSize: isMobile ? theme.fontSizes[1] : theme.fontSizes[2],
@@ -1011,7 +1181,8 @@ function GameContent() {
                   <br />
                   <span style={{ opacity: 0.7 }}>Each inspection: $500</span>
                 </p>
-              </div>
+                </div>
+              )}
             </div>
           )}
 
