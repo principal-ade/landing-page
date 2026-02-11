@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import { useTheme } from "@principal-ade/industry-theme";
 import { useMazeGame } from "@/hooks/useMazeGame";
 import { MazeCanvas } from "@/components/maze/MazeCanvas";
 import { TIMINGS } from "./constants";
 import { GameFlowState } from "./types";
+import { useSequentialTypewriter } from "@/hooks/useSequentialTypewriter";
 
 // Typewriter effect hook
 function useTypewriter(text: string, speed: number = 50, delay: number = 0) {
@@ -115,88 +116,62 @@ function GameContent() {
   const deployQuestionText = "Everything looks good. Ready to deploy to production?";
   const deployQuestion = useTypewriter(flowState === 'deploy-question' ? deployQuestionText : '', TIMINGS.TYPEWRITER.QUESTION, 0);
 
-  // Typewriter text for cost info (after deployment)
-  const [costInfoLine2Ready, setCostInfoLine2Ready] = useState(false);
-  const [costInfoLine3Ready, setCostInfoLine3Ready] = useState(false);
-  const costInfoLine1Text = "Once you deploy to production it can be hard to remember what your code looks like or see into its execution.";
-  const costInfoLine2Text = "Using conventional telemetry can often not be as useful in practice as it is in theory.";
-  const costInfoLine3Text = "On average, production incidents cost companies $225 per second in lost revenue and engineering time.";
+  // Typewriter text for cost info (after deployment) - using sequential typewriter
+  const costInfoLineConfigs = useMemo(() => [
+    { text: "Once you deploy to production it can be hard to remember what your code looks like or see into its execution.", speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+    {
+      text: mode === 'principal'
+        ? "With story based telemetry, we ensure your codebase has the telemetry necessary to understand what is supposed to happen."
+        : "Using conventional telemetry can often not be as useful in practice as it is in theory.",
+      speed: TIMINGS.TYPEWRITER.BODY_TEXT
+    },
+    { text: "On average, production incidents cost companies $225 per second in lost revenue and engineering time.", speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+  ], [mode]);
 
-  const costInfoLine1 = useTypewriter(flowState === 'cost-info' ? costInfoLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
-  const costInfoLine2 = useTypewriter(costInfoLine2Ready ? costInfoLine2Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
-  const costInfoLine3 = useTypewriter(costInfoLine3Ready ? costInfoLine3Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
+  const costInfoLines = useSequentialTypewriter(
+    flowState === 'cost-info',
+    costInfoLineConfigs,
+    TIMINGS.TESTING_LINE_DELAYS.LINE_2
+  );
 
-  // Show second cost info line after first completes
-  useEffect(() => {
-    if (flowState === 'cost-info' && costInfoLine1.isComplete && !costInfoLine2Ready) {
-      const timer = setTimeout(() => setCostInfoLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
-      return () => clearTimeout(timer);
-    } else if (flowState !== 'cost-info') {
-      setCostInfoLine2Ready(false);
-    }
-  }, [flowState, costInfoLine1.isComplete, costInfoLine2Ready]);
+  // Typewriter text for deployed running phase - using sequential typewriter
+  const deployedLineConfigs = useMemo(() => [
+    { text: "✓ Deployed successfully", speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+    { text: "Users are flowing through. Revenue is coming in. Everything is working perfectly...", speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+  ], []);
 
-  // Show third cost info line after second completes
-  useEffect(() => {
-    if (flowState === 'cost-info' && costInfoLine2.isComplete && !costInfoLine3Ready) {
-      const timer = setTimeout(() => setCostInfoLine3Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_3);
-      return () => clearTimeout(timer);
-    } else if (flowState !== 'cost-info') {
-      setCostInfoLine3Ready(false);
-    }
-  }, [flowState, costInfoLine2.isComplete, costInfoLine3Ready]);
+  const deployedLines = useSequentialTypewriter(
+    flowState === 'deployed-running',
+    deployedLineConfigs,
+    TIMINGS.TESTING_LINE_DELAYS.LINE_2
+  );
 
-  // Typewriter text for deployed running phase
-  const [deployedLine2Ready, setDeployedLine2Ready] = useState(false);
-  const deployedLine1Text = "✓ Deployed successfully";
-  const deployedLine2Text = "Users are flowing through. Revenue is coming in. Everything is working perfectly...";
-
-  const deployedLine1 = useTypewriter(flowState === 'deployed-running' ? deployedLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
-  const deployedLine2 = useTypewriter(deployedLine2Ready ? deployedLine2Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
-
-  // Show second deployed line after first completes
-  useEffect(() => {
-    if (flowState === 'deployed-running' && deployedLine1.isComplete && !deployedLine2Ready) {
-      const timer = setTimeout(() => setDeployedLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
-      return () => clearTimeout(timer);
-    } else if (flowState !== 'deployed-running') {
-      setDeployedLine2Ready(false);
-    }
-  }, [flowState, deployedLine1.isComplete, deployedLine2Ready]);
-
-  // Typewriter text for incident phase
-  const [incidentLine2Ready, setIncidentLine2Ready] = useState(false);
+  // Typewriter text for incident phase - using sequential typewriter
   const [showIncidentCostBox, setShowIncidentCostBox] = useState(false);
-  const incidentLine1Text = "🚨 INCIDENT: Users can't complete checkout";
+
   const incidentLine2Regular = "Find the blockage in production. Click cells to inspect the system.";
   const incidentLine2Principal = "With story based telemetry, we ensure your codebase has the telemetry necessary to understand what is supposed to happen.";
 
-  const incidentLine1 = useTypewriter(flowState === 'incident-active' ? incidentLine1Text : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
-  const incidentLine2 = useTypewriter(
-    incidentLine2Ready ? (mode === 'principal' ? incidentLine2Principal : incidentLine2Regular) : '',
-    TIMINGS.TYPEWRITER.BODY_TEXT,
-    0
+  const incidentLineConfigs = useMemo(() => [
+    { text: "🚨 INCIDENT: Users can't complete checkout", speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+    { text: mode === 'principal' ? incidentLine2Principal : incidentLine2Regular, speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+  ], [mode]);
+
+  const incidentLines = useSequentialTypewriter(
+    flowState === 'incident-active',
+    incidentLineConfigs,
+    TIMINGS.TESTING_LINE_DELAYS.LINE_2
   );
 
-  // Show second incident line after first completes
+  // Show cost box after all incident lines complete
   useEffect(() => {
-    if (flowState === 'incident-active' && incidentLine1.isComplete && !incidentLine2Ready) {
-      const timer = setTimeout(() => setIncidentLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
-      return () => clearTimeout(timer);
-    } else if (flowState !== 'incident-active') {
-      setIncidentLine2Ready(false);
-    }
-  }, [flowState, incidentLine1.isComplete, incidentLine2Ready]);
-
-  // Show cost box after second incident line completes
-  useEffect(() => {
-    if (flowState === 'incident-active' && incidentLine2.isComplete && !showIncidentCostBox) {
+    if (flowState === 'incident-active' && incidentLines.allComplete && !showIncidentCostBox) {
       const timer = setTimeout(() => setShowIncidentCostBox(true), 300);
       return () => clearTimeout(timer);
     } else if (flowState !== 'incident-active') {
       setShowIncidentCostBox(false);
     }
-  }, [flowState, incidentLine2.isComplete, showIncidentCostBox]);
+  }, [flowState, incidentLines.allComplete, showIncidentCostBox]);
 
   // Typewriter text for testing phase
   const showTestingText = flowState === 'testing-intro';
@@ -925,80 +900,35 @@ function GameContent() {
               >
                 Production
               </h2>
-              <p
-                style={{
-                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
-                  color: theme.colors.text,
-                  lineHeight: 1.6,
-                  fontFamily: theme.fonts.body,
-                  opacity: 0.9,
-                  marginBottom: "16px",
-                  minHeight: '1.6em',
-                }}
-              >
-                {costInfoLine1.displayedText}
-                {costInfoLine1.displayedText && !costInfoLine1.isComplete && (
-                  <span
-                    style={{
-                      animation: 'blink 1s infinite',
-                      marginLeft: '2px',
-                    }}
-                  >
-                    |
-                  </span>
-                )}
-              </p>
+              {costInfoLines.lines.map((line, index) => (
+                <p
+                  key={index}
+                  style={{
+                    fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
+                    color: theme.colors.text,
+                    lineHeight: 1.6,
+                    fontFamily: theme.fonts.body,
+                    opacity: 0.9,
+                    marginBottom: index === costInfoLines.lines.length - 1 ? "24px" : "16px",
+                    minHeight: '1.6em',
+                  }}
+                >
+                  {line.displayedText}
+                  {line.displayedText && !line.isComplete && (
+                    <span
+                      style={{
+                        animation: 'blink 1s infinite',
+                        marginLeft: '2px',
+                      }}
+                    >
+                      |
+                    </span>
+                  )}
+                </p>
+              ))}
 
-              <p
-                style={{
-                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
-                  color: theme.colors.text,
-                  lineHeight: 1.6,
-                  fontFamily: theme.fonts.body,
-                  opacity: 0.9,
-                  marginBottom: "16px",
-                  minHeight: '1.6em',
-                }}
-              >
-                {costInfoLine2.displayedText}
-                {costInfoLine2.displayedText && !costInfoLine2.isComplete && (
-                  <span
-                    style={{
-                      animation: 'blink 1s infinite',
-                      marginLeft: '2px',
-                    }}
-                  >
-                    |
-                  </span>
-                )}
-              </p>
-
-              <p
-                style={{
-                  fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
-                  color: theme.colors.text,
-                  lineHeight: 1.6,
-                  fontFamily: theme.fonts.body,
-                  opacity: 0.9,
-                  marginBottom: "24px",
-                  minHeight: '1.6em',
-                }}
-              >
-                {costInfoLine3.displayedText}
-                {costInfoLine3.displayedText && !costInfoLine3.isComplete && (
-                  <span
-                    style={{
-                      animation: 'blink 1s infinite',
-                      marginLeft: '2px',
-                    }}
-                  >
-                    |
-                  </span>
-                )}
-              </p>
-
-              {/* Continue button - show after third line completes */}
-              {costInfoLine3.isComplete && (
+              {/* Continue button - show after all lines complete */}
+              {costInfoLines.allComplete && (
                 <button
                   onClick={() => setFlowState('deployed-running')}
                   style={{
@@ -1044,6 +974,7 @@ function GameContent() {
               >
                 Production
               </h2>
+              {/* Line 1: Deployed successfully */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
@@ -1056,8 +987,8 @@ function GameContent() {
                   minHeight: '1.6em',
                 }}
               >
-                {deployedLine1.displayedText}
-                {deployedLine1.displayedText && !deployedLine1.isComplete && (
+                {deployedLines.lines[0]?.displayedText}
+                {deployedLines.lines[0]?.displayedText && !deployedLines.lines[0]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -1068,6 +999,7 @@ function GameContent() {
                   </span>
                 )}
               </p>
+              {/* Line 2: Users flowing through */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[1] : theme.fontSizes[2],
@@ -1078,8 +1010,8 @@ function GameContent() {
                   minHeight: '1.5em',
                 }}
               >
-                {deployedLine2.displayedText}
-                {deployedLine2.displayedText && !deployedLine2.isComplete && (
+                {deployedLines.lines[1]?.displayedText}
+                {deployedLines.lines[1]?.displayedText && !deployedLines.lines[1]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -1108,6 +1040,7 @@ function GameContent() {
               >
                 Production Incident
               </h2>
+              {/* Line 1: Incident alert */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
@@ -1120,8 +1053,8 @@ function GameContent() {
                   minHeight: '1.6em',
                 }}
               >
-                {incidentLine1.displayedText}
-                {incidentLine1.displayedText && !incidentLine1.isComplete && (
+                {incidentLines.lines[0]?.displayedText}
+                {incidentLines.lines[0]?.displayedText && !incidentLines.lines[0]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -1132,6 +1065,7 @@ function GameContent() {
                   </span>
                 )}
               </p>
+              {/* Line 2: Instructions */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[1] : theme.fontSizes[2],
@@ -1143,8 +1077,8 @@ function GameContent() {
                   minHeight: '1.5em',
                 }}
               >
-                {incidentLine2.displayedText}
-                {incidentLine2.displayedText && !incidentLine2.isComplete && (
+                {incidentLines.lines[1]?.displayedText}
+                {incidentLines.lines[1]?.displayedText && !incidentLines.lines[1]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
