@@ -77,9 +77,22 @@ graph TD
 
 ## Key States
 
-### Mode States
+### Flow States (UI State Machine)
+See `src/app/game/types.ts` for the complete state machine definition.
+
 - `start`: Initial screen with intro text
-- `initial`: Agent usage question with slider
+- `agent-question`: Agent usage question with slider
+- `testing-intro`: Testing visualization intro text
+- `testing-running`: Test path animation in progress
+- `test-complete`: Test complete message displayed
+- `deploy-question`: Asking if ready to deploy
+- `cost-info`: Showing incident cost information
+- `deployed-running`: Deployed, revenue accumulating
+- `incident-active`: Incident happening, user searching
+- `incident-resolved`: Blockage found, showing results
+- `principal-comparison`: Showing Principal AI comparison
+
+### Mode States (Game Behavior)
 - `agentic`: Testing/deployment with agent-based development (variable visibility)
 - `no-agentic`: Testing/deployment without agents (full visibility)
 - `principal`: Testing/deployment with Principal AI (automated telemetry-based search)

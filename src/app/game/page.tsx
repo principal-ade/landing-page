@@ -5,6 +5,8 @@ import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import { useTheme } from "@principal-ade/industry-theme";
 import { useMazeGame } from "@/hooks/useMazeGame";
 import { MazeCanvas } from "@/components/maze/MazeCanvas";
+import { TIMINGS } from "./constants";
+import { GameFlowState } from "./types";
 
 // Typewriter effect hook
 function useTypewriter(text: string, speed: number = 50, delay: number = 0) {
@@ -83,42 +85,43 @@ function GameContent() {
     previousIncidentDuration,
   } = gameState;
 
+  // Game flow state machine
+  const [flowState, setFlowState] = useState<GameFlowState>('start');
+
   // Slider state (0 to 100, where 0 = "a little", 100 = "a lot")
   const [agentUsage, setAgentUsage] = useState(50);
-  const [showSlider, setShowSlider] = useState(false);
-  const [showContinueButton, setShowContinueButton] = useState(false);
 
-  // Test complete and deploy UI state
-  const [showTestComplete, setShowTestComplete] = useState(false);
-  const [showDeployQuestion, setShowDeployQuestion] = useState(false);
-  const [showDeployButtons, setShowDeployButtons] = useState(false);
-
-  // Cost info UI state (after deployment)
-  const [showCostInfo, setShowCostInfo] = useState(false);
-  const [showCostContinueButton, setShowCostContinueButton] = useState(false);
-  const [continueClicked, setContinueClicked] = useState(false);
+  // Derived UI states from flowState
+  const showSlider = flowState === 'agent-question';
+  const showContinueButton = flowState === 'agent-question' && agentUsage >= 0; // Always show after slider interaction
+  const showTestComplete = flowState === 'test-complete';
+  const showDeployQuestion = flowState === 'deploy-question';
+  const showDeployButtons = flowState === 'deploy-question';
+  const showCostInfo = flowState === 'cost-info';
+  const showCostContinueButton = flowState === 'cost-info';
+  const continueClicked = flowState === 'deployed-running' || flowState === 'incident-active' || flowState === 'incident-resolved';
 
   // Typewriter text for start screen
   const startHeadingText = "You are a software developer in 2026";
   const startParagraphText = "Your code works locally and you are ready to deploy to production.";
 
-  const startHeading = useTypewriter(startHeadingText, 50, 0);
-  const startParagraph = useTypewriter(startParagraphText, 30, startHeadingText.length * 50 + 200);
+  const startHeading = useTypewriter(startHeadingText, TIMINGS.TYPEWRITER.HEADING, 0);
+  const startParagraph = useTypewriter(startParagraphText, TIMINGS.TYPEWRITER.PARAGRAPH, startHeadingText.length * TIMINGS.TYPEWRITER.HEADING + 200);
 
   // Typewriter text for slider question screen
   const sliderQuestionText = "How much do you use agents to develop your software?";
-  const sliderQuestion = useTypewriter(mode === 'initial' ? sliderQuestionText : '', 50, 0);
+  const sliderQuestion = useTypewriter(flowState === 'agent-question' ? sliderQuestionText : '', TIMINGS.TYPEWRITER.HEADING, 0);
 
   // Typewriter text for deploy question
   const deployQuestionText = "Everything looks good. Ready to deploy to production?";
-  const deployQuestion = useTypewriter(showDeployQuestion ? deployQuestionText : '', 40, 0);
+  const deployQuestion = useTypewriter(flowState === 'deploy-question' ? deployQuestionText : '', TIMINGS.TYPEWRITER.QUESTION, 0);
 
   // Typewriter text for cost info (after deployment)
   const costInfoText = "On average, production incidents cost companies $225 per second in lost revenue and engineering time.";
-  const costInfo = useTypewriter(showCostInfo ? costInfoText : '', 40, 0);
+  const costInfo = useTypewriter(flowState === 'cost-info' ? costInfoText : '', TIMINGS.TYPEWRITER.QUESTION, 0);
 
   // Typewriter text for testing phase
-  const showTestingText = (mode === 'agentic' || mode === 'no-agentic' || mode === 'principal') && !testedLocally && !deployed;
+  const showTestingText = flowState === 'testing-intro';
   const [testingLine1Ready, setTestingLine1Ready] = useState(false);
   const [testingLine2Ready, setTestingLine2Ready] = useState(false);
   const [testingLine3Ready, setTestingLine3Ready] = useState(false);
@@ -131,19 +134,19 @@ function GameContent() {
   const testingLine3Regular = "Higher agent usage generally translates to less insight into the details of the execution path.";
   const testingLinePrincipal = "Watch how Principal AI instruments your code with telemetry to understand the complete execution path.";
 
-  const testingHeadingTyped = useTypewriter(showTestingText ? testingHeading : '', 50, 0);
-  const testingLine1Typed = useTypewriter(testingLine1Ready ? testingLine1Text : '', 40, 0);
+  const testingHeadingTyped = useTypewriter(showTestingText ? testingHeading : '', TIMINGS.TYPEWRITER.HEADING, 0);
+  const testingLine1Typed = useTypewriter(testingLine1Ready ? testingLine1Text : '', TIMINGS.TYPEWRITER.QUESTION, 0);
   const testingLine2Typed = useTypewriter(
     testingLine2Ready ? (mode === 'principal' ? testingLinePrincipal : testingLine2Regular) : '',
-    35,
+    TIMINGS.TYPEWRITER.BODY_TEXT,
     0
   );
-  const testingLine3Typed = useTypewriter(testingLine3Ready ? testingLine3Regular : '', 35, 0);
+  const testingLine3Typed = useTypewriter(testingLine3Ready ? testingLine3Regular : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
 
-  // Chain the typewriter effects
+  // Chain the typewriter effects for testing phase
   useEffect(() => {
     if (showTestingText && testingHeadingTyped.isComplete && !testingLine1Ready) {
-      const timer = setTimeout(() => setTestingLine1Ready(true), 100);
+      const timer = setTimeout(() => setTestingLine1Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_1);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setTestingLine1Ready(false);
@@ -152,7 +155,7 @@ function GameContent() {
 
   useEffect(() => {
     if (testingLine1Typed.isComplete && testingLine1Ready && !testingLine2Ready) {
-      const timer = setTimeout(() => setTestingLine2Ready(true), 100);
+      const timer = setTimeout(() => setTestingLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setTestingLine2Ready(false);
@@ -161,7 +164,7 @@ function GameContent() {
 
   useEffect(() => {
     if (testingLine2Typed.isComplete && testingLine2Ready && !testingLine3Ready && mode !== 'principal') {
-      const timer = setTimeout(() => setTestingLine3Ready(true), 100);
+      const timer = setTimeout(() => setTestingLine3Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_3);
       return () => clearTimeout(timer);
     } else if (!showTestingText || mode === 'principal') {
       setTestingLine3Ready(false);
@@ -171,7 +174,7 @@ function GameContent() {
   // Show maze after first line completes
   useEffect(() => {
     if (testingLine1Ready && testingLine1Typed.isComplete && !showMaze && showTestingText) {
-      const timer = setTimeout(() => setShowMaze(true), 200);
+      const timer = setTimeout(() => setShowMaze(true), TIMINGS.MAZE_FADE_IN_DELAY);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setShowMaze(false);
@@ -181,101 +184,76 @@ function GameContent() {
   // Show buttons only after all text is complete
   useEffect(() => {
     if (mode === 'principal' && testingLine2Ready && testingLine2Typed.isComplete && !showTestingButtons) {
-      const timer = setTimeout(() => setShowTestingButtons(true), 200);
+      const timer = setTimeout(() => setShowTestingButtons(true), TIMINGS.TESTING_BUTTONS_DELAY);
       return () => clearTimeout(timer);
     } else if (mode !== 'principal' && testingLine3Ready && testingLine3Typed.isComplete && !showTestingButtons) {
-      const timer = setTimeout(() => setShowTestingButtons(true), 200);
+      const timer = setTimeout(() => setShowTestingButtons(true), TIMINGS.TESTING_BUTTONS_DELAY);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setShowTestingButtons(false);
     }
   }, [mode, testingLine2Ready, testingLine2Typed.isComplete, testingLine3Ready, testingLine3Typed.isComplete, showTestingButtons, showTestingText]);
 
+  // Transition from testing-running to test-complete when test finishes
   useEffect(() => {
-    if (mode === 'initial' && sliderQuestion.isComplete) {
-      const timer1 = setTimeout(() => setShowSlider(true), 300);
-      return () => clearTimeout(timer1);
-    } else if (mode !== 'initial') {
-      setShowSlider(false);
-      setShowContinueButton(false);
+    if (flowState === 'testing-running' && testedLocally && revealedPathIndex >= testPath.length) {
+      setFlowState('test-complete');
     }
-  }, [mode, sliderQuestion.isComplete]);
+  }, [flowState, testedLocally, revealedPathIndex, testPath.length]);
 
-  // Show "Test complete" immediately when testing finishes
+  // Transition from test-complete to deploy-question after pause
   useEffect(() => {
-    if (testedLocally && !deployed && revealedPathIndex >= testPath.length && (mode === 'agentic' || mode === 'no-agentic' || mode === 'principal')) {
-      setShowTestComplete(true);
-    } else {
-      setShowTestComplete(false);
-      setShowDeployQuestion(false);
-      setShowDeployButtons(false);
-    }
-  }, [testedLocally, deployed, revealedPathIndex, testPath.length, mode]);
-
-  // Show deploy question after a 2 second pause
-  useEffect(() => {
-    if (showTestComplete && !showDeployQuestion && !deployed) {
-      const timer = setTimeout(() => setShowDeployQuestion(true), 2000);
+    if (flowState === 'test-complete') {
+      const timer = setTimeout(() => setFlowState('deploy-question'), TIMINGS.TEST_COMPLETE_PAUSE);
       return () => clearTimeout(timer);
     }
-  }, [showTestComplete, showDeployQuestion, deployed]);
+  }, [flowState]);
 
-  // Show deploy buttons after deploy question is typed
+  // Transition from deploy-question to cost-info after deployment
   useEffect(() => {
-    if (showDeployQuestion && deployQuestion.isComplete && !showDeployButtons) {
-      const timer = setTimeout(() => setShowDeployButtons(true), 300);
+    if (flowState === 'deploy-question' && deployed) {
+      const timer = setTimeout(() => setFlowState('cost-info'), TIMINGS.COST_INFO_DELAY);
       return () => clearTimeout(timer);
     }
-  }, [showDeployQuestion, deployQuestion.isComplete, showDeployButtons]);
+  }, [flowState, deployed]);
 
-  // Show cost info immediately after deployment
+  // Transition from cost-info to deployed-running when Continue is clicked
   useEffect(() => {
-    if (deployed && !started && !showCostInfo) {
-      const timer = setTimeout(() => setShowCostInfo(true), 1000); // 1 second pause after deploy
+    if (flowState === 'deployed-running' && !startRevenue) {
+      const timer = setTimeout(() => setStartRevenue(true), TIMINGS.REVENUE_MESSAGE_PAUSE);
       return () => clearTimeout(timer);
-    } else if (!deployed) {
-      setShowCostInfo(false);
-      setShowCostContinueButton(false);
-      setContinueClicked(false);
-    }
-  }, [deployed, started, showCostInfo]);
-
-  // Show Continue button after cost info is typed
-  useEffect(() => {
-    if (showCostInfo && costInfo.isComplete) {
-      const timer = setTimeout(() => setShowCostContinueButton(true), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [showCostInfo, costInfo.isComplete]);
-
-  // Start revenue after "Users are flowing through..." message is readable
-  useEffect(() => {
-    if (continueClicked && !startRevenue) {
-      const timer = setTimeout(() => setStartRevenue(true), 2500); // 2.5 second delay to read the message
-      return () => clearTimeout(timer);
-    } else if (!continueClicked) {
+    } else if (flowState !== 'deployed-running' && flowState !== 'incident-active' && flowState !== 'incident-resolved') {
       setStartRevenue(false);
     }
-  }, [continueClicked, startRevenue]);
+  }, [flowState, startRevenue]);
 
-  // Start incident after revenue has been accumulating
+  // Transition from deployed-running to incident-active after revenue accumulates
   useEffect(() => {
-    if (startRevenue && deployed && !started) {
-      const timer = setTimeout(() => startIncident(), 3000); // 3 second delay to see revenue
+    if (flowState === 'deployed-running' && startRevenue) {
+      const timer = setTimeout(() => {
+        startIncident();
+        setFlowState('incident-active');
+      }, TIMINGS.REVENUE_TO_INCIDENT_DELAY);
       return () => clearTimeout(timer);
     }
-  }, [startRevenue, deployed, started, startIncident]);
+  }, [flowState, startRevenue, startIncident]);
 
-  // Show continue button after user interacts with slider
+  // Transition from incident-active to incident-resolved when blockage found
+  useEffect(() => {
+    if (flowState === 'incident-active' && blockageFound) {
+      setFlowState('incident-resolved');
+    }
+  }, [flowState, blockageFound]);
+
+  // Handle slider interaction
   const handleSliderChange = (value: number) => {
     setAgentUsage(value);
-    setShowContinueButton(true);
   };
 
   // Render different text panels based on game state
   const renderTextPanel = () => {
     // 1. Initial screen - just intro
-    if (mode === 'start') {
+    if (flowState === 'start') {
       return (
         <div
           style={{
@@ -335,7 +313,7 @@ function GameContent() {
 
           {startParagraph.isComplete && (
             <button
-              onClick={() => setMode('initial')}
+              onClick={() => setFlowState('agent-question')}
               style={{
                 padding: isMobile ? '12px 24px' : '16px 40px',
                 background: theme.colors.primary,
@@ -366,7 +344,7 @@ function GameContent() {
     }
 
     // 2. Slider question screen
-    if (mode === 'initial') {
+    if (flowState === 'agent-question') {
       return (
         <div
           style={{
@@ -480,6 +458,7 @@ function GameContent() {
                 // Set mode based on slider value
                 // For now, use 'agentic' as the mode - we'll adjust the opacity based on agentUsage
                 setMode('agentic');
+                setFlowState('testing-intro');
               }}
               style={{
                 padding: isMobile ? '12px 24px' : '16px 40px',
@@ -627,7 +606,7 @@ function GameContent() {
                   animation: 'fadeIn 0.5s ease-in',
                 }}>
                   <button
-                    onClick={() => setMode('initial')}
+                    onClick={() => setFlowState('agent-question')}
                     style={{
                       padding: isMobile ? '14px 28px' : '16px 40px',
                       background: theme.colors.primary,
@@ -652,7 +631,10 @@ function GameContent() {
                     Back
                   </button>
                   <button
-                    onClick={handleTestLocally}
+                    onClick={() => {
+                      handleTestLocally();
+                      setFlowState('testing-running');
+                    }}
                     style={{
                       padding: isMobile ? '14px 28px' : '16px 40px',
                       background: theme.colors.primary,
@@ -795,7 +777,7 @@ function GameContent() {
                   animation: 'fadeIn 0.5s ease-in',
                 }}>
                   <button
-                    onClick={() => setMode('initial')}
+                    onClick={() => setFlowState('agent-question')}
                     style={{
                       padding: isMobile ? '14px 28px' : '16px 40px',
                       background: theme.colors.primary,
@@ -892,7 +874,7 @@ function GameContent() {
               {/* Continue button */}
               {showCostContinueButton && (
                 <button
-                  onClick={() => setContinueClicked(true)}
+                  onClick={() => setFlowState('deployed-running')}
                   style={{
                     padding: isMobile ? '14px 28px' : '16px 40px',
                     background: theme.colors.primary,
@@ -1103,7 +1085,10 @@ function GameContent() {
                 flexDirection: isMobile ? 'column' : 'row',
               }}>
                 <button
-                  onClick={handleTryAgain}
+                  onClick={() => {
+                    handleTryAgain();
+                    setFlowState('start');
+                  }}
                   style={{
                     padding: isMobile ? '10px 24px' : '12px 32px',
                     background: theme.colors.primary,
@@ -1128,7 +1113,10 @@ function GameContent() {
                   Try Again
                 </button>
                 <button
-                  onClick={handleTryPrincipal}
+                  onClick={() => {
+                    handleTryPrincipal();
+                    setFlowState('testing-intro');
+                  }}
                   style={{
                     padding: isMobile ? '10px 24px' : '12px 32px',
                     background: theme.colors.primary,
