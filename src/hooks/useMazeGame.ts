@@ -4,6 +4,8 @@ import { RevealedCell, BlockageWall, GameMode } from "@/components/maze/types";
 
 interface UseMazeGameProps {
   mazeSeed?: number;
+  incidentCostPerSecond?: number;
+  startRevenue?: boolean;
 }
 
 export interface UseMazeGameReturn {
@@ -14,6 +16,7 @@ export interface UseMazeGameReturn {
   timeCost: number;
   clickCost: number;
   incidentCost: number;
+  incidentDurationSeconds: number;
   blockageFound: boolean;
   started: boolean;
   deployed: boolean;
@@ -23,6 +26,7 @@ export interface UseMazeGameReturn {
   revenue: number;
   previousIncidentCost: number;
   previousMode: 'no-agentic' | 'agentic' | null;
+  previousIncidentDuration: number;
 
   // Maze data
   horizontalWalls: number[][];
@@ -47,9 +51,10 @@ export interface UseMazeGameReturn {
   baseHeight: number;
 
   // Handlers
-  handleModeSelect: (selectedMode: 'no-agentic' | 'agentic') => void;
+  handleModeSelect: (selectedMode: 'no-agentic' | 'agentic' | 'principal') => void;
   handleTestLocally: () => void;
   handleDeploy: () => void;
+  startIncident: () => void;
   handleTryPrincipal: () => void;
   handleTryAgain: () => void;
   handleCellClick: (col: number, row: number) => void;
@@ -57,6 +62,11 @@ export interface UseMazeGameReturn {
 }
 
 export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
+  // Extract props
+  const incidentCostPerSecond = props?.incidentCostPerSecond ?? 225;
+  const propsMazeSeed = props?.mazeSeed;
+  const propsStartRevenue = props?.startRevenue ?? false;
+
   // Use fixed dimensions for calculations but allow SVG to be responsive
   const baseWidth = 450;
   const baseHeight = 620;
@@ -80,6 +90,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   const [directionHint, setDirectionHint] = useState<string>("");
   const [timeCost, setTimeCost] = useState<number>(0);
   const [clickCost, setClickCost] = useState<number>(0);
+  const [incidentDurationSeconds, setIncidentDurationSeconds] = useState<number>(0);
   const [blockageFound, setBlockageFound] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [started, setStarted] = useState<boolean>(false);
@@ -93,27 +104,29 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   const [revenue, setRevenue] = useState<number>(0);
   const [previousIncidentCost, setPreviousIncidentCost] = useState<number>(0);
   const [previousMode, setPreviousMode] = useState<'no-agentic' | 'agentic' | null>(null);
+  const [previousIncidentDuration, setPreviousIncidentDuration] = useState<number>(0);
 
   // Total incident cost
   const incidentCost = timeCost + clickCost;
 
   // Update currentSeed when mazeSeed prop changes (only if provided)
   useEffect(() => {
-    if (props?.mazeSeed !== undefined) {
-      setCurrentSeed(props.mazeSeed);
+    if (propsMazeSeed !== undefined) {
+      setCurrentSeed(propsMazeSeed);
     }
-  }, [props?.mazeSeed]);
+  }, [propsMazeSeed]);
 
-  // Increment time cost
+  // Increment time cost and duration
   useEffect(() => {
     if (blockageFound || !startTime || !started) return;
 
     const interval = setInterval(() => {
-      setTimeCost(prev => prev + 1);
-    }, 10);
+      setTimeCost(prev => prev + (incidentCostPerSecond / 100));
+      setIncidentDurationSeconds(prev => prev + 0.01); // Increment by 0.01 seconds every 10ms
+    }, 10); // Increment based on cost per second (divided by 100 for 10ms intervals)
 
     return () => clearInterval(interval);
-  }, [blockageFound, startTime, started]);
+  }, [blockageFound, startTime, started, incidentCostPerSecond]);
 
   // Progressive path reveal animation
   useEffect(() => {
@@ -131,16 +144,16 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     return () => clearTimeout(timer);
   }, [testedLocally, testPath.length, revealedPathIndex]);
 
-  // Increment revenue while deployed but before incident starts
+  // Increment revenue while deployed but before incident starts (and after startRevenue flag is set)
   useEffect(() => {
-    if (!deployed || started) return;
+    if (!deployed || started || !propsStartRevenue) return;
 
     const interval = setInterval(() => {
-      setRevenue(prev => prev + 10);
-    }, 100); // Increment revenue by $10 every 100ms
+      setRevenue(prev => prev + (incidentCostPerSecond / 10));
+    }, 100); // Increment revenue based on incident cost rate (divided by 10 for 100ms intervals)
 
     return () => clearInterval(interval);
-  }, [deployed, started]);
+  }, [deployed, started, propsStartRevenue, incidentCostPerSecond]);
 
   // Generate maze
   const { horizontalWalls, verticalWalls, blockageWall, actualBlockageCol, actualBlockageRow } = useMemo(() => {
@@ -228,7 +241,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   }, [currentSeed, blockageInjected, gridSize, startRow, startCol, destRow, destCol]);
 
   // Handlers
-  const handleModeSelect = (selectedMode: 'no-agentic' | 'agentic') => {
+  const handleModeSelect = (selectedMode: 'no-agentic' | 'agentic' | 'principal') => {
     setMode(selectedMode);
     setTestedLocally(false);
     setTestPath([]);
@@ -260,23 +273,26 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
 
   const handleDeploy = () => {
     setDeployed(true);
-    setTimeout(() => {
-      setBlockageInjected(true);
-      setStarted(true);
-      setStartTime(Date.now());
-    }, 3000);
   };
 
+  const startIncident = useCallback(() => {
+    setBlockageInjected(true);
+    setStarted(true);
+    setStartTime(Date.now());
+  }, []);
+
   const handleTryPrincipal = () => {
-    // Store the current incident cost and mode for comparison
+    // Store the current incident cost, mode, and duration for comparison
     setPreviousIncidentCost(incidentCost);
     setPreviousMode(mode as 'no-agentic' | 'agentic');
+    setPreviousIncidentDuration(incidentDurationSeconds);
     setMode('principal');
     setRevealedCells([]);
     setDirectionHint("");
     setBlockageFound(false);
     setTimeCost(0);
     setClickCost(0);
+    setIncidentDurationSeconds(0);
     setStartTime(null);
     setStarted(false);
     setDeployed(false);
@@ -292,6 +308,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     setBlockageFound(false);
     setTimeCost(0);
     setClickCost(0);
+    setIncidentDurationSeconds(0);
     setStartTime(null);
     setStarted(false);
     setBlockageInjected(false);
@@ -303,6 +320,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     setRevenue(0);
     setPreviousIncidentCost(0);
     setPreviousMode(null);
+    setPreviousIncidentDuration(0);
   };
 
   const handleCellClick = useCallback((col: number, row: number) => {
@@ -422,6 +440,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     timeCost,
     clickCost,
     incidentCost,
+    incidentDurationSeconds,
     blockageFound,
     started,
     deployed,
@@ -431,6 +450,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     revenue,
     previousIncidentCost,
     previousMode,
+    previousIncidentDuration,
 
     // Maze data
     horizontalWalls,
@@ -458,6 +478,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     handleModeSelect,
     handleTestLocally,
     handleDeploy,
+    startIncident,
     handleTryPrincipal,
     handleTryAgain,
     handleCellClick,

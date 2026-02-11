@@ -42,6 +42,9 @@ interface MazeCanvasProps {
   actualBlockageRow: number;
   blockageInjected: boolean;
 
+  // Agent usage for opacity control
+  agentUsage?: number;
+
   // Handlers
   onCellClick: (col: number, row: number) => void;
 }
@@ -74,20 +77,30 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
   actualBlockageCol,
   actualBlockageRow,
   blockageInjected,
+  agentUsage = 50,
   onCellClick,
 }) => {
   const { theme } = useTheme();
 
   const getTitle = () => {
-    if (mode === 'start') return "Software Development Lifecycle";
-    if (mode === 'principal') return "With Principal AI";
-    if (mode === 'agentic') return "Agentic";
-    if (mode === 'no-agentic') return "Artisanal";
-    return "Choose Your Approach";
+    return "With Principal AI";
   };
 
-  const showCover = mode === 'agentic' || (deployed && mode === 'no-agentic') || (deployed && mode === 'principal');
-  const coverOpacity = 1;
+  const showCover = (testedLocally && (mode === 'agentic' || mode === 'no-agentic')) || (deployed && mode === 'no-agentic') || (deployed && mode === 'principal');
+
+  // Calculate opacity based on agent usage during testing phase
+  // High agent usage (100) = high opacity (less visible)
+  // Low agent usage (0) = low opacity (more visible)
+  const calculateCoverOpacity = () => {
+    if (testedLocally && !deployed) {
+      // During testing, use agent usage to control opacity
+      return agentUsage / 100;
+    }
+    // After deployment, full opacity
+    return 1;
+  };
+
+  const coverOpacity = calculateCoverOpacity();
   const mazeOpacity = 1;
 
   const renderMaze = (showBlockage: boolean, opacity: number = 1) => {
@@ -223,8 +236,8 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
       {/* Background */}
       <rect x={0} y={0} width={baseWidth} height={baseHeight} fill={theme.colors.background} />
 
-      {/* Title */}
-      {mode !== 'start' && (
+      {/* Title - only show for principal mode during testing/incident */}
+      {mode === 'principal' && (
         <text x={baseWidth / 2} y={25} textAnchor="middle" fill={theme.colors.primary} fontSize={theme.fontSizes[2]} fontWeight={theme.fontWeights.bold} fontFamily={theme.fonts.body}>
           {getTitle()}
         </text>

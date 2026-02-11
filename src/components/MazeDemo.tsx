@@ -43,7 +43,6 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
     testedLocally,
     testPath,
     revealedPathIndex,
-    revenue,
     previousIncidentCost,
     previousMode,
     baseWidth,
