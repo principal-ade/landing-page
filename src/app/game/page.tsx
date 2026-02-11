@@ -101,12 +101,17 @@ function GameContent() {
   const showCostInfo = flowState === 'cost-info';
   const continueClicked = flowState === 'deployed-running' || flowState === 'incident-active' || flowState === 'incident-resolved';
 
-  // Typewriter text for start screen
-  const startHeadingText = "You are a software developer in 2026";
-  const startParagraphText = "Your code works locally and you are ready to deploy to production.";
+  // Typewriter text for start screen - using sequential typewriter
+  const startLineConfigs = useMemo(() => [
+    { text: "You are a software developer in 2026", speed: TIMINGS.TYPEWRITER.HEADING },
+    { text: "Your code works locally and you are ready to deploy to production.", speed: TIMINGS.TYPEWRITER.PARAGRAPH },
+  ], []);
 
-  const startHeading = useTypewriter(startHeadingText, TIMINGS.TYPEWRITER.HEADING, 0);
-  const startParagraph = useTypewriter(startParagraphText, TIMINGS.TYPEWRITER.PARAGRAPH, startHeadingText.length * TIMINGS.TYPEWRITER.HEADING + 200);
+  const startLines = useSequentialTypewriter(
+    flowState === 'start',
+    startLineConfigs,
+    200
+  );
 
   // Typewriter text for slider question screen
   const sliderQuestionText = "How much do you use agents to develop your software?";
@@ -173,79 +178,55 @@ function GameContent() {
     }
   }, [flowState, incidentLines.allComplete, showIncidentCostBox]);
 
-  // Typewriter text for testing phase
+  // Typewriter text for testing phase - using sequential typewriter
   const showTestingText = flowState === 'testing-intro';
-  const [testingLine1Ready, setTestingLine1Ready] = useState(false);
-  const [testingLine2Ready, setTestingLine2Ready] = useState(false);
-  const [testingLine3Ready, setTestingLine3Ready] = useState(false);
   const [showTestingButtons, setShowTestingButtons] = useState(false);
   const [showMaze, setShowMaze] = useState(false);
 
-  const testingHeading = "Testing Visualization";
-  const testingLine1Text = "The maze represents an execution path in your codebase.";
   const testingLine2Regular = "Your visibility into the code during testing depends on how much you used agents during development.";
   const testingLine3Regular = "Higher agent usage generally translates to less insight into the details of the execution path.";
   const testingLinePrincipal = "Watch how Principal AI instruments your code with telemetry to understand the complete execution path.";
 
-  const testingHeadingTyped = useTypewriter(showTestingText ? testingHeading : '', TIMINGS.TYPEWRITER.HEADING, 0);
-  const testingLine1Typed = useTypewriter(testingLine1Ready ? testingLine1Text : '', TIMINGS.TYPEWRITER.QUESTION, 0);
-  const testingLine2Typed = useTypewriter(
-    testingLine2Ready ? (mode === 'principal' ? testingLinePrincipal : testingLine2Regular) : '',
-    TIMINGS.TYPEWRITER.BODY_TEXT,
-    0
+  const testingLineConfigs = useMemo(() => {
+    const lines = [
+      { text: "Testing Visualization", speed: TIMINGS.TYPEWRITER.HEADING },
+      { text: "The maze represents an execution path in your codebase.", speed: TIMINGS.TYPEWRITER.QUESTION },
+      { text: mode === 'principal' ? testingLinePrincipal : testingLine2Regular, speed: TIMINGS.TYPEWRITER.BODY_TEXT },
+    ];
+
+    // Add third line only for non-principal mode
+    if (mode !== 'principal') {
+      lines.push({ text: testingLine3Regular, speed: TIMINGS.TYPEWRITER.BODY_TEXT });
+    }
+
+    return lines;
+  }, [mode]);
+
+  const testingLines = useSequentialTypewriter(
+    showTestingText,
+    testingLineConfigs,
+    TIMINGS.TESTING_LINE_DELAYS.LINE_2
   );
-  const testingLine3Typed = useTypewriter(testingLine3Ready ? testingLine3Regular : '', TIMINGS.TYPEWRITER.BODY_TEXT, 0);
 
-  // Chain the typewriter effects for testing phase
+  // Show maze after second line (index 1) completes
   useEffect(() => {
-    if (showTestingText && testingHeadingTyped.isComplete && !testingLine1Ready) {
-      const timer = setTimeout(() => setTestingLine1Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_1);
-      return () => clearTimeout(timer);
-    } else if (!showTestingText) {
-      setTestingLine1Ready(false);
-    }
-  }, [showTestingText, testingHeadingTyped.isComplete, testingLine1Ready]);
-
-  useEffect(() => {
-    if (testingLine1Typed.isComplete && testingLine1Ready && !testingLine2Ready) {
-      const timer = setTimeout(() => setTestingLine2Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_2);
-      return () => clearTimeout(timer);
-    } else if (!showTestingText) {
-      setTestingLine2Ready(false);
-    }
-  }, [testingLine1Typed.isComplete, testingLine1Ready, testingLine2Ready, showTestingText]);
-
-  useEffect(() => {
-    if (testingLine2Typed.isComplete && testingLine2Ready && !testingLine3Ready && mode !== 'principal') {
-      const timer = setTimeout(() => setTestingLine3Ready(true), TIMINGS.TESTING_LINE_DELAYS.LINE_3);
-      return () => clearTimeout(timer);
-    } else if (!showTestingText || mode === 'principal') {
-      setTestingLine3Ready(false);
-    }
-  }, [testingLine2Typed.isComplete, testingLine2Ready, testingLine3Ready, showTestingText, mode]);
-
-  // Show maze after first line completes
-  useEffect(() => {
-    if (testingLine1Ready && testingLine1Typed.isComplete && !showMaze && showTestingText) {
+    if (showTestingText && testingLines.lines[1]?.isComplete && !showMaze) {
       const timer = setTimeout(() => setShowMaze(true), TIMINGS.MAZE_FADE_IN_DELAY);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setShowMaze(false);
     }
-  }, [testingLine1Ready, testingLine1Typed.isComplete, showMaze, showTestingText]);
+  }, [showTestingText, testingLines.lines, showMaze]);
 
-  // Show buttons only after all text is complete
+  // Show buttons after all lines complete
   useEffect(() => {
-    if (mode === 'principal' && testingLine2Ready && testingLine2Typed.isComplete && !showTestingButtons) {
-      const timer = setTimeout(() => setShowTestingButtons(true), TIMINGS.TESTING_BUTTONS_DELAY);
-      return () => clearTimeout(timer);
-    } else if (mode !== 'principal' && testingLine3Ready && testingLine3Typed.isComplete && !showTestingButtons) {
+    if (showTestingText && testingLines.allComplete && !showTestingButtons) {
       const timer = setTimeout(() => setShowTestingButtons(true), TIMINGS.TESTING_BUTTONS_DELAY);
       return () => clearTimeout(timer);
     } else if (!showTestingText) {
       setShowTestingButtons(false);
     }
-  }, [mode, testingLine2Ready, testingLine2Typed.isComplete, testingLine3Ready, testingLine3Typed.isComplete, showTestingButtons, showTestingText]);
+  }, [showTestingText, testingLines.allComplete, showTestingButtons]);
 
   // Transition from testing-running to test-complete when test finishes
   useEffect(() => {
@@ -318,6 +299,7 @@ function GameContent() {
           }}
         >
           <div>
+            {/* Line 0: Heading */}
             <h1
               style={{
                 fontSize: isMobile ? theme.fontSizes[6] : theme.fontSizes[7],
@@ -328,8 +310,8 @@ function GameContent() {
                 lineHeight: 1.2,
               }}
             >
-              {startHeading.displayedText}
-              {!startHeading.isComplete && (
+              {startLines.lines[0]?.displayedText}
+              {startLines.lines[0]?.displayedText && !startLines.lines[0]?.isComplete && (
                 <span
                   style={{
                     animation: 'blink 1s infinite',
@@ -340,6 +322,7 @@ function GameContent() {
                 </span>
               )}
             </h1>
+            {/* Line 1: Paragraph */}
             <p
               style={{
                 fontSize: isMobile ? theme.fontSizes[3] : theme.fontSizes[4],
@@ -350,8 +333,8 @@ function GameContent() {
                 minHeight: '4.8em', // Prevent layout shift
               }}
             >
-              {startParagraph.displayedText}
-              {startParagraph.displayedText && !startParagraph.isComplete && (
+              {startLines.lines[1]?.displayedText}
+              {startLines.lines[1]?.displayedText && !startLines.lines[1]?.isComplete && (
                 <span
                   style={{
                     animation: 'blink 1s infinite',
@@ -364,7 +347,7 @@ function GameContent() {
             </p>
           </div>
 
-          {startParagraph.isComplete && (
+          {startLines.allComplete && (
             <button
               onClick={() => setFlowState('agent-question')}
               style={{
@@ -558,6 +541,7 @@ function GameContent() {
           {/* Testing phase */}
           {!testedLocally && !deployed && (
             <div>
+              {/* Line 0: Heading */}
               <h2
                 style={{
                   fontSize: isMobile ? theme.fontSizes[4] : theme.fontSizes[5],
@@ -568,8 +552,8 @@ function GameContent() {
                   lineHeight: 1.2,
                 }}
               >
-                {testingHeadingTyped.displayedText}
-                {!testingHeadingTyped.isComplete && (
+                {testingLines.lines[0]?.displayedText}
+                {testingLines.lines[0]?.displayedText && !testingLines.lines[0]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -580,6 +564,7 @@ function GameContent() {
                   </span>
                 )}
               </h2>
+              {/* Line 1: Maze description */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[2] : theme.fontSizes[3],
@@ -591,8 +576,8 @@ function GameContent() {
                   minHeight: '1.6em',
                 }}
               >
-                {testingLine1Typed.displayedText}
-                {testingLine1Typed.displayedText && !testingLine1Typed.isComplete && (
+                {testingLines.lines[1]?.displayedText}
+                {testingLines.lines[1]?.displayedText && !testingLines.lines[1]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -603,6 +588,7 @@ function GameContent() {
                   </span>
                 )}
               </p>
+              {/* Line 2: Mode-specific explanation */}
               <p
                 style={{
                   fontSize: isMobile ? theme.fontSizes[1] : theme.fontSizes[2],
@@ -614,8 +600,8 @@ function GameContent() {
                   minHeight: '1.5em',
                 }}
               >
-                {testingLine2Typed.displayedText}
-                {testingLine2Typed.displayedText && !testingLine2Typed.isComplete && (
+                {testingLines.lines[2]?.displayedText}
+                {testingLines.lines[2]?.displayedText && !testingLines.lines[2]?.isComplete && (
                   <span
                     style={{
                       animation: 'blink 1s infinite',
@@ -626,7 +612,8 @@ function GameContent() {
                   </span>
                 )}
               </p>
-              {mode !== 'principal' && (
+              {/* Line 3: Additional info (non-principal only) */}
+              {mode !== 'principal' && testingLines.lines[3] && (
                 <p
                   style={{
                     fontSize: isMobile ? theme.fontSizes[1] : theme.fontSizes[2],
@@ -638,8 +625,8 @@ function GameContent() {
                     minHeight: '1.5em',
                   }}
                 >
-                  {testingLine3Typed.displayedText}
-                  {testingLine3Typed.displayedText && !testingLine3Typed.isComplete && (
+                  {testingLines.lines[3]?.displayedText}
+                  {testingLines.lines[3]?.displayedText && !testingLines.lines[3]?.isComplete && (
                     <span
                       style={{
                         animation: 'blink 1s infinite',
