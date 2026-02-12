@@ -45,6 +45,9 @@ interface MazeCanvasProps {
   // Agent usage for opacity control
   agentUsage?: number;
 
+  // Cover overlay control
+  showCoverOverlay?: boolean;
+
   // Handlers
   onCellClick: (col: number, row: number) => void;
 }
@@ -78,6 +81,7 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
   actualBlockageRow,
   blockageInjected,
   agentUsage = 50,
+  showCoverOverlay,
   onCellClick,
 }) => {
   const { theme } = useTheme();
@@ -86,15 +90,22 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
     return "With Principal AI";
   };
 
-  const showCover = (testedLocally && (mode === 'agentic' || mode === 'no-agentic')) || (deployed && mode === 'no-agentic') || (deployed && mode === 'principal');
+  // Use explicit showCoverOverlay prop if provided, otherwise auto-detect
+  const showCover = showCoverOverlay !== undefined
+    ? showCoverOverlay
+    : (testedLocally && mode === 'conventional') || (deployed && mode !== 'start' && mode !== 'initial');
 
   // Calculate opacity based on agent usage during testing phase
-  // High agent usage (100) = high opacity (less visible)
-  // Low agent usage (0) = low opacity (more visible)
+  // High agent usage = high opacity (less visible)
+  // Low agent usage = low opacity (more visible)
   const calculateCoverOpacity = () => {
-    if (testedLocally && !deployed) {
-      // During testing, use agent usage to control opacity
-      return agentUsage / 100;
+    if (!deployed) {
+      // Before deployment (intro and testing phases), map agent usage to opacity
+      // 25 (a little) → 0.45, 50 (moderately) → 0.80, 75 (a lot) → 0.90
+      if (agentUsage === 25) return 0.45;
+      if (agentUsage === 50) return 0.80;
+      if (agentUsage === 75) return 0.90;
+      return agentUsage / 100; // Fallback
     }
     // After deployment, full opacity
     return 1;
@@ -241,23 +252,6 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
         <text x={baseWidth / 2} y={25} textAnchor="middle" fill={theme.colors.primary} fontSize={theme.fontSizes[2]} fontWeight={theme.fontWeights.bold} fontFamily={theme.fonts.body}>
           {getTitle()}
         </text>
-      )}
-
-      {/* Revenue Counter - shown when deployed */}
-      {deployed && (
-        <g>
-          <text
-            x={baseWidth / 2}
-            y={42}
-            textAnchor="middle"
-            fontSize={theme.fontSizes[1]}
-            fill={theme.colors.success}
-            fontWeight={theme.fontWeights.bold}
-            fontFamily={theme.fonts.body}
-          >
-            Revenue: ${revenue.toLocaleString()}
-          </text>
-        </g>
       )}
 
       {/* Maze - only show after mode is selected */}

@@ -7,9 +7,8 @@ import { GameState, GameEvent, GameMode, AgentUsageLevel } from '../types';
 
 // Helper to determine mode from agent usage
 function determineMode(agentUsage: AgentUsageLevel): GameMode {
-  // For now, map all non-zero usage to 'agentic'
-  // Later we can make this more sophisticated
-  return 'agentic';
+  // All non-Principal usage is conventional
+  return 'conventional';
 }
 
 // Initial state
@@ -37,6 +36,7 @@ export function gameStateReducer(state: GameState, event: GameEvent): GameState 
         return {
           phase: 'testing',
           mode: determineMode(state.selection),
+          agentUsage: state.selection,
         };
       }
       if (event.type === 'GO_BACK') {
@@ -48,7 +48,55 @@ export function gameStateReducer(state: GameState, event: GameEvent): GameState 
       if (event.type === 'GO_BACK') {
         return { phase: 'agentQuestion', selection: null };
       }
-      // Will add START_TEST handler later for phase 2
+      if (event.type === 'START_TEST') {
+        return { phase: 'testing-running', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'testing-running':
+      if (event.type === 'TEST_COMPLETE') {
+        return { phase: 'test-complete', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'test-complete':
+      if (event.type === 'CONTINUE') {
+        return { phase: 'deploy-question', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'deploy-question':
+      if (event.type === 'DEPLOY') {
+        return { phase: 'cost-info', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      if (event.type === 'GO_BACK') {
+        return { phase: 'test-complete', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'cost-info':
+      if (event.type === 'CONTINUE') {
+        return { phase: 'deployed-running', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'deployed-running':
+      if (event.type === 'CONTINUE') {
+        return { phase: 'incident-active', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'incident-active':
+      if (event.type === 'CONTINUE') {
+        return { phase: 'incident-resolved', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      break;
+
+    case 'incident-resolved':
+      if (event.type === 'TRY_PRINCIPAL') {
+        return { phase: 'testing', mode: 'principal', agentUsage: event.agentUsage };
+      }
+      // End of game flow for now
       break;
   }
 
@@ -75,6 +123,6 @@ export function isAgentQuestionPhase(
 
 export function isTestingPhase(
   state: GameState
-): state is { phase: 'testing'; mode: GameMode } {
+): state is { phase: 'testing'; mode: GameMode; agentUsage: AgentUsageLevel } {
   return state.phase === 'testing';
 }

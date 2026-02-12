@@ -25,7 +25,7 @@ export interface UseMazeGameReturn {
   revealedPathIndex: number;
   revenue: number;
   previousIncidentCost: number;
-  previousMode: 'no-agentic' | 'agentic' | null;
+  previousMode: 'conventional' | null;
   previousIncidentDuration: number;
 
   // Maze data
@@ -51,7 +51,7 @@ export interface UseMazeGameReturn {
   baseHeight: number;
 
   // Handlers
-  handleModeSelect: (selectedMode: 'no-agentic' | 'agentic' | 'principal') => void;
+  handleModeSelect: (selectedMode: 'conventional' | 'principal') => void;
   handleTestLocally: () => void;
   handleDeploy: () => void;
   startIncident: () => void;
@@ -103,7 +103,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   const [mode, setMode] = useState<GameMode>('start');
   const [revenue, setRevenue] = useState<number>(0);
   const [previousIncidentCost, setPreviousIncidentCost] = useState<number>(0);
-  const [previousMode, setPreviousMode] = useState<'no-agentic' | 'agentic' | null>(null);
+  const [previousMode, setPreviousMode] = useState<'conventional' | null>(null);
   const [previousIncidentDuration, setPreviousIncidentDuration] = useState<number>(0);
 
   // Total incident cost
@@ -241,7 +241,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   }, [currentSeed, blockageInjected, gridSize, startRow, startCol, destRow, destCol]);
 
   // Handlers
-  const handleModeSelect = (selectedMode: 'no-agentic' | 'agentic' | 'principal') => {
+  const handleModeSelect = (selectedMode: 'conventional' | 'principal') => {
     setMode(selectedMode);
     setTestedLocally(false);
     setTestPath([]);
@@ -284,7 +284,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   const handleTryPrincipal = () => {
     // Store the current incident cost, mode, and duration for comparison
     setPreviousIncidentCost(incidentCost);
-    setPreviousMode(mode as 'no-agentic' | 'agentic');
+    setPreviousMode(mode === 'conventional' ? 'conventional' : null);
     setPreviousIncidentDuration(incidentDurationSeconds);
     setMode('principal');
     setRevealedCells([]);

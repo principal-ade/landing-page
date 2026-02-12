@@ -26,9 +26,24 @@ export function useGameEngine() {
     dispatch({ type: 'START_TEST' });
   }, []);
 
+  // Handler: Test complete
+  const handleTestComplete = useCallback(() => {
+    dispatch({ type: 'TEST_COMPLETE' });
+  }, []);
+
+  // Handler: Deploy
+  const handleDeploy = useCallback(() => {
+    dispatch({ type: 'DEPLOY' });
+  }, []);
+
   // Handler: Go back to previous screen
   const handleGoBack = useCallback(() => {
     dispatch({ type: 'GO_BACK' });
+  }, []);
+
+  // Handler: Try with Principal AI
+  const handleTryPrincipal = useCallback((agentUsage: AgentUsageLevel) => {
+    dispatch({ type: 'TRY_PRINCIPAL', agentUsage });
   }, []);
 
   // Return state and handlers
@@ -38,7 +53,10 @@ export function useGameEngine() {
       continue: handleContinue,
       selectUsage: handleSelectUsage,
       startTest: handleStartTest,
+      testComplete: handleTestComplete,
+      deploy: handleDeploy,
       goBack: handleGoBack,
+      tryPrincipal: handleTryPrincipal,
     },
   };
 }

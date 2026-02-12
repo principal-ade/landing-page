@@ -9,6 +9,7 @@ interface MazePanelProps {
   agentUsage: number;
   isMobile: boolean;
   showMaze: boolean;
+  showCoverOverlay?: boolean; // Explicit control over cover visibility
 }
 
 export function MazePanel({
@@ -17,12 +18,16 @@ export function MazePanel({
   agentUsage,
   isMobile,
   showMaze,
+  showCoverOverlay,
 }: MazePanelProps) {
   return (
     <div
       style={{
-        flex: "0 0 auto",
-        alignSelf: "center", // Center the maze vertically
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       <div style={{
@@ -31,8 +36,9 @@ export function MazePanel({
         alignItems: 'center',
         gap: '24px',
         padding: isMobile ? '20px 16px' : '40px 20px',
-        width: '100%',
         animation: showMaze ? 'fadeIn 0.5s ease-in' : 'none',
+        maxWidth: '100%',
+        maxHeight: '100%',
       }}>
         <svg
           width={gameState.baseWidth}
@@ -40,12 +46,18 @@ export function MazePanel({
           viewBox={`0 0 ${gameState.baseWidth} ${gameState.baseHeight}`}
           preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ maxWidth: '100%', height: 'auto' }}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: 'auto',
+            height: 'auto',
+          }}
         >
           <MazeCanvas
             {...gameState}
             onCellClick={handleCellClick}
             agentUsage={agentUsage}
+            showCoverOverlay={showCoverOverlay}
           />
         </svg>
       </div>

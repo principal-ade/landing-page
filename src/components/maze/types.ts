@@ -13,4 +13,4 @@ export interface BlockageWall {
   row2?: number;
 }
 
-export type GameMode = 'start' | 'initial' | 'no-agentic' | 'agentic' | 'principal';
+export type GameMode = 'start' | 'initial' | 'conventional' | 'principal';

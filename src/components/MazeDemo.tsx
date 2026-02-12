@@ -114,7 +114,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
           flexDirection: isMobile ? 'column' : 'row',
         }}>
           <button
-            onClick={() => handleModeSelect('no-agentic')}
+            onClick={() => handleModeSelect('conventional')}
             style={{
               padding: isMobile ? '14px 28px' : '16px 40px',
               background: theme.colors.secondary,
@@ -140,7 +140,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
             Artisanal
           </button>
           <button
-            onClick={() => handleModeSelect('agentic')}
+            onClick={() => handleModeSelect('principal')}
             style={{
               padding: isMobile ? '14px 28px' : '16px 40px',
               background: theme.colors.primary,
@@ -169,7 +169,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
       )}
 
       {/* Test Locally button */}
-      {(mode === 'no-agentic' || mode === 'agentic' || mode === 'principal') && !testedLocally && !deployed && (
+      {(mode === 'conventional' || mode === 'principal') && !testedLocally && !deployed && (
         <button
           onClick={handleTestLocally}
           style={{
@@ -198,7 +198,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
       )}
 
       {/* Testing status */}
-      {(mode === 'no-agentic' || mode === 'agentic' || mode === 'principal') && testedLocally && revealedPathIndex < testPath.length && !deployed && (
+      {(mode === 'conventional' || mode === 'principal') && testedLocally && revealedPathIndex < testPath.length && !deployed && (
         <div style={{
           background: theme.colors.primary,
           padding: '16px 24px',
@@ -219,7 +219,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
       )}
 
       {/* Test Successful status */}
-      {(mode === 'no-agentic' || mode === 'agentic' || mode === 'principal') && testedLocally && revealedPathIndex >= testPath.length && testPath.length > 0 && !deployed && (
+      {(mode === 'conventional' || mode === 'principal') && testedLocally && revealedPathIndex >= testPath.length && testPath.length > 0 && !deployed && (
         <div style={{
           background: theme.colors.success,
           padding: '16px 24px',
@@ -240,7 +240,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
       )}
 
       {/* Deploy and Back buttons */}
-      {(mode === 'no-agentic' || mode === 'agentic' || mode === 'principal') && testedLocally && revealedPathIndex >= testPath.length && testPath.length > 0 && !deployed && (
+      {(mode === 'conventional' || mode === 'principal') && testedLocally && revealedPathIndex >= testPath.length && testPath.length > 0 && !deployed && (
         <div style={{
           display: 'flex',
           gap: '16px',
@@ -376,7 +376,7 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
             color: theme.colors.text,
             fontFamily: theme.fonts.body,
           }}>
-            You saved ${(previousIncidentCost - incidentCost).toLocaleString()} vs {previousMode === 'agentic' ? 'Agentic' : 'Artisanal'}
+            You saved ${(previousIncidentCost - incidentCost).toLocaleString()} vs {previousMode === 'conventional' ? 'Artisanal' : 'Principal'}
           </div>
         </div>
       )}

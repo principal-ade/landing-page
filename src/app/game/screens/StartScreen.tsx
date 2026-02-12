@@ -56,13 +56,13 @@ export function StartScreen({ onContinue }: StartScreenProps) {
         {/* Heading */}
         <GameHeading
           text={lines[0]?.displayedText || ''}
-          showCursor={lines[0]?.displayedText && !lines[0]?.isComplete && currentLineIndex === 0}
+          showCursor={!!(lines[0]?.displayedText && !lines[0]?.isComplete && currentLineIndex === 0)}
         />
 
         {/* Body text - always render to reserve space, but only show text when available */}
         <GameBodyText
           text={lines[1]?.displayedText || ''}
-          showCursor={lines[1]?.displayedText && !lines[1].isComplete && currentLineIndex === 1}
+          showCursor={!!(lines[1]?.displayedText && !lines[1].isComplete && currentLineIndex === 1)}
           opacity={0.9}
           minHeight="4.8em"
         />

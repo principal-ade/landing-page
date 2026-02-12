@@ -24,6 +24,7 @@ export function GameHeading({ text, showCursor = false }: GameHeadingProps) {
         marginBottom: '24px',
         fontFamily: theme.fonts.heading,
         lineHeight: 1.2,
+        minHeight: '1.2em',
       }}
     >
       {text}
