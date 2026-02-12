@@ -27,7 +27,7 @@ export const Manifesto: React.FC = () => {
     >
       <div
         style={{
-          maxWidth: "720px",
+          maxWidth: "900px",
           margin: "0 auto",
         }}
       >
