@@ -30,6 +30,12 @@ jobs:
         aws-region: us-east-1
         audience: sts.amazonaws.com
 
+    - name: Verify AWS Identity
+      run: |
+        echo "Current AWS Identity:"
+        aws sts get-caller-identity
+        echo "Role ARN: ${{ secrets.AWS_ROLE_ARN }}"
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
