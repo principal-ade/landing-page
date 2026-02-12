@@ -4,10 +4,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import { useTheme } from "@principal-ade/industry-theme";
 import { useMazeGame } from "@/hooks/useMazeGame";
-import { MazeCanvas } from "@/components/maze/MazeCanvas";
 import { TIMINGS } from "./constants";
 import { GameFlowState } from "./types";
 import { useSequentialTypewriter } from "@/hooks/useSequentialTypewriter";
+import { ProgressTracker } from "@/components/game/ProgressTracker";
+import { TextPanel } from "@/components/game/TextPanel";
+import { MazePanel } from "@/components/game/MazePanel";
 
 // Typewriter effect hook
 function useTypewriter(text: string, speed: number = 50, delay: number = 0) {
@@ -89,12 +91,12 @@ function GameContent() {
   // Game flow state machine
   const [flowState, setFlowState] = useState<GameFlowState>('start');
 
-  // Slider state (0 to 100, where 0 = "a little", 100 = "a lot")
-  const [agentUsage, setAgentUsage] = useState(50);
+  // Agent usage state (0 = unselected, 25 = a little, 50 = moderately, 75 = a lot)
+  const [agentUsage, setAgentUsage] = useState(0);
 
   // Derived UI states from flowState
   const showSlider = flowState === 'agent-question';
-  const showContinueButton = flowState === 'agent-question' && agentUsage >= 0; // Always show after slider interaction
+  const showContinueButton = flowState === 'agent-question' && (agentUsage === 25 || agentUsage === 50 || agentUsage === 75);
   const showTestComplete = flowState === 'test-complete';
   const showDeployQuestion = flowState === 'deploy-question';
   const showDeployButtons = flowState === 'deploy-question';
@@ -113,9 +115,9 @@ function GameContent() {
     200
   );
 
-  // Typewriter text for slider question screen
-  const sliderQuestionText = "How much do you use agents to develop your software?";
-  const sliderQuestion = useTypewriter(flowState === 'agent-question' ? sliderQuestionText : '', TIMINGS.TYPEWRITER.HEADING, 0);
+  // Typewriter text for agent question screen
+  const agentQuestionText = "How much do you use agents to develop your software?";
+  const agentQuestion = useTypewriter(flowState === 'agent-question' ? agentQuestionText : '', TIMINGS.TYPEWRITER.HEADING, 0);
 
   // Typewriter text for deploy question
   const deployQuestionText = "Everything looks good. Ready to deploy to production?";
@@ -279,13 +281,92 @@ function GameContent() {
     }
   }, [flowState, blockageFound]);
 
+  // Reset agent usage selection when entering agent-question step
+  useEffect(() => {
+    if (flowState === 'agent-question') {
+      setAgentUsage(0);
+    }
+  }, [flowState]);
+
   // Handle slider interaction
   const handleSliderChange = (value: number) => {
     setAgentUsage(value);
   };
 
-  // Render different text panels based on game state
-  const renderTextPanel = () => {
+  // Handle navigation from progress tracker
+  const handleNavigate = (targetState: GameFlowState) => {
+    // Jumping to start - reset everything
+    if (targetState === 'start') {
+      handleTryAgain();
+      setFlowState('start');
+      return;
+    }
+
+    // Jumping to agent question - reset mode so maze disappears
+    if (targetState === 'agent-question') {
+      setMode('initial');
+      setFlowState('agent-question');
+      return;
+    }
+
+    // Jumping to testing - need to have mode set
+    if (targetState === 'testing-intro') {
+      if (mode === 'initial' || mode === 'start') {
+        setMode('agentic'); // Default to agentic mode if not set
+      }
+      setFlowState('testing-intro');
+      return;
+    }
+
+    // Jumping to deploy - need to have completed test
+    if (targetState === 'deploy-question') {
+      if (!testedLocally) {
+        // Fast-forward through testing
+        handleTestLocally();
+        setTimeout(() => {
+          setFlowState('deploy-question');
+        }, 100);
+      } else {
+        setFlowState('deploy-question');
+      }
+      return;
+    }
+
+    // Jumping to production - need to have deployed
+    if (targetState === 'deployed-running') {
+      if (!deployed) {
+        handleDeploy();
+        setTimeout(() => {
+          setFlowState('deployed-running');
+        }, 100);
+      } else {
+        setFlowState('deployed-running');
+      }
+      return;
+    }
+
+    // Jumping to incident - need to be deployed
+    if (targetState === 'incident-active') {
+      if (!started) {
+        startIncident();
+      }
+      setFlowState('incident-active');
+      return;
+    }
+
+    // Jumping to resolved - only if incident was started
+    if (targetState === 'incident-resolved' && started) {
+      setFlowState('incident-resolved');
+      return;
+    }
+
+    // Default: just set the flow state
+    setFlowState(targetState);
+  };
+
+  // Removed renderTextPanel function - now using TextPanel component
+  // See TextPanel.tsx for the text rendering logic
+  const _renderTextPanel_removed = () => {
     // 1. Initial screen - just intro
     if (flowState === 'start') {
       return (
@@ -403,8 +484,8 @@ function GameContent() {
                 minHeight: '1.5em',
               }}
             >
-              {sliderQuestion.displayedText}
-              {!sliderQuestion.isComplete && (
+              {agentQuestion.displayedText}
+              {!agentQuestion.isComplete && (
                 <span
                   style={{
                     animation: 'blink 1s infinite',
@@ -1362,15 +1443,21 @@ function GameContent() {
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
+      {/* Two-phase layout:
+          Phase 1 (start, agent-question): Vertically centered, flexible
+          Phase 2 (testing onwards): Top-aligned, fixed height for stability */}
       <div
         style={{
           width: "100%",
           minHeight: "calc(100vh - 70px)",
           display: "flex",
-          alignItems: "flex-start",
+          alignItems: flowState === 'start' || flowState === 'agent-question' ? "center" : "flex-start",
           justifyContent: "center",
           backgroundColor: theme.colors.background,
-          paddingTop: mode === 'start' ? "15vh" : mode === 'initial' ? "8vh" : "0",
+          paddingTop: flowState === 'start' || flowState === 'agent-question'
+            ? "0" // Centered by alignItems
+            : isMobile ? "60px" : "80px", // Fixed padding for game phase
+          paddingBottom: isMobile ? "80px" : "120px", // Space for progress tracker
         }}
       >
       <div
@@ -1385,39 +1472,75 @@ function GameContent() {
         }}
       >
         {/* Dynamic Text Panel - now on the left */}
-        {renderTextPanel()}
+        <TextPanel
+          flowState={flowState}
+          setFlowState={setFlowState}
+          mode={mode}
+          setMode={setMode}
+          isMobile={isMobile}
+          theme={theme}
+          testedLocally={testedLocally}
+          deployed={deployed}
+          started={started}
+          blockageFound={blockageFound}
+          incidentCost={incidentCost}
+          incidentDurationSeconds={incidentDurationSeconds}
+          previousIncidentCost={previousIncidentCost}
+          previousIncidentDuration={previousIncidentDuration}
+          continueClicked={continueClicked}
+          startLines={startLines}
+          agentQuestion={agentQuestion}
+          testingLines={testingLines}
+          deployQuestion={deployQuestion}
+          costInfoLines={costInfoLines}
+          deployedLines={deployedLines}
+          incidentLines={incidentLines}
+          agentUsage={agentUsage}
+          setAgentUsage={setAgentUsage}
+          handleTestLocally={handleTestLocally}
+          handleDeploy={handleDeploy}
+          handleTryAgain={handleTryAgain}
+          handleTryPrincipal={handleTryPrincipal}
+          showSlider={showSlider}
+          showContinueButton={showContinueButton}
+          showTestComplete={showTestComplete}
+          showDeployQuestion={showDeployQuestion}
+          showDeployButtons={showDeployButtons}
+          showCostInfo={showCostInfo}
+          showTestingText={showTestingText}
+          showTestingButtons={showTestingButtons}
+          showIncidentCostBox={showIncidentCostBox}
+        />
 
-        {/* Game Section - show after first line of text completes or after testing starts */}
-        {((mode === 'agentic' || mode === 'no-agentic' || mode === 'principal') && (showMaze || testedLocally || deployed)) && (
-          <div style={{ flex: "0 0 auto" }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '24px',
-              padding: isMobile ? '20px 16px' : '40px 20px',
-              width: '100%',
-              animation: showMaze && !testedLocally && !deployed ? 'fadeIn 0.5s ease-in' : 'none',
-            }}>
-              <svg
-                width={gameState.baseWidth}
-                height={gameState.baseHeight}
-                viewBox={`0 0 ${gameState.baseWidth} ${gameState.baseHeight}`}
-                preserveAspectRatio="xMidYMid meet"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ maxWidth: '100%', height: 'auto' }}
-              >
-                <MazeCanvas
-                  {...gameState}
-                  onCellClick={handleCellClick}
-                  agentUsage={agentUsage}
-                />
-              </svg>
+        {/* Maze Panel - space reserved once testing starts, appears after "maze represents..." line completes */}
+        {(mode === 'agentic' || mode === 'no-agentic' || mode === 'principal') && (
+          <div style={{
+            flex: isMobile || isTablet ? "0 0 auto" : "1",
+            minWidth: isMobile || isTablet ? "auto" : "400px",
+            maxWidth: isMobile || isTablet ? "100%" : "550px",
+            opacity: (showMaze || testedLocally || deployed) ? 1 : 0,
+            visibility: (showMaze || testedLocally || deployed) ? 'visible' : 'hidden',
+            pointerEvents: (showMaze || testedLocally || deployed) ? 'auto' : 'none',
+            transition: 'opacity 0.5s ease',
+          }}>
+            <MazePanel
+              gameState={gameState}
+              handleCellClick={handleCellClick}
+              agentUsage={agentUsage}
+              isMobile={isMobile}
+              showMaze={showMaze && !testedLocally && !deployed}
+            />
           </div>
-        </div>
         )}
       </div>
     </div>
+
+    {/* Progress Tracker */}
+    <ProgressTracker
+      currentState={flowState}
+      onNavigate={handleNavigate}
+      isMobile={isMobile}
+    />
     </>
   );
 }
