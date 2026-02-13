@@ -7,27 +7,24 @@ import { GameHeading } from '../components/atoms/GameHeading';
 import { GameBodyText } from '../components/atoms/GameBodyText';
 import { MazePanel } from '@/components/game/MazePanel';
 import { useSequentialTypewriter } from '../hooks/useSequentialTypewriter';
-import { GameMode } from '../types';
 import { GAME_CONTENT } from '../config/gameContent';
 import { GAME_CONFIG } from '../config/gameConfig';
 import { UseMazeGameReturn } from '@/hooks/useMazeGame';
 
-interface ProductionScreenProps {
-  mode: GameMode;
+interface PrincipalProductionScreenProps {
   phase: 'cost-info' | 'deployed-running' | 'incident-active' | 'incident-resolved';
   onBack: () => void;
   onContinue: () => void;
-  onTryPrincipal?: () => void;
   onPlayAgain?: () => void;
   gameState: UseMazeGameReturn;
   agentUsage: number;
 }
 
 /**
- * Production Screen - handles all production-related phases
- * Shows production info with maze displaying completed test path
+ * Principal Production Screen - shows production with Principal AI telemetry
+ * Emphasizes story-based telemetry and automated incident resolution
  */
-export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincipal, onPlayAgain, gameState, agentUsage }: ProductionScreenProps) {
+export function PrincipalProductionScreen({ phase, onBack, onContinue, onPlayAgain, gameState, agentUsage }: PrincipalProductionScreenProps) {
   const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
@@ -53,9 +50,7 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
         speed: GAME_CONFIG.timings.typewriterSpeed.body,
       },
       {
-        text: mode === 'principal'
-          ? GAME_CONTENT.costInfo.lines.principal.text
-          : GAME_CONTENT.costInfo.lines.conventional.text,
+        text: GAME_CONTENT.costInfo.lines.principal.text,
         speed: GAME_CONFIG.timings.typewriterSpeed.body,
       },
       {
@@ -64,7 +59,7 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
       },
     ];
     return lines;
-  }, [mode]);
+  }, []);
 
   const { lines, allComplete, currentLineIndex } = useSequentialTypewriter(
     phase === 'cost-info',
@@ -179,7 +174,7 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
             <>
               <GameHeading text={GAME_CONTENT.incidentActive.heading} />
               <GameBodyText
-                text={GAME_CONTENT.incidentActive.conventional.text}
+                text={GAME_CONTENT.incidentActive.principal.text}
                 opacity={0.9}
                 marginBottom="0"
               />
@@ -191,7 +186,7 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
             <>
               <GameHeading text={GAME_CONTENT.incidentResolved.heading} />
               <GameBodyText
-                text={GAME_CONTENT.incidentResolved.conventional.text}
+                text={GAME_CONTENT.incidentResolved.principal.text}
                 opacity={0.9}
                 marginBottom="0"
               />
@@ -257,19 +252,6 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
                   Duration: {gameState.incidentDurationSeconds.toFixed(1)}s
                 </div>
               </div>
-              {gameState.directionHint && (
-                <div
-                  style={{
-                    fontSize: theme.fontSizes[2],
-                    color: theme.colors.primary,
-                    fontFamily: theme.fonts.body,
-                    marginTop: '8px',
-                    fontWeight: theme.fontWeights.bold,
-                  }}
-                >
-                  Hint: {gameState.directionHint}
-                </div>
-              )}
             </>
           )}
 
@@ -342,9 +324,14 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
                 animation: 'fadeIn 0.5s ease-in',
               }}
             >
-              {onTryPrincipal && (
-                <Button onClick={onTryPrincipal}>
-                  {GAME_CONTENT.incidentResolved.buttons.tryPrincipal}
+              <Button
+                onClick={() => window.open('https://cal.com/principlemd/intro', '_blank')}
+              >
+                {GAME_CONTENT.incidentResolved.buttons.scheduleCall}
+              </Button>
+              {onPlayAgain && (
+                <Button onClick={onPlayAgain} variant="ghost">
+                  {GAME_CONTENT.incidentResolved.buttons.playAgain}
                 </Button>
               )}
             </div>

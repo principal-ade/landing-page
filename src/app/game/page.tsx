@@ -10,6 +10,9 @@ import { AgentQuestionScreen } from './screens/AgentQuestionScreen';
 import { TestingScreen } from './screens/TestingScreen';
 import { PrincipalTestingScreen } from './screens/PrincipalTestingScreen';
 import { ProductionScreen } from './screens/ProductionScreen';
+import { PrincipalProductionScreen } from './screens/PrincipalProductionScreen';
+import { DevProgressBar } from './components/DevProgressBar';
+import { GameState, GameMode, AgentUsageLevel } from './types';
 
 /**
  * Game v2 - Clean Architecture Implementation
@@ -39,10 +42,44 @@ function GameContent() {
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
-  // Set maze mode when entering testing phase
+  // Development only: handler for jumping to specific phases
+  const handleJumpToPhase = (phase: GameState['phase'], mode?: GameMode, agentUsage?: AgentUsageLevel) => {
+    let newState: GameState;
+
+    if (phase === 'start') {
+      newState = { phase: 'start' };
+    } else if (phase === 'agentQuestion') {
+      newState = { phase: 'agentQuestion', selection: null };
+    } else {
+      // All other phases require mode and agentUsage
+      const finalMode = mode || 'conventional';
+      const finalAgentUsage: AgentUsageLevel = agentUsage || 50;
+      newState = { phase, mode: finalMode, agentUsage: finalAgentUsage } as GameState;
+    }
+
+    handlers.jumpToState(newState);
+  };
+
+  // Sync maze state when jumping to phases (for dev progress bar)
   useEffect(() => {
-    if (state.phase === 'testing' || state.phase === 'testing-running' || state.phase === 'test-complete' || state.phase === 'cost-info' || state.phase === 'deployed-running' || state.phase === 'incident-active' || state.phase === 'incident-resolved') {
+    if (state.phase === 'testing' || state.phase === 'testing-running' || state.phase === 'test-complete' || state.phase === 'deploy-question' || state.phase === 'cost-info' || state.phase === 'deployed-running' || state.phase === 'incident-active' || state.phase === 'incident-resolved') {
+      // Set mode
       gameState.setMode(state.mode);
+
+      // If we're at test-complete or beyond, ensure test has been run
+      if ((state.phase === 'test-complete' || state.phase === 'deploy-question' || state.phase === 'cost-info' || state.phase === 'deployed-running' || state.phase === 'incident-active' || state.phase === 'incident-resolved') && !gameState.testedLocally) {
+        gameState.handleTestLocally();
+      }
+
+      // If we're at deployed phases, ensure deploy has been called
+      if ((state.phase === 'deployed-running' || state.phase === 'incident-active' || state.phase === 'incident-resolved') && !gameState.deployed) {
+        gameState.handleDeploy();
+      }
+
+      // If we're at incident phases, ensure incident has started
+      if ((state.phase === 'incident-active' || state.phase === 'incident-resolved') && !gameState.started) {
+        gameState.startIncident();
+      }
     }
   }, [state.phase, state, gameState]);
 
@@ -140,23 +177,39 @@ function GameContent() {
       case 'deployed-running':
       case 'incident-active':
       case 'incident-resolved':
-        return (
-          <ProductionScreen
-            mode={state.mode}
-            phase={state.phase}
-            onBack={handlers.goBack}
-            onContinue={handlers.continue}
-            onTryPrincipal={() => {
-              gameState.handleTryPrincipal();
-              handlers.tryPrincipal(state.agentUsage);
-            }}
-            onPlayAgain={() => {
-              // TODO: Implement play again flow
-            }}
-            gameState={gameState}
-            agentUsage={state.agentUsage}
-          />
-        );
+        // Use PrincipalProductionScreen for principal mode, ProductionScreen for conventional
+        if (state.mode === 'principal') {
+          return (
+            <PrincipalProductionScreen
+              phase={state.phase}
+              onBack={handlers.goBack}
+              onContinue={handlers.continue}
+              onPlayAgain={() => {
+                // TODO: Implement play again flow
+              }}
+              gameState={gameState}
+              agentUsage={state.agentUsage}
+            />
+          );
+        } else {
+          return (
+            <ProductionScreen
+              mode={state.mode}
+              phase={state.phase}
+              onBack={handlers.goBack}
+              onContinue={handlers.continue}
+              onTryPrincipal={() => {
+                gameState.handleTryPrincipal();
+                handlers.tryPrincipal(state.agentUsage);
+              }}
+              onPlayAgain={() => {
+                // TODO: Implement play again flow
+              }}
+              gameState={gameState}
+              agentUsage={state.agentUsage}
+            />
+          );
+        }
 
       default:
         return null;
@@ -171,8 +224,8 @@ function GameContent() {
           50%, 100% { opacity: 0; }
         }
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
       `}</style>
 
@@ -225,6 +278,9 @@ function GameContent() {
           </div>
         </div>
       </div>
+
+      {/* Development progress bar */}
+      <DevProgressBar currentState={state} onJumpToPhase={handleJumpToPhase} />
     </>
   );
 }

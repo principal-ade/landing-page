@@ -46,6 +46,11 @@ export function useGameEngine() {
     dispatch({ type: 'TRY_PRINCIPAL', agentUsage });
   }, []);
 
+  // Handler: Jump to specific state (development only)
+  const handleJumpToState = useCallback((state: GameState) => {
+    dispatch({ type: 'JUMP_TO_STATE', state });
+  }, []);
+
   // Return state and handlers
   return {
     state,
@@ -57,6 +62,7 @@ export function useGameEngine() {
       deploy: handleDeploy,
       goBack: handleGoBack,
       tryPrincipal: handleTryPrincipal,
+      jumpToState: handleJumpToState,
     },
   };
 }

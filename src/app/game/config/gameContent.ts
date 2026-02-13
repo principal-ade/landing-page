@@ -69,13 +69,23 @@ export const GAME_CONTENT = {
 
   incidentActive: {
     heading: "Production Incident",
-    text: "An error is blocking your users! Click cells to search for the bug.",
+    conventional: {
+      text: "An error is blocking your users! Click cells to search for the bug.",
+    },
+    principal: {
+      text: "An error is blocking your users! Principal AI's story-based telemetry automatically identifies the issue.",
+    },
     hint: "Direction hint will appear every 5 clicks",
   },
 
   incidentResolved: {
     heading: "Incident Resolved",
-    text: "You found the bug and fixed the issue!",
+    conventional: {
+      text: "You found the bug and fixed the issue!",
+    },
+    principal: {
+      text: "Principal AI identified and helped resolve the issue in seconds!",
+    },
     buttons: {
       scheduleCall: "Schedule a call",
       tryPrincipal: "Try with Principal AI",

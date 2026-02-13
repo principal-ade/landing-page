@@ -28,7 +28,8 @@ export type GameEvent =
   | { type: 'TEST_COMPLETE' }
   | { type: 'DEPLOY' }
   | { type: 'GO_BACK' }
-  | { type: 'TRY_PRINCIPAL'; agentUsage: AgentUsageLevel };
+  | { type: 'TRY_PRINCIPAL'; agentUsage: AgentUsageLevel }
+  | { type: 'JUMP_TO_STATE'; state: GameState };
 
 // Typewriter result
 export interface TypewriterResult {

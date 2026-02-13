@@ -18,6 +18,11 @@ export const initialGameState: GameState = {
 
 // State transition reducer
 export function gameStateReducer(state: GameState, event: GameEvent): GameState {
+  // Handle JUMP_TO_STATE event (for development only)
+  if (event.type === 'JUMP_TO_STATE') {
+    return event.state;
+  }
+
   switch (state.phase) {
     case 'start':
       if (event.type === 'CONTINUE') {
@@ -77,6 +82,9 @@ export function gameStateReducer(state: GameState, event: GameEvent): GameState 
     case 'cost-info':
       if (event.type === 'CONTINUE') {
         return { phase: 'deployed-running', mode: state.mode, agentUsage: state.agentUsage };
+      }
+      if (event.type === 'GO_BACK') {
+        return { phase: 'deploy-question', mode: state.mode, agentUsage: state.agentUsage };
       }
       break;
 

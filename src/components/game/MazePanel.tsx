@@ -10,6 +10,7 @@ interface MazePanelProps {
   isMobile: boolean;
   showMaze: boolean;
   showCoverOverlay?: boolean; // Explicit control over cover visibility
+  animate?: boolean; // Control fade-in animation (default: false)
 }
 
 export function MazePanel({
@@ -19,6 +20,7 @@ export function MazePanel({
   isMobile,
   showMaze,
   showCoverOverlay,
+  animate = false,
 }: MazePanelProps) {
   return (
     <div
@@ -36,7 +38,7 @@ export function MazePanel({
         alignItems: 'center',
         gap: '24px',
         padding: isMobile ? '20px 16px' : '40px 20px',
-        animation: showMaze ? 'fadeIn 0.5s ease-in' : 'none',
+        animation: (showMaze && animate) ? 'fadeIn 0.5s ease-in' : 'none',
         maxWidth: '100%',
         maxHeight: '100%',
       }}>
