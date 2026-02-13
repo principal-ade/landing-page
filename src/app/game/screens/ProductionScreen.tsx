@@ -179,7 +179,9 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
             <>
               <GameHeading text={GAME_CONTENT.incidentActive.heading} />
               <GameBodyText
-                text={GAME_CONTENT.incidentActive.conventional.text}
+                text={gameState.blockageFound
+                  ? GAME_CONTENT.incidentActive.conventional.foundText
+                  : GAME_CONTENT.incidentActive.conventional.text}
                 opacity={0.9}
                 marginBottom="0"
               />
@@ -330,6 +332,14 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
             <div style={{ animation: 'fadeIn 0.5s ease-in' }}>
               <Button onClick={onContinue}>
                 {GAME_CONTENT.deployedRunning.button}
+              </Button>
+            </div>
+          )}
+
+          {phase === 'incident-active' && gameState.blockageFound && !gameState.bugFixed && (
+            <div style={{ animation: 'fadeIn 0.5s ease-in' }}>
+              <Button onClick={gameState.handleFixBug}>
+                {GAME_CONTENT.incidentActive.buttons.fix}
               </Button>
             </div>
           )}

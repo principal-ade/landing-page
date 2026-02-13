@@ -18,6 +18,7 @@ export interface UseMazeGameReturn {
   incidentCost: number;
   incidentDurationSeconds: number;
   blockageFound: boolean;
+  bugFixed: boolean;
   started: boolean;
   deployed: boolean;
   testedLocally: boolean;
@@ -58,6 +59,7 @@ export interface UseMazeGameReturn {
   handleTryPrincipal: () => void;
   handleTryAgain: () => void;
   handleCellClick: (col: number, row: number) => void;
+  handleFixBug: () => void;
   setMode: (mode: GameMode) => void;
 }
 
@@ -92,6 +94,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
   const [clickCost, setClickCost] = useState<number>(0);
   const [incidentDurationSeconds, setIncidentDurationSeconds] = useState<number>(0);
   const [blockageFound, setBlockageFound] = useState<boolean>(false);
+  const [bugFixed, setBugFixed] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [started, setStarted] = useState<boolean>(false);
   const [currentSeed, setCurrentSeed] = useState<number>(() => Math.floor(Math.random() * 10000));
@@ -118,7 +121,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
 
   // Increment time cost and duration
   useEffect(() => {
-    if (blockageFound || !startTime || !started) return;
+    if (bugFixed || !startTime || !started) return;
 
     const interval = setInterval(() => {
       setTimeCost(prev => prev + (incidentCostPerSecond / 100));
@@ -126,7 +129,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     }, 10); // Increment based on cost per second (divided by 100 for 10ms intervals)
 
     return () => clearInterval(interval);
-  }, [blockageFound, startTime, started, incidentCostPerSecond]);
+  }, [bugFixed, startTime, started, incidentCostPerSecond]);
 
   // Progressive path reveal animation
   useEffect(() => {
@@ -290,6 +293,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     setRevealedCells([]);
     setDirectionHint("");
     setBlockageFound(false);
+    setBugFixed(false);
     setTimeCost(0);
     setClickCost(0);
     setIncidentDurationSeconds(0);
@@ -302,10 +306,15 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     setRevenue(0);
   };
 
+  const handleFixBug = useCallback(() => {
+    setBugFixed(true);
+  }, []);
+
   const handleTryAgain = () => {
     setRevealedCells([]);
     setDirectionHint("");
     setBlockageFound(false);
+    setBugFixed(false);
     setTimeCost(0);
     setClickCost(0);
     setIncidentDurationSeconds(0);
@@ -442,6 +451,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     incidentCost,
     incidentDurationSeconds,
     blockageFound,
+    bugFixed,
     started,
     deployed,
     testedLocally,
@@ -482,6 +492,7 @@ export function useMazeGame(props?: UseMazeGameProps): UseMazeGameReturn {
     handleTryPrincipal,
     handleTryAgain,
     handleCellClick,
+    handleFixBug,
     setMode,
   };
 }

@@ -108,13 +108,13 @@ function GameContent() {
     }
   }, [state.phase, gameState]);
 
-  // Auto-transition to incident-resolved when blockage is found
+  // Auto-transition to incident-resolved when bug is fixed
   useEffect(() => {
-    if (state.phase === 'incident-active' && gameState.blockageFound) {
+    if (state.phase === 'incident-active' && gameState.bugFixed) {
       const timer = setTimeout(() => handlers.continue(), 1500);
       return () => clearTimeout(timer);
     }
-  }, [state.phase, gameState.blockageFound, handlers]);
+  }, [state.phase, gameState.bugFixed, handlers]);
 
   // Render appropriate screen based on state
   const renderScreen = () => {
@@ -257,8 +257,8 @@ function GameContent() {
           {/* Render current screen */}
           {renderScreen()}
 
-          {/* Debug info - remove in production */}
-          <div
+          {/* Debug info - commented out for production */}
+          {/* <div
             style={{
               position: 'fixed',
               bottom: '20px',
@@ -275,12 +275,12 @@ function GameContent() {
             Phase: {state.phase}
             {state.phase === 'agentQuestion' && ` | Selection: ${state.selection ?? 'none'}`}
             {state.phase === 'testing' && ` | Mode: ${state.mode}`}
-          </div>
+          </div> */}
         </div>
       </div>
 
-      {/* Development progress bar */}
-      <DevProgressBar currentState={state} onJumpToPhase={handleJumpToPhase} />
+      {/* Development progress bar - commented out for production */}
+      {/* <DevProgressBar currentState={state} onJumpToPhase={handleJumpToPhase} /> */}
     </>
   );
 }

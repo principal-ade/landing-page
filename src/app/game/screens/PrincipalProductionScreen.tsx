@@ -174,7 +174,9 @@ export function PrincipalProductionScreen({ phase, onBack, onContinue, onPlayAga
             <>
               <GameHeading text={GAME_CONTENT.incidentActive.heading} />
               <GameBodyText
-                text={GAME_CONTENT.incidentActive.principal.text}
+                text={gameState.blockageFound
+                  ? GAME_CONTENT.incidentActive.principal.foundText
+                  : GAME_CONTENT.incidentActive.principal.text}
                 opacity={0.9}
                 marginBottom="0"
               />
@@ -257,35 +259,95 @@ export function PrincipalProductionScreen({ phase, onBack, onContinue, onPlayAga
 
           {/* Final incident cost - shown during incident-resolved */}
           {phase === 'incident-resolved' && (
-            <div
-              style={{
-                padding: '12px 16px',
-                background: `${theme.colors.error}20`,
-                borderRadius: '8px',
-              }}
-            >
+            <>
+              {gameState.previousMode === 'conventional' && (
+                <div
+                  style={{
+                    padding: '12px 16px',
+                    background: `${theme.colors.error}20`,
+                    borderRadius: '8px',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: theme.fontSizes[1],
+                      color: theme.colors.text,
+                      opacity: 0.7,
+                      fontFamily: theme.fonts.body,
+                      marginBottom: '8px',
+                    }}
+                  >
+                    Your previous attempt (Conventional):
+                  </div>
+                  <div
+                    style={{
+                      fontSize: theme.fontSizes[3],
+                      fontWeight: theme.fontWeights.bold,
+                      color: theme.colors.error,
+                      fontFamily: theme.fonts.body,
+                    }}
+                  >
+                    ${Math.round(gameState.previousIncidentCost).toLocaleString()} | {gameState.previousIncidentDuration.toFixed(1)}s
+                  </div>
+                </div>
+              )}
               <div
                 style={{
-                  fontSize: theme.fontSizes[4],
-                  fontWeight: theme.fontWeights.bold,
-                  color: theme.colors.error,
-                  fontFamily: theme.fonts.body,
+                  padding: '12px 16px',
+                  background: `${theme.colors.success}20`,
+                  borderRadius: '8px',
                 }}
               >
-                Total Incident Cost: ${Math.round(gameState.incidentCost).toLocaleString()}
+                {gameState.previousMode === 'conventional' && (
+                  <div
+                    style={{
+                      fontSize: theme.fontSizes[1],
+                      color: theme.colors.text,
+                      opacity: 0.7,
+                      fontFamily: theme.fonts.body,
+                      marginBottom: '8px',
+                    }}
+                  >
+                    With Principal AI:
+                  </div>
+                )}
+                <div
+                  style={{
+                    fontSize: theme.fontSizes[4],
+                    fontWeight: theme.fontWeights.bold,
+                    color: gameState.previousMode === 'conventional' ? theme.colors.success : theme.colors.error,
+                    fontFamily: theme.fonts.body,
+                  }}
+                >
+                  {gameState.previousMode === 'conventional' ? '' : 'Total Incident Cost: '}${Math.round(gameState.incidentCost).toLocaleString()}
+                </div>
+                <div
+                  style={{
+                    fontSize: theme.fontSizes[1],
+                    color: theme.colors.text,
+                    opacity: 0.7,
+                    fontFamily: theme.fonts.body,
+                    marginTop: '4px',
+                  }}
+                >
+                  Duration: {gameState.incidentDurationSeconds.toFixed(1)}s
+                </div>
+                {gameState.previousMode === 'conventional' && gameState.previousIncidentCost > 0 && (
+                  <div
+                    style={{
+                      fontSize: theme.fontSizes[2],
+                      fontWeight: theme.fontWeights.bold,
+                      color: theme.colors.success,
+                      fontFamily: theme.fonts.body,
+                      marginTop: '8px',
+                    }}
+                  >
+                    {Math.round(((gameState.previousIncidentCost - gameState.incidentCost) / gameState.previousIncidentCost) * 100)}% cost reduction
+                  </div>
+                )}
               </div>
-              <div
-                style={{
-                  fontSize: theme.fontSizes[1],
-                  color: theme.colors.text,
-                  opacity: 0.7,
-                  fontFamily: theme.fonts.body,
-                  marginTop: '4px',
-                }}
-              >
-                Duration: {gameState.incidentDurationSeconds.toFixed(1)}s
-              </div>
-            </div>
+            </>
           )}
         </div>
 
@@ -316,24 +378,21 @@ export function PrincipalProductionScreen({ phase, onBack, onContinue, onPlayAga
             </div>
           )}
 
+          {phase === 'incident-active' && gameState.blockageFound && !gameState.bugFixed && (
+            <div style={{ animation: 'fadeIn 0.5s ease-in' }}>
+              <Button onClick={gameState.handleFixBug}>
+                {GAME_CONTENT.incidentActive.buttons.approveFix}
+              </Button>
+            </div>
+          )}
+
           {phase === 'incident-resolved' && (
-            <div
-              style={{
-                display: 'flex',
-                gap: '16px',
-                animation: 'fadeIn 0.5s ease-in',
-              }}
-            >
+            <div style={{ animation: 'fadeIn 0.5s ease-in' }}>
               <Button
                 onClick={() => window.open('https://cal.com/principlemd/intro', '_blank')}
               >
                 {GAME_CONTENT.incidentResolved.buttons.scheduleCall}
               </Button>
-              {onPlayAgain && (
-                <Button onClick={onPlayAgain} variant="ghost">
-                  {GAME_CONTENT.incidentResolved.buttons.playAgain}
-                </Button>
-              )}
             </div>
           )}
         </div>
