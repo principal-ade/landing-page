@@ -40,8 +40,20 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          style={{ maxWidth: "800px", margin: "0 auto 64px auto", textAlign: "center" }}
+          style={{ maxWidth: "900px", margin: "0 auto 64px auto", textAlign: "center" }}
         >
+          <p
+            style={{
+              fontFamily: "monospace",
+              fontSize: isMobile ? "11px" : "12px",
+              color: "#00C2FF",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              marginBottom: "24px",
+            }}
+          >
+            Three products. One platform.
+          </p>
           <h2
             style={{
               fontSize: isMobile ? "32px" : "48px",
@@ -49,25 +61,36 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               color: "#ffffff",
               lineHeight: "1.15",
               letterSpacing: "-0.025em",
-              marginBottom: "16px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-            }}
-          >
-            Three features. One platform.
-          </h2>
-          <p
-            style={{
-              fontSize: isMobile ? "18px" : "20px",
-              fontWeight: "400",
-              color: "#9ca3af",
-              lineHeight: "1.6",
+              marginBottom: "24px",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
             Story-based software from dev to production.
-          </p>
+          </h2>
+          <a
+            href="/product"
+            style={{
+              fontSize: isMobile ? "15px" : "16px",
+              fontWeight: "500",
+              color: "#00C2FF",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#00d4ff";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#00C2FF";
+            }}
+          >
+            See all products →
+          </a>
         </motion.div>
 
         {/* Feature Cards */}
