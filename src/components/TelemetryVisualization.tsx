@@ -96,7 +96,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               <span>→</span>
             </a>
           </motion.div>
-        </div>
       </div>
     </section>
   );
