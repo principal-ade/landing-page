@@ -1,7 +1,6 @@
 import React from 'react';
 import { LivingDocHomepageV2 } from './LivingDocHomepageV2';
 import { TelemetryVisualization } from './TelemetryVisualization';
-import { SeeTheShape } from './SeeTheShape';
 import { AgentShift } from './AgentShift';
 import { FinalCTA } from './FinalCTA';
 import { Footer } from './Footer';
@@ -31,16 +30,6 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           position: 'relative'
         }}>
           <TelemetryVisualization />
-        </div>
-
-        {/* The Call to Action - Dark Gradient with Teal Glow */}
-        <div style={{
-          background: 'radial-gradient(ellipse at center, rgba(0, 194, 255, 0.04) 0%, transparent 50%), linear-gradient(180deg, #060a0f 0%, #0a0d12 50%, #060a0f 100%)',
-          paddingTop: '120px',
-          paddingBottom: '120px',
-          position: 'relative'
-        }}>
-          <SeeTheShape />
         </div>
 
         {/* The Agent Shift - Problem Statement - Deep Blue-Gray */}
