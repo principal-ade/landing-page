@@ -100,6 +100,109 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
             >
               More agents. More code. More logs. Same size team. The tools get more expensive and less useful at the same time.
             </p>
+
+            {/* Comparison Grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: isMobile ? "24px" : "32px",
+                marginTop: "64px",
+              }}
+            >
+              {/* Traditional Monitoring Card */}
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.02)",
+                  backdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "16px",
+                  padding: isMobile ? "24px" : "32px",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: isMobile ? "18px" : "20px",
+                    fontWeight: "600",
+                    color: "#ffffff",
+                    marginBottom: "20px",
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  }}
+                >
+                  Traditional Monitoring
+                </h3>
+                <pre
+                  style={{
+                    fontSize: isMobile ? "13px" : "14px",
+                    lineHeight: "1.8",
+                    color: "#9ca3af",
+                    fontFamily: "monospace",
+                    margin: 0,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+<span style={{ color: "#ffffff", fontWeight: "600" }}>Execute code</span>
+     ↓
+Emit raw telemetry
+     ↓
+Store everything
+     ↓
+Something breaks
+     ↓
+<span style={{ color: "#ffffff", fontWeight: "600" }}>Search the haystack</span>
+     ↓
+Reconstruct what happened
+     ↓
+Hope you find it</pre>
+              </div>
+
+              {/* Story-Based Monitoring Card */}
+              <div
+                style={{
+                  background: "rgba(0, 194, 255, 0.05)",
+                  backdropFilter: "blur(20px)",
+                  border: "1px solid rgba(0, 194, 255, 0.2)",
+                  borderRadius: "16px",
+                  padding: isMobile ? "24px" : "32px",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: isMobile ? "18px" : "20px",
+                    fontWeight: "600",
+                    color: "#00C2FF",
+                    marginBottom: "20px",
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  }}
+                >
+                  Story-Based Monitoring
+                </h3>
+                <pre
+                  style={{
+                    fontSize: isMobile ? "13px" : "14px",
+                    lineHeight: "1.8",
+                    color: "#9ca3af",
+                    fontFamily: "monospace",
+                    margin: 0,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+<span style={{ color: "#ffffff", fontWeight: "600" }}>Start from what should happen</span>
+     ↓
+Run the code
+     ↓
+See the story of what did
+     ↓
+<span style={{ color: "#ffffff", fontWeight: "600" }}>Every divergence surfaced</span>
+     ↓
+Root cause in minutes
+
+<span style={{ color: "#00C2FF" }}>Not after the fire.
+Before the smoke.</span></pre>
+              </div>
+            </div>
           </motion.div>
       </div>
     </section>
