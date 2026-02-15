@@ -8,11 +8,10 @@ const HeroSection: React.FC = () => {
   const [windowHeight, setWindowHeight] = React.useState(
     typeof window !== "undefined" ? window.innerHeight : 768,
   );
-  const [mode, setMode] = React.useState<"development" | "production">("development");
-  const [displayMode, setDisplayMode] = React.useState<"development" | "production">("development");
   const [showHeadlineLine2, setShowHeadlineLine2] = React.useState(false);
   const [showSubheadingLine1, setShowSubheadingLine1] = React.useState(false);
   const [showSubheadingLine2, setShowSubheadingLine2] = React.useState(false);
+  const [showSubheadingLine3, setShowSubheadingLine3] = React.useState(false);
   const [showButton, setShowButton] = React.useState(false);
 
   React.useEffect(() => {
@@ -28,41 +27,20 @@ const HeroSection: React.FC = () => {
     // Initial page load - start animation sequence immediately
     const timer1 = setTimeout(() => setShowHeadlineLine2(true), 800);
     const timer2 = setTimeout(() => setShowSubheadingLine1(true), 2300);
-    const timer3 = setTimeout(() => setShowSubheadingLine2(true), 3800);
-    const timer4 = setTimeout(() => setShowButton(true), 5300);
+    const timer3 = setTimeout(() => setShowSubheadingLine2(true), 3300);
+    const timer4 = setTimeout(() => setShowSubheadingLine3(true), 4300);
+    const timer5 = setTimeout(() => setShowButton(true), 5800);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
       clearTimeout(timer4);
+      clearTimeout(timer5);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
-    // Reset all states immediately (no fade out, just disappear)
-    setShowHeadlineLine2(false);
-    setShowSubheadingLine1(false);
-    setShowSubheadingLine2(false);
-    setShowButton(false);
-
-    // Update content immediately
-    setDisplayMode(mode);
-
-    // Start animation sequence (first line is always visible)
-    const timer1 = setTimeout(() => setShowHeadlineLine2(true), 800);
-    const timer2 = setTimeout(() => setShowSubheadingLine1(true), 2300);
-    const timer3 = setTimeout(() => setShowSubheadingLine2(true), 3800);
-    const timer4 = setTimeout(() => setShowButton(true), 5300);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
-    };
-  }, [mode]);
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -133,65 +111,6 @@ const HeroSection: React.FC = () => {
           />
         </div>
 
-        {/* Mode Toggle - Below Logo */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "24px",
-          }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              background: "rgba(0, 194, 255, 0.1)",
-              border: "1px solid rgba(0, 194, 255, 0.3)",
-              borderRadius: "8px",
-              padding: "4px",
-              gap: "4px",
-            }}
-          >
-            <button
-              onClick={() => setMode("development")}
-              style={{
-                padding: isMobile ? "8px 16px" : "10px 20px",
-                fontSize: isMobile ? "13px" : "14px",
-                fontWeight: "500",
-                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                background: mode === "development" ? "#00C2FF" : "transparent",
-                color: mode === "development" ? "#000000" : "#ffffff",
-                flex: "1",
-                minWidth: isMobile ? "100px" : "120px",
-              }}
-            >
-              Development
-            </button>
-            <button
-              onClick={() => setMode("production")}
-              style={{
-                padding: isMobile ? "8px 16px" : "10px 20px",
-                fontSize: isMobile ? "13px" : "14px",
-                fontWeight: "500",
-                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                background: mode === "production" ? "#00C2FF" : "transparent",
-                color: mode === "production" ? "#000000" : "#ffffff",
-                flex: "1",
-                minWidth: isMobile ? "100px" : "120px",
-              }}
-            >
-              Production
-            </button>
-          </div>
-        </div>
-
         {/* Centered Single Column Layout - No Image */}
         <div
           style={{
@@ -256,7 +175,24 @@ const HeroSection: React.FC = () => {
                 transition: showSubheadingLine1 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
               }}
             >
-              {displayMode === "development" ? "Understand agent-built systems with" : "Understanding production systems through"}
+              AI agents write the code. Tests pass. Deploys go through.
+            </div>
+            <div
+              style={{
+                fontSize: isMobile ? "17px" : "21px",
+                fontWeight: "400",
+                color: "#ffffff",
+                lineHeight: "1.47",
+                letterSpacing: "0.007em",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                textAlign: "center",
+                opacity: showSubheadingLine2 ? 1 : 0,
+                transform: showSubheadingLine2 ? "translateY(0)" : "translateY(20px)",
+                transition: showSubheadingLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+              }}
+            >
+              Nobody knows if it did what you intended.
             </div>
             <div
               style={{
@@ -268,12 +204,12 @@ const HeroSection: React.FC = () => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 textAlign: "center",
-                opacity: showSubheadingLine2 ? 1 : 0,
-                transform: showSubheadingLine2 ? "translateY(0)" : "translateY(20px)",
-                transition: showSubheadingLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+                opacity: showSubheadingLine3 ? 1 : 0,
+                transform: showSubheadingLine3 ? "translateY(0)" : "translateY(20px)",
+                transition: showSubheadingLine3 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
               }}
             >
-              {displayMode === "development" ? "story-based development" : "story-based telemetry"}
+              We fix that.
             </div>
           </div>
 
@@ -288,7 +224,9 @@ const HeroSection: React.FC = () => {
             }}
           >
             <a
-              href={displayMode === "development" ? "/download" : "/demo"}
+              href="https://app.principal-ade.com"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 backgroundColor: "#00C2FF",
                 color: "#000000",
@@ -313,7 +251,7 @@ const HeroSection: React.FC = () => {
                 e.currentTarget.style.backgroundColor = "#00C2FF";
               }}
             >
-              {displayMode === "development" ? "Download Alpha" : "Book a Demo"}
+              Get Early Access
             </a>
           </div>
         </div>
