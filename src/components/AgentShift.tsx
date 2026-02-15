@@ -52,7 +52,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               marginBottom: "24px",
             }}
           >
-            Three products. One platform.
+            Three features. One platform.
           </p>
           <h2
             style={{
@@ -89,7 +89,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               e.currentTarget.style.color = "#00C2FF";
             }}
           >
-            See all products →
+            See all features →
           </a>
         </motion.div>
 
