@@ -151,7 +151,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            Our alpha is live. We're onboarding individual devs and teams now.
+            Our alpha is live.<br />We're onboarding individual devs and teams now.
           </p>
         </div>
 
