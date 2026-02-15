@@ -216,7 +216,7 @@ const HeroSection: React.FC = () => {
                 overflowWrap: "break-word",
               }}
             >
-              Is a picture worth
+              Story-Based Monitoring
             </div>
             <div
               style={{
@@ -235,7 +235,7 @@ const HeroSection: React.FC = () => {
                 transition: showHeadlineLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
               }}
             >
-              a thousand {displayMode === "development" ? "lines of code" : "logs"}
+              for the Agent Era
             </div>
           </div>
 
