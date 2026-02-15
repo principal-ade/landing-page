@@ -49,7 +49,9 @@ export default function ProductPage() {
             ← Principal AI
           </a>
           <a
-            href="/demo"
+            href="https://app.principal-ade.com"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               padding: "10px 20px",
               background: "#00C2FF",
@@ -63,7 +65,7 @@ export default function ProductPage() {
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            Book Demo
+            Get Early Access
           </a>
         </div>
       </header>
@@ -165,7 +167,7 @@ export default function ProductPage() {
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              See It In Action
+              Ready to Get Started?
             </h2>
             <p
               style={{
@@ -177,47 +179,28 @@ export default function ProductPage() {
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              Book a demo to see how these views work on your codebase.
+              Join the alpha and experience visual understanding of your codebase.
             </p>
-            <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <a
-                href="/demo"
-                style={{
-                  display: "inline-block",
-                  padding: "16px 32px",
-                  background: "#00C2FF",
-                  color: "#0d1117",
-                  borderRadius: "10px",
-                  textDecoration: "none",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  transition: "all 0.2s ease",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                }}
-              >
-                Book Demo →
-              </a>
-              <a
-                href="/download"
-                style={{
-                  display: "inline-block",
-                  padding: "16px 32px",
-                  background: "transparent",
-                  color: "#00C2FF",
-                  border: "1px solid #00C2FF",
-                  borderRadius: "10px",
-                  textDecoration: "none",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  transition: "all 0.2s ease",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                }}
-              >
-                Download Alpha
-              </a>
-            </div>
+            <a
+              href="https://app.principal-ade.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-block",
+                padding: "16px 32px",
+                background: "#00C2FF",
+                color: "#0d1117",
+                borderRadius: "10px",
+                textDecoration: "none",
+                fontSize: "16px",
+                fontWeight: "600",
+                transition: "all 0.2s ease",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              }}
+            >
+              Get Early Access →
+            </a>
           </div>
         </div>
       </main>

@@ -26,7 +26,7 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
       description:
         "A Carfax report for code. Six dimensions to know if it's solid before you invest developer time.",
       screenshotUrl: "/quality-radar.png",
-      linkText: "Learn more",
+      linkText: "Get Early Access",
       imageScale: 1.2,
     },
     {
@@ -36,7 +36,7 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
       description:
         "Files and directories as a living city map. See size, complexity, and composition in seconds.",
       screenshotUrl: "/file-city.png",
-      linkText: "Learn more",
+      linkText: "Get Early Access",
     },
     {
       icon: "🔷",
@@ -45,7 +45,7 @@ export const MultipleViews: React.FC<MultipleViewsProps> = ({ isMobile = false }
       description:
         "Generated from your code showing modules, packages, and dependencies. Understand the system at a glance.",
       screenshotUrl: "/architecture-diagram.png",
-      linkText: "Learn more",
+      linkText: "Get Early Access",
     },
   ];
 
@@ -216,7 +216,9 @@ function ViewShowcase({
           {description}
         </p>
         <a
-          href="/demo"
+          href="https://app.principal-ade.com"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: "inline-flex",
             alignItems: "center",

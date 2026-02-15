@@ -63,7 +63,9 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
 
             {/* CTA Button */}
             <a
-              href="/game"
+              href="https://app.principal-ade.com"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 backgroundColor: "transparent",
                 color: "#00C2FF",
@@ -90,7 +92,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 e.currentTarget.style.color = "#00C2FF";
               }}
             >
-              Try the Demo
+              Get Early Access
               <span>→</span>
             </a>
           </motion.div>
