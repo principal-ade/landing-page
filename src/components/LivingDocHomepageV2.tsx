@@ -291,57 +291,25 @@ const HeroSection: React.FC = () => {
               transition: showButton ? "opacity 0.6s ease-out 0.3s" : "none",
             }}
           >
-            <p
-              style={{
-                fontSize: isMobile ? "13px" : "14px",
-                color: "#6b7280",
-                textAlign: "center",
-                marginBottom: "16px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              Trusted by developers building the future of AI
-            </p>
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: isMobile ? "24px" : "40px",
+                gap: isMobile ? "12px" : "16px",
                 flexWrap: "wrap",
+                fontSize: isMobile ? "12px" : "13px",
+                color: "#9ca3af",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                textAlign: "center",
               }}
             >
-              <div
-                style={{
-                  fontSize: isMobile ? "12px" : "13px",
-                  color: "#9ca3af",
-                  fontFamily: "monospace",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Y COMBINATOR
-              </div>
-              <div
-                style={{
-                  fontSize: isMobile ? "12px" : "13px",
-                  color: "#9ca3af",
-                  fontFamily: "monospace",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                OPENAI
-              </div>
-              <div
-                style={{
-                  fontSize: isMobile ? "12px" : "13px",
-                  color: "#9ca3af",
-                  fontFamily: "monospace",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                ANTHROPIC
-              </div>
+              <span>7 patents pending</span>
+              <span style={{ color: "#4b5563" }}>|</span>
+              <span>Git-native architecture</span>
+              <span style={{ color: "#4b5563" }}>|</span>
+              <span>Dogfooding in production</span>
             </div>
           </div>
         </div>
