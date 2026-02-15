@@ -188,7 +188,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     fontFamily: "monospace",
                   }}
                 >
-                  <div style={{ color: "#ffffff" }}>Define what should happen</div>
+                  <div style={{ color: "#ffffff" }}>Start from what should happen</div>
                   <div style={{ paddingLeft: "20px" }}>↓</div>
                   <div>Run the code</div>
                   <div style={{ paddingLeft: "20px" }}>↓</div>
