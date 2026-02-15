@@ -66,7 +66,9 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            Story-based software from dev to production.
+            <span style={{ color: "#00C2FF" }}>Story-based software</span>
+            <br />
+            from dev to production.
           </h2>
           <a
             href="/product"
