@@ -22,7 +22,10 @@
     "analyze-*.ts"
   ],
   "ignoreDependencies": [
-    "eslint-config-next"
+    "eslint-config-next",
+    "postcss",
+    "tailwindcss",
+    "@types/uuid"
   ],
   "next": {
     "entry": [

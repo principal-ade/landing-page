@@ -5,7 +5,7 @@
  * This includes GitHub repository information for releases and auto-updates.
  */
 
-export const DESKTOP_APP_CONFIG = {
+const DESKTOP_APP_CONFIG = {
   // GitHub repository for desktop app releases
   github: {
     owner: 'principal-ade',

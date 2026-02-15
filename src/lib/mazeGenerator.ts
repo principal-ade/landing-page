@@ -288,22 +288,3 @@ export class MazeGenerator {
     }
   }
 }
-
-/**
- * Helper function to generate a maze with default settings
- */
-export function generateMaze(rows: number, cols: number, seed?: number): MazeWalls {
-  // Use seed for reproducible mazes (if provided)
-  if (seed !== undefined) {
-    // Simple seeded random (not cryptographically secure)
-    let currentSeed = seed;
-    Math.random = () => {
-      currentSeed = (currentSeed * 9301 + 49297) % 233280;
-      return currentSeed / 233280;
-    };
-  }
-
-  const generator = new MazeGenerator(rows, cols);
-  generator.generate(0, 0);
-  return generator.getWalls();
-}
