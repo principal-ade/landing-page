@@ -118,6 +118,33 @@ const HeroSection: React.FC = () => {
             textAlign: "center",
           }}
         >
+          {/* Badge */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              background: "rgba(0, 194, 255, 0.1)",
+              border: "1px solid rgba(0, 194, 255, 0.3)",
+              borderRadius: "24px",
+              marginBottom: "24px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "monospace",
+                fontSize: isMobile ? "11px" : "12px",
+                color: "#00C2FF",
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                fontWeight: "600",
+              }}
+            >
+              Alpha — Now onboarding
+            </span>
+          </div>
+
           {/* Main Headline */}
           <div style={{ margin: "0 0 28px 0" }}>
             <div
