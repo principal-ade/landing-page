@@ -85,7 +85,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              And you're paying $300K+ a month for that blind spot. Most of it storing the same log line repeated millions of times with slightly different variables. When something breaks, you're searching a haystack you paid to build.
+              And you're paying thousands a month for that blind spot. Most of it storing the same log line repeated millions of times with slightly different variables. When something breaks, you're searching a haystack you paid to build.
             </p>
 
             <p
