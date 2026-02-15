@@ -11,10 +11,10 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
   return (
     <section
       style={{
-        padding: isMobile ? "0 24px" : "0 40px",
+        padding: isMobile ? "60px 24px" : "80px 40px",
       }}
     >
-      <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
         {/* Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -24,77 +24,82 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
         >
             <p
               style={{
-                fontFamily: "monospace",
-                fontSize: "11px",
-                color: "#ec4899",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
+                fontSize: isMobile ? "16px" : "18px",
+                color: "#9ca3af",
+                lineHeight: "1.7",
                 marginBottom: "24px",
-              }}
-            >
-              Production Monitoring
-            </p>
-            <h2
-              style={{
-                fontSize: isMobile ? "28px" : "40px",
-                fontWeight: "600",
-                color: "#ffffff",
-                lineHeight: "1.15",
-                letterSpacing: "-0.025em",
-                marginBottom: "20px",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              See the story, not the logs
-            </h2>
+              You get paged at 3am. Dashboards are green. Logs say success. Nothing looks wrong.
+            </p>
+
             <p
               style={{
-                fontSize: isMobile ? "14px" : "15px",
+                fontSize: isMobile ? "16px" : "18px",
                 color: "#9ca3af",
-                lineHeight: "1.6",
+                lineHeight: "1.7",
                 marginBottom: "32px",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              System Stories turn production behavior into something you can actually read. Expected vs. actual. Where it diverged. Why it broke. <strong style={{ fontWeight: "700", color: "#ffffff" }}>Root cause in minutes, not hours.</strong>
+              Six hours later, finance calls. Payments went through without fraud checks. Thousands of transactions. No alert ever fired.
             </p>
 
-            {/* CTA Button */}
-            <a
-              href="https://app.principal-ade.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <p
               style={{
-                backgroundColor: "transparent",
-                color: "#00C2FF",
-                padding: "12px 24px",
-                borderRadius: "8px",
-                fontSize: "14px",
+                fontSize: isMobile ? "18px" : "20px",
+                color: "#ffffff",
+                lineHeight: "1.6",
+                marginBottom: "24px",
                 fontWeight: "600",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                border: "1px solid #00C2FF",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                transition: "background-color 0.2s ease, color 0.2s ease",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#00C2FF";
-                e.currentTarget.style.color = "#000000";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#00C2FF";
               }}
             >
-              Get Early Access
-              <span>→</span>
-            </a>
+              The system worked perfectly. It just didn't do what anyone intended.
+            </p>
+
+            <p
+              style={{
+                fontSize: isMobile ? "16px" : "18px",
+                color: "#9ca3af",
+                lineHeight: "1.7",
+                marginBottom: "24px",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              }}
+            >
+              That's a silent failure. Code that passes every check but breaks the business. Your monitoring can't see it because it was never built to ask "did this do what we meant?"
+            </p>
+
+            <p
+              style={{
+                fontSize: isMobile ? "16px" : "18px",
+                color: "#9ca3af",
+                lineHeight: "1.7",
+                marginBottom: "32px",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              }}
+            >
+              And you're paying $300K+ a month for that blind spot. Most of it storing the same log line repeated millions of times with slightly different variables. When something breaks, you're searching a haystack you paid to build.
+            </p>
+
+            <p
+              style={{
+                fontSize: isMobile ? "18px" : "20px",
+                color: "#ffffff",
+                lineHeight: "1.6",
+                fontWeight: "600",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              }}
+            >
+              More agents. More code. More logs. Same size team. The tools get more expensive and less useful at the same time.
+            </p>
           </motion.div>
       </div>
     </section>
