@@ -46,7 +46,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             style={{
               fontFamily: "monospace",
               fontSize: isMobile ? "11px" : "12px",
-              color: "#00C2FF",
+              color: "#ffffff",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               marginBottom: "24px",
@@ -58,7 +58,6 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             style={{
               fontSize: isMobile ? "32px" : "48px",
               fontWeight: "600",
-              color: "#ffffff",
               lineHeight: "1.15",
               letterSpacing: "-0.025em",
               marginBottom: "24px",
@@ -68,7 +67,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
           >
             <span style={{ color: "#00C2FF" }}>Story-based software</span>
             <br />
-            from dev to production.
+            <span style={{ color: "#9ca3af" }}>from dev to production.</span>
           </h2>
           <a
             href="/product"
