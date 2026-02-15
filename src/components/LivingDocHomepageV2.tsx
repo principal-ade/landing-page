@@ -102,8 +102,8 @@ const HeroSection: React.FC = () => {
           }}
         >
           <Logo
-            width={isMobile ? 100 : isConstrainedHeight ? 140 : 180}
-            height={isMobile ? 100 : isConstrainedHeight ? 140 : 180}
+            width={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
+            height={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
             color="#00C2FF"
             particleColor="#0098CC"
             opacity={0.9}
@@ -146,10 +146,10 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Main Headline */}
-          <div style={{ margin: "0 0 28px 0" }}>
+          <div style={{ margin: "0 0 24px 0" }}>
             <div
               style={{
-                fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
+                fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
                 fontWeight: "600",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
@@ -165,7 +165,7 @@ const HeroSection: React.FC = () => {
             </div>
             <div
               style={{
-                fontSize: isMobile ? "40px" : isTablet ? "56px" : "80px",
+                fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
                 fontWeight: "600",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
@@ -279,6 +279,70 @@ const HeroSection: React.FC = () => {
             >
               Get Early Access
             </a>
+          </div>
+
+          {/* Proof Bar */}
+          <div
+            style={{
+              marginTop: "48px",
+              paddingTop: "24px",
+              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+              opacity: showButton ? 1 : 0,
+              transition: showButton ? "opacity 0.6s ease-out 0.3s" : "none",
+            }}
+          >
+            <p
+              style={{
+                fontSize: isMobile ? "13px" : "14px",
+                color: "#6b7280",
+                textAlign: "center",
+                marginBottom: "16px",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              }}
+            >
+              Trusted by developers building the future of AI
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: isMobile ? "24px" : "40px",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: isMobile ? "12px" : "13px",
+                  color: "#9ca3af",
+                  fontFamily: "monospace",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                Y COMBINATOR
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "12px" : "13px",
+                  color: "#9ca3af",
+                  fontFamily: "monospace",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                OPENAI
+              </div>
+              <div
+                style={{
+                  fontSize: isMobile ? "12px" : "13px",
+                  color: "#9ca3af",
+                  fontFamily: "monospace",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                ANTHROPIC
+              </div>
+            </div>
           </div>
         </div>
       </div>
