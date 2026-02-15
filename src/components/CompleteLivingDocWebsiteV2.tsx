@@ -2,7 +2,6 @@ import React from 'react';
 import { LivingDocHomepageV2 } from './LivingDocHomepageV2';
 import { TelemetryVisualization } from './TelemetryVisualization';
 import { SeeTheShape } from './SeeTheShape';
-import { MultipleViews } from './MultipleViews';
 import { AgentShift } from './AgentShift';
 import { FinalCTA } from './FinalCTA';
 import { Footer } from './Footer';
@@ -42,15 +41,6 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           position: 'relative'
         }}>
           <SeeTheShape />
-        </div>
-
-        {/* The Capabilities - Almost Black */}
-        <div style={{
-          background: '#0a0c10',
-          paddingTop: '140px',
-          paddingBottom: '140px'
-        }}>
-          <MultipleViews />
         </div>
 
         {/* The Agent Shift - Problem Statement - Deep Blue-Gray */}

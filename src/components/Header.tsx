@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
 
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
+  const isProductPage = pathname?.startsWith('/product');
   const isHomePage = pathname === '/';
 
   useEffect(() => {
@@ -76,11 +77,11 @@ export const Header: React.FC = () => {
               AI
             </span>
           </Link>
-          {isMobile && (isBlogPage || isAboutPage) && (
+          {isMobile && (isBlogPage || isAboutPage || isProductPage) && (
             <>
               <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
               <Link
-                href={isBlogPage ? '/blog' : '/about'}
+                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : '/product'}
                 style={{
                   color: '#00C2FF',
                   textDecoration: 'none',
@@ -89,7 +90,7 @@ export const Header: React.FC = () => {
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 }}
               >
-                {isBlogPage ? 'Blog' : 'About'}
+                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Product'}
               </Link>
             </>
           )}
@@ -103,6 +104,28 @@ export const Header: React.FC = () => {
             gap: isTablet ? '20px' : '24px',
           }}
         >
+          <Link
+            href="/product"
+            style={{
+              color: isProductPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isProductPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: isTablet ? '15px' : '14px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00C2FF';
+            }}
+            onMouseLeave={(e) => {
+              if (!isProductPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
+            }}
+          >
+            Product
+          </Link>
           <Link
             href="/about"
             style={{
@@ -239,6 +262,20 @@ export const Header: React.FC = () => {
             gap: '20px',
           }}
         >
+          <Link
+            href="/product"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isProductPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isProductPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Product
+          </Link>
           <Link
             href="/about"
             onClick={() => setMobileMenuOpen(false)}
