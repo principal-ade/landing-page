@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
   const isFeaturesPage = pathname?.startsWith('/product');
-  const isCommunityPage = pathname?.startsWith('/community');
+  // const isCommunityPage = pathname?.startsWith('/community');
   const isHomePage = pathname === '/';
 
   useEffect(() => {
@@ -78,11 +78,11 @@ export const Header: React.FC = () => {
               AI
             </span>
           </Link>
-          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage || isCommunityPage) && (
+          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage) && (
             <>
               <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
               <Link
-                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : isCommunityPage ? '/community' : '/product'}
+                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : '/product'}
                 style={{
                   color: '#00C2FF',
                   textDecoration: 'none',
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 }}
               >
-                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : isCommunityPage ? 'Community' : 'Features'}
+                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Features'}
               </Link>
             </>
           )}
@@ -170,28 +170,6 @@ export const Header: React.FC = () => {
             }}
           >
             Blog
-          </Link>
-          <Link
-            href="/community"
-            style={{
-              color: isCommunityPage ? '#00C2FF' : '#d1d5db',
-              textDecoration: isCommunityPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
-            }}
-            onMouseLeave={(e) => {
-              if (!isCommunityPage) {
-                e.currentTarget.style.color = '#d1d5db';
-              }
-            }}
-          >
-            Community
           </Link>
           <Link
             href="https://app.principal-ade.com"
@@ -300,20 +278,6 @@ export const Header: React.FC = () => {
             }}
           >
             Blog
-          </Link>
-          <Link
-            href="/community"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              color: isCommunityPage ? '#00C2FF' : '#d1d5db',
-              textDecoration: isCommunityPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '16px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            }}
-          >
-            Community
           </Link>
           <Link
             href="https://app.principal-ade.com"

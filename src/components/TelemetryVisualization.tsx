@@ -12,9 +12,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
     <section
       style={{
         padding: isMobile ? "60px 24px" : "80px 40px",
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "800px", margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
         {/* Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -108,6 +110,8 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
                 gap: isMobile ? "24px" : "32px",
                 marginTop: "64px",
+                width: "100%",
+                boxSizing: "border-box",
               }}
             >
               {/* Traditional Monitoring Card */}
@@ -118,6 +122,10 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   border: "1px solid rgba(239, 68, 68, 0.3)",
                   borderRadius: "16px",
                   padding: isMobile ? "28px" : "36px",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  overflowWrap: "break-word",
+                  wordBreak: "break-word",
                 }}
               >
                 <h3
@@ -165,6 +173,10 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   border: "1px solid rgba(0, 194, 255, 0.4)",
                   borderRadius: "16px",
                   padding: isMobile ? "28px" : "36px",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  overflowWrap: "break-word",
+                  wordBreak: "break-word",
                 }}
               >
                 <h3
@@ -203,6 +215,61 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     Before the smoke.
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Storyboard Visualization */}
+            <div
+              style={{
+                marginTop: "64px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: isMobile ? "20px" : "24px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: "12px",
+                  textAlign: "center",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                What a storyboard looks like
+              </h3>
+              <p
+                style={{
+                  fontSize: isMobile ? "14px" : "16px",
+                  color: "#9ca3af",
+                  marginBottom: "48px",
+                  textAlign: "center",
+                  maxWidth: "600px",
+                  margin: "0 auto 48px",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                Expected flow in blue. Actual behavior tracked. Divergence highlighted in red.
+              </p>
+
+              <div
+                style={{
+                  background: "#000000",
+                  border: "2px solid rgba(30, 58, 138, 0.8)",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  padding: isMobile ? "20px" : "40px",
+                }}
+              >
+                <img
+                  src="/storyboard-visual.png"
+                  alt="System story visualization showing expected flow and error divergence"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                  }}
+                />
               </div>
             </div>
           </motion.div>

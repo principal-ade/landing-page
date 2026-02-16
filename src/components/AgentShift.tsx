@@ -31,9 +31,11 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
     <section
       style={{
         padding: isMobile ? "0 24px" : "0 40px",
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -100,6 +102,8 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
             gap: isMobile ? "24px" : "32px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           {features.map((feature, index) => (
@@ -115,6 +119,10 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
                 border: "1px solid rgba(255, 255, 255, 0.08)",
                 borderRadius: "16px",
                 padding: isMobile ? "28px" : "32px",
+                width: "100%",
+                boxSizing: "border-box",
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
               }}
             >
               <div
@@ -172,6 +180,8 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
             gap: isMobile ? "24px" : "32px",
             marginTop: isMobile ? "80px" : "120px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           {[
@@ -201,6 +211,10 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
                 borderRadius: "16px",
                 padding: isMobile ? "32px 28px" : "40px 32px",
                 textAlign: "center",
+                width: "100%",
+                boxSizing: "border-box",
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
               }}
             >
               <div

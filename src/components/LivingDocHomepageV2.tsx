@@ -2,12 +2,9 @@ import React from "react";
 import { Logo } from "@principal-ai/logo-component";
 
 const HeroSection: React.FC = () => {
-  const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
-  const [windowHeight, setWindowHeight] = React.useState(
-    typeof window !== "undefined" ? window.innerHeight : 768,
-  );
+  const [mounted, setMounted] = React.useState(false);
+  const [windowWidth, setWindowWidth] = React.useState(1024);
+  const [windowHeight, setWindowHeight] = React.useState(768);
   const [showHeadlineLine2, setShowHeadlineLine2] = React.useState(false);
   const [showSubheadingLine1, setShowSubheadingLine1] = React.useState(false);
   const [showSubheadingLine2, setShowSubheadingLine2] = React.useState(false);
@@ -15,6 +12,10 @@ const HeroSection: React.FC = () => {
   const [showButton, setShowButton] = React.useState(false);
 
   React.useEffect(() => {
+    setMounted(true);
+    setWindowWidth(window.innerWidth);
+    setWindowHeight(window.innerHeight);
+
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
       setWindowHeight(window.innerHeight);
