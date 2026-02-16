@@ -2,7 +2,7 @@ import React from 'react';
 import { LivingDocHomepageV2 } from './LivingDocHomepageV2';
 import { TelemetryVisualization } from './TelemetryVisualization';
 import { AgentShift } from './AgentShift';
-import { GetEarlyAccess } from './GetEarlyAccess';
+import { SimpleCTA } from './SimpleCTA';
 import { Footer } from './Footer';
 
 export const CompleteLivingDocWebsiteV2: React.FC = () => {
@@ -68,15 +68,7 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
         </div>
 
         {/* Final CTA - Deep Navy */}
-        <div style={{
-          background: '#141e30',
-          paddingTop: isMobile ? '60px' : '100px',
-          paddingBottom: isMobile ? '60px' : '100px',
-          width: '100%',
-          boxSizing: 'border-box'
-        }}>
-          <GetEarlyAccess isMobile={isMobile} />
-        </div>
+        <SimpleCTA isMobile={isMobile} />
       </main>
       <Footer />
     </div>
