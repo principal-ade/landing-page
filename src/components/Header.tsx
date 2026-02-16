@@ -39,11 +39,15 @@ export const Header: React.FC = () => {
         zIndex: 1000,
         background: '#000000',
         borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
-        padding: isTablet ? '18px 32px' : isMobile ? '14px 20px' : '16px 24px',
+        height: '70px',
+        padding: isMobile ? '0 20px' : '0 24px',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
       <div
         style={{
+          width: '100%',
           maxWidth: '1400px',
           margin: '0 auto',
           display: 'flex',

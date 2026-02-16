@@ -39,7 +39,10 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           background: 'radial-gradient(ellipse at top, rgba(0, 194, 255, 0.1) 0%, transparent 50%), #0d1b2a',
           paddingBottom: '0px',
           width: '100%',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          height: 'calc(100vh - 70px)',
+          display: 'flex',
+          flexDirection: 'column'
         }}>
           <LivingDocHomepageV2 />
         </div>

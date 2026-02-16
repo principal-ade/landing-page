@@ -47,7 +47,8 @@ const HeroSection: React.FC = () => {
   return (
     <div
       style={{
-        minHeight: "auto",
+        flex: 1,
+        minHeight: "100%",
         backgroundColor: "#000000",
         backgroundImage: gridBackground,
         backgroundSize: "100px 100px",
@@ -314,7 +315,11 @@ const HeroSection: React.FC = () => {
 
 export const LivingDocHomepageV2: React.FC = () => {
   return (
-    <div>
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       <HeroSection />
     </div>
   );
