@@ -14,7 +14,8 @@ export const Header: React.FC = () => {
 
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
-  const isProductPage = pathname?.startsWith('/product');
+  const isFeaturesPage = pathname?.startsWith('/product');
+  const isCommunityPage = pathname?.startsWith('/community');
   const isHomePage = pathname === '/';
 
   useEffect(() => {
@@ -77,11 +78,11 @@ export const Header: React.FC = () => {
               AI
             </span>
           </Link>
-          {isMobile && (isBlogPage || isAboutPage || isProductPage) && (
+          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage || isCommunityPage) && (
             <>
               <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
               <Link
-                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : '/product'}
+                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : isCommunityPage ? '/community' : '/product'}
                 style={{
                   color: '#00C2FF',
                   textDecoration: 'none',
@@ -90,7 +91,7 @@ export const Header: React.FC = () => {
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 }}
               >
-                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Product'}
+                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : isCommunityPage ? 'Community' : 'Features'}
               </Link>
             </>
           )}
@@ -104,28 +105,6 @@ export const Header: React.FC = () => {
             gap: isTablet ? '20px' : '24px',
           }}
         >
-          <Link
-            href="/product"
-            style={{
-              color: isProductPage ? '#00C2FF' : '#d1d5db',
-              textDecoration: isProductPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
-            }}
-            onMouseLeave={(e) => {
-              if (!isProductPage) {
-                e.currentTarget.style.color = '#d1d5db';
-              }
-            }}
-          >
-            Product
-          </Link>
           <Link
             href="/about"
             style={{
@@ -149,6 +128,28 @@ export const Header: React.FC = () => {
             About
           </Link>
           <Link
+            href="/product"
+            style={{
+              color: isFeaturesPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isFeaturesPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: isTablet ? '15px' : '14px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00C2FF';
+            }}
+            onMouseLeave={(e) => {
+              if (!isFeaturesPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
+            }}
+          >
+            Features
+          </Link>
+          <Link
             href="/blog"
             style={{
               color: isBlogPage ? '#00C2FF' : '#d1d5db',
@@ -170,59 +171,55 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          {!isHomePage && (
-            <>
-              <Link
-                href="/demo"
-                style={{
-                  padding: isTablet ? '10px 24px' : '8px 20px',
-                  background: 'transparent',
-                  color: '#00C2FF',
-                  border: '1px solid #00C2FF',
-                  textDecoration: 'none',
-                  fontSize: isTablet ? '15px' : '14px',
-                  fontWeight: '600',
-                  borderRadius: '8px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 194, 255, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                Book a Demo
-              </Link>
-              <Link
-                href="/download"
-                style={{
-                  padding: isTablet ? '10px 24px' : '8px 20px',
-                  background: '#00C2FF',
-                  color: '#000000',
-                  textDecoration: 'none',
-                  fontSize: isTablet ? '15px' : '14px',
-                  fontWeight: '600',
-                  borderRadius: '8px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Download Alpha
-              </Link>
-            </>
-          )}
+          <Link
+            href="/community"
+            style={{
+              color: isCommunityPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isCommunityPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: isTablet ? '15px' : '14px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00C2FF';
+            }}
+            onMouseLeave={(e) => {
+              if (!isCommunityPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
+            }}
+          >
+            Community
+          </Link>
+          <Link
+            href="https://app.principal-ade.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: isTablet ? '10px 24px' : '8px 20px',
+              background: '#00C2FF',
+              color: '#000000',
+              textDecoration: 'none',
+              fontSize: isTablet ? '15px' : '14px',
+              fontWeight: '600',
+              borderRadius: '8px',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            Get Early Access
+          </Link>
         </div>
 
         {/* Mobile Hamburger Menu Button */}
@@ -263,20 +260,6 @@ export const Header: React.FC = () => {
           }}
         >
           <Link
-            href="/product"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              color: isProductPage ? '#00C2FF' : '#d1d5db',
-              textDecoration: isProductPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '16px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            }}
-          >
-            Product
-          </Link>
-          <Link
             href="/about"
             onClick={() => setMobileMenuOpen(false)}
             style={{
@@ -289,6 +272,20 @@ export const Header: React.FC = () => {
             }}
           >
             About
+          </Link>
+          <Link
+            href="/product"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isFeaturesPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isFeaturesPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Features
           </Link>
           <Link
             href="/blog"
@@ -304,45 +301,39 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          {!isHomePage && (
-            <>
-              <Link
-                href="/demo"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  padding: '12px 24px',
-                  background: 'transparent',
-                  color: '#00C2FF',
-                  border: '1px solid #00C2FF',
-                  textDecoration: 'none',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  borderRadius: '6px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  textAlign: 'center',
-                }}
-              >
-                Book a Demo
-              </Link>
-              <Link
-                href="/download"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  padding: '12px 24px',
-                  background: '#00C2FF',
-                  color: '#000000',
-                  textDecoration: 'none',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  borderRadius: '6px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  textAlign: 'center',
-                }}
-              >
-                Download Alpha
-              </Link>
-            </>
-          )}
+          <Link
+            href="/community"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isCommunityPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isCommunityPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Community
+          </Link>
+          <Link
+            href="https://app.principal-ade.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              padding: '12px 24px',
+              background: '#00C2FF',
+              color: '#000000',
+              textDecoration: 'none',
+              fontSize: '16px',
+              fontWeight: '600',
+              borderRadius: '6px',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              textAlign: 'center',
+            }}
+          >
+            Get Early Access
+          </Link>
         </div>
       )}
     </nav>

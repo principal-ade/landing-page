@@ -164,6 +164,72 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             </motion.div>
           ))}
         </div>
+
+        {/* Statistics Section */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+            gap: isMobile ? "24px" : "32px",
+            marginTop: isMobile ? "80px" : "120px",
+          }}
+        >
+          {[
+            {
+              percentage: "59%",
+              description: "of developers ship AI code\nthey don't fully understand",
+            },
+            {
+              percentage: "67%",
+              description: "more time debugging\nAI-generated code",
+            },
+            {
+              percentage: "91%",
+              description: "have unresolved bugs\nthey can't reproduce",
+            },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.percentage}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              style={{
+                background: "rgba(255, 255, 255, 0.02)",
+                backdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "16px",
+                padding: isMobile ? "32px 28px" : "40px 32px",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: isMobile ? "48px" : "56px",
+                  fontWeight: "600",
+                  color: "#00C2FF",
+                  marginBottom: "16px",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                {stat.percentage}
+              </div>
+              <p
+                style={{
+                  fontSize: isMobile ? "14px" : "15px",
+                  color: "#9ca3af",
+                  lineHeight: "1.6",
+                  whiteSpace: "pre-line",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                {stat.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

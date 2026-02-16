@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
-              A picture is worth a thousand<br /><span style={{ color: '#0099FF' }}>lines of code</span>.
+              Story-based software<br />from dev to production.
             </p>
 
             {/* Social Links */}

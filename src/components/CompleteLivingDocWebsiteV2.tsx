@@ -2,7 +2,7 @@ import React from 'react';
 import { LivingDocHomepageV2 } from './LivingDocHomepageV2';
 import { TelemetryVisualization } from './TelemetryVisualization';
 import { AgentShift } from './AgentShift';
-import { FinalCTA } from './FinalCTA';
+import { GetEarlyAccess } from './GetEarlyAccess';
 import { Footer } from './Footer';
 
 export const CompleteLivingDocWebsiteV2: React.FC = () => {
@@ -47,7 +47,7 @@ export const CompleteLivingDocWebsiteV2: React.FC = () => {
           paddingTop: '100px',
           paddingBottom: '100px'
         }}>
-          <FinalCTA />
+          <GetEarlyAccess />
         </div>
       </main>
       <Footer />

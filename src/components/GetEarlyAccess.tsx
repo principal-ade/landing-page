@@ -116,18 +116,6 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
       >
         {/* Header */}
         <div style={{ marginBottom: "48px", textAlign: "center" }}>
-          <p
-            style={{
-              fontFamily: "monospace",
-              fontSize: "11px",
-              color: "#00C2FF",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              marginBottom: "24px",
-            }}
-          >
-            Alpha Access
-          </p>
           <h1
             style={{
               fontSize: isMobile ? "32px" : "44px",
@@ -362,7 +350,24 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
           }}
         >
-          We'll never share your information with third parties.
+          Investor or partner?{" "}
+          <a
+            href="/demo"
+            style={{
+              color: "#00C2FF",
+              textDecoration: "none",
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#00d4ff";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#00C2FF";
+            }}
+          >
+            Schedule a demo
+          </a>
+          .
         </p>
       </motion.div>
     </div>

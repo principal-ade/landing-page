@@ -24,19 +24,12 @@ const HeroSection: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    // Initial page load - start animation sequence immediately
-    const timer1 = setTimeout(() => setShowHeadlineLine2(true), 800);
-    const timer2 = setTimeout(() => {
-      setShowSubheadingLine1(true);
-      setShowSubheadingLine2(true);
-      setShowSubheadingLine3(true);
-      setShowButton(true);
-    }, 2300);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
+    // Show all elements immediately - no delays
+    setShowHeadlineLine2(true);
+    setShowSubheadingLine1(true);
+    setShowSubheadingLine2(true);
+    setShowSubheadingLine3(true);
+    setShowButton(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -288,7 +281,7 @@ const HeroSection: React.FC = () => {
               paddingTop: "24px",
               borderTop: "1px solid rgba(255, 255, 255, 0.1)",
               opacity: showButton ? 1 : 0,
-              transition: showButton ? "opacity 0.6s ease-out 0.3s" : "none",
+              transition: showButton ? "opacity 0.6s ease-out" : "none",
             }}
           >
             <div
