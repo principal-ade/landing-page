@@ -244,14 +244,7 @@ const HeroSection: React.FC = () => {
             }}
           >
             <a
-              href="#early-access"
-              onClick={(e) => {
-                e.preventDefault();
-                const element = document.getElementById('early-access');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
+              href="/early-access"
               style={{
                 backgroundColor: "#00C2FF",
                 color: "#000000",

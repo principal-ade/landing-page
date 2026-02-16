@@ -172,7 +172,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="/#early-access"
+            href="/early-access"
             style={{
               padding: isTablet ? '10px 24px' : '8px 20px',
               background: '#00C2FF',
@@ -278,7 +278,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="/#early-access"
+            href="/early-access"
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',

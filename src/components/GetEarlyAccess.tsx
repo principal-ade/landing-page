@@ -96,7 +96,6 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
 
   return (
     <div
-      id="early-access"
       style={{
         minHeight: "100vh",
         display: "flex",

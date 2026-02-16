@@ -888,7 +888,7 @@ export default function FeaturesPage() {
           Our alpha is live. We're onboarding individual devs and teams now.
         </p>
         <a
-          href="/#early-access"
+          href="/early-access"
           style={{
             background: "#22d3ee",
             color: "#0a0e17",
