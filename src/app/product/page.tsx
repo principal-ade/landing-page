@@ -59,7 +59,7 @@ export default function FeaturesPage() {
         <p
           style={{
             color: "#94a3b8",
-            fontSize: "1.1rem",
+            fontSize: isMobile ? "16px" : "1.1rem",
             maxWidth: "600px",
             margin: "0 auto",
             lineHeight: "1.7",
@@ -377,10 +377,9 @@ export default function FeaturesPage() {
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             gap: isMobile ? "2rem" : "4rem",
             alignItems: "center",
-            direction: isMobile ? "ltr" : "rtl",
           }}
         >
-          <div style={{ direction: "ltr" }}>
+          <div style={{ order: isMobile ? 1 : 2 }}>
             <div
               style={{
                 fontFamily: "monospace",
@@ -408,7 +407,7 @@ export default function FeaturesPage() {
             </h2>
             <p
               style={{
-                fontSize: "1.1rem",
+                fontSize: isMobile ? "16px" : "1.1rem",
                 color: "#94a3b8",
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
@@ -446,7 +445,7 @@ export default function FeaturesPage() {
                     display: "flex",
                     gap: "0.75rem",
                     alignItems: "flex-start",
-                    fontSize: "0.95rem",
+                    fontSize: isMobile ? "14px" : "0.95rem",
                     color: "#94a3b8",
                     lineHeight: "1.6",
                     fontFamily:
@@ -455,8 +454,8 @@ export default function FeaturesPage() {
                 >
                   <div
                     style={{
-                      width: "24px",
-                      height: "24px",
+                      width: isMobile ? "20px" : "24px",
+                      height: isMobile ? "20px" : "24px",
                       borderRadius: "6px",
                       display: "flex",
                       alignItems: "center",
@@ -487,7 +486,7 @@ export default function FeaturesPage() {
               border: "1px solid rgba(30, 58, 138, 0.5)",
               borderRadius: "16px",
               overflow: "hidden",
-              direction: "ltr",
+              order: isMobile ? 2 : 1,
             }}
           >
             <Image
@@ -552,7 +551,7 @@ export default function FeaturesPage() {
             </h2>
             <p
               style={{
-                fontSize: "1.1rem",
+                fontSize: isMobile ? "16px" : "1.1rem",
                 color: "#94a3b8",
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
@@ -590,7 +589,7 @@ export default function FeaturesPage() {
                     display: "flex",
                     gap: "0.75rem",
                     alignItems: "flex-start",
-                    fontSize: "0.95rem",
+                    fontSize: isMobile ? "14px" : "0.95rem",
                     color: "#94a3b8",
                     lineHeight: "1.6",
                     fontFamily:
@@ -599,8 +598,8 @@ export default function FeaturesPage() {
                 >
                   <div
                     style={{
-                      width: "24px",
-                      height: "24px",
+                      width: isMobile ? "20px" : "24px",
+                      height: isMobile ? "20px" : "24px",
                       borderRadius: "6px",
                       display: "flex",
                       alignItems: "center",
@@ -623,84 +622,6 @@ export default function FeaturesPage() {
                 </li>
               ))}
             </ul>
-
-            {/* Comparison */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: "1rem",
-                marginTop: "2rem",
-              }}
-            >
-              <div
-                style={{
-                  padding: "1.25rem",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(248, 113, 113, 0.12)",
-                  background: "rgba(248, 113, 113, 0.1)",
-                }}
-              >
-                <h4
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    marginBottom: "0.6rem",
-                    color: "#f87171",
-                  }}
-                >
-                  Without Stories
-                </h4>
-                <p
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#94a3b8",
-                    lineHeight: "1.65",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                  }}
-                >
-                  ERROR: Connection timeout at 14:32:07. Grep through 50,000 log
-                  lines. Reconstruct what happened. Hope you find it.
-                </p>
-              </div>
-              <div
-                style={{
-                  padding: "1.25rem",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(34, 211, 238, 0.15)",
-                  background: "rgba(34, 211, 238, 0.15)",
-                }}
-              >
-                <h4
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    marginBottom: "0.6rem",
-                    color: "#22d3ee",
-                  }}
-                >
-                  With Stories
-                </h4>
-                <p
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#94a3b8",
-                    lineHeight: "1.65",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                  }}
-                >
-                  User authenticates → Gateway validates → Auth service receives →
-                  Connection pool exhausted → Session never created. Five-second
-                  visual diagnosis.
-                </p>
-              </div>
-            </div>
           </div>
 
           <div
@@ -736,31 +657,25 @@ export default function FeaturesPage() {
             </div>
             <div
               style={{
-                padding: "1.5rem",
-                minHeight: "300px",
+                padding: isMobile ? "1rem" : "1.5rem",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                textAlign: "center",
-                color: "#64748b",
-                fontFamily: "monospace",
-                fontSize: "0.8rem",
-                lineHeight: "2",
+                background: "#000000",
               }}
             >
-              <div>
-                [ Visual flow graph ]
-                <br />
-                <br />
-                Green nodes = expected behavior
-                <br />
-                Red node = where it diverged
-                <br />
-                <br />
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: "#f87171", marginTop: "1rem", lineHeight: "1.5" }}>
-                  Story tab output only. No Template tab. No sidebar.
-                </span>
-              </div>
+              <Image
+                src="/system-story-flow.png"
+                alt="System story flow diagram showing expected behavior in blue and error divergence in red"
+                width={900}
+                height={733}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  borderRadius: "8px",
+                }}
+              />
             </div>
           </div>
         </div>
@@ -803,7 +718,7 @@ export default function FeaturesPage() {
         <p
           style={{
             color: "#94a3b8",
-            fontSize: "1.05rem",
+            fontSize: isMobile ? "15px" : "1.05rem",
             lineHeight: "1.8",
             maxWidth: "650px",
             margin: "0 auto 2.5rem",
@@ -951,7 +866,7 @@ export default function FeaturesPage() {
       >
         <h2
           style={{
-            fontSize: "1.75rem",
+            fontSize: isMobile ? "1.5rem" : "1.75rem",
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "0.75rem",
@@ -964,7 +879,7 @@ export default function FeaturesPage() {
         <p
           style={{
             color: "#94a3b8",
-            fontSize: "1rem",
+            fontSize: isMobile ? "15px" : "1rem",
             marginBottom: "2rem",
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -973,9 +888,7 @@ export default function FeaturesPage() {
           Our alpha is live. We're onboarding individual devs and teams now.
         </p>
         <a
-          href="https://app.principal-ade.com"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/#early-access"
           style={{
             background: "#22d3ee",
             color: "#0a0e17",

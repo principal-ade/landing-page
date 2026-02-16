@@ -244,9 +244,14 @@ const HeroSection: React.FC = () => {
             }}
           >
             <a
-              href="https://app.principal-ade.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#early-access"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('early-access');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
               style={{
                 backgroundColor: "#00C2FF",
                 color: "#000000",

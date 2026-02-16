@@ -172,9 +172,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="https://app.principal-ade.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/#early-access"
             style={{
               padding: isTablet ? '10px 24px' : '8px 20px',
               background: '#00C2FF',
@@ -280,9 +278,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="https://app.principal-ade.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/#early-access"
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',
