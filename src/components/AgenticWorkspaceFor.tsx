@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { User, Users, Code2, Lightbulb, MessageSquare, Target } from "lucide-react";
 import React from "react";
 
-export function AgenticWorkspaceForV2() {
+export function AgenticWorkspaceFor() {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );

@@ -313,7 +313,7 @@ const HeroSection: React.FC = () => {
 
 // About Principal AI Section
 
-export const LivingDocHomepageV2: React.FC = () => {
+export const LivingDocHomepage: React.FC = () => {
   return (
     <div style={{
       height: '100%',

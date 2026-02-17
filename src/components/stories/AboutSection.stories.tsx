@@ -3,7 +3,7 @@ import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
 import { About } from '../About';
 import { LivingDocumentationSection } from '../LivingDocumentationSection';
-import { AgenticWorkspaceForV2 } from '../AgenticWorkspaceForV2';
+import { AgenticWorkspaceFor } from '../AgenticWorkspaceFor';
 import { WhyTeamsUse } from '../WhyTeamsUse';
 import { JoinTheAlpha } from '../JoinTheAlpha';
 import { FAQSection } from '../FAQSection';
@@ -61,7 +61,7 @@ export const AboutDecember18: Story = {
       <About />
       <LivingDocumentationSection />
       <WhyTeamsUse />
-      <AgenticWorkspaceForV2 />
+      <AgenticWorkspaceFor />
       <JoinTheAlpha />
       <FAQSection />
     </div>
