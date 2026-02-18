@@ -12,12 +12,35 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
   const [role, setRole] = useState("");
   const [teamSize, setTeamSize] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would send the data to your backend
-    console.log({ email, role, teamSize });
-    setIsSubmitted(true);
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/early-access", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, role, teamSize }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit request");
+      }
+
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubmitted) {
@@ -305,13 +328,33 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               </select>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div
+                style={{
+                  marginBottom: "16px",
+                  padding: "12px 16px",
+                  background: "rgba(239, 68, 68, 0.1)",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                  borderRadius: "8px",
+                  color: "#f87171",
+                  fontSize: "14px",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
+              disabled={isLoading}
               style={{
                 width: "100%",
                 padding: "14px 24px",
-                background: "#00C2FF",
+                background: isLoading ? "#6b7280" : "#00C2FF",
                 color: "#000000",
                 border: "none",
                 borderRadius: "8px",
@@ -319,22 +362,27 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 fontWeight: "600",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                cursor: "pointer",
+                cursor: isLoading ? "not-allowed" : "pointer",
                 transition: "all 0.2s ease",
+                opacity: isLoading ? 0.7 : 1,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#00d4ff";
-                e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0, 194, 255, 0.4)";
+                if (!isLoading) {
+                  e.currentTarget.style.background = "#00d4ff";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0, 194, 255, 0.4)";
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#00C2FF";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
+                if (!isLoading) {
+                  e.currentTarget.style.background = "#00C2FF";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }
               }}
             >
-              Join the list
+              {isLoading ? "Submitting..." : "Join the list"}
             </button>
           </div>
         </form>
