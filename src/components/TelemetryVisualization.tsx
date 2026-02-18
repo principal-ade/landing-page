@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { COLORS } from "../styles/colors";
 
 interface TelemetryVisualizationProps {
   isMobile?: boolean;
@@ -11,7 +12,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
   return (
     <section
       style={{
-        padding: isMobile ? "60px 24px" : "80px 40px",
+        padding: isMobile ? "60px 24px 0px 24px" : "80px 40px 0px 40px",
         width: "100%",
         boxSizing: "border-box",
       }}
@@ -22,86 +23,99 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         >
-            <p
+            {/* Blue quote block with grid */}
+            <div
               style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: "#9ca3af",
-                lineHeight: "1.7",
-                marginBottom: "24px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                position: "relative",
+                background: COLORS.royalBlue,
+                borderRadius: "8px",
+                padding: isMobile ? "48px 32px" : "64px 56px",
+                marginBottom: "64px",
+                overflow: "hidden",
+                backgroundImage: `
+                  linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                `,
+                backgroundSize: "20px 20px",
+                boxShadow: "0 8px 24px rgba(30, 64, 175, 0.3)",
               }}
             >
-              You get paged at 3am. Dashboards are green. Logs say success. Nothing looks wrong.
-            </p>
+              {/* Eyebrow */}
+              <p
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  color: COLORS.accentAlt,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  marginBottom: "24px",
+                  fontFamily: "monospace",
+                }}
+              >
+                WHY WE BUILT THIS
+              </p>
 
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: "#9ca3af",
-                lineHeight: "1.7",
-                marginBottom: "32px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              Six hours later, finance calls. Payments went through without fraud checks. Thousands of transactions. No alert ever fired.
-            </p>
+              {/* Headline */}
+              <h2
+                style={{
+                  fontSize: isMobile ? "32px" : "48px",
+                  fontWeight: "700",
+                  color: COLORS.white,
+                  lineHeight: "1.2",
+                  marginBottom: "24px",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                Monitoring starts from the wrong end.
+              </h2>
 
-            <p
-              style={{
-                fontSize: isMobile ? "18px" : "20px",
-                color: "#ffffff",
-                lineHeight: "1.6",
-                marginBottom: "24px",
-                fontWeight: "600",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              The system worked perfectly. It just didn't do what anyone intended.
-            </p>
+              {/* Body */}
+              <p
+                style={{
+                  fontSize: isMobile ? "16px" : "18px",
+                  color: COLORS.white,
+                  lineHeight: "1.7",
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                }}
+              >
+                Agents write the code. Nobody understands it.{" "}
+                <strong style={{ fontWeight: "700" }}>
+                  That's the whole problem.
+                </strong>{" "}
+                Every tool in your stack starts after something breaks. We start from what should happen.
+              </p>
 
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: "#9ca3af",
-                lineHeight: "1.7",
-                marginBottom: "24px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              That's a silent failure. Code that passes every check but breaks the business. Your monitoring can't see it because it was never built to ask "did this do what we meant?"
-            </p>
-
-            <p
-              style={{
-                fontSize: isMobile ? "16px" : "18px",
-                color: "#9ca3af",
-                lineHeight: "1.7",
-                marginBottom: "32px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              And you're paying thousands a month for that blind spot. Most of it storing the same log line repeated millions of times with slightly different variables. When something breaks, you're searching a haystack you paid to build.
-            </p>
-
-            <p
-              style={{
-                fontSize: isMobile ? "18px" : "20px",
-                color: "#ffffff",
-                lineHeight: "1.6",
-                fontWeight: "600",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              More agents. More code. More logs. Same size team. The tools get more expensive and less useful at the same time.
-            </p>
+              {/* Link */}
+              <div style={{ marginTop: "32px" }}>
+                <a
+                  href="/about"
+                  style={{
+                    fontSize: isMobile ? "16px" : "18px",
+                    fontWeight: "600",
+                    color: COLORS.white,
+                    textDecoration: "underline",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    transition: "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "0.8";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                >
+                  Read our thesis →
+                </a>
+              </div>
+            </div>
 
             {/* Comparison Grid */}
             <div
@@ -117,161 +131,168 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Traditional Monitoring Card */}
               <div
                 style={{
-                  background: "rgba(139, 69, 69, 0.15)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                  background: COLORS.gray100,
                   borderRadius: "16px",
-                  padding: isMobile ? "28px" : "36px",
+                  padding: isMobile ? "24px" : "32px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
                   wordBreak: "break-word",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
                 }}
               >
                 <h3
                   style={{
-                    fontSize: isMobile ? "11px" : "12px",
+                    fontSize: isMobile ? "16px" : "18px",
                     fontWeight: "600",
-                    color: "#ef4444",
-                    marginBottom: "28px",
-                    fontFamily: "monospace",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
+                    color: COLORS.gray500,
+                    marginBottom: "24px",
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                   }}
                 >
                   Traditional Monitoring
                 </h3>
-                <div
-                  style={{
-                    fontSize: isMobile ? "14px" : "15px",
-                    lineHeight: "2.2",
-                    color: "#9ca3af",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  <div style={{ color: "#ffffff" }}>Execute code</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Emit raw telemetry</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Store everything</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Something breaks</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div style={{ color: "#ffffff" }}>Search the haystack</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Reconstruct what happened</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Hope you find it</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  {[
+                    { num: 1, text: "Execute code", color: COLORS.gray400 },
+                    { num: 2, text: "Emit raw telemetry", color: COLORS.gray400 },
+                    { num: 3, text: "Store everything", color: COLORS.gray400 },
+                    { num: 4, text: "Something breaks", color: COLORS.error },
+                    { num: 5, text: "Search the haystack", color: COLORS.gray400 },
+                    { num: 6, text: "Reconstruct what happened", color: COLORS.gray400 },
+                    { num: 7, text: "Hope you find it", color: COLORS.gray400 },
+                  ].map((step) => (
+                    <div
+                      key={step.num}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          background: step.color,
+                          color: COLORS.white,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {step.num}
+                      </div>
+                      <span
+                        style={{
+                          fontSize: isMobile ? "14px" : "16px",
+                          color: COLORS.gray800,
+                          fontFamily:
+                            '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                        }}
+                      >
+                        {step.text}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Story-Based Monitoring Card */}
               <div
                 style={{
-                  background: "rgba(6, 78, 89, 0.3)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(0, 194, 255, 0.4)",
+                  background: COLORS.white,
+                  border: `2px solid ${COLORS.info}`,
                   borderRadius: "16px",
-                  padding: isMobile ? "28px" : "36px",
+                  padding: isMobile ? "24px" : "32px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
                   wordBreak: "break-word",
+                  boxShadow: "0 4px 12px rgba(8, 145, 178, 0.15)",
                 }}
               >
                 <h3
                   style={{
-                    fontSize: isMobile ? "11px" : "12px",
+                    fontSize: isMobile ? "16px" : "18px",
                     fontWeight: "600",
-                    color: "#00C2FF",
-                    marginBottom: "28px",
-                    fontFamily: "monospace",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
+                    color: COLORS.info,
+                    marginBottom: "24px",
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                   }}
                 >
                   Story-Based Monitoring
                 </h3>
-                <div
-                  style={{
-                    fontSize: isMobile ? "14px" : "15px",
-                    lineHeight: "2.2",
-                    color: "#9ca3af",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  <div style={{ color: "#ffffff" }}>Start from what should happen</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Run the code</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>See the story of what did</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div style={{ color: "#ffffff" }}>Every divergence surfaced</div>
-                  <div style={{ paddingLeft: "20px" }}>↓</div>
-                  <div>Root cause in minutes</div>
-                  <div style={{ marginTop: "24px", color: "#00C2FF" }}>
-                    Not after the fire.
-                    <br />
-                    Before the smoke.
-                  </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  {[
+                    { num: 1, text: "Start from what should happen", color: COLORS.royalBlue },
+                    { num: 2, text: "Run the code", color: COLORS.info },
+                    { num: 3, text: "See the story of what did", color: COLORS.success },
+                    { num: 4, text: "Every divergence surfaced", color: COLORS.info },
+                    { num: 5, text: "Root cause in minutes", color: COLORS.accentAlt },
+                  ].map((step) => (
+                    <div
+                      key={step.num}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          background: step.color,
+                          color: COLORS.white,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {step.num}
+                      </div>
+                      <span
+                        style={{
+                          fontSize: isMobile ? "14px" : "16px",
+                          color: COLORS.gray800,
+                          fontFamily:
+                            '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                        }}
+                      >
+                        {step.text}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Storyboard Visualization */}
-            <div
+            {/* Tagline */}
+            <p
               style={{
-                marginTop: "64px",
+                fontSize: isMobile ? "20px" : "24px",
+                fontWeight: "700",
+                color: COLORS.gray400,
+                textAlign: "center",
+                marginTop: "48px",
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
               }}
             >
-              <h3
-                style={{
-                  fontSize: isMobile ? "20px" : "24px",
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: "12px",
-                  textAlign: "center",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                }}
-              >
-                What a storyboard looks like
-              </h3>
-              <p
-                style={{
-                  fontSize: isMobile ? "14px" : "16px",
-                  color: "#9ca3af",
-                  marginBottom: "48px",
-                  textAlign: "center",
-                  maxWidth: "600px",
-                  margin: "0 auto 48px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                }}
-              >
-                Expected flow in blue. Actual behavior tracked. Divergence highlighted in red.
-              </p>
+              Not after the fire. Before the smoke.
+            </p>
 
-              <div
-                style={{
-                  background: "#000000",
-                  border: "2px solid rgba(30, 58, 138, 0.8)",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  padding: isMobile ? "20px" : "40px",
-                }}
-              >
-                <img
-                  src="/storyboard-visual.png"
-                  alt="System story visualization showing expected flow and error divergence"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                  }}
-                />
-              </div>
-            </div>
           </motion.div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Logo } from "@principal-ai/logo-component";
+import { COLORS } from "../styles/colors";
 
 const HeroSection: React.FC = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -49,9 +50,9 @@ const HeroSection: React.FC = () => {
       style={{
         flex: 1,
         minHeight: "100%",
-        backgroundColor: "#000000",
+        background: `linear-gradient(180deg, ${COLORS.navyDark} 0%, ${COLORS.black} 100%)`,
         backgroundImage: gridBackground,
-        backgroundSize: "100px 100px",
+        backgroundSize: "80px 80px",
         backgroundPosition: "-1px -1px",
         position: "relative",
         display: "flex",
@@ -59,7 +60,7 @@ const HeroSection: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        padding: isMobile ? "12px 20px 40px 20px" : "24px 20px 60px 20px",
+        padding: isMobile ? "16px 24px 40px 24px" : "24px 24px 48px 24px",
       }}
     >
       {/* Subtle circular gradient */}
@@ -85,13 +86,13 @@ const HeroSection: React.FC = () => {
           margin: "0 auto",
           position: "relative",
           zIndex: 2,
-          padding: isMobile ? "0 20px" : "0 40px",
+          padding: isMobile ? "0 24px" : "0 40px",
         }}
       >
         {/* Logo - Centered above everything */}
         <div
           style={{
-            margin: "0 auto 12px auto",
+            margin: "0 auto 16px auto",
             display: "flex",
             justifyContent: "center",
           }}
@@ -99,8 +100,8 @@ const HeroSection: React.FC = () => {
           <Logo
             width={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
             height={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
-            color="#00C2FF"
-            particleColor="#0098CC"
+            color={COLORS.primary}
+            particleColor={COLORS.primaryDark}
             opacity={0.9}
           />
         </div>
@@ -120,8 +121,8 @@ const HeroSection: React.FC = () => {
               alignItems: "center",
               gap: "8px",
               padding: "8px 16px",
-              background: "rgba(0, 194, 255, 0.1)",
-              border: "1px solid rgba(0, 194, 255, 0.3)",
+              background: `rgba(0, 194, 255, 0.1)`,
+              border: `1px solid rgba(0, 194, 255, 0.3)`,
               borderRadius: "24px",
               marginBottom: "24px",
             }}
@@ -129,8 +130,8 @@ const HeroSection: React.FC = () => {
             <span
               style={{
                 fontFamily: "monospace",
-                fontSize: isMobile ? "11px" : "12px",
-                color: "#00C2FF",
+                fontSize: "12px",
+                color: COLORS.primary,
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
                 fontWeight: "600",
@@ -145,13 +146,13 @@ const HeroSection: React.FC = () => {
             <div
               style={{
                 fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
-                fontWeight: "600",
+                fontWeight: "700",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 lineHeight: "1.05",
-                color: "#00C2FF",
+                color: COLORS.primary,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
               }}
@@ -161,76 +162,59 @@ const HeroSection: React.FC = () => {
             <div
               style={{
                 fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
-                fontWeight: "600",
+                fontWeight: "700",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 lineHeight: "1.05",
-                color: "#86868b",
+                color: COLORS.white,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
                 opacity: showHeadlineLine2 ? 1 : 0,
                 transform: showHeadlineLine2 ? "translateY(0)" : "translateY(20px)",
-                transition: showHeadlineLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+                transition: showHeadlineLine2 ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
               }}
             >
               for the Agent Era
             </div>
           </div>
 
-          {/* Subheading */}
+          {/* Key Benefits */}
           <div style={{ margin: "0 auto 48px auto", maxWidth: "700px" }}>
             <div
               style={{
-                fontSize: isMobile ? "17px" : "21px",
-                fontWeight: "400",
-                color: "#ffffff",
-                lineHeight: "1.47",
-                letterSpacing: "0.007em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
                 opacity: showSubheadingLine1 ? 1 : 0,
                 transform: showSubheadingLine1 ? "translateY(0)" : "translateY(20px)",
-                transition: showSubheadingLine1 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+                transition: showSubheadingLine1 ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
               }}
             >
-              AI agents write the code. Tests pass. Deploys go through.
-            </div>
-            <div
-              style={{
-                fontSize: isMobile ? "17px" : "21px",
-                fontWeight: "400",
-                color: "#ffffff",
-                lineHeight: "1.47",
-                letterSpacing: "0.007em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                textAlign: "center",
-                opacity: showSubheadingLine2 ? 1 : 0,
-                transform: showSubheadingLine2 ? "translateY(0)" : "translateY(20px)",
-                transition: showSubheadingLine2 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
-              }}
-            >
-              Nobody knows if it did what you intended.
-            </div>
-            <div
-              style={{
-                fontSize: isMobile ? "17px" : "21px",
-                fontWeight: "400",
-                color: "#00C2FF",
-                lineHeight: "1.47",
-                letterSpacing: "0.007em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                textAlign: "center",
-                opacity: showSubheadingLine3 ? 1 : 0,
-                transform: showSubheadingLine3 ? "translateY(0)" : "translateY(20px)",
-                transition: showSubheadingLine3 ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
-              }}
-            >
-              We fix that.
+              {[
+                "Reduce monthly database costs by storing context in Git",
+                "Verify AI agent work without reviewing every line of code",
+                "Debug production issues in minutes instead of hours",
+              ].map((benefit, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "12px",
+                    fontSize: isMobile ? "16px" : "18px",
+                    fontWeight: "400",
+                    color: COLORS.white,
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  }}
+                >
+                  <span style={{ color: COLORS.primary, fontSize: "20px" }}>✓</span>
+                  <span>{benefit}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -241,17 +225,17 @@ const HeroSection: React.FC = () => {
               justifyContent: "center",
               opacity: showButton ? 1 : 0,
               transform: showButton ? "translateY(0)" : "translateY(20px)",
-              transition: showButton ? "opacity 0.6s ease-out, transform 0.6s ease-out" : "none",
+              transition: showButton ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             }}
           >
             <a
               href="/early-access"
               style={{
-                backgroundColor: "#00C2FF",
-                color: "#000000",
-                padding: isMobile ? "14px 32px" : "16px 40px",
+                backgroundColor: COLORS.primary,
+                color: COLORS.black,
+                padding: isMobile ? "16px 32px" : "16px 40px",
                 borderRadius: "8px",
-                fontSize: isMobile ? "17px" : "19px",
+                fontSize: isMobile ? "16px" : "20px",
                 fontWeight: "600",
                 textDecoration: "none",
                 display: "inline-flex",
@@ -259,15 +243,21 @@ const HeroSection: React.FC = () => {
                 gap: "6px",
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
                 border: "none",
+                boxShadow: "0 4px 12px rgba(0, 194, 255, 0.3)",
+                transform: "scale(1)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#00d4ff";
+                e.currentTarget.style.backgroundColor = COLORS.primaryHover;
+                e.currentTarget.style.transform = "scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 6px 16px rgba(0, 194, 255, 0.4)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#00C2FF";
+                e.currentTarget.style.backgroundColor = COLORS.primary;
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 194, 255, 0.3)";
               }}
             >
               Get Early Access
@@ -281,7 +271,7 @@ const HeroSection: React.FC = () => {
               paddingTop: "24px",
               borderTop: "1px solid rgba(255, 255, 255, 0.1)",
               opacity: showButton ? 1 : 0,
-              transition: showButton ? "opacity 0.6s ease-out" : "none",
+              transition: showButton ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             }}
           >
             <div
@@ -291,18 +281,18 @@ const HeroSection: React.FC = () => {
                 alignItems: "center",
                 gap: isMobile ? "12px" : "16px",
                 flexWrap: "wrap",
-                fontSize: isMobile ? "12px" : "13px",
-                color: "#9ca3af",
+                fontSize: isMobile ? "12px" : "14px",
+                color: COLORS.gray400,
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 textAlign: "center",
               }}
             >
-              <span>7 patents pending</span>
-              <span style={{ color: "#4b5563" }}>|</span>
-              <span>Git-native architecture</span>
-              <span style={{ color: "#4b5563" }}>|</span>
+              <span>Built by engineers, for engineers</span>
+              <span style={{ color: COLORS.gray600 }}>•</span>
               <span>Dogfooding in production</span>
+              <span style={{ color: COLORS.gray600 }}>•</span>
+              <span>7 patents pending</span>
             </div>
           </div>
         </div>
