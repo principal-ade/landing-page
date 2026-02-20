@@ -18,7 +18,7 @@ This is how it works everywhere. Something breaks. You dig. You piece it togethe
 
 You open the story.
 
-Cart validated. Payment authorized. Fraud check: skipped. Inventory reserved. Shipping initiated. Order confirmed.
+*Cart validated. Payment authorized. Fraud check: skipped. Inventory reserved. Shipping initiated. Order confirmed.*
 
 One line is flagged. Fraud check: skipped.
 
@@ -48,7 +48,7 @@ What it doesn't show you is what should have happened.
 
 The trace for this checkout looks clean. Six services, all responding, all within normal latency. The fraud check span is just absent. In a trace with a couple hundred spans, one missing span doesn't announce itself. You'd have to already know it should be there. And if you already knew that, you probably wouldn't need the trace.
 
-## This is the part that matters.
+## Here's the catch
 
 You can have the best query engine ever built. You can have infinite cardinality, perfect instrumentation, columns for days. You still cannot write a query for something you don't know is missing.
 
