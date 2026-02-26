@@ -4,6 +4,7 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { ThemeProvider } from '@principal-ade/industry-theme';
 import { mockFileTree, mockFileContents, getFileContent } from './mock-data';
 import type { FileTree } from '@principal-ai/repository-abstraction';
+import type { DataSlice } from '@principal-ade/panel-framework-core';
 
 // Import panel component
 // Note: Dynamic import may be needed if there are SSR issues
@@ -50,9 +51,9 @@ function createEventEmitter() {
 /**
  * Create a DataSlice for the fileTree
  */
-function createFileTreeSlice(fileTree: FileTree) {
+function createFileTreeSlice(fileTree: FileTree): DataSlice<FileTree> {
   return {
-    scope: 'repository' as const,
+    scope: 'repository',
     name: 'fileTree',
     data: fileTree,
     loading: false,
@@ -66,7 +67,7 @@ function createFileTreeSlice(fileTree: FileTree) {
  */
 function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string, string>) {
   const fileTreeSlice = createFileTreeSlice(fileTree);
-  const slices = new Map([['fileTree', fileTreeSlice]]);
+  const slices = new Map<string, DataSlice>([['fileTree', fileTreeSlice]]);
 
   return {
     // Typed slice access (modern approach)
@@ -87,14 +88,16 @@ function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string
 
     // Legacy slice access methods
     slices,
-    getSlice: <_T = unknown>(name: string) => slices.get(name) as any,
-    getWorkspaceSlice: <_T = unknown>(name: string) => {
-      const slice = slices.get(name);
-      return (slice?.scope as string) === 'workspace' ? slice : undefined;
+    getSlice: <T,>(name: string): DataSlice<T> | undefined => {
+      return slices.get(name) as DataSlice<T> | undefined;
     },
-    getRepositorySlice: <_T = unknown>(name: string) => {
+    getWorkspaceSlice: <T,>(name: string): DataSlice<T> | undefined => {
       const slice = slices.get(name);
-      return (slice?.scope as string) === 'repository' ? slice : undefined;
+      return slice?.scope === 'workspace' ? (slice as DataSlice<T>) : undefined;
+    },
+    getRepositorySlice: <T,>(name: string): DataSlice<T> | undefined => {
+      const slice = slices.get(name);
+      return slice?.scope === 'repository' ? (slice as DataSlice<T>) : undefined;
     },
 
     // Utility methods
