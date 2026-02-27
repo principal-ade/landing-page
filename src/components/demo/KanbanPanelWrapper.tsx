@@ -4,14 +4,15 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { ThemeProvider } from '@principal-ade/industry-theme';
 import { mockFileTree, mockFileContents, getFileContent } from './mock-data';
 import type { FileTree } from '@principal-ai/repository-abstraction';
-import type { DataSlice } from '@principal-ade/panel-framework-core';
+import type { DataSlice, PanelEventEmitter } from '@principal-ade/panel-framework-core';
+import { PanelNavigator } from './PanelNavigator';
 
-// Import panel component
-// Note: Dynamic import may be needed if there are SSR issues
+// Import panel components
 import { panels } from '@industry-theme/backlogmd-kanban-panel';
 
-// Get the KanbanPanel component from the panels export
+// Get the panel components from the panels export
 const KanbanPanel = panels[0].component;
+const TaskDetailPanel = panels[1].component;
 
 /**
  * Simple event emitter for panel events
@@ -205,6 +206,35 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     console.log('[Demo] File deleted:', path);
   }, []);
 
+  // Panel definitions for navigator
+  const panelSlots = useMemo(() => [
+    {
+      id: 'kanban',
+      render: (navEvents: PanelEventEmitter) => (
+        <KanbanPanel
+          context={context}
+          actions={actions}
+          events={navEvents}
+        />
+      ),
+    },
+    {
+      id: 'task-detail',
+      render: (navEvents: PanelEventEmitter) => (
+        <TaskDetailPanel
+          context={context}
+          actions={actions}
+          events={navEvents}
+        />
+      ),
+    },
+  ], [context, actions]);
+
+  // Navigation routes
+  const routes = useMemo(() => [
+    { eventType: 'task:selected', targetPanelId: 'task-detail' },
+  ], []);
+
   return (
     <ThemeProvider>
       <div style={{
@@ -214,10 +244,13 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
         flexDirection: 'column',
         background: '#0a0e17',
       }}>
-        <KanbanPanel
-          context={context}
-          actions={actions}
-          events={events}
+        <PanelNavigator
+          rootPanelId="kanban"
+          panels={panelSlots}
+          routes={routes}
+          backEventTypes={['navigation:back', 'task:deselected']}
+          externalEvents={events}
+          animationDuration={300}
         />
       </div>
     </ThemeProvider>
