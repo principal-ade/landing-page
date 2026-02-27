@@ -6,11 +6,9 @@ import { SimpleCTA } from './SimpleCTA';
 import { Footer } from './Footer';
 
 export const CompleteLivingDocWebsite: React.FC = () => {
-  const [mounted, setMounted] = React.useState(false);
   const [windowWidth, setWindowWidth] = React.useState(1024);
 
   React.useEffect(() => {
-    setMounted(true);
     setWindowWidth(window.innerWidth);
 
     const handleResize = () => {

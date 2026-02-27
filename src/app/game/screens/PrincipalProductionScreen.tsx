@@ -15,7 +15,6 @@ interface PrincipalProductionScreenProps {
   phase: 'cost-info' | 'deployed-running' | 'incident-active' | 'incident-resolved';
   onBack: () => void;
   onContinue: () => void;
-  onPlayAgain?: () => void;
   gameState: UseMazeGameReturn;
   agentUsage: number;
 }
@@ -24,7 +23,7 @@ interface PrincipalProductionScreenProps {
  * Principal Production Screen - shows production with Principal AI telemetry
  * Emphasizes story-based telemetry and automated incident resolution
  */
-export function PrincipalProductionScreen({ phase, onBack, onContinue, onPlayAgain, gameState, agentUsage }: PrincipalProductionScreenProps) {
+export function PrincipalProductionScreen({ phase, onBack, onContinue, gameState, agentUsage }: PrincipalProductionScreenProps) {
   const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024

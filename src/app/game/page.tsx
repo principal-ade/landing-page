@@ -11,8 +11,8 @@ import { TestingScreen } from './screens/TestingScreen';
 import { PrincipalTestingScreen } from './screens/PrincipalTestingScreen';
 import { ProductionScreen } from './screens/ProductionScreen';
 import { PrincipalProductionScreen } from './screens/PrincipalProductionScreen';
-import { DevProgressBar } from './components/DevProgressBar';
-import { GameState, GameMode, AgentUsageLevel } from './types';
+// DevProgressBar import removed - commented out in production
+// GameState, GameMode, AgentUsageLevel imports removed - only used by commented-out dev code
 
 /**
  * Game v2 - Clean Architecture Implementation
@@ -42,23 +42,23 @@ function GameContent() {
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
-  // Development only: handler for jumping to specific phases
-  const handleJumpToPhase = (phase: GameState['phase'], mode?: GameMode, agentUsage?: AgentUsageLevel) => {
-    let newState: GameState;
-
-    if (phase === 'start') {
-      newState = { phase: 'start' };
-    } else if (phase === 'agentQuestion') {
-      newState = { phase: 'agentQuestion', selection: null };
-    } else {
-      // All other phases require mode and agentUsage
-      const finalMode = mode || 'conventional';
-      const finalAgentUsage: AgentUsageLevel = agentUsage || 50;
-      newState = { phase, mode: finalMode, agentUsage: finalAgentUsage } as GameState;
-    }
-
-    handlers.jumpToState(newState);
-  };
+  // Development only: handler for jumping to specific phases (commented out for production)
+  // const handleJumpToPhase = (phase: GameState['phase'], mode?: GameMode, agentUsage?: AgentUsageLevel) => {
+  //   let newState: GameState;
+  //
+  //   if (phase === 'start') {
+  //     newState = { phase: 'start' };
+  //   } else if (phase === 'agentQuestion') {
+  //     newState = { phase: 'agentQuestion', selection: null };
+  //   } else {
+  //     // All other phases require mode and agentUsage
+  //     const finalMode = mode || 'conventional';
+  //     const finalAgentUsage: AgentUsageLevel = agentUsage || 50;
+  //     newState = { phase, mode: finalMode, agentUsage: finalAgentUsage } as GameState;
+  //   }
+  //
+  //   handlers.jumpToState(newState);
+  // };
 
   // Sync maze state when jumping to phases (for dev progress bar)
   useEffect(() => {
@@ -184,9 +184,6 @@ function GameContent() {
               phase={state.phase}
               onBack={handlers.goBack}
               onContinue={handlers.continue}
-              onPlayAgain={() => {
-                // TODO: Implement play again flow
-              }}
               gameState={gameState}
               agentUsage={state.agentUsage}
             />
@@ -201,9 +198,6 @@ function GameContent() {
               onTryPrincipal={() => {
                 gameState.handleTryPrincipal();
                 handlers.tryPrincipal(state.agentUsage);
-              }}
-              onPlayAgain={() => {
-                // TODO: Implement play again flow
               }}
               gameState={gameState}
               agentUsage={state.agentUsage}

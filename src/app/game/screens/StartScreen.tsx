@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from 'react';
-import { useTheme } from '@principal-ade/industry-theme';
 import { Button } from '../components/atoms/Button';
 import { GameHeading } from '../components/atoms/GameHeading';
 import { GameBodyText } from '../components/atoms/GameBodyText';
@@ -18,8 +17,6 @@ interface StartScreenProps {
  * Shows intro text with typewriter effect
  */
 export function StartScreen({ onContinue }: StartScreenProps) {
-  const { theme } = useTheme();
-
   // Configure lines with typewriter speeds
   const lineConfigs = useMemo(
     () => [

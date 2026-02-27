@@ -18,7 +18,6 @@ interface ProductionScreenProps {
   onBack: () => void;
   onContinue: () => void;
   onTryPrincipal?: () => void;
-  onPlayAgain?: () => void;
   gameState: UseMazeGameReturn;
   agentUsage: number;
 }
@@ -27,7 +26,7 @@ interface ProductionScreenProps {
  * Production Screen - handles all production-related phases
  * Shows production info with maze displaying completed test path
  */
-export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincipal, onPlayAgain, gameState, agentUsage }: ProductionScreenProps) {
+export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincipal, gameState, agentUsage }: ProductionScreenProps) {
   const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024

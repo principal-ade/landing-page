@@ -32,8 +32,6 @@ export function TestingScreen({ mode, phase, onBack, onTestLocally, onDeploy, ga
   const [showMaze, setShowMaze] = useState(false);
   const [deployQuestionText, setDeployQuestionText] = useState('');
   const [deployQuestionComplete, setDeployQuestionComplete] = useState(false);
-  const [costInfoLines, setCostInfoLines] = useState<string[]>(['', '', '']);
-  const [costInfoComplete, setCostInfoComplete] = useState(false);
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );

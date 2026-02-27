@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '@principal-ade/industry-theme';
 import { Button } from '../components/atoms/Button';
 import { GameBodyText } from '../components/atoms/GameBodyText';
 import { GAME_CONTENT } from '../config/gameContent';
@@ -17,7 +16,6 @@ interface DeployQuestionScreenProps {
  * Shows question with typewriter effect
  */
 export function DeployQuestionScreen({ onBack, onDeploy }: DeployQuestionScreenProps) {
-  const { theme } = useTheme();
   const [displayedText, setDisplayedText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
 

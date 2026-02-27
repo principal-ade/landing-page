@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducer, useCallback } from 'react';
-import { GameState, GameEvent, AgentUsageLevel } from '../types';
+import { GameState, AgentUsageLevel } from '../types';
 import { gameStateReducer, initialGameState } from '../state-machine/gameStateMachine';
 
 /**

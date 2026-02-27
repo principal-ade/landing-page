@@ -32,7 +32,6 @@ interface MazeCanvasProps {
   testedLocally: boolean;
   testPath: RevealedCell[];
   revealedPathIndex: number;
-  revenue: number;
 
   // Maze data
   horizontalWalls: number[][];
@@ -73,7 +72,6 @@ export const MazeCanvas: React.FC<MazeCanvasProps> = ({
   testedLocally,
   testPath,
   revealedPathIndex,
-  revenue,
   horizontalWalls,
   verticalWalls,
   blockageWall,

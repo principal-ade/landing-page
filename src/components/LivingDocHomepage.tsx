@@ -3,17 +3,13 @@ import { Logo } from "@principal-ai/logo-component";
 import { COLORS } from "../styles/colors";
 
 const HeroSection: React.FC = () => {
-  const [mounted, setMounted] = React.useState(false);
   const [windowWidth, setWindowWidth] = React.useState(1024);
   const [windowHeight, setWindowHeight] = React.useState(768);
   const [showHeadlineLine2, setShowHeadlineLine2] = React.useState(false);
   const [showSubheadingLine1, setShowSubheadingLine1] = React.useState(false);
-  const [showSubheadingLine2, setShowSubheadingLine2] = React.useState(false);
-  const [showSubheadingLine3, setShowSubheadingLine3] = React.useState(false);
   const [showButton, setShowButton] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true);
     setWindowWidth(window.innerWidth);
     setWindowHeight(window.innerHeight);
 
@@ -29,10 +25,7 @@ const HeroSection: React.FC = () => {
     // Show all elements immediately - no delays
     setShowHeadlineLine2(true);
     setShowSubheadingLine1(true);
-    setShowSubheadingLine2(true);
-    setShowSubheadingLine3(true);
     setShowButton(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

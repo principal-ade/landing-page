@@ -6,7 +6,7 @@ import { GameState, GameEvent, GameMode, AgentUsageLevel } from '../types';
  */
 
 // Helper to determine mode from agent usage
-function determineMode(agentUsage: AgentUsageLevel): GameMode {
+function determineMode(_agentUsage: AgentUsageLevel): GameMode {
   // All non-Principal usage is conventional
   return 'conventional';
 }
