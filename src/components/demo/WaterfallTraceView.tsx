@@ -169,16 +169,9 @@ export function WaterfallTraceView({ spans, onClear }: WaterfallTraceViewProps) 
             margin: 0,
             fontFamily: 'Inter, sans-serif',
           }}>
-            Raw Trace Waterfall
+            Trace Waterfall
           </h2>
-          <span style={{
-            fontSize: '12px',
-            color: '#94a3b8',
-            fontFamily: 'Inter, sans-serif',
-          }}>
-            {traceGroups.length} traces ({spans.length} spans)
-          </span>
-        </div>
+                  </div>
         <button
           onClick={onClear}
           style={{

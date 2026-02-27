@@ -188,7 +188,7 @@ export default function ObservabilityDemoPage() {
                 color: viewMode === 'raw' ? '#ffffff' : '#666',
               }}
             >
-              Conventional Monitoring
+              Traditional Monitoring
             </button>
             <button
               onClick={() => setViewMode('principal')}
@@ -205,7 +205,7 @@ export default function ObservabilityDemoPage() {
                 color: viewMode === 'principal' ? '#00C2FF' : '#666',
               }}
             >
-              Story Based Monitoring
+              Story-based Monitoring
             </button>
           </div>
 
