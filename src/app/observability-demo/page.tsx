@@ -28,12 +28,15 @@ const KanbanPanelWrapper = dynamic(
   }
 );
 
+type ViewMode = 'raw' | 'principal';
+
 export default function ObservabilityDemoPage() {
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
   const [spans, setSpans] = useState<CapturedSpan[]>([]);
   const [providerReady, setProviderReady] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('raw');
   const cleanupRef = useRef<(() => void) | null>(null);
 
   // Initialize telemetry provider on mount
@@ -86,7 +89,7 @@ export default function ObservabilityDemoPage() {
         borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
         borderRight: '1px solid rgba(255, 255, 255, 0.1)',
       }}>
-        {/* Left Panel: Trace Waterfall */}
+        {/* Left Panel: Trace View */}
         <div style={{
           flex: 1,
           display: 'flex',
@@ -96,7 +99,103 @@ export default function ObservabilityDemoPage() {
           borderBottom: isMobile ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
           overflow: 'hidden',
         }}>
-          <WaterfallTraceView spans={spans} onClear={handleClearSpans} />
+          {/* View Mode Toggle */}
+          <div style={{
+            padding: '12px 16px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'rgba(0, 0, 0, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}>
+            <span style={{
+              fontSize: '12px',
+              color: '#666',
+              fontFamily: 'Inter, sans-serif',
+            }}>
+              View:
+            </span>
+            <div style={{
+              display: 'flex',
+              background: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '6px',
+              padding: '2px',
+            }}>
+              <button
+                onClick={() => setViewMode('raw')}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500,
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  background: viewMode === 'raw' ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                  color: viewMode === 'raw' ? '#ffffff' : '#666',
+                }}
+              >
+                Raw Traces
+              </button>
+              <button
+                onClick={() => setViewMode('principal')}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500,
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  background: viewMode === 'principal' ? 'rgba(0, 194, 255, 0.2)' : 'transparent',
+                  color: viewMode === 'principal' ? '#00C2FF' : '#666',
+                }}
+              >
+                Principal AI
+              </button>
+            </div>
+          </div>
+
+          {/* View Content */}
+          {viewMode === 'raw' ? (
+            <WaterfallTraceView spans={spans} onClear={handleClearSpans} />
+          ) : (
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '40px',
+              color: '#666',
+              fontFamily: 'Inter, sans-serif',
+              textAlign: 'center',
+            }}>
+              <div style={{
+                fontSize: '48px',
+                marginBottom: '16px',
+              }}>
+                🚀
+              </div>
+              <p style={{
+                fontSize: '16px',
+                color: '#00C2FF',
+                margin: 0,
+                fontWeight: 500,
+              }}>
+                Principal AI View
+              </p>
+              <p style={{
+                fontSize: '13px',
+                color: '#666',
+                margin: '8px 0 0 0',
+              }}>
+                TraceList panel integration coming soon
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Right Panel: Kanban */}
