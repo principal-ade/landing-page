@@ -71,6 +71,9 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
     GAME_CONFIG.timings.lineDelays.line2
   );
 
+  // Extract for dependency array
+  const firstLineComplete = lines[0]?.isComplete;
+
   // Reset states when phase changes
   useEffect(() => {
     if (phase !== 'cost-info') {
@@ -81,11 +84,11 @@ export function ProductionScreen({ mode, phase, onBack, onContinue, onTryPrincip
 
   // Turn on overlay after first line completes
   useEffect(() => {
-    if (phase === 'cost-info' && lines[0]?.isComplete && !showOverlay) {
+    if (phase === 'cost-info' && firstLineComplete && !showOverlay) {
       const timer = setTimeout(() => setShowOverlay(true), 500);
       return () => clearTimeout(timer);
     }
-  }, [phase, lines[0]?.isComplete, showOverlay]);
+  }, [phase, firstLineComplete, showOverlay]);
 
   // Show remaining lines after overlay is on
   useEffect(() => {

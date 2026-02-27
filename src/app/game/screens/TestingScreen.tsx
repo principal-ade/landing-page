@@ -64,6 +64,9 @@ export function TestingScreen({ mode, phase, onBack, onTestLocally, onDeploy, ga
     GAME_CONFIG.timings.lineDelays.line2
   );
 
+  // Extract for dependency array
+  const secondLineComplete = lines[1]?.isComplete;
+
   // Show maze after line 1 completes OR if we're in running/complete/deploy phases
   useEffect(() => {
     if (phase === 'testing-running' || phase === 'test-complete' || phase === 'deploy-question') {
@@ -71,14 +74,14 @@ export function TestingScreen({ mode, phase, onBack, onTestLocally, onDeploy, ga
       setShowMaze(true);
     } else if (phase === 'testing') {
       // In testing phase, show after line 1 completes
-      if (lines[1]?.isComplete && !showMaze) {
+      if (secondLineComplete && !showMaze) {
         const timer = setTimeout(() => setShowMaze(true), 500);
         return () => clearTimeout(timer);
-      } else if (!lines[1]?.isComplete) {
+      } else if (!secondLineComplete) {
         setShowMaze(false);
       }
     }
-  }, [phase, lines[1]?.isComplete, showMaze]);
+  }, [phase, secondLineComplete, showMaze]);
 
   // Typewriter effect for deploy question
   useEffect(() => {
