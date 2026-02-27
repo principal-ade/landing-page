@@ -15,6 +15,7 @@ export const Header: React.FC = () => {
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
   const isFeaturesPage = pathname?.startsWith('/product');
+  const isObservabilityDemo = pathname?.startsWith('/observability-demo');
 
   useEffect(() => {
     const handleResize = () => {
@@ -95,6 +96,22 @@ export const Header: React.FC = () => {
               >
                 {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Features'}
               </Link>
+            </>
+          )}
+          {isObservabilityDemo && (
+            <>
+              <span style={{ color: 'rgba(255, 255, 255, 0.3)', marginLeft: '4px' }}>:</span>
+              <span
+                style={{
+                  color: '#00C2FF',
+                  fontSize: isMobile ? '14px' : isTablet ? '18px' : '16px',
+                  fontWeight: '500',
+                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  marginLeft: '4px',
+                }}
+              >
+                Story Based Monitoring Demo
+              </span>
             </>
           )}
         </div>
