@@ -1,15 +1,48 @@
 import { NextResponse } from 'next/server';
 
 const REPOSITORY_URL = 'https://github.com/principal-ade/industry-themed-backlogmd-kanban-panel';
-const COMMIT_SHA = '0055a21db5ee66b171db7fb5948ea108a5288831';
+const CUSTOMER_ID = 'principal-ade/industry-themed-backlogmd-kanban-panel';
 
 export async function GET() {
   try {
-    const url = new URL('https://app.principal-ade.com/api/versions/schematic');
-    url.searchParams.set('repositoryUrl', REPOSITORY_URL);
-    url.searchParams.set('commitSha', COMMIT_SHA);
+    // First, fetch the latest version registration to get the current SHA
+    const latestUrl = new URL('https://app.principal-ade.com/api/versions/latest');
+    latestUrl.searchParams.set('customerId', CUSTOMER_ID);
 
-    const response = await fetch(url.toString(), {
+    const latestResponse = await fetch(latestUrl.toString(), {
+      headers: {
+        'Accept': 'application/json',
+      },
+      next: {
+        revalidate: 60, // Short cache - latest can change with new deployments
+      },
+    });
+
+    if (!latestResponse.ok) {
+      const error = await latestResponse.json().catch(() => ({ message: 'Unknown error' }));
+      return NextResponse.json(
+        { error: 'Failed to fetch latest version', details: error },
+        { status: latestResponse.status }
+      );
+    }
+
+    const latestData = await latestResponse.json();
+
+    if (!latestData.success || !latestData.registration?.gitSHA) {
+      return NextResponse.json(
+        { error: 'No version registration found for repository' },
+        { status: 404 }
+      );
+    }
+
+    const commitSha = latestData.registration.gitSHA;
+
+    // Now fetch the schematic using the latest SHA
+    const schematicUrl = new URL('https://app.principal-ade.com/api/versions/schematic');
+    schematicUrl.searchParams.set('repositoryUrl', REPOSITORY_URL);
+    schematicUrl.searchParams.set('commitSha', commitSha);
+
+    const response = await fetch(schematicUrl.toString(), {
       headers: {
         'Accept': 'application/json',
       },
