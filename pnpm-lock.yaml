@@ -24,8 +24,8 @@ importers:
         specifier: 1.1.3
         version: 1.1.3(@babel/runtime@7.28.4)(@opentelemetry/api@1.9.0)(@principal-ai/repository-abstraction@0.5.7)(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(zod@4.3.6)
       '@industry-theme/principal-view-panels':
-        specifier: ^0.11.34
-        version: 0.11.34(a90ffef4376b55f75d88b3a1762289ac)
+        specifier: ^0.11.35
+        version: 0.11.35(f244ad80a5a97e3346408bfe644e170b)
       '@octokit/rest':
         specifier: ^22.0.0
         version: 22.0.1
@@ -40,19 +40,22 @@ importers:
         version: 2.5.1(@opentelemetry/api@1.9.0)
       '@principal-ade/dynamic-file-tree':
         specifier: ^0.1.72
-        version: 0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@principal-ade/industry-theme':
         specifier: ^0.1.7
         version: 0.1.7(react@19.2.0)
       '@principal-ade/panel-framework-core':
         specifier: ^0.4.2
         version: 0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@principal-ai/codebase-composition':
+        specifier: ^0.2.45
+        version: 0.2.45
       '@principal-ai/logo-component':
         specifier: ^0.1.3
         version: 0.1.3(react@19.2.0)
       '@principal-ai/principal-view-core':
         specifier: ^0.24.29
-        version: 0.24.29(@principal-ai/codebase-composition@0.2.9)
+        version: 0.24.29(@principal-ai/codebase-composition@0.2.45)
       '@principal-ai/repository-abstraction':
         specifier: ^0.5.7
         version: 0.5.7
@@ -889,8 +892,8 @@ packages:
       react: '>=19.0.0'
       react-dom: '>=19.0.0'
 
-  '@industry-theme/principal-view-panels@0.11.34':
-    resolution: {integrity: sha512-yNoPaJFfd1MaQtF1zTNlwWW+MDdHkP/OfDET/cJHfZm04efB7Dh1RwABBbQQmrWrUlv42hSn2uZpaVIJfDkN9w==}
+  '@industry-theme/principal-view-panels@0.11.35':
+    resolution: {integrity: sha512-6Bm+oxgrSV2Zf4NwQo11gziFKRAn/owqszRhup/JqIdVhVREr+yl+ivMuyooNd+0OrjSdv6xOfFGidlYpLfdpA==}
     peerDependencies:
       '@principal-ade/dynamic-file-tree': ^0.1.70
       '@principal-ade/industry-theme': ^0.1.7
@@ -1463,8 +1466,17 @@ packages:
   '@principal-ai/agent-monitoring@0.3.9':
     resolution: {integrity: sha512-z9BHFx8c5qaXel94wbfQWWo6+7f0qL8cQpebRQBZMa0KwH5M1k2kCMC6XyiwjZovumAx/yul9+sDEiUxGTDA6Q==}
 
-  '@principal-ai/codebase-composition@0.2.9':
-    resolution: {integrity: sha512-lmjsUf48ov8O8uEOqWyAet5pEJXs2k26r9hLijkq09A5KUEzyts0vdXdl0v3pfc4XxitBKuubMtr4h+NvOOrxw==}
+  '@principal-ai/codebase-composition@0.2.45':
+    resolution: {integrity: sha512-eKlWp4dcuRGznZHyicXP9yWb71D73YepYu3UMOC3bp1SH7QYFKno+61pL4bznxWEw9hT5s9GQK222ENJbVshWg==}
+
+  '@principal-ai/codebase-quality-lenses@0.1.65':
+    resolution: {integrity: sha512-7l3x0836uWhaH5b9nurTxbCuF8TiRqVLA8ZG5DffSalWkQdbTVbj/I+fAhDNoDXbbMKTEa1eJUIw5+y3vg3xOg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@a24z/alexandria-cli': '>=0.2.0'
+    peerDependenciesMeta:
+      '@a24z/alexandria-cli':
+        optional: true
 
   '@principal-ai/logo-component@0.1.3':
     resolution: {integrity: sha512-y2UXgto6AkFpySOu1fqNLbTINGPFiP/FgBXME5slzXDNKwiGuB3pp7q7Ow3r8icNH0CVnUdvd/bGzj1FFYe85Q==}
@@ -1476,13 +1488,16 @@ packages:
     peerDependencies:
       '@principal-ai/codebase-composition': ^0.2.43
 
-  '@principal-ai/principal-view-react@0.13.5':
-    resolution: {integrity: sha512-E6aVK0AtCiz4u4KchoXixsn1KSCQHFW8lXL16O0tcJQYoRCYji/Efm86jyWKcw3EILlo5lYqu2iOZxdwrqV6Cw==}
+  '@principal-ai/principal-view-react@0.13.6':
+    resolution: {integrity: sha512-uMSl/bf6HAVnsyiXtGpIycvGU0/Hq2PgyHPEQPa3zW9QRp0FZcOArd76Z3weCwyTds99qMFvuBIhuKH/8gnEDQ==}
     peerDependencies:
       '@principal-ade/industry-theme': ^0.1.7
       '@principal-ai/principal-view-core': ^0.24.10
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
+
+  '@principal-ai/quality-lens-registry@0.3.3':
+    resolution: {integrity: sha512-+ln796H5BvVTEgiot9GIsTbEnZWF2aDNqYEG4AfBi0jmEJpHO68Gk2+fa6E4LvQ1da0Pa52JmQvnKptbeoEmaw==}
 
   '@principal-ai/repository-abstraction@0.2.6':
     resolution: {integrity: sha512-QOP0thqMWEl/UjTcM+M6rIzCXX/LRx0XnyQd00Qo9cY1sIeCLIyWb/ZdAJrnUhjnzpjhvLhgBfKgHqEHqkVZ7A==}
@@ -6822,16 +6837,16 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@industry-theme/principal-view-panels@0.11.34(a90ffef4376b55f75d88b3a1762289ac)':
+  '@industry-theme/principal-view-panels@0.11.35(f244ad80a5a97e3346408bfe644e170b)':
     dependencies:
-      '@principal-ade/dynamic-file-tree': 0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@principal-ade/dynamic-file-tree': 0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@principal-ade/industry-theme': 0.1.7(react@19.2.0)
       '@principal-ade/panel-framework-core': 0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@principal-ade/panels': 1.0.53(@principal-ade/industry-theme@0.1.7(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@principal-ade/utcp-panel-event': 0.1.0
-      '@principal-ai/codebase-composition': 0.2.9
-      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.9)
-      '@principal-ai/principal-view-react': 0.13.5(@babel/runtime@7.28.4)(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9))(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(zod@4.3.6)
+      '@principal-ai/codebase-composition': 0.2.45
+      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.45)
+      '@principal-ai/principal-view-react': 0.13.6(@babel/runtime@7.28.4)(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45))(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(zod@4.3.6)
       '@principal-ai/repository-abstraction': 0.5.7
       '@xyflow/react': 12.10.1(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       clsx: 2.1.1
@@ -7341,10 +7356,10 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@principal-ade/dynamic-file-tree@0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@principal-ade/dynamic-file-tree@0.1.72(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ade/panel-framework-core@0.4.2(@principal-ai/repository-abstraction@0.5.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45))(@principal-ai/repository-abstraction@0.5.7)(@types/node@20.19.25)(@types/react@19.2.6)(lucide-react@0.534.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@principal-ade/industry-theme': 0.1.7(react@19.2.0)
-      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.9)
+      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.45)
       '@principal-ai/repository-abstraction': 0.5.7
       react-arborist: 3.4.3(@types/node@20.19.25)(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       typescript: 5.9.3
@@ -7428,19 +7443,26 @@ snapshots:
       - sql.js
       - sqlite3
 
-  '@principal-ai/codebase-composition@0.2.9':
+  '@principal-ai/codebase-composition@0.2.45':
     dependencies:
+      '@principal-ai/codebase-quality-lenses': 0.1.65
+      '@principal-ai/quality-lens-registry': 0.3.3
       '@principal-ai/repository-abstraction': 0.2.6
       ignore: 5.3.2
-      js-toml: 1.0.3
-      pip-requirements-js: 0.2.1
       typescript: 5.9.3
+    optionalDependencies:
+      pip-requirements-js: 0.2.1
+      smol-toml: 1.6.0
+    transitivePeerDependencies:
+      - '@a24z/alexandria-cli'
+
+  '@principal-ai/codebase-quality-lenses@0.1.65': {}
 
   '@principal-ai/logo-component@0.1.3(react@19.2.0)':
     dependencies:
       react: 19.2.0
 
-  '@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9)':
+  '@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/exporter-trace-otlp-http': 0.208.0(@opentelemetry/api@1.9.0)
@@ -7448,7 +7470,7 @@ snapshots:
       '@opentelemetry/resources': 2.2.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.2.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.38.0
-      '@principal-ai/codebase-composition': 0.2.9
+      '@principal-ai/codebase-composition': 0.2.45
       '@principal-ai/repository-abstraction': 0.5.7
       date-fns: 3.0.0
       handlebars: 4.7.8
@@ -7457,10 +7479,10 @@ snapshots:
     transitivePeerDependencies:
       - globby
 
-  '@principal-ai/principal-view-react@0.13.5(@babel/runtime@7.28.4)(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.9))(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(zod@4.3.6)':
+  '@principal-ai/principal-view-react@0.13.6(@babel/runtime@7.28.4)(@principal-ade/industry-theme@0.1.7(react@19.2.0))(@principal-ai/principal-view-core@0.24.29(@principal-ai/codebase-composition@0.2.45))(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react-resizable-panels@3.0.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)(zod@4.3.6)':
     dependencies:
       '@principal-ade/industry-theme': 0.1.7(react@19.2.0)
-      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.9)
+      '@principal-ai/principal-view-core': 0.24.29(@principal-ai/codebase-composition@0.2.45)
       '@xyflow/react': 12.0.0(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       hast-util-sanitize: 5.0.2
       highlight.js: 11.11.1
@@ -7487,6 +7509,8 @@ snapshots:
       - supports-color
       - utf-8-validate
       - zod
+
+  '@principal-ai/quality-lens-registry@0.3.3': {}
 
   '@principal-ai/repository-abstraction@0.2.6': {}
 
@@ -8641,7 +8665,7 @@ snapshots:
       classcat: 5.0.5
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
-      zustand: 4.5.0(@types/react@19.2.6)(react@19.2.0)
+      zustand: 4.5.7(@types/react@19.2.6)(react@19.2.0)
     transitivePeerDependencies:
       - '@types/react'
       - immer
