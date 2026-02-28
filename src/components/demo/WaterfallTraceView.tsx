@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import { BarChart3 } from 'lucide-react';
 import type { CapturedSpan } from './telemetry-provider';
 
 interface WaterfallTraceViewProps {
@@ -216,9 +217,7 @@ export function WaterfallTraceView({ spans, onClear }: WaterfallTraceViewProps) 
             textAlign: 'center',
             padding: '40px',
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>
-              📊
-            </div>
+            <BarChart3 size={48} strokeWidth={1.5} color="#666" style={{ marginBottom: '16px' }} />
             <p style={{ fontSize: '14px', margin: 0 }}>
               No traces yet. Interact with the Kanban board to generate telemetry.
             </p>

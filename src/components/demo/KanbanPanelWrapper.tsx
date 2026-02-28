@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { ThemeProvider } from '@principal-ade/industry-theme';
+import { ThemeProvider, theme as defaultTheme, overrideColors } from '@principal-ade/industry-theme';
 import { mockFileTree } from './mock-data';
+
+// Custom theme with cyan primary color (same as backlog panel storybook)
+const customTheme = overrideColors(defaultTheme, {
+  primary: '#07c0ca',
+  secondary: '#06a8b1',
+});
 import { createDemoBacklog, type BacklogCoreAdapter } from './backlog-core-adapter';
 import type { FileTree } from '@principal-ai/repository-abstraction';
 import type { DataSlice, PanelEventEmitter } from '@principal-ade/panel-framework-core';
@@ -377,7 +383,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
   // Show loading state while initializing Backlog Core
   if (isLoading) {
     return (
-      <ThemeProvider>
+      <ThemeProvider theme={customTheme}>
         <div style={{
           height: '100%',
           width: '100%',
@@ -395,7 +401,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
   }
 
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={customTheme}>
       <div style={{
         height: '100%',
         width: '100%',
