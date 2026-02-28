@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useCallback,
   type ReactNode,
 } from 'react';
 import type { PanelEvent, PanelEventEmitter } from '@principal-ade/panel-framework-core';
@@ -16,6 +17,8 @@ export interface NavigationRoute {
   eventType: string;
   /** Panel ID to navigate to */
   targetPanelId: string;
+  /** Optional condition to further filter events (e.g., check payload.action) */
+  condition?: (event: PanelEvent) => boolean;
 }
 
 /**
@@ -91,8 +94,18 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   // Panel map for quick lookup
   const panelMap = useRef(new Map(panels.map(p => [p.id, p]))).current;
 
-  // Route map for quick lookup
-  const routeMap = useRef(new Map(routes.map(r => [r.eventType, r]))).current;
+  // Routes ref (for access in event emitter)
+  const routesRef = useRef(routes);
+  routesRef.current = routes;
+
+  // Find matching route for an event
+  const findRoute = useCallback((event: PanelEvent): NavigationRoute | undefined => {
+    return routesRef.current.find(route => {
+      if (route.eventType !== event.type) return false;
+      if (route.condition && !route.condition(event)) return false;
+      return true;
+    });
+  }, []);
 
   // Event handlers storage for cleanup
   const handlersRef = useRef(new Map<string, Set<(event: PanelEvent) => void>>());
@@ -110,7 +123,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   const internalEvents: PanelEventEmitter = useRef({
     emit: <T,>(event: PanelEvent<T>) => {
       // Check if this event triggers a navigation
-      const route = routeMap.get(event.type);
+      const route = findRoute(event as PanelEvent);
       if (route && !isAnimatingRef.current) {
         // Save the event to re-emit after animation
         lastNavigationEventRef.current = event as PanelEvent;
@@ -157,11 +170,6 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     },
   }).current;
 
-  // Update routeMap when routes change
-  useEffect(() => {
-    routeMap.clear();
-    routes.forEach(r => routeMap.set(r.eventType, r));
-  }, [routes, routeMap]);
 
   // Handle animation end and re-emit navigation event
   useEffect(() => {
@@ -190,10 +198,14 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
 
     const unsubscribes: (() => void)[] = [];
 
+    // Get unique event types from routes
+    const routeEventTypes = [...new Set(routes.map(r => r.eventType))];
+
     // Subscribe to route events
-    routes.forEach(route => {
-      const unsub = externalEvents.on(route.eventType, (event) => {
-        if (!isAnimating) {
+    routeEventTypes.forEach(eventType => {
+      const unsub = externalEvents.on(eventType, (event) => {
+        const route = findRoute(event);
+        if (route && !isAnimating) {
           setPreviousStack(stack);
           setAnimationDirection('left');
           setIsAnimating(true);
@@ -219,7 +231,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     return () => {
       unsubscribes.forEach(unsub => unsub());
     };
-  }, [externalEvents, routes, backEventTypes, stack, isAnimating]);
+  }, [externalEvents, routes, backEventTypes, stack, isAnimating, findRoute]);
 
   // Get panel render function
   const currentPanel = panelMap.get(currentEntry.panelId);
