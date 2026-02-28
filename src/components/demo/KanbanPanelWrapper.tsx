@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { ThemeProvider } from '@principal-ade/industry-theme';
-import { mockFileTree, mockFileContents, getFileContent } from './mock-data';
+import { mockFileTree } from './mock-data';
+import { createDemoBacklog, type BacklogCoreAdapter } from './backlog-core-adapter';
 import type { FileTree } from '@principal-ai/repository-abstraction';
 import type { DataSlice, PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import { PanelNavigator } from './PanelNavigator';
@@ -65,8 +66,12 @@ function createFileTreeSlice(fileTree: FileTree): DataSlice<FileTree> {
 
 /**
  * Create the panel context with all required properties
+ * Uses BacklogCoreAdapter for file operations when available
  */
-function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string, string>) {
+function createPanelContext(
+  fileTree: FileTree,
+  backlogAdapter: BacklogCoreAdapter | null
+) {
   const fileTreeSlice = createFileTreeSlice(fileTree);
   const slices = new Map<string, DataSlice>([['fileTree', fileTreeSlice]]);
 
@@ -104,16 +109,21 @@ function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string
     // Utility methods
     hasSlice: (name: string) => slices.has(name),
     isSliceLoading: (name: string) => slices.get(name)?.loading ?? false,
-    refresh: async () => {},
+    refresh: async () => {
+      if (backlogAdapter) {
+        await backlogAdapter.reload();
+      }
+    },
 
-    // Adapters for file operations
+    // Adapters for file operations - uses BacklogCoreAdapter when available
     adapters: {
       readFile: async (path: string): Promise<string> => {
-        const content = getFileContent(path);
-        if (!content) {
-          console.warn(`[Demo] File not found: ${path}`);
+        if (backlogAdapter) {
+          const content = await backlogAdapter.readFile(path);
+          return content;
         }
-        return content;
+        console.warn(`[Demo] Backlog adapter not initialized, cannot read: ${path}`);
+        return '';
       },
       // Optional: glob matching (not implemented for demo)
       matchesPath: (pattern: string, path: string): boolean => {
@@ -130,28 +140,103 @@ function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string
 }
 
 /**
- * Create mock actions for the panel
+ * Create actions for the panel with Backlog Core integration
  */
-function createMockActions() {
+function createActions(
+  backlogAdapter: BacklogCoreAdapter | null,
+  onWriteFile: (path: string, content: string) => Promise<void>,
+  onDeleteFile: (path: string) => Promise<void>
+) {
   return {
     readFile: async (path: string): Promise<string> => {
-      const content = getFileContent(path);
-      if (!content) {
-        console.warn(`[Demo Action] File not found: ${path}`);
+      if (backlogAdapter) {
+        return backlogAdapter.readFile(path);
       }
-      return content;
+      console.warn(`[Demo Action] Backlog adapter not ready, cannot read: ${path}`);
+      return '';
     },
+
+    writeFile: onWriteFile,
+
+    deleteFile: onDeleteFile,
+
     openFile: (filePath: string) => {
       console.log('[Demo Action] openFile:', filePath);
     },
+
     openGitDiff: (filePath: string, status?: string) => {
       console.log('[Demo Action] openGitDiff:', filePath, status);
     },
+
     navigateToPanel: (panelId: string) => {
       console.log('[Demo Action] navigateToPanel:', panelId);
     },
-    notifyPanels: (event: any) => {
+
+    notifyPanels: (event: unknown) => {
       console.log('[Demo Action] notifyPanels:', event);
+    },
+
+    // Task-specific actions using Backlog Core
+    updateTask: async (taskId: string, updates: Record<string, unknown>) => {
+      if (!backlogAdapter) {
+        console.warn('[Demo Action] Cannot update task - adapter not initialized');
+        return;
+      }
+
+      try {
+        const task = await backlogAdapter.updateTask(taskId, updates);
+        console.log('[Demo Action] Task updated via Backlog Core:', taskId, task);
+        return task;
+      } catch (error) {
+        console.error('[Demo Action] Failed to update task:', taskId, error);
+        throw error;
+      }
+    },
+
+    createTask: async (input: { title: string; status?: string; description?: string }) => {
+      if (!backlogAdapter) {
+        console.warn('[Demo Action] Cannot create task - adapter not initialized');
+        return;
+      }
+
+      try {
+        const task = await backlogAdapter.createTask(input);
+        console.log('[Demo Action] Task created via Backlog Core:', task);
+        return task;
+      } catch (error) {
+        console.error('[Demo Action] Failed to create task:', error);
+        throw error;
+      }
+    },
+
+    deleteTask: async (taskId: string) => {
+      if (!backlogAdapter) {
+        console.warn('[Demo Action] Cannot delete task - adapter not initialized');
+        return;
+      }
+
+      try {
+        await backlogAdapter.deleteTask(taskId);
+        console.log('[Demo Action] Task deleted via Backlog Core:', taskId);
+      } catch (error) {
+        console.error('[Demo Action] Failed to delete task:', taskId, error);
+        throw error;
+      }
+    },
+
+    archiveTask: async (taskId: string) => {
+      if (!backlogAdapter) {
+        console.warn('[Demo Action] Cannot archive task - adapter not initialized');
+        return;
+      }
+
+      try {
+        await backlogAdapter.archiveTask(taskId);
+        console.log('[Demo Action] Task archived via Backlog Core:', taskId);
+      } catch (error) {
+        console.error('[Demo Action] Failed to archive task:', taskId, error);
+        throw error;
+      }
     },
   };
 }
@@ -167,11 +252,47 @@ export interface KanbanPanelWrapperProps {
  * KanbanPanelWrapper
  *
  * Wraps the KanbanPanel component with mock data and context
- * for use in the demo page.
+ * for use in the demo page. Uses @backlog-md/core for realistic
+ * file operations with in-memory storage.
  */
 export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
-  // Track file contents in state so we can update them
-  const [fileContents, setFileContents] = useState<Record<string, string>>(() => ({ ...mockFileContents }));
+  // Backlog Core adapter - initialized on mount
+  const [backlogAdapter, setBacklogAdapter] = useState<BacklogCoreAdapter | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize the backlog adapter on mount
+  useEffect(() => {
+    let mounted = true;
+
+    async function init() {
+      try {
+        console.log('[Demo] Initializing Backlog Core adapter...');
+        const adapter = await createDemoBacklog();
+
+        if (mounted) {
+          setBacklogAdapter(adapter);
+          setIsLoading(false);
+          console.log('[Demo] Backlog Core adapter initialized');
+
+          // Log initial state
+          const tasks = await adapter.listTasks();
+          const milestones = await adapter.listMilestones();
+          console.log(`[Demo] Loaded ${tasks.length} tasks and ${milestones.length} milestones`);
+        }
+      } catch (error) {
+        console.error('[Demo] Failed to initialize Backlog Core adapter:', error);
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    init();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Create event emitter
   const events = useMemo(() => {
@@ -185,33 +306,44 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     return emitter;
   }, [onEvent]);
 
-  // Create context with the current file contents
+  // Create context with the backlog adapter
   const context = useMemo(
-    () => createMockPanelContext(mockFileTree, fileContents),
-    [fileContents]
+    () => createPanelContext(mockFileTree, backlogAdapter),
+    [backlogAdapter]
   );
 
-  // Create actions
-  const actions = useMemo(() => createMockActions(), []);
+  // Handle file writes using Backlog Core
+  const handleWriteFile = useCallback(async (path: string, content: string) => {
+    if (!backlogAdapter) {
+      console.warn('[Demo] Cannot write file - adapter not initialized');
+      return;
+    }
 
-  // Handle file writes (for CRUD operations) - available for future use
-  const _handleWriteFile = useCallback((path: string, content: string) => {
-    setFileContents(prev => ({
-      ...prev,
-      [path]: content,
-    }));
-    console.log('[Demo] File written:', path);
-  }, []);
+    try {
+      await backlogAdapter.writeFile(path, content);
+      console.log('[Demo] File written via Backlog Core:', path);
+    } catch (error) {
+      console.error('[Demo] Failed to write file:', path, error);
+    }
+  }, [backlogAdapter]);
 
-  // Handle file deletes - available for future use
-  const _handleDeleteFile = useCallback((path: string) => {
-    setFileContents(prev => {
-      const next = { ...prev };
-      delete next[path];
-      return next;
-    });
-    console.log('[Demo] File deleted:', path);
-  }, []);
+  // Handle file deletes using Backlog Core
+  const handleDeleteFile = useCallback(async (path: string) => {
+    if (!backlogAdapter) {
+      console.warn('[Demo] Cannot delete file - adapter not initialized');
+      return;
+    }
+
+    try {
+      await backlogAdapter.deleteFile(path);
+      console.log('[Demo] File deleted via Backlog Core:', path);
+    } catch (error) {
+      console.error('[Demo] Failed to delete file:', path, error);
+    }
+  }, [backlogAdapter]);
+
+  // Create actions with Backlog Core integration
+  const actions = useMemo(() => createActions(backlogAdapter, handleWriteFile, handleDeleteFile), [backlogAdapter, handleWriteFile, handleDeleteFile]);
 
   // Panel definitions for navigator
   const panelSlots = useMemo(() => [
@@ -241,6 +373,26 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
   const routes = useMemo(() => [
     { eventType: 'task:selected', targetPanelId: 'task-detail' },
   ], []);
+
+  // Show loading state while initializing Backlog Core
+  if (isLoading) {
+    return (
+      <ThemeProvider>
+        <div style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0a0e17',
+          color: '#6b7280',
+          fontFamily: 'system-ui, sans-serif',
+        }}>
+          Initializing backlog...
+        </div>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider>
