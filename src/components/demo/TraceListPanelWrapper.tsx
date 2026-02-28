@@ -8,6 +8,7 @@ import type {
   PanelEventEmitter,
 } from '@principal-ade/panel-framework-core';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
+import { PathsFileTreeBuilder } from '@principal-ai/repository-abstraction';
 import { PanelNavigator, type NavigationRoute, type PanelSlot } from './PanelNavigator';
 
 interface TraceListPanelWrapperProps {
@@ -54,16 +55,52 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
     };
   }, [schematics]);
 
-  // fileTree with null data - WorkflowScenariosPanel requires this slice
-  // but actual workflow data comes via props in demo mode
-  const fileTreeSlice: DataSlice<null> = useMemo(() => ({
-    scope: 'workspace',
-    name: 'fileTree',
-    data: null,
-    loading: false,
-    error: null,
-    refresh: async () => {},
-  }), []);
+  // Build file content map and file paths from schematics
+  const { fileContentMap, filePaths } = useMemo(() => {
+    const map = new Map<string, string>();
+    const paths: string[] = [];
+    if (!schematics) return { fileContentMap: map, filePaths: paths };
+
+    for (const schematic of schematics) {
+      for (const storyboard of schematic.storyboards || []) {
+        // Add canvas content
+        const canvas = storyboard.canvas as { path: string; content?: unknown };
+        if (canvas?.path) {
+          paths.push(canvas.path);
+          if (canvas.content) {
+            map.set(canvas.path, JSON.stringify(canvas.content));
+          }
+        }
+        // Add workflow content
+        for (const workflow of (storyboard.workflows || []) as Array<{ path: string; content?: unknown }>) {
+          if (workflow?.path) {
+            paths.push(workflow.path);
+            if (workflow.content) {
+              map.set(workflow.path, JSON.stringify(workflow.content));
+            }
+          }
+        }
+      }
+    }
+    console.log('[TraceListPanelWrapper] File content map built:', Array.from(map.keys()));
+    return { fileContentMap: map, filePaths: paths };
+  }, [schematics]);
+
+  // Build proper FileTree from schematic paths using PathsFileTreeBuilder
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fileTreeSlice: DataSlice<any> = useMemo(() => {
+    const builder = new PathsFileTreeBuilder();
+    const fileTree = builder.build({ files: filePaths, rootPath: '.' });
+
+    return {
+      scope: 'workspace' as const,
+      name: 'fileTree',
+      data: fileTree,
+      loading: false,
+      error: null,
+      refresh: async () => {},
+    };
+  }, [filePaths]);
 
   // Create slices map
   const slicesMap = useMemo(() => {
@@ -84,6 +121,9 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
         path: '/demo',
       },
     },
+    // repositoryPath is used by WorkflowScenariosPanel to construct full paths
+    // Using '.' to represent current directory (must be non-empty to pass panel check)
+    repositoryPath: '.',
     slices: slicesMap,
     getSlice: <T,>(name: string) => slicesMap.get(name) as DataSlice<T> | undefined,
     getWorkspaceSlice: <T,>(name: string) => slicesMap.get(name) as DataSlice<T> | undefined,
@@ -104,13 +144,29 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
   const actions = useMemo(() => ({
     // TraceListPanelActions
     clearTelemetry: onClear ? async () => { onClear(); } : undefined,
-    readFile: async (_path: string) => '',
+    readFile: async (path: string) => {
+      // Normalize path - handle both './path' and '/path' formats
+      let normalizedPath = path;
+      if (normalizedPath.startsWith('./')) {
+        normalizedPath = normalizedPath.slice(2); // Remove './'
+      } else if (normalizedPath.startsWith('/')) {
+        normalizedPath = normalizedPath.slice(1); // Remove leading '/'
+      }
+      console.log('[TraceListPanelWrapper] readFile called:', path, '-> normalized:', normalizedPath);
+      const content = fileContentMap.get(normalizedPath);
+      if (content) {
+        console.log('[TraceListPanelWrapper] File found, content length:', content.length);
+        return content;
+      }
+      console.warn('[TraceListPanelWrapper] File not found in schematic:', normalizedPath, 'Available:', Array.from(fileContentMap.keys()));
+      return '';
+    },
     // PanelActions (optional)
     openFile: undefined,
     openGitDiff: undefined,
     navigateToPanel: undefined,
     notifyPanels: undefined,
-  }), [onClear]);
+  }), [onClear, fileContentMap]);
 
   // Create event emitter with proper typing
   const events: PanelEventEmitter = useMemo(() => {

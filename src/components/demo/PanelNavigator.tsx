@@ -5,6 +5,7 @@ import React, {
   useRef,
   useEffect,
   useCallback,
+  useMemo,
   type ReactNode,
 } from 'react';
 import type { PanelEvent, PanelEventEmitter } from '@principal-ade/panel-framework-core';
@@ -91,8 +92,8 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   const currentEntry = stack[stack.length - 1];
   const previousEntry = previousStack ? previousStack[previousStack.length - 1] : null;
 
-  // Panel map for quick lookup
-  const panelMap = useRef(new Map(panels.map(p => [p.id, p]))).current;
+  // Panel map for quick lookup - must update when panels change
+  const panelMap = useMemo(() => new Map(panels.map(p => [p.id, p])), [panels]);
 
   // Routes ref (for access in event emitter)
   const routesRef = useRef(routes);

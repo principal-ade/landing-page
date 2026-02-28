@@ -134,6 +134,13 @@ function createMockPanelContext(fileTree: FileTree, _fileContents: Record<string
  */
 function createMockActions() {
   return {
+    readFile: async (path: string): Promise<string> => {
+      const content = getFileContent(path);
+      if (!content) {
+        console.warn(`[Demo Action] File not found: ${path}`);
+      }
+      return content;
+    },
     openFile: (filePath: string) => {
       console.log('[Demo Action] openFile:', filePath);
     },
