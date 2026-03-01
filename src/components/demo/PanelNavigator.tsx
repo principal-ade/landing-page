@@ -147,13 +147,25 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
         const overlayAlreadyVisible = stackRef.current.length > 1;
 
         if (overlayAlreadyVisible) {
-          // Check if clicking the same task - if so, dismiss
+          // Check if clicking the same item - if so, dismiss
           const currentData = stackRef.current[stackRef.current.length - 1]?.data as Record<string, unknown> | undefined;
+
+          // Check various ID fields for task panels
           const currentTaskId = currentData?.id ?? currentData?.taskId;
           const newTaskId = payload?.id ?? payload?.taskId;
 
-          if (currentTaskId && newTaskId && currentTaskId === newTaskId) {
-            // Same task clicked - dismiss the overlay
+          // Check canvas/workflow IDs for workflow scenarios panel
+          const currentCanvasId = currentData?.canvasId;
+          const newCanvasId = payload?.canvasId;
+          const currentWorkflowId = currentData?.workflowId;
+          const newWorkflowId = payload?.workflowId;
+
+          const isSameTask = currentTaskId && newTaskId && currentTaskId === newTaskId;
+          const isSameCanvas = currentCanvasId && newCanvasId && currentCanvasId === newCanvasId &&
+                               currentWorkflowId && newWorkflowId && currentWorkflowId === newWorkflowId;
+
+          if (isSameTask || isSameCanvas) {
+            // Same item clicked - dismiss the overlay
             setPreviousStack(stackRef.current);
             setAnimationDirection('right');
             setIsAnimating(true);
@@ -264,13 +276,25 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           const overlayAlreadyVisible = stack.length > 1;
 
           if (overlayAlreadyVisible) {
-            // Check if clicking the same task - if so, dismiss
+            // Check if clicking the same item - if so, dismiss
             const currentData = stack[stack.length - 1]?.data as Record<string, unknown> | undefined;
+
+            // Check various ID fields for task panels
             const currentTaskId = currentData?.id ?? currentData?.taskId;
             const newTaskId = payload?.id ?? payload?.taskId;
 
-            if (currentTaskId && newTaskId && currentTaskId === newTaskId) {
-              // Same task clicked - dismiss the overlay
+            // Check canvas/workflow IDs for workflow scenarios panel
+            const currentCanvasId = currentData?.canvasId;
+            const newCanvasId = payload?.canvasId;
+            const currentWorkflowId = currentData?.workflowId;
+            const newWorkflowId = payload?.workflowId;
+
+            const isSameTask = currentTaskId && newTaskId && currentTaskId === newTaskId;
+            const isSameCanvas = currentCanvasId && newCanvasId && currentCanvasId === newCanvasId &&
+                                 currentWorkflowId && newWorkflowId && currentWorkflowId === newWorkflowId;
+
+            if (isSameTask || isSameCanvas) {
+              // Same item clicked - dismiss the overlay
               setPreviousStack(stack);
               setAnimationDirection('right');
               setIsAnimating(true);
