@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import {
-  initializeTelemetryProvider,
-  type CapturedSpan,
-} from '@/components/demo/telemetry-provider';
+import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
 import { WaterfallTraceView } from '@/components/demo/WaterfallTraceView';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
@@ -53,7 +50,6 @@ const TraceListPanelWrapper = dynamic(
 type ViewMode = 'raw' | 'principal';
 
 export default function ObservabilityDemoPage() {
-  const [spans, setSpans] = useState<CapturedSpan[]>([]);
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
   const [providerReady, setProviderReady] = useState(false);
@@ -111,14 +107,11 @@ export default function ObservabilityDemoPage() {
 
   // Initialize telemetry provider on mount
   useEffect(() => {
-    const handleSpan = (span: CapturedSpan) => {
-      setSpans(prev => [span, ...prev].slice(0, 100)); // Keep last 100 spans
-    };
-
     // Preload schematic for faster first trace processing
     preloadSchematic().catch(console.error);
 
-    cleanupRef.current = initializeTelemetryProvider(handleSpan, handleTraceComplete);
+    // Pass no-op for span callback since we only use complete traces now
+    cleanupRef.current = initializeTelemetryProvider(() => {}, handleTraceComplete);
     setProviderReady(true);
 
     return () => {
@@ -129,11 +122,7 @@ export default function ObservabilityDemoPage() {
     };
   }, [handleTraceComplete]);
 
-  // Clear all spans and traces
-  const handleClearSpans = () => {
-    setSpans([]);
-  };
-
+  // Clear all traces
   const handleClearTraces = () => {
     setRegisteredTraces([]);
   };
@@ -142,7 +131,7 @@ export default function ObservabilityDemoPage() {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      background: '#0a0e17',
+      background: 'rgb(10, 10, 10)',
       overflowY: 'auto',
     }}>
       {/* Main Content */}
@@ -152,8 +141,6 @@ export default function ObservabilityDemoPage() {
         maxWidth: '1400px',
         width: '100%',
         margin: '0 auto',
-        borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRight: '1px solid rgba(255, 255, 255, 0.1)',
       }}>
         {/* Backlog Panel Section */}
         <div style={{
@@ -214,9 +201,28 @@ export default function ObservabilityDemoPage() {
             </button>
           </div>
 
+          {/* View Description */}
+          <div style={{
+            padding: '12px 16px',
+            background: 'rgba(255, 255, 255, 0.02)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          }}>
+            <p style={{
+              fontSize: '14px',
+              color: '#666',
+              margin: 0,
+              fontFamily: 'Inter, sans-serif',
+              textAlign: 'center',
+            }}>
+              {viewMode === 'raw'
+                ? 'Standard trace view - technical span data without business context'
+                : 'Story-based view - traces matched against business scenarios'}
+            </p>
+          </div>
+
           {/* View Content */}
           {viewMode === 'raw' ? (
-            <WaterfallTraceView spans={spans} onClear={handleClearSpans} />
+            <WaterfallTraceView traces={registeredTraces} onClear={handleClearTraces} />
           ) : (
             <TraceListPanelWrapper
               traces={registeredTraces}
