@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { ThemeProvider, theme as defaultTheme, overrideColors } from '@principal-ade/industry-theme';
-import { mockFileTree } from './mock-data';
 
 // Custom theme with cyan primary color (same as backlog panel storybook)
 const customTheme = overrideColors(defaultTheme, {
@@ -151,7 +150,8 @@ function createPanelContext(
 function createActions(
   backlogAdapter: BacklogCoreAdapter | null,
   onWriteFile: (path: string, content: string) => Promise<void>,
-  onDeleteFile: (path: string) => Promise<void>
+  onDeleteFile: (path: string) => Promise<void>,
+  onFileTreeChanged: () => void
 ) {
   return {
     readFile: async (path: string): Promise<string> => {
@@ -224,6 +224,8 @@ function createActions(
       try {
         await backlogAdapter.deleteTask(taskId);
         console.log('[Demo Action] Task deleted via Backlog Core:', taskId);
+        // Refresh fileTree to reflect the deletion
+        onFileTreeChanged();
       } catch (error) {
         console.error('[Demo Action] Failed to delete task:', taskId, error);
         throw error;
@@ -264,6 +266,7 @@ export interface KanbanPanelWrapperProps {
 export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
   // Backlog Core adapter - initialized on mount
   const [backlogAdapter, setBacklogAdapter] = useState<BacklogCoreAdapter | null>(null);
+  const [fileTree, setFileTree] = useState<FileTree | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize the backlog adapter on mount
@@ -277,6 +280,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
 
         if (mounted) {
           setBacklogAdapter(adapter);
+          setFileTree(adapter.getFileTree());
           setIsLoading(false);
           console.log('[Demo] Backlog Core adapter initialized');
 
@@ -312,10 +316,10 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     return emitter;
   }, [onEvent]);
 
-  // Create context with the backlog adapter
+  // Create context with the backlog adapter and reactive fileTree
   const context = useMemo(
-    () => createPanelContext(mockFileTree, backlogAdapter),
-    [backlogAdapter]
+    () => fileTree ? createPanelContext(fileTree, backlogAdapter) : null,
+    [fileTree, backlogAdapter]
   );
 
   // Handle file writes using Backlog Core
@@ -328,6 +332,8 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     try {
       await backlogAdapter.writeFile(path, content);
       console.log('[Demo] File written via Backlog Core:', path);
+      // Update fileTree to reflect the change
+      setFileTree(backlogAdapter.getFileTree());
     } catch (error) {
       console.error('[Demo] Failed to write file:', path, error);
     }
@@ -343,21 +349,32 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     try {
       await backlogAdapter.deleteFile(path);
       console.log('[Demo] File deleted via Backlog Core:', path);
+      // Update fileTree to reflect the change
+      setFileTree(backlogAdapter.getFileTree());
     } catch (error) {
       console.error('[Demo] Failed to delete file:', path, error);
     }
   }, [backlogAdapter]);
 
   // Create actions with Backlog Core integration
-  const actions = useMemo(() => createActions(backlogAdapter, handleWriteFile, handleDeleteFile), [backlogAdapter, handleWriteFile, handleDeleteFile]);
+  // Callback to refresh fileTree when files change
+  const handleFileTreeChanged = useCallback(() => {
+    if (backlogAdapter) {
+      setFileTree(backlogAdapter.getFileTree());
+    }
+  }, [backlogAdapter]);
+
+  const actions = useMemo(() => createActions(backlogAdapter, handleWriteFile, handleDeleteFile, handleFileTreeChanged), [backlogAdapter, handleWriteFile, handleDeleteFile, handleFileTreeChanged]);
 
   // Panel definitions for navigator
+  // Note: context is guaranteed non-null when these render functions are called
+  // due to the early return guard below
   const panelSlots = useMemo(() => [
     {
       id: 'kanban',
       render: (navEvents: PanelEventEmitter) => (
         <KanbanPanel
-          context={context}
+          context={context!}
           actions={actions}
           events={navEvents}
         />
@@ -367,7 +384,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
       id: 'task-detail',
       render: (navEvents: PanelEventEmitter) => (
         <TaskDetailPanel
-          context={context}
+          context={context!}
           actions={actions}
           events={navEvents}
         />
@@ -380,8 +397,8 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     { eventType: 'task:selected', targetPanelId: 'task-detail' },
   ], []);
 
-  // Show loading state while initializing Backlog Core
-  if (isLoading) {
+  // Show loading state while initializing Backlog Core or fileTree
+  if (isLoading || !context) {
     return (
       <ThemeProvider theme={customTheme}>
         <div style={{
@@ -413,7 +430,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
           rootPanelId="kanban"
           panels={panelSlots}
           routes={routes}
-          backEventTypes={['navigation:back', 'task:deselected']}
+          backEventTypes={['navigation:back', 'task:deselected', 'task:deleted']}
           externalEvents={events}
           animationDuration={300}
         />

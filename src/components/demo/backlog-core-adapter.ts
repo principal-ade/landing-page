@@ -6,6 +6,7 @@
  */
 
 import { Core, InMemoryFileSystemAdapter, type Task, type Milestone } from '@backlog-md/core';
+import { PathsFileTreeBuilder, type FileTree } from '@principal-ai/repository-abstraction';
 import { mockFileContents } from './mock-data';
 
 export interface BacklogCoreAdapter {
@@ -31,6 +32,9 @@ export interface BacklogCoreAdapter {
 
   // Reload from filesystem
   reload: () => Promise<void>;
+
+  // Get current FileTree from in-memory filesystem
+  getFileTree: () => FileTree;
 }
 
 /**
@@ -173,6 +177,28 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
     // Reload
     reload: async (): Promise<void> => {
       await core.reload();
+    },
+
+    // Build FileTree from current in-memory filesystem state
+    getFileTree: (): FileTree => {
+      const filesMap = fs.getFiles();
+      const filePaths: string[] = [];
+
+      for (const fullPath of filesMap.keys()) {
+        // Convert absolute paths to relative (remove projectRoot prefix)
+        if (fullPath.startsWith(projectRoot)) {
+          const relativePath = fullPath.slice(projectRoot.length + 1); // +1 for the slash
+          filePaths.push(relativePath);
+        } else {
+          filePaths.push(fullPath);
+        }
+      }
+
+      const builder = new PathsFileTreeBuilder();
+      return builder.build({
+        files: filePaths,
+        rootPath: projectRoot,
+      });
     },
   };
 }
