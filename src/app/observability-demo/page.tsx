@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
-import { WaterfallTraceView } from '@/components/demo/WaterfallTraceView';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
 
@@ -42,6 +41,26 @@ const TraceListPanelWrapper = dynamic(
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Trace Panel...
+      </div>
+    ),
+  }
+);
+
+// Dynamic import for WaterfallTraceView to avoid SSR issues with panel packages
+const WaterfallTraceView = dynamic(
+  () => import('@/components/demo/WaterfallTraceView'),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        color: '#666',
+        fontFamily: 'Inter, sans-serif',
+      }}>
+        Loading Trace View...
       </div>
     ),
   }
