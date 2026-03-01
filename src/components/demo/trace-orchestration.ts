@@ -14,8 +14,15 @@ import {
 } from '@principal-ai/principal-view-core';
 
 /**
- * Demo registry that fetches the kanban panel schematic
- * from our local API route.
+ * Schematic API endpoints to fetch
+ */
+const SCHEMATIC_ENDPOINTS = [
+  '/api/schematics/kanban-panel',
+  '/api/schematics/backlog-core',
+];
+
+/**
+ * Demo registry that fetches multiple schematics and merges them.
  */
 class DemoRegistry implements StoryboardRegistryInterface {
   private schematicCache: VersionSnapshot | null = null;
@@ -25,7 +32,7 @@ class DemoRegistry implements StoryboardRegistryInterface {
     _scope: { name: string; version: string },
     _resource: { attributes?: Record<string, unknown> }
   ): Promise<VersionSnapshot | null> {
-    // For the demo, all scopes map to our kanban panel schematic
+    // For the demo, return the merged schematic containing all storyboards
     // In production, you'd use RemoteRegistry with proper PURL lookups
     return this.getSchematic();
   }
@@ -41,34 +48,53 @@ class DemoRegistry implements StoryboardRegistryInterface {
       return this.fetchPromise;
     }
 
-    // Fetch from our API route
-    this.fetchPromise = this.fetchSchematic();
+    // Fetch from our API routes
+    this.fetchPromise = this.fetchAndMergeSchematics();
     const result = await this.fetchPromise;
     this.fetchPromise = null;
 
     return result;
   }
 
-  private async fetchSchematic(): Promise<VersionSnapshot | null> {
-    try {
-      const response = await fetch('/api/schematics/kanban-panel');
-      if (!response.ok) {
-        console.error('[DemoRegistry] Failed to fetch schematic:', response.status);
-        return null;
+  private async fetchAndMergeSchematics(): Promise<VersionSnapshot | null> {
+    const schematics: VersionSnapshot[] = [];
+
+    for (const endpoint of SCHEMATIC_ENDPOINTS) {
+      try {
+        const response = await fetch(endpoint);
+        if (response.ok) {
+          const schematic: VersionSnapshot = await response.json();
+          schematics.push(schematic);
+          console.log(`[DemoRegistry] Loaded schematic from ${endpoint}:`, {
+            storyboardCount: schematic.storyboards?.length || 0,
+          });
+        } else {
+          console.warn(`[DemoRegistry] Failed to fetch ${endpoint}:`, response.status);
+        }
+      } catch (error) {
+        console.error(`[DemoRegistry] Error fetching ${endpoint}:`, error);
       }
+    }
 
-      const schematic: VersionSnapshot = await response.json();
-      this.schematicCache = schematic;
-
-      console.log('[DemoRegistry] Schematic loaded:', {
-        storyboardCount: schematic.storyboards?.length || 0,
-      });
-
-      return schematic;
-    } catch (error) {
-      console.error('[DemoRegistry] Schematic fetch error:', error);
+    if (schematics.length === 0) {
+      console.error('[DemoRegistry] No schematics loaded');
       return null;
     }
+
+    // Merge all schematics into one - combine storyboards from all sources
+    const mergedSchematic: VersionSnapshot = {
+      ...schematics[0],
+      storyboards: schematics.flatMap(s => s.storyboards || []),
+    };
+
+    this.schematicCache = mergedSchematic;
+
+    console.log('[DemoRegistry] Merged schematics:', {
+      totalStoryboards: mergedSchematic.storyboards?.length || 0,
+      sources: schematics.length,
+    });
+
+    return mergedSchematic;
   }
 
   async listScopes(): Promise<Array<{ name: string; versions: string[] }>> {
@@ -80,7 +106,7 @@ class DemoRegistry implements StoryboardRegistryInterface {
   }
 
   /**
-   * Pre-load the schematic for faster first trace processing
+   * Pre-load the schematics for faster first trace processing
    */
   async preload(): Promise<void> {
     await this.getSchematic();
