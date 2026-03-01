@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
+import { ExplanationSection } from '@/components/demo/ExplanationSection';
 
 // Dynamic import to avoid SSR issues with panel packages
 const KanbanPanelWrapper = dynamic(
@@ -152,6 +153,8 @@ export default function ObservabilityDemoPage() {
       flexDirection: 'column',
       background: '#1a1c1e',
       overflowY: 'auto',
+      height: 'calc(100vh - 70px)',
+      scrollSnapType: 'y mandatory',
     }}>
       {/* Main Content */}
       <main style={{
@@ -161,12 +164,19 @@ export default function ObservabilityDemoPage() {
         width: '100%',
         margin: '0 auto',
       }}>
+        {/* Explanation Section */}
+        <ExplanationSection />
+
         {/* Backlog Panel Section */}
-        <div style={{
-          height: 'calc(100vh - 70px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          overflow: 'hidden',
-        }}>
+        <div
+          id="kanban-section"
+          style={{
+            height: 'calc(100vh - 70px)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            overflow: 'hidden',
+            scrollSnapAlign: 'start',
+          }}
+        >
           {providerReady && <KanbanPanelWrapper />}
         </div>
 
@@ -176,6 +186,7 @@ export default function ObservabilityDemoPage() {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
+          scrollSnapAlign: 'start',
         }}>
           {/* View Mode Switch */}
           <div style={{
