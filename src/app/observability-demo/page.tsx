@@ -77,23 +77,36 @@ export default function ObservabilityDemoPage() {
     }
   }, []);
 
-  // Fetch schematic on mount for the Schematics tab
+  // Fetch schematics on mount for the Schematics tab
   useEffect(() => {
-    const fetchSchematic = async () => {
-      try {
-        const response = await fetch('/api/schematics/kanban-panel');
-        if (response.ok) {
-          const schematic: VersionSnapshot = await response.json();
-          setSchematics([schematic]);
-          console.log('[Demo] Schematic loaded for display:', {
-            storyboards: schematic.storyboards?.length || 0,
-          });
+    const fetchSchematics = async () => {
+      const schematicEndpoints = [
+        '/api/schematics/kanban-panel',
+        '/api/schematics/backlog-core',
+      ];
+
+      const loadedSchematics: VersionSnapshot[] = [];
+
+      for (const endpoint of schematicEndpoints) {
+        try {
+          const response = await fetch(endpoint);
+          if (response.ok) {
+            const schematic: VersionSnapshot = await response.json();
+            loadedSchematics.push(schematic);
+            console.log(`[Demo] Schematic loaded from ${endpoint}:`, {
+              storyboards: schematic.storyboards?.length || 0,
+            });
+          }
+        } catch (error) {
+          console.error(`[Demo] Failed to fetch schematic from ${endpoint}:`, error);
         }
-      } catch (error) {
-        console.error('[Demo] Failed to fetch schematic:', error);
+      }
+
+      if (loadedSchematics.length > 0) {
+        setSchematics(loadedSchematics);
       }
     };
-    fetchSchematic();
+    fetchSchematics();
   }, []);
 
   // Initialize telemetry provider on mount
