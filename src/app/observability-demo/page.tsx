@@ -53,9 +53,6 @@ const TraceListPanelWrapper = dynamic(
 type ViewMode = 'raw' | 'principal';
 
 export default function ObservabilityDemoPage() {
-  const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1024
-  );
   const [spans, setSpans] = useState<CapturedSpan[]>([]);
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
@@ -119,14 +116,6 @@ export default function ObservabilityDemoPage() {
     };
   }, [handleTraceComplete]);
 
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const isMobile = windowWidth < 768;
-
   // Clear all spans and traces
   const handleClearSpans = () => {
     setSpans([]);
@@ -138,32 +127,35 @@ export default function ObservabilityDemoPage() {
 
   return (
     <div style={{
-      height: 'calc(100vh - 70px)',
       display: 'flex',
       flexDirection: 'column',
       background: '#0a0e17',
-      overflow: 'hidden',
+      overflowY: 'auto',
     }}>
       {/* Main Content */}
       <main style={{
-        flex: 1,
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        overflow: 'hidden',
+        flexDirection: 'column',
         maxWidth: '1400px',
         width: '100%',
         margin: '0 auto',
         borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
         borderRight: '1px solid rgba(255, 255, 255, 0.1)',
       }}>
-        {/* Left Panel: Trace View */}
+        {/* Backlog Panel Section */}
         <div style={{
-          flex: 1,
+          height: 'calc(100vh - 70px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          overflow: 'hidden',
+        }}>
+          {providerReady && <KanbanPanelWrapper />}
+        </div>
+
+        {/* Telemetry Panel Section */}
+        <div style={{
+          height: 'calc(100vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
-          minHeight: isMobile ? '50vh' : 'auto',
-          borderRight: isMobile ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
-          borderBottom: isMobile ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
           overflow: 'hidden',
         }}>
           {/* View Mode Switch */}
@@ -219,15 +211,6 @@ export default function ObservabilityDemoPage() {
               onClear={handleClearTraces}
             />
           )}
-        </div>
-
-        {/* Right Panel: Kanban */}
-        <div style={{
-          flex: 1,
-          minHeight: isMobile ? '50vh' : 'auto',
-          overflow: 'hidden',
-        }}>
-          {providerReady && <KanbanPanelWrapper />}
         </div>
       </main>
     </div>

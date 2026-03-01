@@ -37,6 +37,8 @@ export interface PanelSlot {
 interface StackEntry {
   panelId: string;
   data?: unknown;
+  /** Which side the overlay should appear on */
+  overlaySide?: 'left' | 'right';
 }
 
 interface PanelNavigatorProps {
@@ -116,6 +118,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   const isAnimatingRef = useRef(isAnimating);
   const backEventTypesRef = useRef(backEventTypes);
   const lastNavigationEventRef = useRef<PanelEvent | null>(null);
+  const lastProcessedEventRef = useRef<number>(0); // Track last processed event timestamp
   stackRef.current = stack;
   isAnimatingRef.current = isAnimating;
   backEventTypesRef.current = backEventTypes;
@@ -123,16 +126,52 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   // Create internal event emitter that handles navigation
   const internalEvents: PanelEventEmitter = useRef({
     emit: <T,>(event: PanelEvent<T>) => {
+      // Skip duplicate events (same timestamp = already processed)
+      if (event.timestamp === lastProcessedEventRef.current) {
+        return;
+      }
+      lastProcessedEventRef.current = event.timestamp;
+
       // Check if this event triggers a navigation
       const route = findRoute(event as PanelEvent);
       if (route && !isAnimatingRef.current) {
-        // Save the event to re-emit after animation
-        lastNavigationEventRef.current = event as PanelEvent;
-        // Push to new panel
-        setPreviousStack(stackRef.current);
-        setAnimationDirection('left');
-        setIsAnimating(true);
-        setStack(prev => [...prev, { panelId: route.targetPanelId, data: event.payload }]);
+        // Detect if this is a "done" task - slide from left side
+        const payload = event.payload as Record<string, unknown> | undefined;
+        // Status might be at payload.status or payload.task.status
+        const taskStatus = (payload?.status ?? (payload?.task as Record<string, unknown>)?.status) as string | undefined;
+        const isDone = taskStatus?.toLowerCase() === 'done';
+        console.log('[PanelNavigator] Task selected, payload:', payload, 'status:', taskStatus, 'isDone:', isDone);
+        const overlaySide = isDone ? 'left' : 'right';
+
+        // Check if overlay is already visible (stack > 1)
+        const overlayAlreadyVisible = stackRef.current.length > 1;
+
+        if (overlayAlreadyVisible) {
+          // Check if clicking the same task - if so, dismiss
+          const currentData = stackRef.current[stackRef.current.length - 1]?.data as Record<string, unknown> | undefined;
+          const currentTaskId = currentData?.id ?? currentData?.taskId;
+          const newTaskId = payload?.id ?? payload?.taskId;
+
+          if (currentTaskId && newTaskId && currentTaskId === newTaskId) {
+            // Same task clicked - dismiss the overlay
+            setPreviousStack(stackRef.current);
+            setAnimationDirection('right');
+            setIsAnimating(true);
+            setStack(prev => prev.slice(0, -1));
+            return;
+          }
+
+          // Different task - just replace the top of the stack without animation
+          setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
+        } else {
+          // Save the event to re-emit after animation
+          lastNavigationEventRef.current = event as PanelEvent;
+          // Push to new panel with animation
+          setPreviousStack(stackRef.current);
+          setAnimationDirection('left');
+          setIsAnimating(true);
+          setStack(prev => [...prev, { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
+        }
       } else if (backEventTypesRef.current.includes(event.type) && stackRef.current.length > 1 && !isAnimatingRef.current) {
         // Pop back
         setPreviousStack(stackRef.current);
@@ -205,12 +244,48 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     // Subscribe to route events
     routeEventTypes.forEach(eventType => {
       const unsub = externalEvents.on(eventType, (event) => {
+        // Skip if already processed (forwarded from internal emitter)
+        if (event.timestamp === lastProcessedEventRef.current) {
+          return;
+        }
+        lastProcessedEventRef.current = event.timestamp;
+
         const route = findRoute(event);
         if (route && !isAnimating) {
-          setPreviousStack(stack);
-          setAnimationDirection('left');
-          setIsAnimating(true);
-          setStack(prev => [...prev, { panelId: route.targetPanelId, data: event.payload }]);
+          // Detect if this is a "done" task - slide from left side
+          const payload = event.payload as Record<string, unknown> | undefined;
+          // Status might be at payload.status or payload.task.status
+          const taskStatus = (payload?.status ?? (payload?.task as Record<string, unknown>)?.status) as string | undefined;
+          const isDone = taskStatus?.toLowerCase() === 'done';
+          console.log('[PanelNavigator] External task selected, payload:', payload, 'status:', taskStatus, 'isDone:', isDone);
+          const overlaySide = isDone ? 'left' : 'right';
+
+          // Check if overlay is already visible (stack > 1)
+          const overlayAlreadyVisible = stack.length > 1;
+
+          if (overlayAlreadyVisible) {
+            // Check if clicking the same task - if so, dismiss
+            const currentData = stack[stack.length - 1]?.data as Record<string, unknown> | undefined;
+            const currentTaskId = currentData?.id ?? currentData?.taskId;
+            const newTaskId = payload?.id ?? payload?.taskId;
+
+            if (currentTaskId && newTaskId && currentTaskId === newTaskId) {
+              // Same task clicked - dismiss the overlay
+              setPreviousStack(stack);
+              setAnimationDirection('right');
+              setIsAnimating(true);
+              setStack(prev => prev.slice(0, -1));
+              return;
+            }
+
+            // Different task - just replace the top of the stack without animation
+            setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
+          } else {
+            setPreviousStack(stack);
+            setAnimationDirection('left');
+            setIsAnimating(true);
+            setStack(prev => [...prev, { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
+          }
         }
       });
       unsubscribes.push(unsub);
@@ -235,8 +310,20 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   }, [externalEvents, routes, backEventTypes, stack, isAnimating, findRoute]);
 
   // Get panel render function
-  const currentPanel = panelMap.get(currentEntry.panelId);
   const previousPanel = previousEntry ? panelMap.get(previousEntry.panelId) : null;
+
+  // Root panel is always first in stack - needed for half-width overlay mode
+  const rootEntry = stack[0];
+  const rootPanel = panelMap.get(rootEntry.panelId);
+
+  // Are we showing an overlay panel? (stack has more than just root)
+  const hasOverlay = stack.length > 1;
+  const overlayEntry = hasOverlay ? currentEntry : null;
+  const overlayPanel = overlayEntry ? panelMap.get(overlayEntry.panelId) : null;
+  const overlaySide = overlayEntry?.overlaySide ?? 'right';
+
+  // For pop animation, get the side from the previous entry
+  const previousOverlaySide = previousEntry?.overlaySide ?? 'right';
 
   // Calculate animation styles
   const getContainerStyle = (): React.CSSProperties => ({
@@ -245,69 +332,6 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     height: '100%',
     overflow: 'hidden',
   });
-
-  // For overlay-style animation:
-  // PUSH: previous (board) stays put at z-index 1, current (detail) slides in from right at z-index 2
-  // POP: current (board) stays put at z-index 1, previous (detail) slides out to right at z-index 2
-
-  const getOverlayPanel = (): 'current' | 'previous' => {
-    // The overlay is the panel that slides - when pushing it's current, when popping it's previous
-    return animationDirection === 'left' ? 'current' : 'previous';
-  };
-
-  const getPanelStyle = (position: 'current' | 'previous'): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#0a0e17', // Opaque background to prevent bleed-through during animations
-    };
-
-    const isOverlay = position === getOverlayPanel();
-
-    return {
-      ...base,
-      zIndex: isOverlay ? 2 : 1,
-    };
-  };
-
-  const getInitialTransform = (position: 'current' | 'previous'): string => {
-    const isOverlay = position === getOverlayPanel();
-
-    if (!isOverlay) {
-      // Base panel stays in place
-      return 'translateX(0)';
-    }
-
-    if (animationDirection === 'left') {
-      // Pushing: overlay (current) starts off-screen right
-      return 'translateX(100%)';
-    } else {
-      // Popping: overlay (previous) starts in place
-      return 'translateX(0)';
-    }
-  };
-
-  const getFinalTransform = (position: 'current' | 'previous'): string => {
-    const isOverlay = position === getOverlayPanel();
-
-    if (!isOverlay) {
-      // Base panel stays in place
-      return 'translateX(0)';
-    }
-
-    if (animationDirection === 'left') {
-      // Pushing: overlay (current) ends in place
-      return 'translateX(0)';
-    } else {
-      // Popping: overlay (previous) ends off-screen right
-      return 'translateX(100%)';
-    }
-  };
 
   // Force initial position before animation
   // Use double rAF to ensure browser has painted the initial state before transitioning
@@ -323,35 +347,99 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     }
   }, [isAnimating, mounted]);
 
+  // Handle Escape key to dismiss overlay
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && stack.length > 1 && !isAnimating) {
+        internalEvents.emit({
+          type: 'navigation:back',
+          source: 'keyboard',
+          timestamp: Date.now(),
+          payload: {},
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [stack.length, isAnimating, internalEvents]);
+
   return (
     <div style={getContainerStyle()}>
-      {/* Previous panel - needs transform during pop (when it's the overlay sliding out) */}
-      {isAnimating && previousPanel && (
+      {/* Base panel (root/kanban) - always visible */}
+      {rootPanel && (
         <div
           style={{
-            ...getPanelStyle('previous'),
-            // Only apply transition AFTER initial position is painted (mounted=true)
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0a0e17',
+            zIndex: 1,
+          }}
+        >
+          {rootPanel.render(internalEvents)}
+        </div>
+      )}
+
+      {/* Overlay panel sliding out during pop animation */}
+      {isAnimating && animationDirection === 'right' && previousPanel && previousEntry?.panelId !== rootEntry.panelId && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            ...(previousOverlaySide === 'left' ? { left: 0 } : { right: 0 }),
+            width: '50%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0a0e17',
+            zIndex: 2,
+            boxShadow: previousOverlaySide === 'left'
+              ? '4px 0 20px rgba(0, 0, 0, 0.5)'
+              : '-4px 0 20px rgba(0, 0, 0, 0.5)',
+            ...(previousOverlaySide === 'left'
+              ? { borderRight: '1px solid rgba(255, 255, 255, 0.1)' }
+              : { borderLeft: '1px solid rgba(255, 255, 255, 0.1)' }),
             transition: mounted ? `transform ${animationDuration}ms ease-out` : 'none',
-            transform: mounted ? getFinalTransform('previous') : getInitialTransform('previous'),
+            transform: mounted
+              ? (previousOverlaySide === 'left' ? 'translateX(-100%)' : 'translateX(100%)')
+              : 'translateX(0)',
           }}
         >
           {previousPanel.render(internalEvents)}
         </div>
       )}
 
-      {/* Current panel - needs transform during push (when it's the overlay sliding in) */}
-      {currentPanel && (
+      {/* Overlay panel (task detail) - shown when stack > 1 or animating in */}
+      {(hasOverlay || (isAnimating && animationDirection === 'left')) && overlayPanel && (
         <div
           style={{
-            ...getPanelStyle('current'),
-            // Only apply transition AFTER initial position is painted (mounted=true)
+            position: 'absolute',
+            top: 0,
+            ...(overlaySide === 'left' ? { left: 0 } : { right: 0 }),
+            width: '50%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#0a0e17',
+            zIndex: 2,
+            boxShadow: overlaySide === 'left'
+              ? '4px 0 20px rgba(0, 0, 0, 0.5)'
+              : '-4px 0 20px rgba(0, 0, 0, 0.5)',
+            ...(overlaySide === 'left'
+              ? { borderRight: '1px solid rgba(255, 255, 255, 0.1)' }
+              : { borderLeft: '1px solid rgba(255, 255, 255, 0.1)' }),
             transition: isAnimating && mounted ? `transform ${animationDuration}ms ease-out` : 'none',
             transform: isAnimating
-              ? (mounted ? getFinalTransform('current') : getInitialTransform('current'))
+              ? (mounted ? 'translateX(0)' : (overlaySide === 'left' ? 'translateX(-100%)' : 'translateX(100%)'))
               : 'translateX(0)',
           }}
         >
-          {currentPanel.render(internalEvents)}
+          {overlayPanel.render(internalEvents)}
         </div>
       )}
     </div>
