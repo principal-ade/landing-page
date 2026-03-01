@@ -24,7 +24,7 @@
     "@opentelemetry/resources": "^2.5.1",
     "@opentelemetry/sdk-trace-web": "^2.5.1",
     "@principal-ade/dynamic-file-tree": "^0.1.72",
-    "@principal-ade/industry-theme": "^0.1.7",
+    "@principal-ade/industry-theme": "^0.1.8",
     "@principal-ade/panel-framework-core": "^0.4.2",
     "@principal-ai/codebase-composition": "^0.2.45",
     "@principal-ai/logo-component": "^0.1.3",

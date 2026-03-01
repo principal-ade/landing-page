@@ -131,7 +131,7 @@ export default function ObservabilityDemoPage() {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      background: 'rgb(10, 10, 10)',
+      background: '#1a1c1e',
       overflowY: 'auto',
     }}>
       {/* Main Content */}

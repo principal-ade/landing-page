@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { ThemeProvider, theme as defaultTheme, overrideColors } from '@principal-ade/industry-theme';
+import { ThemeProvider, slateTheme, overrideColors } from '@principal-ade/industry-theme';
 
 // Custom theme with cyan primary color (same as backlog panel storybook)
-const customTheme = overrideColors(defaultTheme, {
+const customTheme = overrideColors(slateTheme, {
   primary: '#07c0ca',
   secondary: '#06a8b1',
 });
@@ -416,7 +416,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#0a0e17',
+          background: '#1a1c1e',
           color: '#6b7280',
           fontFamily: 'system-ui, sans-serif',
         }}>
@@ -433,7 +433,7 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        background: '#0a0e17',
+        background: '#1a1c1e',
       }}>
         <PanelNavigator
           rootPanelId="kanban"
