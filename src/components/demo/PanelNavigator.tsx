@@ -293,7 +293,13 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
 
     // Subscribe to back events
     backEventTypes.forEach(backEventType => {
-      const unsubBack = externalEvents.on(backEventType, () => {
+      const unsubBack = externalEvents.on(backEventType, (event) => {
+        // Skip if already processed (forwarded from internal emitter)
+        if (event.timestamp === lastProcessedEventRef.current) {
+          return;
+        }
+        lastProcessedEventRef.current = event.timestamp;
+
         if (stack.length > 1 && !isAnimating) {
           setPreviousStack(stack);
           setAnimationDirection('right');
@@ -314,7 +320,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
 
   // Root panel is always first in stack - needed for half-width overlay mode
   const rootEntry = stack[0];
-  const rootPanel = panelMap.get(rootEntry.panelId);
+  const rootPanel = rootEntry ? panelMap.get(rootEntry.panelId) : null;
 
   // Are we showing an overlay panel? (stack has more than just root)
   const hasOverlay = stack.length > 1;
