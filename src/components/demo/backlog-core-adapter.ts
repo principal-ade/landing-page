@@ -17,6 +17,7 @@ export interface BacklogCoreAdapter {
   readFile: (path: string) => Promise<string>;
   writeFile: (path: string, content: string) => Promise<void>;
   deleteFile: (path: string) => Promise<void>;
+  createDir: (path: string) => Promise<void>;
 
   // Task operations
   getTask: (id: string) => Promise<Task | undefined>;
@@ -122,6 +123,13 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
 
       // Reload core to pick up changes
       await core.reload();
+    },
+
+    createDir: async (path: string): Promise<void> => {
+      const normalized = normalizePath(path);
+      const fullPath = `${projectRoot}/${normalized}`;
+
+      await ensureDir(fs, fullPath);
     },
 
     // Task operations

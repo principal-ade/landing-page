@@ -166,6 +166,15 @@ function createActions(
 
     deleteFile: onDeleteFile,
 
+    createDir: async (path: string): Promise<void> => {
+      if (backlogAdapter) {
+        await backlogAdapter.createDir(path);
+        console.log('[Demo Action] Directory created via Backlog Core:', path);
+      } else {
+        console.warn('[Demo Action] Backlog adapter not ready, cannot create dir:', path);
+      }
+    },
+
     openFile: (filePath: string) => {
       console.log('[Demo Action] openFile:', filePath);
     },
