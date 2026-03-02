@@ -35,7 +35,7 @@ export function ExplanationSection() {
         textTransform: 'uppercase',
         letterSpacing: '0.1em',
       }}>
-        Story Based Monitoring Demo
+        Story-based Monitoring
       </p>
 
       <h1 style={{
@@ -154,11 +154,11 @@ export function ExplanationSection() {
           margin: 0,
           marginBottom: '8px',
         }}>
-          Try it yourself
+          Learn More
         </p>
         <div
           onClick={() => {
-            const el = document.getElementById('kanban-section');
+            const el = document.getElementById('demo-explanation-section');
             if (el) {
               el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }

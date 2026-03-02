@@ -6,6 +6,8 @@ import { initializeTelemetryProvider } from '@/components/demo/telemetry-provide
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
 import { ExplanationSection } from '@/components/demo/ExplanationSection';
+import { BacklogBackgroundSection } from '@/components/demo/BacklogBackgroundSection';
+import { DemoExplanationSection } from '@/components/demo/DemoExplanationSection';
 
 // Dynamic import to avoid SSR issues with panel packages
 const KanbanPanelWrapper = dynamic(
@@ -67,13 +69,10 @@ const WaterfallTraceView = dynamic(
   }
 );
 
-type ViewMode = 'raw' | 'principal';
-
 export default function ObservabilityDemoPage() {
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
   const [providerReady, setProviderReady] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('raw');
   const cleanupRef = useRef<(() => void) | null>(null);
 
   // Handle incoming OTLP trace - process through orchestrator
@@ -167,6 +166,12 @@ export default function ObservabilityDemoPage() {
         {/* Explanation Section */}
         <ExplanationSection />
 
+        {/* Demo Explanation Section */}
+        <DemoExplanationSection />
+
+        {/* Backlog Background Section */}
+        <BacklogBackgroundSection />
+
         {/* Backlog Panel Section */}
         <div
           id="kanban-section"
@@ -180,86 +185,88 @@ export default function ObservabilityDemoPage() {
           {providerReady && <KanbanPanelWrapper />}
         </div>
 
-        {/* Telemetry Panel Section */}
+        {/* Traditional Monitoring Section */}
         <div style={{
           height: 'calc(100vh - 70px)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
           scrollSnapAlign: 'start',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}>
-          {/* View Mode Switch */}
           <div style={{
-            display: 'flex',
+            padding: '16px',
             background: 'rgba(0, 0, 0, 0.3)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           }}>
-            <button
-              onClick={() => setViewMode('raw')}
-              style={{
-                flex: 1,
-                padding: '16px 16px',
-                fontSize: '18px',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                border: 'none',
-                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                background: viewMode === 'raw' ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                color: viewMode === 'raw' ? '#ffffff' : '#666',
-              }}
-            >
+            <h2 style={{
+              fontSize: '24px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              color: '#ffffff',
+              margin: 0,
+              textAlign: 'center',
+            }}>
               Traditional Monitoring
-            </button>
-            <button
-              onClick={() => setViewMode('principal')}
-              style={{
-                flex: 1,
-                padding: '16px 16px',
-                fontSize: '18px',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                background: viewMode === 'principal' ? 'rgba(0, 194, 255, 0.1)' : 'transparent',
-                color: viewMode === 'principal' ? '#00C2FF' : '#666',
-              }}
-            >
-              Story-based Monitoring
-            </button>
-          </div>
-
-          {/* View Description */}
-          <div style={{
-            padding: '12px 16px',
-            background: 'rgba(255, 255, 255, 0.02)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          }}>
+            </h2>
             <p style={{
               fontSize: '14px',
               color: '#666',
               margin: 0,
+              marginTop: '8px',
               fontFamily: 'Inter, sans-serif',
               textAlign: 'center',
             }}>
-              {viewMode === 'raw'
-                ? 'Standard trace view - technical span data without business context'
-                : 'Story-based view - traces matched against business scenarios'}
+              Standard trace view - technical span data without business context
             </p>
           </div>
+          <WaterfallTraceView traces={registeredTraces} onClear={handleClearTraces} />
+        </div>
 
-          {/* View Content */}
-          {viewMode === 'raw' ? (
-            <WaterfallTraceView traces={registeredTraces} onClear={handleClearTraces} />
-          ) : (
+        {/* Story-based Monitoring Section */}
+        <div style={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          height: 'calc(100vh - 70px)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          scrollSnapAlign: 'start',
+          background: 'rgb(10, 10, 10)',
+        }}>
+          <div style={{
+            padding: '16px',
+            background: 'rgba(0, 194, 255, 0.1)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          }}>
+            <h2 style={{
+              fontSize: '24px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              color: '#00C2FF',
+              margin: 0,
+              textAlign: 'center',
+            }}>
+              Story-based Monitoring
+            </h2>
+            <p style={{
+              fontSize: '14px',
+              color: '#666',
+              margin: 0,
+              marginTop: '8px',
+              fontFamily: 'Inter, sans-serif',
+              textAlign: 'center',
+            }}>
+              Traces matched against business scenarios
+            </p>
+          </div>
+          <div style={{ maxWidth: '1400px', width: '100%', height: '100%', margin: '0 auto', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <TraceListPanelWrapper
               traces={registeredTraces}
               schematics={schematics}
               onClear={handleClearTraces}
             />
-          )}
+          </div>
         </div>
       </main>
     </div>
