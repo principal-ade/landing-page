@@ -10,6 +10,7 @@ import {
   getRootSpan,
 } from '@industry-theme/principal-view-panels';
 import { ThemeProvider } from '@principal-ade/industry-theme';
+import { TraceTape } from './TraceTape';
 
 interface WaterfallTraceViewProps {
   traces: RegisteredTrace[];
@@ -79,9 +80,41 @@ function formatDuration(ms: number): string {
 
 export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps) {
   const [selectedTrace, setSelectedTrace] = useState<RegisteredTrace | null>(null);
+  const [highlightedSpanId, setHighlightedSpanId] = useState<string | null>(null);
+  const [highlightedTraceId, setHighlightedTraceId] = useState<string | null>(null);
+  const [scrubberTime, setScrubberTime] = useState<number | null>(null);
   const context = usePanelContext();
   const actions = usePanelActions();
   const events = usePanelEvents();
+
+  // Find which trace contains a given span
+  const findTraceForSpan = (spanId: string): string | null => {
+    for (const trace of traces) {
+      const spans = getSpansFromTrace(trace);
+      if (spans.some(s => s.spanId === spanId)) {
+        return trace.traceId;
+      }
+    }
+    return null;
+  };
+
+  // Parse nanosecond timestamp to milliseconds
+  const parseNanoTime = (nanoStr: string): number => {
+    const nanos = BigInt(nanoStr);
+    return Number(nanos / BigInt(1_000_000));
+  };
+
+  // Get the start time of a span
+  const getSpanStartTime = (spanId: string): number | null => {
+    for (const trace of traces) {
+      const spans = getSpansFromTrace(trace);
+      const span = spans.find(s => s.spanId === spanId);
+      if (span) {
+        return parseNanoTime(span.startTimeUnixNano);
+      }
+    }
+    return null;
+  };
 
   return (
     <div style={{
@@ -144,6 +177,23 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
           </button>
         </div>
 
+        {/* TraceTape */}
+        <div style={{
+          padding: '16px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          flexShrink: 0,
+        }}>
+          <TraceTape
+            traces={traces}
+            highlightedSpanId={highlightedSpanId ?? undefined}
+            onSpanHighlight={(spanId) => {
+              setHighlightedSpanId(spanId);
+              setHighlightedTraceId(spanId ? findTraceForSpan(spanId) : null);
+              setScrubberTime(spanId ? getSpanStartTime(spanId) : null);
+            }}
+          />
+        </div>
+
         {/* Trace List */}
         <div style={{
           flex: 1,
@@ -171,11 +221,13 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {traces.map((trace) => (
+              {[...traces].reverse().map((trace) => (
                 <TraceRow
                   key={trace.traceId}
                   trace={trace}
                   isSelected={selectedTrace?.traceId === trace.traceId}
+                  isHighlighted={highlightedTraceId === trace.traceId}
+                  isDimmed={scrubberTime !== null && trace.startTime > scrubberTime}
                   onClick={() => setSelectedTrace(
                     selectedTrace?.traceId === trace.traceId ? null : trace
                   )}
@@ -210,26 +262,43 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
 function TraceRow({
   trace,
   isSelected,
+  isHighlighted,
+  isDimmed,
   onClick,
 }: {
   trace: RegisteredTrace;
   isSelected: boolean;
+  isHighlighted: boolean;
+  isDimmed: boolean;
   onClick: () => void;
 }) {
   const rootSpan = getRootSpan(trace);
   const spans = getSpansFromTrace(trace);
   const spanCount = spans.length;
 
+  const getBackground = () => {
+    if (isSelected) return 'rgba(255, 255, 255, 0.08)';
+    if (isHighlighted) return 'rgba(59, 130, 246, 0.15)';
+    return 'rgba(255, 255, 255, 0.02)';
+  };
+
+  const getBorderLeft = () => {
+    if (isSelected) return '3px solid #3b82f6';
+    if (isHighlighted) return '3px solid #60a5fa';
+    return '1px solid rgba(255, 255, 255, 0.08)';
+  };
+
   return (
     <div
       onClick={onClick}
       style={{
-        background: isSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+        background: getBackground(),
         border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderLeft: isSelected ? '3px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.08)',
+        borderLeft: getBorderLeft(),
         overflow: 'hidden',
         cursor: 'pointer',
         transition: 'all 0.15s ease',
+        opacity: isDimmed ? 0.3 : 1,
       }}
     >
       {/* Trace Header */}
