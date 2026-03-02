@@ -1,16 +1,16 @@
 /**
  * Backlog Core Adapter for Demo
  *
- * Provides an in-memory backlog instance using @backlog-md/core
- * for realistic file operations in the observability demo.
+ * Provides an in-memory filesystem seeded with mock backlog data.
+ * The panel creates its own Core instance for task operations,
+ * so this adapter only needs to provide file operations.
  */
 
-import { Core, InMemoryFileSystemAdapter, type Task, type Milestone } from '@backlog-md/core';
+import { InMemoryFileSystemAdapter } from '@backlog-md/core';
 import { PathsFileTreeBuilder, type FileTree } from '@principal-ai/repository-abstraction';
 import { mockFileContents } from './mock-data';
 
 export interface BacklogCoreAdapter {
-  core: Core;
   fs: InMemoryFileSystemAdapter;
 
   // File operations (for panel context)
@@ -19,28 +19,17 @@ export interface BacklogCoreAdapter {
   deleteFile: (path: string) => Promise<void>;
   createDir: (path: string) => Promise<void>;
 
-  // Task operations
-  getTask: (id: string) => Promise<Task | undefined>;
-  listTasks: () => Promise<Task[]>;
-  getTasksByStatus: () => Promise<Record<string, Task[]>>;
-  updateTask: (id: string, updates: Partial<Task>) => Promise<Task>;
-  createTask: (input: { title: string; status?: string; description?: string; labels?: string[]; priority?: string }) => Promise<Task>;
-  deleteTask: (id: string) => Promise<void>;
-  archiveTask: (id: string) => Promise<void>;
-
-  // Milestone operations
-  listMilestones: () => Promise<Milestone[]>;
-
-  // Reload from filesystem
-  reload: () => Promise<void>;
-
   // Get current FileTree from in-memory filesystem
   getFileTree: () => FileTree;
 }
 
 /**
- * Create a demo backlog instance with in-memory storage
+ * Create a demo backlog adapter with in-memory storage
  * seeded from the mock data.
+ *
+ * Note: This adapter only provides file operations. The panel's
+ * useKanbanData hook creates its own Core instance for task operations,
+ * which will create the "core.init" span as a child of "kanban.load".
  */
 export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
   const fs = new InMemoryFileSystemAdapter();
@@ -57,14 +46,8 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
     await fs.writeFile(fullPath, content);
   }
 
-  // Initialize Core with the in-memory filesystem
-  const core = new Core({
-    projectRoot,
-    adapters: { fs },
-  });
-
-  // Load all tasks and config
-  await core.initialize();
+  // No Core initialization here - the panel will create its own Core
+  // and initialize it within the kanban.load span context
 
   // Helper to normalize paths for lookups
   const normalizePath = (path: string): string => {
@@ -84,7 +67,6 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
   };
 
   return {
-    core,
     fs,
 
     // File operations
@@ -110,9 +92,6 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
       await ensureDir(fs, dir);
 
       await fs.writeFile(fullPath, content);
-
-      // Reload core to pick up changes
-      await core.reload();
     },
 
     deleteFile: async (path: string): Promise<void> => {
@@ -120,9 +99,6 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
       const fullPath = `${projectRoot}/${normalized}`;
 
       await fs.deleteFile(fullPath);
-
-      // Reload core to pick up changes
-      await core.reload();
     },
 
     createDir: async (path: string): Promise<void> => {
@@ -130,61 +106,6 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
       const fullPath = `${projectRoot}/${normalized}`;
 
       await ensureDir(fs, fullPath);
-    },
-
-    // Task operations
-    getTask: async (id: string): Promise<Task | undefined> => {
-      return core.getTask(id);
-    },
-
-    listTasks: async (): Promise<Task[]> => {
-      return core.listTasks();
-    },
-
-    getTasksByStatus: async (): Promise<Record<string, Task[]>> => {
-      const map = core.getTasksByStatus();
-      const record: Record<string, Task[]> = {};
-      for (const [status, tasks] of map) {
-        record[status] = tasks;
-      }
-      return record;
-    },
-
-    updateTask: async (id: string, updates: Partial<Task>): Promise<Task> => {
-      const task = await core.updateTask(id, updates);
-      if (!task) {
-        throw new Error(`Task not found: ${id}`);
-      }
-      return task;
-    },
-
-    createTask: async (input): Promise<Task> => {
-      const task = await core.createTask({
-        title: input.title,
-        status: input.status || 'To Do',
-        description: input.description,
-        labels: input.labels,
-        priority: input.priority as 'high' | 'medium' | 'low' | undefined,
-      });
-      return task;
-    },
-
-    deleteTask: async (id: string): Promise<void> => {
-      await core.deleteTask(id);
-    },
-
-    archiveTask: async (id: string): Promise<void> => {
-      await core.archiveTask(id);
-    },
-
-    // Milestone operations
-    listMilestones: async (): Promise<Milestone[]> => {
-      return core.listMilestones();
-    },
-
-    // Reload
-    reload: async (): Promise<void> => {
-      await core.reload();
     },
 
     // Build FileTree from current in-memory filesystem state
@@ -226,9 +147,3 @@ async function ensureDir(fs: InMemoryFileSystemAdapter, dirPath: string): Promis
     }
   }
 }
-
-/**
- * React hook for using the backlog core adapter
- * Returns a promise that resolves to the adapter
- */
-export type { Task, Milestone };

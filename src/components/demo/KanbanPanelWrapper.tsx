@@ -115,9 +115,7 @@ function createPanelContext(
     hasSlice: (name: string) => slices.has(name),
     isSliceLoading: (name: string) => slices.get(name)?.loading ?? false,
     refresh: async () => {
-      if (backlogAdapter) {
-        await backlogAdapter.reload();
-      }
+      // No-op: panel's Core handles its own state
     },
 
     // Adapters for file operations - uses BacklogCoreAdapter when available
@@ -145,13 +143,14 @@ function createPanelContext(
 }
 
 /**
- * Create actions for the panel with Backlog Core integration
+ * Create actions for the panel
+ * File operations use the BacklogCoreAdapter, task operations are handled
+ * by the panel's own Core instance via useKanbanData
  */
 function createActions(
   backlogAdapter: BacklogCoreAdapter | null,
   onWriteFile: (path: string, content: string) => Promise<void>,
-  onDeleteFile: (path: string) => Promise<void>,
-  onFileTreeChanged: () => void
+  onDeleteFile: (path: string) => Promise<void>
 ) {
   return {
     readFile: async (path: string): Promise<string> => {
@@ -191,70 +190,8 @@ function createActions(
       console.log('[Demo Action] notifyPanels:', event);
     },
 
-    // Task-specific actions using Backlog Core
-    updateTask: async (taskId: string, updates: Record<string, unknown>) => {
-      if (!backlogAdapter) {
-        console.warn('[Demo Action] Cannot update task - adapter not initialized');
-        return;
-      }
-
-      try {
-        const task = await backlogAdapter.updateTask(taskId, updates);
-        console.log('[Demo Action] Task updated via Backlog Core:', taskId, task);
-        return task;
-      } catch (error) {
-        console.error('[Demo Action] Failed to update task:', taskId, error);
-        throw error;
-      }
-    },
-
-    createTask: async (input: { title: string; status?: string; description?: string }) => {
-      if (!backlogAdapter) {
-        console.warn('[Demo Action] Cannot create task - adapter not initialized');
-        return;
-      }
-
-      try {
-        const task = await backlogAdapter.createTask(input);
-        console.log('[Demo Action] Task created via Backlog Core:', task);
-        return task;
-      } catch (error) {
-        console.error('[Demo Action] Failed to create task:', error);
-        throw error;
-      }
-    },
-
-    deleteTask: async (taskId: string) => {
-      if (!backlogAdapter) {
-        console.warn('[Demo Action] Cannot delete task - adapter not initialized');
-        return;
-      }
-
-      try {
-        await backlogAdapter.deleteTask(taskId);
-        console.log('[Demo Action] Task deleted via Backlog Core:', taskId);
-        // Refresh fileTree to reflect the deletion
-        onFileTreeChanged();
-      } catch (error) {
-        console.error('[Demo Action] Failed to delete task:', taskId, error);
-        throw error;
-      }
-    },
-
-    archiveTask: async (taskId: string) => {
-      if (!backlogAdapter) {
-        console.warn('[Demo Action] Cannot archive task - adapter not initialized');
-        return;
-      }
-
-      try {
-        await backlogAdapter.archiveTask(taskId);
-        console.log('[Demo Action] Task archived via Backlog Core:', taskId);
-      } catch (error) {
-        console.error('[Demo Action] Failed to archive task:', taskId, error);
-        throw error;
-      }
-    },
+    // Note: Task operations (create, update, delete) are handled by the panel's
+    // own Core instance via useKanbanData, not through these actions
   };
 }
 
@@ -291,12 +228,8 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
           setBacklogAdapter(adapter);
           setFileTree(adapter.getFileTree());
           setIsLoading(false);
-          console.log('[Demo] Backlog Core adapter initialized');
-
-          // Log initial state
-          const tasks = await adapter.listTasks();
-          const milestones = await adapter.listMilestones();
-          console.log(`[Demo] Loaded ${tasks.length} tasks and ${milestones.length} milestones`);
+          console.log('[Demo] Backlog adapter initialized (filesystem ready)');
+          // Note: Tasks will be loaded by the panel's Core instance
         }
       } catch (error) {
         console.error('[Demo] Failed to initialize Backlog Core adapter:', error);
@@ -365,15 +298,11 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
     }
   }, [backlogAdapter]);
 
-  // Create actions with Backlog Core integration
-  // Callback to refresh fileTree when files change
-  const handleFileTreeChanged = useCallback(() => {
-    if (backlogAdapter) {
-      setFileTree(backlogAdapter.getFileTree());
-    }
-  }, [backlogAdapter]);
-
-  const actions = useMemo(() => createActions(backlogAdapter, handleWriteFile, handleDeleteFile, handleFileTreeChanged), [backlogAdapter, handleWriteFile, handleDeleteFile, handleFileTreeChanged]);
+  // Create actions for file operations
+  const actions = useMemo(
+    () => createActions(backlogAdapter, handleWriteFile, handleDeleteFile),
+    [backlogAdapter, handleWriteFile, handleDeleteFile]
+  );
 
   // Panel definitions for navigator
   // Note: context is guaranteed non-null when these render functions are called
