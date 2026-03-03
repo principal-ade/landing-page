@@ -61,7 +61,12 @@ export async function GET() {
 
     const schematic = await response.json();
 
-    return NextResponse.json(schematic, {
+    // Include repositoryUrl and commitSha in the response for GitHub linking
+    return NextResponse.json({
+      ...schematic,
+      repositoryUrl: REPOSITORY_URL,
+      commitSha,
+    }, {
       headers: {
         'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
       },

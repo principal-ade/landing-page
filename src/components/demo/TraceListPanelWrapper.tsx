@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { TraceListPanel, WorkflowScenariosPanel, type OpenCanvasPayload } from '@industry-theme/principal-view-panels';
 import type {
   DataSlice,
@@ -140,6 +140,49 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
     fileTree: fileTreeSlice,
   }), [slicesMap, telemetrySlice, schematicsSlice, fileTreeSlice]);
 
+  // Helper to construct GitHub URL from schematic info
+  const openFileInGitHub = useMemo(() => {
+    if (!schematics || schematics.length === 0) return undefined;
+
+    // Get repository info from the first schematic
+    const schematic = schematics[0];
+    const { repositoryUrl, commitSha } = schematic;
+
+    if (!repositoryUrl || !commitSha) {
+      console.warn('[TraceListPanelWrapper] Missing repositoryUrl or commitSha in schematic');
+      return undefined;
+    }
+
+    // Parse GitHub URL: https://github.com/owner/repo or git@github.com:owner/repo.git
+    const githubMatch = repositoryUrl.match(/github\.com[/:]([^/]+)\/([^/.]+)/);
+    if (!githubMatch) {
+      console.warn('[TraceListPanelWrapper] Could not parse GitHub URL:', repositoryUrl);
+      return undefined;
+    }
+
+    const [, owner, repo] = githubMatch;
+
+    return (filePath: string) => {
+      // Normalize path
+      let normalizedPath = filePath;
+      if (normalizedPath.startsWith('./')) {
+        normalizedPath = normalizedPath.slice(2);
+      } else if (normalizedPath.startsWith('/')) {
+        normalizedPath = normalizedPath.slice(1);
+      }
+
+      const githubUrl = `https://github.com/${owner}/${repo}/blob/${commitSha}/${normalizedPath}#L89`;
+      console.log('[TraceListPanelWrapper] Opening file in GitHub:', githubUrl);
+      window.open(githubUrl, '_blank');
+    };
+  }, [schematics]);
+
+  // Keep a ref to the latest openFileInGitHub so event handlers always use current value
+  const openFileInGitHubRef = useRef(openFileInGitHub);
+  useEffect(() => {
+    openFileInGitHubRef.current = openFileInGitHub;
+  }, [openFileInGitHub]);
+
   // Create panel actions - intersection of TraceListPanel and WorkflowScenariosPanel needs
   const actions = useMemo(() => ({
     // TraceListPanelActions
@@ -161,12 +204,12 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
       console.warn('[TraceListPanelWrapper] File not found in schematic:', normalizedPath, 'Available:', Array.from(fileContentMap.keys()));
       return '';
     },
-    // PanelActions (optional)
-    openFile: undefined,
+    // PanelActions
+    openFile: openFileInGitHub,
     openGitDiff: undefined,
     navigateToPanel: undefined,
     notifyPanels: undefined,
-  }), [onClear, fileContentMap]);
+  }), [onClear, fileContentMap, openFileInGitHub]);
 
   // Create event emitter with proper typing
   const events: PanelEventEmitter = useMemo(() => {
@@ -188,6 +231,15 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
             scenarioId: string;
           };
           onWorkflowClick(storyboardId, workflowId, scenarioId);
+        }
+        // Handle file:open events from WorkflowScenariosPanel
+        if (event.type === 'file:open') {
+          const { path } = event.payload as { path: string };
+          if (openFileInGitHubRef.current) {
+            openFileInGitHubRef.current(path);
+          } else {
+            console.warn('[TraceListPanelWrapper] openFileInGitHub not available yet - schematics may still be loading');
+          }
         }
         // Capture openCanvas payload for WorkflowScenariosPanel navigation
         if (event.type === 'custom') {

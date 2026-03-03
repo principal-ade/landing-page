@@ -110,6 +110,8 @@ export default function ObservabilityDemoPage() {
             loadedSchematics.push(schematic);
             console.log(`[Demo] Schematic loaded from ${endpoint}:`, {
               storyboards: schematic.storyboards?.length || 0,
+              repositoryUrl: schematic.repositoryUrl,
+              commitSha: schematic.commitSha,
             });
           }
         } catch (error) {
