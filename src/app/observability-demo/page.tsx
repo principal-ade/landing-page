@@ -126,14 +126,24 @@ export default function ObservabilityDemoPage() {
 
   // Initialize telemetry provider on mount
   useEffect(() => {
-    // Preload schematic for faster first trace processing
-    preloadSchematic().catch(console.error);
+    let mounted = true;
 
-    // Pass no-op for span callback since we only use complete traces now
-    cleanupRef.current = initializeTelemetryProvider(() => {}, handleTraceComplete);
-    setProviderReady(true);
+    const init = async () => {
+      // Preload schematic BEFORE initializing telemetry
+      // This ensures owned-scopes are registered before traces arrive
+      await preloadSchematic();
+
+      if (!mounted) return;
+
+      // Now initialize telemetry provider
+      cleanupRef.current = initializeTelemetryProvider(() => {}, handleTraceComplete);
+      setProviderReady(true);
+    };
+
+    init().catch(console.error);
 
     return () => {
+      mounted = false;
       if (cleanupRef.current) {
         cleanupRef.current();
         cleanupRef.current = null;
