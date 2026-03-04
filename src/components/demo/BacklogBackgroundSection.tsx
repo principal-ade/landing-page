@@ -40,9 +40,8 @@ export function BacklogBackgroundSection() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: '48px',
-        paddingTop: '120px',
+        justifyContent: 'center',
+        padding: '24px',
         maxWidth: '1400px',
         margin: '0 auto',
       }}>
@@ -56,22 +55,22 @@ export function BacklogBackgroundSection() {
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
         }}>
-          What is
+          Our Demo Partner
         </p>
 
         <img
           src="/backlog-logo.jpg"
           alt="Backlog.md"
           style={{
-            width: '120px',
-            height: '120px',
+            width: 'clamp(80px, 15vw, 120px)',
+            height: 'clamp(80px, 15vw, 120px)',
             borderRadius: '16px',
             marginBottom: '24px',
           }}
         />
 
         <h1 style={{
-          fontSize: '48px',
+          fontSize: 'clamp(28px, 6vw, 48px)',
           fontWeight: 600,
           fontFamily: 'Inter, sans-serif',
           color: '#ffffff',
@@ -85,26 +84,29 @@ export function BacklogBackgroundSection() {
         </h1>
 
         <p style={{
-          fontSize: '18px',
+          fontSize: 'clamp(14px, 3vw, 18px)',
           fontFamily: 'Inter, sans-serif',
           color: '#9ca3af',
           margin: 0,
-          marginBottom: '64px',
+          marginBottom: 'clamp(32px, 6vw, 64px)',
           textAlign: 'center',
           maxWidth: '600px',
           lineHeight: 1.6,
+          padding: '0 16px',
         }}>
           Backlog.md turns any Git repository into a self-contained project board
           powered by plain Markdown files.
         </p>
 
         <p style={{
-          fontSize: '16px',
+          fontSize: 'clamp(14px, 3vw, 16px)',
           fontFamily: 'Inter, sans-serif',
           color: '#9ca3af',
           margin: 0,
           display: 'flex',
           alignItems: 'center',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
           gap: '6px',
         }}>
           {starCount !== null && (
@@ -136,7 +138,7 @@ export function BacklogBackgroundSection() {
         </p>
 
         <div style={{
-          marginTop: '80px',
+          marginTop: 'clamp(40px, 8vw, 80px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

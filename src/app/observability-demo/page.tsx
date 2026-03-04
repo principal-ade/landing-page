@@ -8,6 +8,7 @@ import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } 
 import { ExplanationSection } from '@/components/demo/ExplanationSection';
 import { BacklogBackgroundSection } from '@/components/demo/BacklogBackgroundSection';
 import { DemoExplanationSection } from '@/components/demo/DemoExplanationSection';
+import { DemoExplanationSectionMobile } from '@/components/demo/DemoExplanationSectionMobile';
 
 // Dynamic import to avoid SSR issues with panel packages
 const KanbanPanelWrapper = dynamic(
@@ -73,7 +74,16 @@ export default function ObservabilityDemoPage() {
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
   const [providerReady, setProviderReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const cleanupRef = useRef<(() => void) | null>(null);
+
+  // Track window width for responsive rendering
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Handle incoming OTLP trace - process through orchestrator
   const handleTraceComplete = useCallback(async (otlpTrace: OtelExportTraceServiceRequest) => {
@@ -179,7 +189,7 @@ export default function ObservabilityDemoPage() {
         <ExplanationSection />
 
         {/* Demo Explanation Section */}
-        <DemoExplanationSection />
+        {isMobile ? <DemoExplanationSectionMobile /> : <DemoExplanationSection />}
 
         {/* Backlog Background Section */}
         <BacklogBackgroundSection />

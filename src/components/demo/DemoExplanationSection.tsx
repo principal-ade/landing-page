@@ -240,7 +240,7 @@ export function DemoExplanationSection() {
             margin: 0,
             marginBottom: '8px',
           }}>
-            Intro to Backlog.md
+            Next
           </p>
           <div
             onClick={() => {
