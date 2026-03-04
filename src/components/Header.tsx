@@ -15,7 +15,6 @@ export const Header: React.FC = () => {
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
   const isFeaturesPage = pathname?.startsWith('/product');
-  const isObservabilityDemo = pathname?.startsWith('/observability-demo');
 
   useEffect(() => {
     const handleResize = () => {

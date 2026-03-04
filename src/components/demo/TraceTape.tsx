@@ -91,7 +91,6 @@ export function TraceTape({
   const tapeRef = useRef<HTMLDivElement>(null);
   const [scrubberPercent, setScrubberPercent] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [tapeWidth, setTapeWidth] = useState(0);
 
   // Merge default colors
   const resolvedColors = {
@@ -116,9 +115,9 @@ export function TraceTape({
   }, [traces]);
 
   // Compute segments and gaps for compression
-  const { segments, gaps, totalDisplayDuration } = useMemo(() => {
+  const { segments, gaps } = useMemo(() => {
     if (traces.length === 0) {
-      return { segments: [] as TimeSegment[], gaps: [] as CompressedGap[], totalDisplayDuration: 0 };
+      return { segments: [] as TimeSegment[], gaps: [] as CompressedGap[] };
     }
 
     // Sort traces by start time
@@ -140,7 +139,6 @@ export function TraceTape({
 
     // If only one segment, no compression needed
     if (rawSegments.length <= 1) {
-      const duration = timeRange.max - timeRange.min;
       return {
         segments: [{
           startTime: timeRange.min,
@@ -149,7 +147,6 @@ export function TraceTape({
           displayEnd: 100,
         }] as TimeSegment[],
         gaps: [] as CompressedGap[],
-        totalDisplayDuration: duration,
       };
     }
 
@@ -200,7 +197,7 @@ export function TraceTape({
       }
     }
 
-    return { segments: segs, gaps: gapsFound, totalDisplayDuration: totalDisplay };
+    return { segments: segs, gaps: gapsFound };
   }, [traces, timeRange]);
 
   // Convert time to display percentage (with gap compression)
@@ -429,21 +426,6 @@ export function TraceTape({
     };
   }, [isDragging, handlePointerMove, handlePointerUp]);
 
-  // Track tape width for proper rendering
-  useEffect(() => {
-    if (!tapeRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setTapeWidth(entry.contentRect.width);
-      }
-    });
-
-    observer.observe(tapeRef.current);
-    setTapeWidth(tapeRef.current.clientWidth);
-
-    return () => observer.disconnect();
-  }, []);
 
   const duration = timeRange.max - timeRange.min;
 
