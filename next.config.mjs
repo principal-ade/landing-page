@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false, // Disabled to prevent double-mount animation issues in dev
   transpilePackages: ['themed-markdown'],
   typescript: {
     // Allow builds to complete with some remaining type compatibility issues

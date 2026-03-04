@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
-import { Logo } from '@principal-ai/logo-component';
+import { FeatureCarousel } from './FeatureCarousel';
 
 export function ExplanationSection() {
   return (
@@ -19,9 +19,8 @@ export function ExplanationSection() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: '48px',
-        paddingTop: '120px',
+        justifyContent: 'center',
+        padding: '24px',
         maxWidth: '1400px',
         margin: '0 auto',
       }}>
@@ -39,7 +38,7 @@ export function ExplanationSection() {
       </p>
 
       <h1 style={{
-        fontSize: '48px',
+        fontSize: 'clamp(28px, 6vw, 48px)',
         fontWeight: 600,
         fontFamily: 'Inter, sans-serif',
         color: '#ffffff',
@@ -52,97 +51,10 @@ export function ExplanationSection() {
         Craft Traces that tell a story
       </h1>
 
-      <div style={{
-        marginTop: '64px',
-        display: 'flex',
-        gap: '64px',
-      }}>
-        <div style={{ textAlign: 'center', width: '240px' }}>
-          <div style={{ height: '56px', marginBottom: '16px', color: '#07c0ca', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-            <Logo width={90} height={90} color="#07c0ca" />
-          </div>
-          <h3 style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            fontFamily: 'Inter, sans-serif',
-            color: '#ffffff',
-            margin: 0,
-            marginBottom: '8px',
-          }}>
-            Story-based Dev
-          </h3>
-          <p style={{
-            fontSize: '14px',
-            fontFamily: 'Inter, sans-serif',
-            color: '#6b7280',
-            margin: 0,
-            lineHeight: 1.5,
-          }}>
-            Design your systems expected behaviors first
-          </p>
-        </div>
-
-        <div style={{ textAlign: 'center', width: '240px' }}>
-          <div style={{ height: '56px', marginBottom: '16px', paddingBottom: '10px', color: '#07c0ca', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '12px' }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#13120a', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
-              <img src="/cursor-logo.svg" alt="Cursor" width={38} height={38} />
-            </div>
-            <div style={{ width: 58, height: 58, borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', transform: 'translateY(-3px)', zIndex: 3, position: 'relative' }}>
-              <img src="/claude-logo.svg" alt="Claude" width={36} height={36} />
-            </div>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', zIndex: 1, position: 'relative' }}>
-              <img src="/openai-logo.svg" alt="OpenAI Codex" width={38} height={38} />
-            </div>
-          </div>
-          <h3 style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            fontFamily: 'Inter, sans-serif',
-            color: '#ffffff',
-            margin: 0,
-            marginBottom: '8px',
-          }}>
-            AI Native Validation
-          </h3>
-          <p style={{
-            fontSize: '14px',
-            fontFamily: 'Inter, sans-serif',
-            color: '#6b7280',
-            margin: 0,
-            lineHeight: 1.5,
-          }}>
-            Confirm agent code changes in development
-          </p>
-        </div>
-
-        <div style={{ textAlign: 'center', width: '240px' }}>
-          <div style={{ height: '56px', marginBottom: '16px', paddingBottom: '10px', color: '#07c0ca', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-            <img src="/otel-logo.png" alt="OpenTelemetry" width={54} height={54} />
-          </div>
-          <h3 style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            fontFamily: 'Inter, sans-serif',
-            color: '#ffffff',
-            margin: 0,
-            marginBottom: '8px',
-          }}>
-            Built on OTel
-          </h3>
-          <p style={{
-            fontSize: '14px',
-            fontFamily: 'Inter, sans-serif',
-            color: '#6b7280',
-            margin: 0,
-            lineHeight: 1.5,
-          }}>
-            Works with your existing OpenTelemetry setup
-          </p>
-        </div>
-      </div>
+      <FeatureCarousel />
 
       <div style={{
-        marginTop: '140px',
+        marginTop: '32px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
