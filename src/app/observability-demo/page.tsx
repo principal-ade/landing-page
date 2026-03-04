@@ -7,7 +7,6 @@ import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestr
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
 import { ExplanationSection } from '@/components/demo/ExplanationSection';
 import { BacklogBackgroundSection } from '@/components/demo/BacklogBackgroundSection';
-import { DemoExplanationSection } from '@/components/demo/DemoExplanationSection';
 import { DemoExplanationSectionMobile } from '@/components/demo/DemoExplanationSectionMobile';
 
 // Dynamic import to avoid SSR issues with panel packages
@@ -189,7 +188,7 @@ export default function ObservabilityDemoPage() {
         <ExplanationSection />
 
         {/* Demo Explanation Section */}
-        {isMobile ? <DemoExplanationSectionMobile /> : <DemoExplanationSection />}
+        <DemoExplanationSectionMobile showExpandedText={!isMobile} />
 
         {/* Backlog Background Section */}
         <BacklogBackgroundSection />

@@ -3,7 +3,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export function DemoExplanationSectionMobile() {
+interface DemoExplanationSectionMobileProps {
+  showExpandedText?: boolean;
+}
+
+export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoExplanationSectionMobileProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -46,9 +50,8 @@ export function DemoExplanationSectionMobile() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: '48px',
-        paddingTop: '100px',
+        justifyContent: 'center',
+        padding: '24px',
         maxWidth: '1400px',
         margin: '0 auto',
       }}>
@@ -66,7 +69,7 @@ export function DemoExplanationSectionMobile() {
         </p>
 
         <h1 style={{
-          fontSize: '42px',
+          fontSize: 'clamp(28px, 6vw, 42px)',
           fontWeight: 600,
           fontFamily: 'Inter, sans-serif',
           color: '#ffffff',
@@ -79,8 +82,22 @@ export function DemoExplanationSectionMobile() {
           From Traces to Stories
         </h1>
 
+        {showExpandedText && (
+          <p style={{
+            fontSize: '18px',
+            fontFamily: 'Inter, sans-serif',
+            color: '#9ca3af',
+            margin: 0,
+            marginBottom: '32px',
+            textAlign: 'center',
+            maxWidth: '700px',
+            lineHeight: 1.6,
+          }}>
+            Understanding behavior from OTel, we can provide clarity to how your systems work.
+          </p>
+        )}
 
-        {/* Simplified Architecture Diagram for Mobile */}
+        {/* Simplified Architecture Diagram */}
         <svg
           viewBox="0 0 300 320"
           style={{
