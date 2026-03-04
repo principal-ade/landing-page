@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import { TraceListPanel, WorkflowScenariosPanel, type OpenCanvasPayload } from '@industry-theme/principal-view-panels';
+import { TraceListPanel, CanvasEditorPanel, type OpenCanvasPayload } from '@industry-theme/principal-view-panels';
 import type {
   DataSlice,
   PanelEvent,
@@ -284,18 +284,17 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
     {
       id: 'workflow-scenarios',
       render: (navEvents: PanelEventEmitter) => (
-        <WorkflowScenariosPanel
+        // CanvasEditorPanel with workflow integration (v0.12.1+)
+        // Shows ScenariosList side panel when workflowTemplate is provided
+        <CanvasEditorPanel
           context={context}
           actions={actions}
           events={navEvents}
-          selectedCanvasId={workflowContext?.canvasId}
           canvasPath={workflowContext?.canvasPath}
+          canvasName={workflowContext?.canvasId}
+          workflowTemplate={workflowContext?.workflow}
           selectedWorkflowId={workflowContext?.workflowId}
           workflowPath={workflowContext?.workflowPath}
-          workflowTemplate={workflowContext?.workflow}
-          selectedTraceId={workflowContext?.traceId}
-          highlightedSpanId={workflowContext?.spanId}
-          selectedScenarioIdProp={workflowContext?.scenarioId}
         />
       ),
     },
