@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { useTheme } from '@principal-ade/industry-theme';
 
 function formatStarCount(count: number): string {
@@ -11,7 +11,12 @@ function formatStarCount(count: number): string {
   return count.toString();
 }
 
-export function BacklogBackgroundSection() {
+interface BacklogBackgroundSectionProps {
+  /** Called when user clicks "See it in action" to start the tour */
+  onStartTour?: () => void;
+}
+
+export function BacklogBackgroundSection({ onStartTour }: BacklogBackgroundSectionProps) {
   const { theme } = useTheme();
   const [starCount, setStarCount] = useState<number | null>(null);
 
@@ -144,36 +149,49 @@ export function BacklogBackgroundSection() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: theme.colors.primary,
         }}>
-          <p style={{
-            fontSize: theme.fontSizes[4],
-            fontFamily: theme.fonts.body,
-            margin: 0,
-            marginBottom: '8px',
-          }}>
-            See it in action
-          </p>
-          <div
+          <button
             onClick={() => {
-              const el = document.getElementById('kanban-section');
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (onStartTour) {
+                onStartTour();
+              } else {
+                // Fallback: scroll to kanban section if no tour handler
+                const el = document.getElementById('kanban-section');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
               }
             }}
             style={{
-              animation: 'bounce 2s ease-in-out infinite',
+              background: `linear-gradient(135deg, ${theme.colors.primary} 0%, #0088CC 100%)`,
+              border: 'none',
+              borderRadius: '12px',
+              color: '#fff',
               cursor: 'pointer',
+              padding: '16px 48px',
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: theme.fontWeights.semibold,
+              fontFamily: theme.fonts.body,
+              boxShadow: `0 4px 24px ${theme.colors.primary}66`,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = `0 6px 32px ${theme.colors.primary}88`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = `0 4px 24px ${theme.colors.primary}66`;
             }}
           >
-            <ChevronDown size={48} />
-          </div>
-          <style>{`
-            @keyframes bounce {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(6px); }
-            }
-          `}</style>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21" />
+            </svg>
+            Start Demo
+          </button>
         </div>
       </div>
     </div>

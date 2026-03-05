@@ -1,99 +1,20 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import dynamic from 'next/dynamic';
 import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
 import { ExplanationSection } from '@/components/demo/ExplanationSection';
 import { BacklogBackgroundSection } from '@/components/demo/BacklogBackgroundSection';
 import { DemoExplanationSectionMobile } from '@/components/demo/DemoExplanationSectionMobile';
-
-// Dynamic import to avoid SSR issues with panel packages
-const KanbanPanelWrapper = dynamic(
-  () => import('@/components/demo/KanbanPanelWrapper'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: '#666',
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Kanban Panel...
-      </div>
-    ),
-  }
-);
-
-// Dynamic import for TraceListPanel wrapper
-const TraceListPanelWrapper = dynamic(
-  () => import('@/components/demo/TraceListPanelWrapper'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: '#00C2FF',
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Trace Panel...
-      </div>
-    ),
-  }
-);
-
-// Dynamic import for StoryboardListPanel wrapper
-const StoryboardListPanelWrapper = dynamic(
-  () => import('@/components/demo/StoryboardListPanelWrapper'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: '#00C2FF',
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Storyboards...
-      </div>
-    ),
-  }
-);
-
-// Dynamic import for WaterfallTraceView to avoid SSR issues with panel packages
-const WaterfallTraceView = dynamic(
-  () => import('@/components/demo/WaterfallTraceView'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: '#666',
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Trace View...
-      </div>
-    ),
-  }
-);
+import { DemoView } from '@/components/demo/DemoView';
 
 export default function ObservabilityDemoPage() {
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
   const [providerReady, setProviderReady] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
   const cleanupRef = useRef<(() => void) | null>(null);
 
   // Track window width for responsive rendering
@@ -109,7 +30,7 @@ export default function ObservabilityDemoPage() {
     try {
       console.log('[Demo] Processing trace through orchestrator');
       const registered = await processTrace(otlpTrace);
-      setRegisteredTraces(prev => [registered, ...prev].slice(0, 50)); // Keep last 50 traces
+      setRegisteredTraces(prev => [registered, ...prev].slice(0, 50));
       console.log('[Demo] Trace processed:', {
         traceId: registered.traceId,
         scenarioMatches: registered.scenarioMatches.length,
@@ -121,7 +42,7 @@ export default function ObservabilityDemoPage() {
     }
   }, []);
 
-  // Fetch schematics on mount for the Schematics tab
+  // Fetch schematics on mount
   useEffect(() => {
     const fetchSchematics = async () => {
       const schematicEndpoints = [
@@ -160,13 +81,10 @@ export default function ObservabilityDemoPage() {
     let mounted = true;
 
     const init = async () => {
-      // Preload schematic BEFORE initializing telemetry
-      // This ensures owned-scopes are registered before traces arrive
       await preloadSchematic();
 
       if (!mounted) return;
 
-      // Now initialize telemetry provider
       cleanupRef.current = initializeTelemetryProvider(() => {}, handleTraceComplete);
       setProviderReady(true);
     };
@@ -187,174 +105,54 @@ export default function ObservabilityDemoPage() {
     setRegisteredTraces([]);
   };
 
+  // Open demo view
+  const handleStartDemo = () => {
+    setIsDemoOpen(true);
+  };
+
+  // Close demo view
+  const handleCloseDemo = () => {
+    setIsDemoOpen(false);
+  };
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#1a1c1e',
-      overflowY: 'auto',
-      height: 'calc(100vh - 70px)',
-      scrollSnapType: 'y mandatory',
-    }}>
-      {/* Main Content */}
-      <main style={{
+    <>
+      <div style={{
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: '1400px',
-        width: '100%',
-        margin: '0 auto',
+        background: '#1a1c1e',
+        overflowY: 'auto',
+        height: 'calc(100vh - 70px)',
+        scrollSnapType: 'y mandatory',
       }}>
-        {/* Explanation Section */}
-        <ExplanationSection />
-
-        {/* Demo Explanation Section */}
-        <DemoExplanationSectionMobile showExpandedText={!isMobile} />
-
-        {/* Backlog Background Section */}
-        <BacklogBackgroundSection />
-
-        {/* Storyboard List Section */}
-        <div
-          id="storyboard-section"
-          style={{
-            width: '100vw',
-            marginLeft: 'calc(-50vw + 50%)',
-            height: 'calc(100vh - 70px)',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            scrollSnapAlign: 'start',
-            background: 'rgb(10, 10, 10)',
-          }}
-        >
-          <div style={{
-            padding: '16px',
-            background: 'rgba(0, 194, 255, 0.1)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          }}>
-            <h2 style={{
-              fontSize: '24px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              color: '#00C2FF',
-              margin: 0,
-              textAlign: 'center',
-            }}>
-              Storyboard Discovery
-            </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#666',
-              margin: 0,
-              marginTop: '8px',
-              fontFamily: 'Inter, sans-serif',
-              textAlign: 'center',
-            }}>
-              Browse canvases and workflows defined in the schematic
-            </p>
-          </div>
-          <div style={{ maxWidth: '1400px', width: '100%', height: '100%', margin: '0 auto', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <StoryboardListPanelWrapper schematics={schematics} />
-          </div>
-        </div>
-
-        {/* Backlog Panel Section */}
-        <div
-          id="kanban-section"
-          style={{
-            height: 'calc(100vh - 70px)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-            overflow: 'hidden',
-            scrollSnapAlign: 'start',
-          }}
-        >
-          {providerReady && <KanbanPanelWrapper />}
-        </div>
-
-        {/* Traditional Monitoring Section */}
-        <div style={{
-          height: 'calc(100vh - 70px)',
+        {/* Main Content */}
+        <main style={{
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
-          scrollSnapAlign: 'start',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          maxWidth: '1400px',
+          width: '100%',
+          margin: '0 auto',
         }}>
-          <div style={{
-            padding: '16px',
-            background: 'rgba(0, 0, 0, 0.3)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          }}>
-            <h2 style={{
-              fontSize: '24px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              color: '#ffffff',
-              margin: 0,
-              textAlign: 'center',
-            }}>
-              Traditional Monitoring
-            </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#666',
-              margin: 0,
-              marginTop: '8px',
-              fontFamily: 'Inter, sans-serif',
-              textAlign: 'center',
-            }}>
-              Standard trace view - technical span data without business context
-            </p>
-          </div>
-          <WaterfallTraceView traces={registeredTraces} onClear={handleClearTraces} />
-        </div>
+          {/* Explanation Section */}
+          <ExplanationSection />
 
-        {/* Story-based Monitoring Section */}
-        <div style={{
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          height: 'calc(100vh - 70px)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          scrollSnapAlign: 'start',
-          background: 'rgb(10, 10, 10)',
-        }}>
-          <div style={{
-            padding: '16px',
-            background: 'rgba(0, 194, 255, 0.1)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          }}>
-            <h2 style={{
-              fontSize: '24px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              color: '#00C2FF',
-              margin: 0,
-              textAlign: 'center',
-            }}>
-              Story-based Monitoring
-            </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#666',
-              margin: 0,
-              marginTop: '8px',
-              fontFamily: 'Inter, sans-serif',
-              textAlign: 'center',
-            }}>
-              Traces matched against business scenarios
-            </p>
-          </div>
-          <div style={{ maxWidth: '1400px', width: '100%', height: '100%', margin: '0 auto', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-            <TraceListPanelWrapper
-              traces={registeredTraces}
-              schematics={schematics}
-              onClear={handleClearTraces}
-            />
-          </div>
-        </div>
-      </main>
-    </div>
+          {/* Demo Explanation Section */}
+          <DemoExplanationSectionMobile showExpandedText={!isMobile} />
+
+          {/* Backlog Background Section - starts the demo on click */}
+          <BacklogBackgroundSection onStartTour={handleStartDemo} />
+        </main>
+      </div>
+
+      {/* Fullscreen Demo View */}
+      <DemoView
+        isOpen={isDemoOpen}
+        onClose={handleCloseDemo}
+        schematics={schematics}
+        providerReady={providerReady}
+        registeredTraces={registeredTraces}
+        onClearTraces={handleClearTraces}
+      />
+    </>
   );
 }
