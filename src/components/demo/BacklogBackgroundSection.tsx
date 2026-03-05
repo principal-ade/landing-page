@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Star } from 'lucide-react';
+import { useTheme } from '@principal-ade/industry-theme';
 
 function formatStarCount(count: number): string {
   if (count >= 1000) {
@@ -11,6 +12,7 @@ function formatStarCount(count: number): string {
 }
 
 export function BacklogBackgroundSection() {
+  const { theme } = useTheme();
   const [starCount, setStarCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -31,9 +33,9 @@ export function BacklogBackgroundSection() {
       width: '100vw',
       marginLeft: 'calc(-50vw + 50%)',
       height: 'calc(100vh - 70px)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      borderBottom: `1px solid ${theme.colors.border}`,
       scrollSnapAlign: 'start',
-      background: '#0d1b2a',
+      background: theme.colors.backgroundSecondary,
     }}>
       <div style={{
         height: '100%',
@@ -46,10 +48,10 @@ export function BacklogBackgroundSection() {
         margin: '0 auto',
       }}>
         <p style={{
-          fontSize: '14px',
-          fontWeight: 500,
-          fontFamily: 'Inter, sans-serif',
-          color: '#07c0ca',
+          fontSize: theme.fontSizes[2],
+          fontWeight: theme.fontWeights.medium,
+          fontFamily: theme.fonts.body,
+          color: theme.colors.primary,
           margin: 0,
           marginBottom: '16px',
           textTransform: 'uppercase',
@@ -71,9 +73,9 @@ export function BacklogBackgroundSection() {
 
         <h1 style={{
           fontSize: 'clamp(28px, 6vw, 48px)',
-          fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
-          color: '#ffffff',
+          fontWeight: theme.fontWeights.semibold,
+          fontFamily: theme.fonts.body,
+          color: theme.colors.text,
           margin: 0,
           marginBottom: '24px',
           textAlign: 'center',
@@ -85,8 +87,8 @@ export function BacklogBackgroundSection() {
 
         <p style={{
           fontSize: 'clamp(14px, 3vw, 18px)',
-          fontFamily: 'Inter, sans-serif',
-          color: '#9ca3af',
+          fontFamily: theme.fonts.body,
+          color: theme.colors.textSecondary,
           margin: 0,
           marginBottom: 'clamp(32px, 6vw, 64px)',
           textAlign: 'center',
@@ -100,8 +102,8 @@ export function BacklogBackgroundSection() {
 
         <p style={{
           fontSize: 'clamp(14px, 3vw, 16px)',
-          fontFamily: 'Inter, sans-serif',
-          color: '#9ca3af',
+          fontFamily: theme.fonts.body,
+          color: theme.colors.textSecondary,
           margin: 0,
           display: 'flex',
           alignItems: 'center',
@@ -111,8 +113,8 @@ export function BacklogBackgroundSection() {
         }}>
           {starCount !== null && (
             <>
-              <Star size={16} fill="#07c0ca" color="#07c0ca" />
-              <span style={{ color: '#07c0ca', fontWeight: 500 }}>{formatStarCount(starCount)}</span>
+              <Star size={16} fill={theme.colors.primary} color={theme.colors.primary} />
+              <span style={{ color: theme.colors.primary, fontWeight: theme.fontWeights.medium }}>{formatStarCount(starCount)}</span>
               <span>stars on GitHub.</span>
             </>
           )}
@@ -122,9 +124,9 @@ export function BacklogBackgroundSection() {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              color: '#07c0ca',
+              color: theme.colors.primary,
               textDecoration: 'none',
-              fontWeight: 500,
+              fontWeight: theme.fontWeights.medium,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.textDecoration = 'underline';
@@ -142,11 +144,11 @@ export function BacklogBackgroundSection() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#07c0ca',
+          color: theme.colors.primary,
         }}>
           <p style={{
-            fontSize: '18px',
-            fontFamily: 'Inter, sans-serif',
+            fontSize: theme.fontSizes[4],
+            fontFamily: theme.fonts.body,
             margin: 0,
             marginBottom: '8px',
           }}>

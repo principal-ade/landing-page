@@ -2,18 +2,56 @@
 
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useTheme } from '@principal-ade/industry-theme';
 import { FeatureCarousel } from './FeatureCarousel';
 
 export function ExplanationSection() {
+  const { theme } = useTheme();
+
   return (
     <div style={{
       width: '100vw',
       marginLeft: 'calc(-50vw + 50%)',
       height: 'calc(100vh - 70px)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      borderBottom: `1px solid ${theme.colors.border}`,
       scrollSnapAlign: 'start',
-      background: 'radial-gradient(ellipse at center 40%, rgba(0, 194, 255, 0.1) 0%, transparent 50%), #0d1b2a',
+      background: `linear-gradient(180deg, ${theme.colors.backgroundSecondary} 0%, ${theme.colors.background} 100%)`,
+      position: 'relative',
+      overflow: 'hidden',
     }}>
+      {/* Grid layer with radial fade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(${theme.colors.primary}14 1px, transparent 1px),
+            linear-gradient(90deg, ${theme.colors.primary}14 1px, transparent 1px)
+          `,
+          backgroundSize: '300px 300px',
+          backgroundPosition: '50% calc(50% + 5px)',
+          maskImage: 'radial-gradient(ellipse 70% 60% at center, black 0%, black 50%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at center, black 0%, black 50%, transparent 100%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Subtle circular glow underneath */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '40%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '120%',
+          height: '120%',
+          background: `radial-gradient(circle at center, ${theme.colors.primary}10 0%, transparent 40%)`,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
       <div style={{
         height: '100%',
         display: 'flex',
@@ -23,12 +61,15 @@ export function ExplanationSection() {
         padding: '24px',
         maxWidth: '1400px',
         margin: '0 auto',
+        position: 'relative',
+        zIndex: 2,
+        transform: 'translateY(-80px)',
       }}>
       <p style={{
-        fontSize: '14px',
-        fontWeight: 500,
-        fontFamily: 'Inter, sans-serif',
-        color: '#07c0ca',
+        fontSize: theme.fontSizes[2],
+        fontWeight: theme.fontWeights.medium,
+        fontFamily: theme.fonts.body,
+        color: theme.colors.primary,
         margin: 0,
         marginBottom: '16px',
         textTransform: 'uppercase',
@@ -39,9 +80,9 @@ export function ExplanationSection() {
 
       <h1 style={{
         fontSize: 'clamp(28px, 6vw, 48px)',
-        fontWeight: 600,
-        fontFamily: 'Inter, sans-serif',
-        color: '#ffffff',
+        fontWeight: theme.fontWeights.semibold,
+        fontFamily: theme.fonts.body,
+        color: theme.colors.text,
         margin: 0,
         marginBottom: '24px',
         textAlign: 'center',
@@ -52,17 +93,23 @@ export function ExplanationSection() {
       </h1>
 
       <FeatureCarousel />
+      </div>
 
+      {/* Learn More - positioned at bottom */}
       <div style={{
-        marginTop: '32px',
+        position: 'absolute',
+        bottom: '32px',
+        left: '50%',
+        transform: 'translateX(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        color: '#07c0ca',
+        color: theme.colors.primary,
+        zIndex: 2,
       }}>
         <p style={{
-          fontSize: '18px',
-          fontFamily: 'Inter, sans-serif',
+          fontSize: theme.fontSizes[4],
+          fontFamily: theme.fonts.body,
           margin: 0,
           marginBottom: '8px',
         }}>
@@ -88,7 +135,6 @@ export function ExplanationSection() {
             50% { transform: translateY(6px); }
           }
         `}</style>
-      </div>
       </div>
     </div>
   );

@@ -2,12 +2,14 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useTheme } from '@principal-ade/industry-theme';
 
 interface DemoExplanationSectionMobileProps {
   showExpandedText?: boolean;
 }
 
 export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoExplanationSectionMobileProps) {
+  const { theme } = useTheme();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -40,9 +42,9 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
         width: '100vw',
         marginLeft: 'calc(-50vw + 50%)',
         height: 'calc(100vh - 70px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        borderBottom: `1px solid ${theme.colors.border}`,
         scrollSnapAlign: 'start',
-        background: '#0d1b2a',
+        background: theme.colors.backgroundSecondary,
       }}
     >
       <div style={{
@@ -56,10 +58,10 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
         margin: '0 auto',
       }}>
         <p style={{
-          fontSize: '14px',
-          fontWeight: 500,
-          fontFamily: 'Inter, sans-serif',
-          color: '#07c0ca',
+          fontSize: theme.fontSizes[2],
+          fontWeight: theme.fontWeights.medium,
+          fontFamily: theme.fonts.body,
+          color: theme.colors.primary,
           margin: 0,
           marginBottom: '16px',
           textTransform: 'uppercase',
@@ -70,9 +72,9 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
 
         <h1 style={{
           fontSize: 'clamp(28px, 6vw, 42px)',
-          fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
-          color: '#ffffff',
+          fontWeight: theme.fontWeights.semibold,
+          fontFamily: theme.fonts.body,
+          color: theme.colors.text,
           margin: 0,
           marginBottom: '24px',
           textAlign: 'center',
@@ -84,9 +86,9 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
 
         {showExpandedText && (
           <p style={{
-            fontSize: '18px',
-            fontFamily: 'Inter, sans-serif',
-            color: '#9ca3af',
+            fontSize: theme.fontSizes[4],
+            fontFamily: theme.fonts.body,
+            color: theme.colors.textSecondary,
             margin: 0,
             marginBottom: '32px',
             textAlign: 'center',
@@ -137,7 +139,7 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
               refY="3.5"
               orient="auto"
             >
-              <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" />
+              <polygon points="0 0, 10 3.5, 0 7" fill={theme.colors.warning} />
             </marker>
             <marker
               id="arrowhead-green-mobile"
@@ -147,41 +149,41 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
               refY="3.5"
               orient="auto"
             >
-              <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e" />
+              <polygon points="0 0, 10 3.5, 0 7" fill={theme.colors.success} />
             </marker>
           </defs>
 
           {/* Your System Box */}
           <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '0s' }} transform="translate(70, 10)">
-            <rect x="0" y="0" width="160" height="70" rx="8" fill="rgba(7, 192, 202, 0.1)" stroke="#07c0ca" strokeWidth="2" />
-            <text x="80" y="30" textAnchor="middle" fill="#ffffff" fontFamily="Inter, sans-serif" fontSize="16" fontWeight="600">Your System</text>
-            <text x="80" y="50" textAnchor="middle" fill="#9ca3af" fontFamily="Inter, sans-serif" fontSize="12">OTel Instrumented</text>
+            <rect x="0" y="0" width="160" height="70" fill={`${theme.colors.primary}1A`} stroke={theme.colors.primary} strokeWidth="2" />
+            <text x="80" y="42" textAnchor="middle" fill={theme.colors.text} fontFamily={theme.fonts.body} fontSize="16" fontWeight="600">Your System</text>
           </g>
 
           {/* Telemetry arrow: Your System -> Principal AI */}
           <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '1s' }}>
-            <line className={isVisible ? "telemetry-flow" : ""} x1="150" y1="80" x2="150" y2="115" stroke="#f59e0b" strokeWidth="2" strokeDasharray="5,3" markerEnd="url(#arrowhead-telemetry-mobile)" />
-            <text x="175" y="102" fill="#f59e0b" fontFamily="Inter, sans-serif" fontSize="11">telemetry</text>
+            <line className={isVisible ? "telemetry-flow" : ""} x1="150" y1="80" x2="150" y2="125" stroke={theme.colors.warning} strokeWidth="2" strokeDasharray="5,3" markerEnd="url(#arrowhead-telemetry-mobile)" />
+            <text x="175" y="107" fill={theme.colors.warning} fontFamily={theme.fonts.body} fontSize="14">telemetry</text>
           </g>
 
           {/* Principal AI Box */}
-          <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '2s' }} transform="translate(70, 120)">
-            <rect x="0" y="0" width="160" height="70" rx="8" fill="rgba(7, 192, 202, 0.2)" stroke="#07c0ca" strokeWidth="3" />
-            <text x="80" y="30" textAnchor="middle" fill="#07c0ca" fontFamily="Inter, sans-serif" fontSize="16" fontWeight="700">Principal AI</text>
-            <text x="80" y="50" textAnchor="middle" fill="#9ca3af" fontFamily="Inter, sans-serif" fontSize="12">Trace Processor</text>
+          <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '2s' }} transform="translate(70, 130)">
+            <rect x="0" y="0" width="160" height="50" fill={theme.colors.background} stroke={theme.colors.primary} strokeWidth="3" />
+            <text x="80" y="32" textAnchor="middle" fontFamily={theme.fonts.body} fontSize="16" fontWeight="700">
+              <tspan fill={theme.colors.text}>Principal </tspan>
+              <tspan fill={theme.colors.primary}>AI</tspan>
+            </text>
           </g>
 
           {/* Output arrow: Principal AI -> Stories */}
           <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '3s' }}>
-            <line className={isVisible ? "output-flow" : ""} x1="150" y1="190" x2="150" y2="225" stroke="#22c55e" strokeWidth="2" strokeDasharray="5,3" markerEnd="url(#arrowhead-green-mobile)" />
-            <text x="175" y="212" fill="#22c55e" fontFamily="Inter, sans-serif" fontSize="11">stories</text>
+            <line className={isVisible ? "output-flow" : ""} x1="150" y1="180" x2="150" y2="225" stroke={theme.colors.success} strokeWidth="2" strokeDasharray="5,3" markerEnd="url(#arrowhead-green-mobile)" />
+            <text x="175" y="207" fill={theme.colors.success} fontFamily={theme.fonts.body} fontSize="14">stories</text>
           </g>
 
           {/* Stories Output Box */}
           <g className={isVisible ? "svg-animate" : ""} style={{ opacity: isVisible ? undefined : 0, animationDelay: '4s' }} transform="translate(70, 230)">
-            <rect x="0" y="0" width="160" height="70" rx="8" fill="rgba(34, 197, 94, 0.1)" stroke="#22c55e" strokeWidth="2" />
-            <text x="80" y="30" textAnchor="middle" fill="#ffffff" fontFamily="Inter, sans-serif" fontSize="16" fontWeight="600">Stories</text>
-            <text x="80" y="50" textAnchor="middle" fill="#9ca3af" fontFamily="Inter, sans-serif" fontSize="12">Business Context</text>
+            <rect x="0" y="0" width="160" height="70" fill={`${theme.colors.success}1A`} stroke={theme.colors.success} strokeWidth="2" />
+            <text x="80" y="42" textAnchor="middle" fill={theme.colors.text} fontFamily={theme.fonts.body} fontSize="16" fontWeight="600">Stories</text>
           </g>
         </svg>
 
@@ -190,11 +192,11 @@ export function DemoExplanationSectionMobile({ showExpandedText = false }: DemoE
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          color: '#07c0ca',
+          color: theme.colors.primary,
         }}>
           <p style={{
-            fontSize: '18px',
-            fontFamily: 'Inter, sans-serif',
+            fontSize: theme.fontSizes[4],
+            fontFamily: theme.fonts.body,
             margin: 0,
             marginBottom: '8px',
           }}>
