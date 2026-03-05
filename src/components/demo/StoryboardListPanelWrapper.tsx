@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { StoryboardListPanel, CanvasEditorPanel } from '@industry-theme/principal-view-panels';
 import type {
   DataSlice,
@@ -24,9 +24,34 @@ interface CanvasContext {
   workflow?: WorkflowTemplate;
 }
 
+/**
+ * Request payload for programmatic panel control
+ * Used by tour controllers to trigger panel actions
+ */
+export interface StoryboardListRequest {
+  action: 'selectCanvas' | 'closeCanvas';
+  canvasId?: string;
+  canvasPath?: string;
+  canvasName?: string;
+  workflowId?: string;
+  workflowPath?: string;
+}
+
+/**
+ * Response payload for programmatic panel control
+ */
+export interface StoryboardListResponse {
+  success: boolean;
+  action: string;
+  canvasId?: string;
+  error?: string;
+}
+
 interface StoryboardListPanelWrapperProps {
   schematics?: VersionSnapshot[];
   onStoryboardSelect?: (storyboardId: string) => void;
+  /** Callback when the events emitter is ready - use this for programmatic control */
+  onEventsReady?: (events: PanelEventEmitter) => void;
 }
 
 /**
@@ -36,9 +61,29 @@ interface StoryboardListPanelWrapperProps {
 export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProps> = ({
   schematics,
   onStoryboardSelect,
+  onEventsReady,
 }) => {
   // Store canvas/workflow context when navigating to CanvasEditorPanel
   const [canvasContext, setCanvasContext] = useState<CanvasContext | null>(null);
+
+  // Controlled selection state - synced to StoryboardListPanel via context
+  // Format: 'canvas:{canvasId}' or 'workflow:{workflowId}'
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  // Helper to find workflow template from schematics
+  const findWorkflowTemplate = useCallback((workflowId: string, workflowPath: string): WorkflowTemplate | undefined => {
+    if (!schematics) return undefined;
+    for (const schematic of schematics) {
+      for (const storyboard of schematic.storyboards || []) {
+        for (const workflow of (storyboard.workflows || []) as Array<{ id: string; path: string; content?: unknown }>) {
+          if (workflow.id === workflowId || workflow.path === workflowPath) {
+            return workflow.content as WorkflowTemplate | undefined;
+          }
+        }
+      }
+    }
+    return undefined;
+  }, [schematics]);
 
   // Build file content map and file paths from schematics
   const { fileContentMap, filePaths, storyboardCount } = useMemo(() => {
@@ -131,7 +176,9 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
     refresh: async () => {},
     fileTree: fileTreeSlice,
     schematics: schematicsSlice,
-  }), [slicesMap, fileTreeSlice, schematicsSlice]);
+    // Controlled selection for programmatic control (tours)
+    selectedNodeId,
+  }), [slicesMap, fileTreeSlice, schematicsSlice, selectedNodeId]);
 
   // Create panel actions with readFile for CanvasEditorPanel
   const actions = useMemo(() => ({
@@ -226,6 +273,106 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
       },
     };
   }, [onStoryboardSelect]);
+
+  // Handle programmatic control requests (for tours)
+  useEffect(() => {
+    const handleRequest = (event: PanelEvent) => {
+      const payload = event.payload as StoryboardListRequest;
+      console.log('[StoryboardListPanelWrapper] Request received:', payload);
+
+      if (payload.action === 'selectCanvas') {
+        // Validate required fields
+        if (!payload.canvasPath) {
+          events.emit({
+            type: 'storyboard-list:response',
+            source: 'storyboard-list-panel',
+            timestamp: Date.now(),
+            payload: {
+              success: false,
+              action: 'selectCanvas',
+              error: 'canvasPath is required',
+            } as StoryboardListResponse,
+          });
+          return;
+        }
+
+        // Find workflow template if workflowId is provided
+        const workflow = payload.workflowId && payload.workflowPath
+          ? findWorkflowTemplate(payload.workflowId, payload.workflowPath)
+          : undefined;
+
+        // Update selection state to highlight in StoryboardListPanel
+        // Format: 'canvas:{id}' or 'workflow:{id}'
+        const nodeId = payload.workflowId
+          ? `workflow:${payload.workflowId}`
+          : `canvas:${payload.canvasId || payload.canvasPath}`;
+        setSelectedNodeId(nodeId);
+
+        // Emit openCanvas event to trigger navigation
+        events.emit({
+          type: 'custom',
+          source: 'tour-controller',
+          timestamp: Date.now(),
+          payload: {
+            action: 'openCanvas',
+            canvasId: payload.canvasId || payload.canvasPath,
+            canvasPath: payload.canvasPath,
+            canvas: {
+              id: payload.canvasId || payload.canvasPath,
+              path: payload.canvasPath,
+              name: payload.canvasName || payload.canvasId || 'Canvas',
+            },
+            workflowId: payload.workflowId,
+            workflowPath: payload.workflowPath,
+            workflow,
+            openMode: workflow ? 'detail' : 'editor',
+          },
+        });
+
+        // Emit success response
+        events.emit({
+          type: 'storyboard-list:response',
+          source: 'storyboard-list-panel',
+          timestamp: Date.now(),
+          payload: {
+            success: true,
+            action: 'selectCanvas',
+            canvasId: payload.canvasId || payload.canvasPath,
+          } as StoryboardListResponse,
+        });
+      } else if (payload.action === 'closeCanvas') {
+        // Clear selection state
+        setSelectedNodeId(null);
+
+        // Emit navigation:back to close the overlay
+        events.emit({
+          type: 'navigation:back',
+          source: 'tour-controller',
+          timestamp: Date.now(),
+          payload: {},
+        });
+
+        // Emit success response
+        events.emit({
+          type: 'storyboard-list:response',
+          source: 'storyboard-list-panel',
+          timestamp: Date.now(),
+          payload: {
+            success: true,
+            action: 'closeCanvas',
+          } as StoryboardListResponse,
+        });
+      }
+    };
+
+    // Subscribe to request events
+    const unsubscribe = events.on('storyboard-list:request', handleRequest);
+
+    // Notify parent that events are ready
+    onEventsReady?.(events);
+
+    return unsubscribe;
+  }, [events, findWorkflowTemplate, onEventsReady]);
 
   // Panel slots for PanelNavigator
   const panelSlots: PanelSlot[] = useMemo(() => [
