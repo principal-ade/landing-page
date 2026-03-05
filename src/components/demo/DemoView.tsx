@@ -240,9 +240,6 @@ export function DemoView({
 
           {/* Tabs - centered */}
           <DemoTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-
-          {/* Exit Button */}
-          <ExitDemoButton onClose={onClose} />
         </header>
 
         {/* Tab Content */}
@@ -654,54 +651,6 @@ function IntroScreen() {
         </div>
       )}
     </div>
-  );
-}
-
-// Exit button component
-function ExitDemoButton({ onClose }: { onClose: () => void }) {
-  const { stop } = useTour();
-
-  const handleExit = () => {
-    stop();
-    onClose();
-  };
-
-  return (
-    <button
-      onClick={handleExit}
-      style={{
-        position: 'absolute',
-        right: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        background: 'transparent',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        borderRadius: '8px',
-        color: 'rgba(255, 255, 255, 0.7)',
-        cursor: 'pointer',
-        padding: '8px 16px',
-        fontSize: '13px',
-        fontFamily: 'Inter, sans-serif',
-        transition: 'all 0.2s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-        e.currentTarget.style.color = '#fff';
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
-        e.currentTarget.style.background = 'transparent';
-      }}
-    >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-      Exit Demo
-    </button>
   );
 }
 

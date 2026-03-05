@@ -4,13 +4,26 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
 import type { RegisteredTrace, OtelExportTraceServiceRequest, VersionSnapshot } from '@principal-ai/principal-view-core';
+import { ExplanationSection } from '@/components/demo/ExplanationSection';
+import { BacklogBackgroundSection } from '@/components/demo/BacklogBackgroundSection';
+import { DemoExplanationSectionMobile } from '@/components/demo/DemoExplanationSectionMobile';
 import { DemoView } from '@/components/demo/DemoView';
 
 export default function ObservabilityDemoPage() {
   const [registeredTraces, setRegisteredTraces] = useState<RegisteredTrace[]>([]);
   const [schematics, setSchematics] = useState<VersionSnapshot[]>([]);
   const [providerReady, setProviderReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
   const cleanupRef = useRef<(() => void) | null>(null);
+
+  // Track window width for responsive rendering
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Handle incoming OTLP trace - process through orchestrator
   const handleTraceComplete = useCallback(async (otlpTrace: OtelExportTraceServiceRequest) => {
@@ -92,14 +105,54 @@ export default function ObservabilityDemoPage() {
     setRegisteredTraces([]);
   };
 
+  // Open demo view
+  const handleStartDemo = () => {
+    setIsDemoOpen(true);
+  };
+
+  // Close demo view
+  const handleCloseDemo = () => {
+    setIsDemoOpen(false);
+  };
+
   return (
-    <DemoView
-      isOpen={true}
-      onClose={() => {}}
-      schematics={schematics}
-      providerReady={providerReady}
-      registeredTraces={registeredTraces}
-      onClearTraces={handleClearTraces}
-    />
+    <>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#1a1c1e',
+        overflowY: 'auto',
+        height: 'calc(100vh - 70px)',
+        scrollSnapType: 'y mandatory',
+      }}>
+        {/* Main Content */}
+        <main style={{
+          display: 'flex',
+          flexDirection: 'column',
+          maxWidth: '1400px',
+          width: '100%',
+          margin: '0 auto',
+        }}>
+          {/* Explanation Section */}
+          <ExplanationSection />
+
+          {/* Demo Explanation Section */}
+          <DemoExplanationSectionMobile showExpandedText={!isMobile} />
+
+          {/* Backlog Background Section - starts the demo on click */}
+          <BacklogBackgroundSection onStartTour={handleStartDemo} />
+        </main>
+      </div>
+
+      {/* Fullscreen Demo View */}
+      <DemoView
+        isOpen={isDemoOpen}
+        onClose={handleCloseDemo}
+        schematics={schematics}
+        providerReady={providerReady}
+        registeredTraces={registeredTraces}
+        onClearTraces={handleClearTraces}
+      />
+    </>
   );
 }
