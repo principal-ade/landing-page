@@ -295,6 +295,15 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
           workflowTemplate={workflowContext?.workflow}
           selectedWorkflowId={workflowContext?.workflowId}
           workflowPath={workflowContext?.workflowPath}
+          onClosePanel={() => {
+            // Emit navigation:back event to close the overlay
+            navEvents.emit({
+              type: 'navigation:back',
+              source: 'canvas-editor-panel',
+              timestamp: Date.now(),
+              payload: {},
+            });
+          }}
         />
       ),
     },

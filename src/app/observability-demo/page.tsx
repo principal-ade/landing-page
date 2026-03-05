@@ -49,6 +49,26 @@ const TraceListPanelWrapper = dynamic(
   }
 );
 
+// Dynamic import for StoryboardListPanel wrapper
+const StoryboardListPanelWrapper = dynamic(
+  () => import('@/components/demo/StoryboardListPanelWrapper'),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        color: '#00C2FF',
+        fontFamily: 'Inter, sans-serif',
+      }}>
+        Loading Storyboards...
+      </div>
+    ),
+  }
+);
+
 // Dynamic import for WaterfallTraceView to avoid SSR issues with panel packages
 const WaterfallTraceView = dynamic(
   () => import('@/components/demo/WaterfallTraceView'),
@@ -192,6 +212,51 @@ export default function ObservabilityDemoPage() {
 
         {/* Backlog Background Section */}
         <BacklogBackgroundSection />
+
+        {/* Storyboard List Section */}
+        <div
+          id="storyboard-section"
+          style={{
+            width: '100vw',
+            marginLeft: 'calc(-50vw + 50%)',
+            height: 'calc(100vh - 70px)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            scrollSnapAlign: 'start',
+            background: 'rgb(10, 10, 10)',
+          }}
+        >
+          <div style={{
+            padding: '16px',
+            background: 'rgba(0, 194, 255, 0.1)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          }}>
+            <h2 style={{
+              fontSize: '24px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              color: '#00C2FF',
+              margin: 0,
+              textAlign: 'center',
+            }}>
+              Storyboard Discovery
+            </h2>
+            <p style={{
+              fontSize: '14px',
+              color: '#666',
+              margin: 0,
+              marginTop: '8px',
+              fontFamily: 'Inter, sans-serif',
+              textAlign: 'center',
+            }}>
+              Browse canvases and workflows defined in the schematic
+            </p>
+          </div>
+          <div style={{ maxWidth: '1400px', width: '100%', height: '100%', margin: '0 auto', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <StoryboardListPanelWrapper schematics={schematics} />
+          </div>
+        </div>
 
         {/* Backlog Panel Section */}
         <div

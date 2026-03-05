@@ -1,0 +1,332 @@
+'use client';
+
+import React, { useMemo, useState } from 'react';
+import { StoryboardListPanel, CanvasEditorPanel } from '@industry-theme/principal-view-panels';
+import type {
+  DataSlice,
+  PanelEvent,
+  PanelEventEmitter,
+} from '@principal-ade/panel-framework-core';
+import type { VersionSnapshot, WorkflowTemplate } from '@principal-ai/principal-view-core';
+import type { FileTree } from '@principal-ai/repository-abstraction';
+import { PathsFileTreeBuilder } from '@principal-ai/repository-abstraction';
+import { PanelNavigator, type NavigationRoute, type PanelSlot } from './PanelNavigator';
+
+/**
+ * Canvas context extracted from openCanvas event payload
+ * Handles both direct properties and nested canvas object
+ */
+interface CanvasContext {
+  canvasPath: string;
+  canvasName: string;
+  workflowPath?: string;
+  workflowId?: string;
+  workflow?: WorkflowTemplate;
+}
+
+interface StoryboardListPanelWrapperProps {
+  schematics?: VersionSnapshot[];
+  onStoryboardSelect?: (storyboardId: string) => void;
+}
+
+/**
+ * Wrapper for StoryboardListPanel that provides the panel framework context.
+ * Displays storyboards from the loaded schematics with CanvasEditorPanel overlay.
+ */
+export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProps> = ({
+  schematics,
+  onStoryboardSelect,
+}) => {
+  // Store canvas/workflow context when navigating to CanvasEditorPanel
+  const [canvasContext, setCanvasContext] = useState<CanvasContext | null>(null);
+
+  // Build file content map and file paths from schematics
+  const { fileContentMap, filePaths, storyboardCount } = useMemo(() => {
+    const map = new Map<string, string>();
+    const paths: string[] = [];
+    let count = 0;
+    if (!schematics) return { fileContentMap: map, filePaths: paths, storyboardCount: 0 };
+
+    for (const schematic of schematics) {
+      for (const storyboard of schematic.storyboards || []) {
+        count++;
+        // Add canvas content
+        const canvas = storyboard.canvas as { path: string; content?: unknown };
+        if (canvas?.path) {
+          paths.push(canvas.path);
+          if (canvas.content) {
+            map.set(canvas.path, JSON.stringify(canvas.content));
+            // Also store with ./ prefix for compatibility
+            map.set('./' + canvas.path, JSON.stringify(canvas.content));
+          }
+        }
+        // Add workflow content
+        for (const workflow of (storyboard.workflows || []) as Array<{ path: string; content?: unknown }>) {
+          if (workflow?.path) {
+            paths.push(workflow.path);
+            if (workflow.content) {
+              map.set(workflow.path, JSON.stringify(workflow.content));
+              // Also store with ./ prefix for compatibility
+              map.set('./' + workflow.path, JSON.stringify(workflow.content));
+            }
+          }
+        }
+      }
+    }
+    console.log('[StoryboardListPanelWrapper] File content map built:', Array.from(map.keys()), 'storyboards:', count);
+    return { fileContentMap: map, filePaths: paths, storyboardCount: count };
+  }, [schematics]);
+
+  // Build file tree from schematic paths
+  const fileTreeSlice: DataSlice<FileTree | null> = useMemo(() => {
+    const builder = new PathsFileTreeBuilder();
+    const fileTree = builder.build({ files: filePaths, rootPath: '.' });
+
+    return {
+      scope: 'workspace' as const,
+      name: 'fileTree',
+      data: fileTree,
+      loading: false,
+      error: null,
+      refresh: async () => {},
+    };
+  }, [filePaths]);
+
+  // Create schematics DataSlice (used by the panel to discover storyboards)
+  const schematicsSlice: DataSlice<VersionSnapshot[]> = useMemo(() => {
+    return {
+      scope: 'workspace',
+      name: 'schematics',
+      data: schematics || [],
+      loading: false,
+      error: null,
+      refresh: async () => {},
+    };
+  }, [schematics]);
+
+  // Create slices map
+  const slicesMap = useMemo(() => {
+    const map = new Map<string, DataSlice>();
+    map.set('fileTree', fileTreeSlice);
+    map.set('schematics', schematicsSlice);
+    return map;
+  }, [fileTreeSlice, schematicsSlice]);
+
+  // Create panel context
+  const context = useMemo(() => ({
+    currentScope: {
+      type: 'workspace' as const,
+      workspace: {
+        name: 'Demo Workspace',
+        path: '/demo',
+      },
+    },
+    repositoryPath: '.',
+    slices: slicesMap,
+    getSlice: <T,>(name: string) => slicesMap.get(name) as DataSlice<T> | undefined,
+    getWorkspaceSlice: <T,>(name: string) => slicesMap.get(name) as DataSlice<T> | undefined,
+    getRepositorySlice: <T,>() => undefined as DataSlice<T> | undefined,
+    hasSlice: (name: string) => slicesMap.has(name),
+    isSliceLoading: (name: string) => slicesMap.get(name)?.loading ?? false,
+    refresh: async () => {},
+    fileTree: fileTreeSlice,
+    schematics: schematicsSlice,
+  }), [slicesMap, fileTreeSlice, schematicsSlice]);
+
+  // Create panel actions with readFile for CanvasEditorPanel
+  const actions = useMemo(() => ({
+    readFile: async (path: string) => {
+      // Normalize path - handle both './path' and '/path' formats
+      let normalizedPath = path;
+      if (normalizedPath.startsWith('./')) {
+        normalizedPath = normalizedPath.slice(2);
+      } else if (normalizedPath.startsWith('/')) {
+        normalizedPath = normalizedPath.slice(1);
+      }
+      console.log('[StoryboardListPanelWrapper] readFile called:', path, '-> normalized:', normalizedPath);
+      const content = fileContentMap.get(normalizedPath);
+      if (content) {
+        console.log('[StoryboardListPanelWrapper] File found, content length:', content.length);
+        return content;
+      }
+      console.warn('[StoryboardListPanelWrapper] File not found:', normalizedPath, 'Available:', Array.from(fileContentMap.keys()));
+      return '';
+    },
+    openFile: undefined,
+    openGitDiff: undefined,
+    navigateToPanel: undefined,
+    notifyPanels: undefined,
+  }), [fileContentMap]);
+
+  // Create event emitter
+  const events: PanelEventEmitter = useMemo(() => {
+    const listeners = new Map<string, Set<(event: PanelEvent) => void>>();
+
+    return {
+      emit: <T,>(event: PanelEvent<T>) => {
+        console.log('[StoryboardListPanelWrapper] Event:', event.type, event.payload);
+
+        // Handle storyboard selection events
+        if (event.type === 'storyboard:selected' && onStoryboardSelect) {
+          const { storyboardId } = event.payload as { storyboardId: string };
+          onStoryboardSelect(storyboardId);
+        }
+
+        // Capture openCanvas payload for CanvasEditorPanel navigation
+        if (event.type === 'custom') {
+          const payload = event.payload as Record<string, unknown>;
+          if (payload?.action === 'openCanvas') {
+            // Extract canvas path - could be direct or nested in canvas object
+            const canvas = payload.canvas as { path?: string; name?: string; id?: string } | undefined;
+            const canvasPath = (payload.canvasPath as string) || canvas?.path || '';
+            const canvasName = (payload.canvasId as string) || canvas?.name || canvas?.id || '';
+
+            // Extract workflow data
+            const workflowPath = payload.workflowPath as string | undefined;
+            const workflowId = payload.workflowId as string | undefined;
+            const workflow = payload.workflow as WorkflowTemplate | undefined;
+
+            console.log('[StoryboardListPanelWrapper] openCanvas:', {
+              canvasPath,
+              canvasName,
+              workflowPath,
+              workflowId,
+              hasWorkflow: !!workflow,
+            });
+
+            if (canvasPath) {
+              setCanvasContext({
+                canvasPath,
+                canvasName,
+                workflowPath,
+                workflowId,
+                workflow,
+              });
+            }
+          }
+        }
+
+        // Notify listeners
+        const typeListeners = listeners.get(event.type);
+        if (typeListeners) {
+          typeListeners.forEach(listener => listener(event as PanelEvent));
+        }
+      },
+      on: <T,>(type: string, handler: (event: PanelEvent<T>) => void) => {
+        if (!listeners.has(type)) {
+          listeners.set(type, new Set());
+        }
+        listeners.get(type)!.add(handler as (event: PanelEvent) => void);
+        return () => {
+          listeners.get(type)?.delete(handler as (event: PanelEvent) => void);
+        };
+      },
+      off: <T,>(type: string, handler: (event: PanelEvent<T>) => void) => {
+        listeners.get(type)?.delete(handler as (event: PanelEvent) => void);
+      },
+    };
+  }, [onStoryboardSelect]);
+
+  // Panel slots for PanelNavigator
+  const panelSlots: PanelSlot[] = useMemo(() => [
+    {
+      id: 'storyboard-list',
+      render: (navEvents: PanelEventEmitter) => (
+        <StoryboardListPanel
+          context={context}
+          actions={actions}
+          events={navEvents}
+        />
+      ),
+    },
+    {
+      id: 'canvas-editor',
+      render: (navEvents: PanelEventEmitter) => (
+        <CanvasEditorPanel
+          context={context}
+          actions={actions}
+          events={navEvents}
+          canvasPath={canvasContext?.canvasPath}
+          canvasName={canvasContext?.canvasName}
+          workflowTemplate={canvasContext?.workflow}
+          selectedWorkflowId={canvasContext?.workflowId}
+          workflowPath={canvasContext?.workflowPath}
+          onClosePanel={() => {
+            // Emit navigation:back event to close the overlay
+            navEvents.emit({
+              type: 'navigation:back',
+              source: 'canvas-editor-panel',
+              timestamp: Date.now(),
+              payload: {},
+            });
+          }}
+        />
+      ),
+    },
+  ], [context, actions, canvasContext]);
+
+  // Navigation routes - open canvas editor on openCanvas action
+  const routes: NavigationRoute[] = useMemo(() => [
+    {
+      eventType: 'custom',
+      targetPanelId: 'canvas-editor',
+      condition: (event: PanelEvent) => {
+        const payload = event.payload as Record<string, unknown>;
+        return payload?.action === 'openCanvas';
+      },
+    },
+  ], []);
+
+  // Show loading state while schematics are being fetched
+  if (!schematics || schematics.length === 0) {
+    return (
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0a0e17',
+        color: '#00C2FF',
+        fontFamily: 'Inter, sans-serif',
+        gap: '16px',
+      }}>
+        <div style={{
+          width: '24px',
+          height: '24px',
+          border: '2px solid rgba(0, 194, 255, 0.3)',
+          borderTopColor: '#00C2FF',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+        }} />
+        <span>Loading storyboards...</span>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      background: '#0a0e17',
+    }}>
+      <PanelNavigator
+        rootPanelId="storyboard-list"
+        panels={panelSlots}
+        routes={routes}
+        backEventTypes={['navigation:back', 'canvas:close']}
+        externalEvents={events}
+        animationDuration={300}
+      />
+    </div>
+  );
+};
+
+export default StoryboardListPanelWrapper;
