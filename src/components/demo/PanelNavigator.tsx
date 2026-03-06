@@ -274,6 +274,20 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           return; // Don't navigate yet - wait for KanbanPanel to re-emit
         }
 
+        // For custom events with programmatic control actions (selectNode, toggleNode, switchTab),
+        // forward to internal handlers so the panel can process them.
+        if (event.type === 'custom' && isProgrammaticSource) {
+          const payload = event.payload as Record<string, unknown>;
+          const isProgrammaticAction = ['selectNode', 'toggleNode', 'switchTab'].includes(payload?.action as string);
+          if (isProgrammaticAction) {
+            const handlers = handlersRef.current.get(event.type);
+            if (handlers) {
+              handlers.forEach(handler => handler(event));
+            }
+            return; // Panel will emit openCanvas event if needed
+          }
+        }
+
         const route = findRoute(event);
         if (route && !isAnimating) {
           // Detect if this is a "done" task - slide from left side

@@ -48,6 +48,7 @@ export const observabilityTourSteps: TourStep[] = [
     description:
       'Click on any storyboard to view its architecture canvas. Canvases show how components interact and what workflows are available.',
     duration: 999999999,
+    tab: 'storyboards',
     target: {
       selector: '#storyboard-section',
     },
@@ -56,14 +57,14 @@ export const observabilityTourSteps: TourStep[] = [
     id: 'canvas-detail',
     title: 'Architecture Canvases',
     description:
-      'Click any storyboard to view its architecture canvas. Canvases visualize how components interact and what workflows are available.',
+      'Watch as we programmatically open the Task Lifecycle canvas. This demonstrates how the panel supports automated navigation for guided tours.',
     duration: 999999999,
+    tab: 'storyboards',
     target: {
       selector: '#storyboard-section',
-      panelAction: {
-        action: 'selectCanvas',
-        canvasPath: '.principal-views/kanban-panel.canvas',
-        canvasName: 'Kanban Panel Architecture',
+      tourAction: {
+        panel: 'storyboard-custom',
+        action: { action: 'selectNode', nodeId: 'canvas:task-lifecycle' },
       },
     },
   },
@@ -73,6 +74,7 @@ export const observabilityTourSteps: TourStep[] = [
     description:
       'You can close the canvas view to return to the storyboard list and explore other features.',
     duration: 999999999,
+    tab: 'storyboards',
     target: {
       selector: '#storyboard-section',
       panelAction: {

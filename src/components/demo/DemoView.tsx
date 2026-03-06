@@ -9,6 +9,7 @@ import {
   TourProvider,
   TourOverlay,
   TourSpotlight,
+  TourDebugPanel,
   useTour,
   observabilityTourSteps,
 } from './tour';
@@ -352,6 +353,7 @@ export function DemoView({
         {/* Tour UI */}
         <TourOverlay />
         <TourSpotlight />
+        <TourDebugPanel />
 
         {/* Tour panel events integration */}
         <TourPanelEventsConnector

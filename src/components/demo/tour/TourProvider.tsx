@@ -22,10 +22,22 @@ export interface KanbanPanelAction {
 }
 
 /**
+ * Storyboard panel programmatic control actions
+ * See: PROGRAMMATIC_CONTROL.md in principal-view-panels
+ */
+export interface StoryboardPanelAction {
+  action: 'switchTab' | 'toggleNode' | 'selectNode';
+  tab?: 'otel' | 'regular';
+  nodeId?: string;
+  open?: boolean;
+}
+
+/**
  * Union type for all panel actions the tour can execute
  */
 export type TourPanelAction =
   | { panel: 'storyboard'; action: StoryboardListRequest }
+  | { panel: 'storyboard-custom'; action: StoryboardPanelAction }
   | { panel: 'kanban'; action: KanbanPanelAction };
 
 /**
@@ -174,14 +186,32 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     });
   }, []);
 
+  // Execute storyboard panel custom action (selectNode, toggleNode, switchTab)
+  const executeStoryboardCustomAction = useCallback((action: StoryboardPanelAction) => {
+    const events = panelEventsRef.current;
+    if (!events) {
+      console.warn('[Tour] No storyboard panel events available for custom action:', action);
+      return;
+    }
+
+    events.emit({
+      type: 'custom',
+      source: 'tour-controller',
+      timestamp: Date.now(),
+      payload: action,
+    });
+  }, []);
+
   // Execute tour panel action (multi-panel)
   const executeTourAction = useCallback((tourAction: TourPanelAction) => {
     if (tourAction.panel === 'storyboard') {
       executeStoryboardAction(tourAction.action);
+    } else if (tourAction.panel === 'storyboard-custom') {
+      executeStoryboardCustomAction(tourAction.action);
     } else if (tourAction.panel === 'kanban') {
       executeKanbanAction(tourAction.action);
     }
-  }, [executeStoryboardAction, executeKanbanAction]);
+  }, [executeStoryboardAction, executeStoryboardCustomAction, executeKanbanAction]);
 
   // Enter a step
   const enterStep = useCallback(
