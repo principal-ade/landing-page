@@ -70,6 +70,40 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
   // Format: 'canvas:{canvasId}' or 'workflow:{workflowId}'
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
+  // Hardcoded demo files loaded from public folder
+  const [hardcodedContent, setHardcodedContent] = useState<Map<string, string>>(new Map());
+
+  // Fetch hardcoded demo files from public folder
+  useEffect(() => {
+    const hardcodedFiles = [
+      '.principal-views/task-lifecycle.canvas',
+      '.principal-views/task-lifecycle.md',
+    ];
+
+    Promise.all(
+      hardcodedFiles.map(async (path) => {
+        try {
+          const response = await fetch(`/${path}`);
+          if (response.ok) {
+            const content = await response.text();
+            return [path, content] as [string, string];
+          }
+        } catch (e) {
+          console.warn(`[StoryboardListPanelWrapper] Failed to fetch ${path}:`, e);
+        }
+        return null;
+      })
+    ).then((results) => {
+      const map = new Map<string, string>();
+      for (const result of results) {
+        if (result) {
+          map.set(result[0], result[1]);
+        }
+      }
+      setHardcodedContent(map);
+    });
+  }, []);
+
   // Helper to find workflow template from schematics
   const findWorkflowTemplate = useCallback((workflowId: string, workflowPath: string): WorkflowTemplate | undefined => {
     if (!schematics) return undefined;
@@ -118,9 +152,20 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
         }
       }
     }
-    console.log('[StoryboardListPanelWrapper] File content map built:', Array.from(map.keys()), 'storyboards:', count);
+    // Add hardcoded demo paths only when content is loaded
+    // This ensures discovery runs after content is available
+    if (hardcodedContent.size > 0) {
+      for (const [path, content] of hardcodedContent) {
+        paths.push(path);
+        map.set(path, content);
+        // Also store with ./ prefix for compatibility
+        map.set('./' + path, content);
+      }
+    }
+
+    console.log('[StoryboardListPanelWrapper] File content map built:', Array.from(map.keys()), 'storyboards:', count, 'hardcoded:', hardcodedContent.size);
     return { fileContentMap: map, filePaths: paths, storyboardCount: count };
-  }, [schematics]);
+  }, [schematics, hardcodedContent]);
 
   // Build file tree from schematic paths
   const fileTreeSlice: DataSlice<FileTree | null> = useMemo(() => {
@@ -191,11 +236,13 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
         normalizedPath = normalizedPath.slice(1);
       }
       console.log('[StoryboardListPanelWrapper] readFile called:', path, '-> normalized:', normalizedPath);
+
       const content = fileContentMap.get(normalizedPath);
       if (content) {
         console.log('[StoryboardListPanelWrapper] File found, content length:', content.length);
         return content;
       }
+
       console.warn('[StoryboardListPanelWrapper] File not found:', normalizedPath, 'Available:', Array.from(fileContentMap.keys()));
       return '';
     },

@@ -1,0 +1,358 @@
+{
+  "pv": {
+    "name": "Task Lifecycle",
+    "version": "1.0.0",
+    "markdown": ".principal-views/task-lifecycle.md",
+    "nodeTypes": {
+      "component": {
+        "description": "UI Component",
+        "color": "#3b82f6",
+        "shape": "rectangle"
+      },
+      "event": {
+        "description": "Event emitted",
+        "color": "#8b5cf6",
+        "shape": "hexagon"
+      },
+      "action": {
+        "description": "User action",
+        "color": "#f59e0b",
+        "shape": "diamond"
+      },
+      "process": {
+        "description": "Background process",
+        "color": "#10b981",
+        "shape": "rectangle"
+      },
+      "system": {
+        "description": "External system",
+        "color": "#6b7280",
+        "shape": "rectangle"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "kanban-board",
+      "type": "text",
+      "text": "Kanban Board",
+      "x": -90,
+      "y": -16,
+      "width": 200,
+      "height": 80,
+      "pv": {
+        "nodeType": "component",
+        "description": "Displays tasks in columns by status. Users can select tasks to view details."
+      }
+    },
+    {
+      "id": "task-detail-panel",
+      "type": "text",
+      "text": "Task Detail Panel",
+      "x": 627,
+      "y": -17,
+      "width": 200,
+      "height": 80,
+      "pv": {
+        "nodeType": "component",
+        "description": "Shows detailed information about a selected task. Provides actions like Delete."
+      }
+    },
+    {
+      "id": "task-selected-event",
+      "type": "text",
+      "text": "task:selected",
+      "x": 183,
+      "y": -6,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Emitted when user clicks on a task in the Kanban board"
+      }
+    },
+    {
+      "id": "panel-focus-detail",
+      "type": "text",
+      "text": "panel:focus (detail)",
+      "x": 398,
+      "y": -7,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Focuses the task detail panel in the middle slot"
+      }
+    },
+    {
+      "id": "task-deselected-event",
+      "type": "text",
+      "text": "task:deselected",
+      "x": 416,
+      "y": 186,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Emitted when user deselects the current task"
+      }
+    },
+    {
+      "id": "panel-focus-kanban",
+      "type": "text",
+      "text": "panel:focus (kanban)",
+      "x": -225,
+      "y": 186,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Refocuses the Kanban board panel"
+      }
+    },
+    {
+      "id": "delete-task-action",
+      "type": "text",
+      "text": "Delete Task",
+      "x": 783,
+      "y": 186,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "action",
+        "description": "User clicks Delete button in task detail panel"
+      }
+    },
+    {
+      "id": "task-delete-requested-event",
+      "type": "text",
+      "text": "task:delete-requested",
+      "x": 450,
+      "y": 380,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Triggers task deletion process"
+      }
+    },
+    {
+      "id": "delete-task-file",
+      "type": "text",
+      "text": "Delete Task File",
+      "x": 450,
+      "y": 500,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "Removes task markdown file from filesystem"
+      }
+    },
+    {
+      "id": "file-system",
+      "type": "text",
+      "text": "File System",
+      "x": 680,
+      "y": 500,
+      "width": 140,
+      "height": 60,
+      "pv": {
+        "nodeType": "system",
+        "description": "File system adapter for task file operations"
+      }
+    },
+    {
+      "id": "update-file-tree",
+      "type": "text",
+      "text": "Update File Tree",
+      "x": 450,
+      "y": 620,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "Updates file tree state to remove deleted file"
+      }
+    },
+    {
+      "id": "task-deleted-event",
+      "type": "text",
+      "text": "task:deleted",
+      "x": 450,
+      "y": 740,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "event",
+        "description": "Emitted after successful task deletion"
+      }
+    },
+    {
+      "id": "refresh-kanban",
+      "type": "text",
+      "text": "Refresh Kanban",
+      "x": -71,
+      "y": 620,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "Kanban board detects file tree changes and refreshes task list"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "select-to-focus",
+      "fromNode": "task-selected-event",
+      "toNode": "panel-focus-detail",
+      "fromSide": "right",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "close-detail",
+      "fromNode": "task-detail-panel",
+      "toNode": "task-deselected-event",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "close",
+      "pv": {
+        "edgeType": "interaction"
+      }
+    },
+    {
+      "id": "delete-to-event",
+      "fromNode": "delete-task-action",
+      "toNode": "task-delete-requested-event",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "emit"
+      }
+    },
+    {
+      "id": "event-to-process",
+      "fromNode": "task-delete-requested-event",
+      "toNode": "delete-task-file",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "process-to-fs",
+      "fromNode": "delete-task-file",
+      "toNode": "file-system",
+      "fromSide": "right",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "call"
+      }
+    },
+    {
+      "id": "delete-to-tree",
+      "fromNode": "delete-task-file",
+      "toNode": "update-file-tree",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "tree-to-deleted",
+      "fromNode": "update-file-tree",
+      "toNode": "task-deleted-event",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "emit"
+      }
+    },
+    {
+      "id": "deleted-to-focus",
+      "fromNode": "task-deleted-event",
+      "toNode": "panel-focus-kanban",
+      "fromSide": "left",
+      "toSide": "bottom",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "tree-to-refresh",
+      "fromNode": "update-file-tree",
+      "toNode": "refresh-kanban",
+      "fromSide": "left",
+      "toSide": "right",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "refresh-to-kanban",
+      "fromNode": "refresh-kanban",
+      "toNode": "kanban-board",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "pv": {
+        "edgeType": "update"
+      }
+    },
+    {
+      "id": "edge-kanban-board-task-selected-event-1772756162653",
+      "fromNode": "kanban-board",
+      "toNode": "task-selected-event",
+      "fromSide": "right",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "interaction"
+      }
+    },
+    {
+      "id": "edge-panel-focus-detail-task-detail-panel-1772756162653",
+      "fromNode": "panel-focus-detail",
+      "toNode": "task-detail-panel",
+      "fromSide": "right",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "display"
+      }
+    },
+    {
+      "id": "edge-task-detail-panel-delete-task-action-1772756248078",
+      "fromNode": "task-detail-panel",
+      "toNode": "delete-task-action",
+      "fromSide": "right",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "interaction"
+      }
+    },
+    {
+      "id": "edge-task-deselected-event-panel-focus-kanban-1772756248078",
+      "fromNode": "task-deselected-event",
+      "toNode": "panel-focus-kanban",
+      "fromSide": "left",
+      "toSide": "right",
+      "pv": {
+        "edgeType": "trigger"
+      }
+    },
+    {
+      "id": "edge-panel-focus-kanban-kanban-board-1772756248078",
+      "fromNode": "panel-focus-kanban",
+      "toNode": "kanban-board",
+      "fromSide": "left",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "display"
+      }
+    }
+  ]
+}
