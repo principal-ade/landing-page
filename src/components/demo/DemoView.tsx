@@ -157,7 +157,7 @@ export function DemoView({
     },
     {
       id: 'traditional-monitoring',
-      label: 'Traditional Monitoring',
+      label: 'Traditional Otel',
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
@@ -166,7 +166,7 @@ export function DemoView({
     },
     {
       id: 'story-monitoring',
-      label: 'Story-Based Monitoring',
+      label: 'Story-Based Otel',
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
@@ -202,44 +202,57 @@ export function DemoView({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '0 16px',
-            height: '56px',
+            padding: '0 24px',
+            height: '70px',
             background: 'rgba(0, 0, 0, 0.4)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             flexShrink: 0,
-            position: 'relative',
           }}
         >
-          {/* Logo - left side */}
           <div
             style={{
-              position: 'absolute',
-              left: '16px',
+              width: '100%',
+              maxWidth: '1400px',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              fontSize: '18px',
-              fontWeight: 600,
-              fontFamily: 'Inter, sans-serif',
+              justifyContent: 'center',
+              position: 'relative',
             }}
           >
-            <Logo width={40} height={40} color="#00C2FF" />
-            <span style={{ color: '#ffffff' }}>Principal</span>
-            <span
+            {/* Logo - left side */}
+            <div
               style={{
-                fontWeight: 300,
-                background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                position: 'absolute',
+                left: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontSize: '18px',
+                fontWeight: 600,
+                fontFamily: 'Inter, sans-serif',
               }}
             >
-              AI
-            </span>
-          </div>
+              <Logo width={40} height={40} color="#00C2FF" />
+              <span style={{ color: '#ffffff' }}>Principal</span>
+              <span
+                style={{
+                  fontWeight: 300,
+                  background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                AI
+              </span>
+            </div>
 
-          {/* Tabs - centered */}
-          <DemoTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+            {/* Tabs - centered */}
+            <DemoTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+
+            {/* Tour navigation - right side */}
+            <TourHeaderNav />
+          </div>
         </header>
 
         {/* Tab Content */}
@@ -247,75 +260,88 @@ export function DemoView({
           {/* Intro Screen - shown during welcome and tab intro steps */}
           <IntroScreen />
 
-          {/* Storyboards Tab */}
-          {activeTab === 'storyboards' && (
-            <div
-              id="storyboard-section"
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden',
-                background: 'rgb(10, 10, 10)',
-              }}
-            >
-              <StoryboardListPanelWrapper
-                schematics={schematics}
-                onEventsReady={handleStoryboardEventsReady}
-              />
-            </div>
-          )}
+          {/* Content wrapper with max-width */}
+          <div
+            style={{
+              flex: 1,
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              maxWidth: '1400px',
+              margin: '0 auto',
+            }}
+          >
+            {/* Storyboards Tab */}
+            {activeTab === 'storyboards' && (
+              <div
+                id="storyboard-section"
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  background: 'rgb(10, 10, 10)',
+                }}
+              >
+                <StoryboardListPanelWrapper
+                  schematics={schematics}
+                  onEventsReady={handleStoryboardEventsReady}
+                />
+              </div>
+            )}
 
-          {/* Kanban Tab */}
-          {activeTab === 'kanban' && (
-            <div
-              id="kanban-section"
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-              }}
-            >
-              {providerReady && <KanbanPanelWrapper />}
-            </div>
-          )}
+            {/* Kanban Tab */}
+            {activeTab === 'kanban' && (
+              <div
+                id="kanban-section"
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                }}
+              >
+                {providerReady && <KanbanPanelWrapper />}
+              </div>
+            )}
 
-          {/* Story-Based Monitoring Tab */}
-          {activeTab === 'story-monitoring' && (
-            <div
-              data-tour-id="story-monitoring"
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden',
-                background: 'rgb(10, 10, 10)',
-              }}
-            >
-              <TraceListPanelWrapper
-                traces={registeredTraces}
-                schematics={schematics}
-                onClear={onClearTraces}
-              />
-            </div>
-          )}
+            {/* Story-Based Monitoring Tab */}
+            {activeTab === 'story-monitoring' && (
+              <div
+                data-tour-id="story-monitoring"
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  background: 'rgb(10, 10, 10)',
+                }}
+              >
+                <TraceListPanelWrapper
+                  traces={registeredTraces}
+                  schematics={schematics}
+                  onClear={onClearTraces}
+                />
+              </div>
+            )}
 
-          {/* Traditional Monitoring Tab */}
-          {activeTab === 'traditional-monitoring' && (
-            <div
-              data-tour-id="traditional-monitoring"
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden',
-              }}
-            >
-              <WaterfallTraceView
-                traces={registeredTraces}
-                onClear={onClearTraces}
-              />
-            </div>
-          )}
+            {/* Traditional Monitoring Tab */}
+            {activeTab === 'traditional-monitoring' && (
+              <div
+                data-tour-id="traditional-monitoring"
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                }}
+              >
+                <WaterfallTraceView
+                  traces={registeredTraces}
+                  onClear={onClearTraces}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Tour UI */}
@@ -650,6 +676,82 @@ function IntroScreen() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// Tour navigation for header
+function TourHeaderNav() {
+  const { isActive, currentStep, prev, next, currentStepIndex, steps } = useTour();
+
+  // Don't show during intro steps
+  const introStepIds = ['welcome', 'tab-storyboards', 'tab-backlog', 'tab-story-monitoring', 'tab-traditional-monitoring'];
+  if (!isActive || !currentStep || introStepIds.includes(currentStep.id)) {
+    return null;
+  }
+
+  const isFirstStep = currentStepIndex === 0;
+  const isLastStep = currentStepIndex === steps.length - 1;
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        right: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontFamily: 'Inter, sans-serif',
+      }}
+    >
+      <button
+        onClick={prev}
+        disabled={isFirstStep}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          color: isFirstStep ? 'rgba(255, 255, 255, 0.3)' : '#00C2FF',
+          cursor: isFirstStep ? 'not-allowed' : 'pointer',
+          padding: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        aria-label="Previous step"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+
+      <span
+        style={{
+          color: '#00C2FF',
+          fontSize: '14px',
+          fontWeight: 500,
+        }}
+      >
+        Tour
+      </span>
+
+      <button
+        onClick={next}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          color: '#00C2FF',
+          cursor: 'pointer',
+          padding: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        aria-label={isLastStep ? 'Finish tour' : 'Next step'}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
     </div>
   );
 }
