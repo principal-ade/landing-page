@@ -219,6 +219,7 @@ export function DemoView({
             style={{
               width: '100%',
               maxWidth: '1400px',
+              height: '100%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -255,9 +256,6 @@ export function DemoView({
 
             {/* Tabs - centered */}
             <DemoTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-
-            {/* Tour navigation - right side */}
-            <TourHeaderNav />
           </div>
         </header>
 
@@ -391,7 +389,7 @@ function DemoTabs({
   const highlightedTab = currentStep?.id ? introStepToTab[currentStep.id] : undefined;
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', height: '100%' }}>
       {tabs.map((tab) => {
         // During intro screens, highlight the tab being explained
         const isHighlighted = isIntroScreen && highlightedTab === tab.id;
@@ -411,8 +409,8 @@ function DemoTabs({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              padding: '10px 0',
-              width: '180px',
+              padding: '0 20px',
+              height: '100%',
               background: isActive || isHighlighted ? 'rgba(0, 194, 255, 0.15)' : 'transparent',
               border: 'none',
               borderBottom: isActive || isHighlighted ? '2px solid #00C2FF' : '2px solid transparent',
@@ -422,7 +420,6 @@ function DemoTabs({
               fontSize: '13px',
               fontWeight: isActive || isHighlighted ? 600 : 400,
               transition: 'all 0.2s ease',
-              marginBottom: '-1px',
               opacity: isDimmed ? 0.4 : 1,
             }}
             onMouseEnter={(e) => {
@@ -689,85 +686,6 @@ function IntroScreen() {
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-// Tour navigation for header
-function TourHeaderNav() {
-  const { isActive, currentStep, prev, next, currentStepIndex, steps } = useTour();
-
-  // Don't show during intro steps
-  const introStepIds = ['welcome', 'tab-storyboards', 'tab-backlog', 'tab-story-monitoring', 'tab-traditional-monitoring'];
-  if (!isActive || !currentStep || introStepIds.includes(currentStep.id)) {
-    return null;
-  }
-
-  const isFirstStep = currentStepIndex === 0;
-  const isLastStep = currentStepIndex === steps.length - 1;
-
-  return (
-    <div
-      data-tour-target="header-nav"
-      style={{
-        position: 'absolute',
-        right: 0,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontFamily: 'Inter, sans-serif',
-      }}
-    >
-      <button
-        data-tour-target="header-prev"
-        onClick={prev}
-        disabled={isFirstStep}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: isFirstStep ? 'rgba(255, 255, 255, 0.3)' : '#00C2FF',
-          cursor: isFirstStep ? 'not-allowed' : 'pointer',
-          padding: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        aria-label="Previous step"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </button>
-
-      <span
-        style={{
-          color: '#00C2FF',
-          fontSize: '14px',
-          fontWeight: 500,
-        }}
-      >
-        Tour
-      </span>
-
-      <button
-        data-tour-target="header-next"
-        onClick={next}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: '#00C2FF',
-          cursor: 'pointer',
-          padding: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        aria-label={isLastStep ? 'Finish tour' : 'Next step'}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </button>
     </div>
   );
 }
