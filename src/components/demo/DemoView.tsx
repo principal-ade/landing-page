@@ -630,6 +630,7 @@ function IntroScreen() {
 
         {/* Next button */}
         <button
+          data-tour-target="next-button"
           onClick={next}
           style={{
             display: 'flex',
@@ -707,6 +708,7 @@ function TourHeaderNav() {
 
   return (
     <div
+      data-tour-target="header-nav"
       style={{
         position: 'absolute',
         right: 0,
@@ -717,6 +719,7 @@ function TourHeaderNav() {
       }}
     >
       <button
+        data-tour-target="header-prev"
         onClick={prev}
         disabled={isFirstStep}
         style={{
@@ -747,6 +750,7 @@ function TourHeaderNav() {
       </span>
 
       <button
+        data-tour-target="header-next"
         onClick={next}
         style={{
           background: 'transparent',

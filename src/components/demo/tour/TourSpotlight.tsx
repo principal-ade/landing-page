@@ -20,8 +20,8 @@ interface TourSpotlightProps {
 }
 
 export const TourSpotlight: React.FC<TourSpotlightProps> = ({
-  padding = 8,
-  borderRadius = 8,
+  padding = 0,
+  borderRadius = 4,
   pulse = true,
 }) => {
   const { isActive, currentStep } = useTour();
@@ -75,61 +75,30 @@ export const TourSpotlight: React.FC<TourSpotlightProps> = ({
     };
   }, [isActive, updateRect]);
 
-  // Spotlight disabled for now
   // Don't render if tour is not active or no target
   if (!isActive || !rect) {
     return null;
   }
 
-  // Create the spotlight overlay using box-shadow
-  // This creates a dark overlay everywhere except the spotlight area
-  const shadowSpread = Math.max(window.innerWidth, window.innerHeight) * 2;
-
   return (
     <>
+      {/* Spotlight highlight border - no dimming overlay */}
       <div
         style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+          borderRadius: `${borderRadius}px`,
+          border: '2px solid #00C2FF',
+          boxShadow: '0 0 20px rgba(0, 194, 255, 0.4)',
+          transition: 'all 0.3s ease-out',
           pointerEvents: 'none',
           zIndex: 9999,
+          animation: pulse ? 'tourSpotlightPulse 2s ease-in-out infinite' : undefined,
         }}
-      >
-        {/* Spotlight cutout */}
-        <div
-          style={{
-            position: 'absolute',
-            top: rect.top,
-            left: rect.left,
-            width: rect.width,
-            height: rect.height,
-            borderRadius: `${borderRadius}px`,
-            boxShadow: `0 0 0 ${shadowSpread}px rgba(0, 0, 0, 0.7)`,
-            transition: 'all 0.3s ease-out',
-            pointerEvents: 'none',
-          }}
-        />
-
-        {/* Spotlight border */}
-        <div
-          style={{
-            position: 'absolute',
-            top: rect.top,
-            left: rect.left,
-            width: rect.width,
-            height: rect.height,
-            borderRadius: `${borderRadius}px`,
-            border: '2px solid #00C2FF',
-            boxShadow: '0 0 20px rgba(0, 194, 255, 0.4)',
-            transition: 'all 0.3s ease-out',
-            pointerEvents: 'none',
-            animation: pulse ? 'tourSpotlightPulse 2s ease-in-out infinite' : undefined,
-          }}
-        />
-      </div>
+      />
 
       <style>{`
         @keyframes tourSpotlightPulse {

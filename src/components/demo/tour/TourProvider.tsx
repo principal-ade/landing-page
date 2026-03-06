@@ -194,6 +194,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       return;
     }
 
+    console.log('[Tour] Executing storyboard custom action:', action);
     events.emit({
       type: 'custom',
       source: 'tour-controller',
