@@ -140,40 +140,13 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
         // Status might be at payload.status or payload.task.status
         const taskStatus = (payload?.status ?? (payload?.task as Record<string, unknown>)?.status) as string | undefined;
         const isDone = taskStatus?.toLowerCase() === 'done';
-        console.log('[PanelNavigator] Task selected, payload:', payload, 'status:', taskStatus, 'isDone:', isDone);
         const overlaySide = isDone ? 'left' : 'right';
 
         // Check if overlay is already visible (stack > 1)
         const overlayAlreadyVisible = stackRef.current.length > 1;
 
         if (overlayAlreadyVisible) {
-          // Check if clicking the same item - if so, dismiss
-          const currentData = stackRef.current[stackRef.current.length - 1]?.data as Record<string, unknown> | undefined;
-
-          // Check various ID fields for task panels
-          const currentTaskId = currentData?.id ?? currentData?.taskId;
-          const newTaskId = payload?.id ?? payload?.taskId;
-
-          // Check canvas/workflow IDs for workflow scenarios panel
-          const currentCanvasId = currentData?.canvasId;
-          const newCanvasId = payload?.canvasId;
-          const currentWorkflowId = currentData?.workflowId;
-          const newWorkflowId = payload?.workflowId;
-
-          const isSameTask = currentTaskId && newTaskId && currentTaskId === newTaskId;
-          const isSameCanvas = currentCanvasId && newCanvasId && currentCanvasId === newCanvasId &&
-                               currentWorkflowId && newWorkflowId && currentWorkflowId === newWorkflowId;
-
-          if (isSameTask || isSameCanvas) {
-            // Same item clicked - dismiss the overlay
-            setPreviousStack(stackRef.current);
-            setAnimationDirection('right');
-            setIsAnimating(true);
-            setStack(prev => prev.slice(0, -1));
-            return;
-          }
-
-          // Different task - just replace the top of the stack without animation
+          // Overlay already visible - update/replace the top of the stack
           setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
         } else {
           // Save the event to re-emit after animation
@@ -281,7 +254,6 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           const isProgrammaticAction = ['selectNode', 'toggleNode', 'switchTab'].includes(payload?.action as string);
           if (isProgrammaticAction) {
             const handlers = handlersRef.current.get(event.type);
-            console.log('[PanelNavigator] Forwarding custom programmatic action:', payload?.action, 'handlers:', handlers?.size ?? 0);
             if (handlers) {
               handlers.forEach(handler => handler(event));
             }
@@ -296,40 +268,13 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           // Status might be at payload.status or payload.task.status
           const taskStatus = (payload?.status ?? (payload?.task as Record<string, unknown>)?.status) as string | undefined;
           const isDone = taskStatus?.toLowerCase() === 'done';
-          console.log('[PanelNavigator] External task selected, payload:', payload, 'status:', taskStatus, 'isDone:', isDone);
           const overlaySide = isDone ? 'left' : 'right';
 
           // Check if overlay is already visible (stack > 1)
           const overlayAlreadyVisible = stack.length > 1;
 
           if (overlayAlreadyVisible) {
-            // Check if clicking the same item - if so, dismiss
-            const currentData = stack[stack.length - 1]?.data as Record<string, unknown> | undefined;
-
-            // Check various ID fields for task panels
-            const currentTaskId = currentData?.id ?? currentData?.taskId;
-            const newTaskId = payload?.id ?? payload?.taskId;
-
-            // Check canvas/workflow IDs for workflow scenarios panel
-            const currentCanvasId = currentData?.canvasId;
-            const newCanvasId = payload?.canvasId;
-            const currentWorkflowId = currentData?.workflowId;
-            const newWorkflowId = payload?.workflowId;
-
-            const isSameTask = currentTaskId && newTaskId && currentTaskId === newTaskId;
-            const isSameCanvas = currentCanvasId && newCanvasId && currentCanvasId === newCanvasId &&
-                                 currentWorkflowId && newWorkflowId && currentWorkflowId === newWorkflowId;
-
-            if (isSameTask || isSameCanvas) {
-              // Same item clicked - dismiss the overlay
-              setPreviousStack(stack);
-              setAnimationDirection('right');
-              setIsAnimating(true);
-              setStack(prev => prev.slice(0, -1));
-              return;
-            }
-
-            // Different task - just replace the top of the stack without animation
+            // Overlay already visible - update/replace the top of the stack
             setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
             // Forward to internal handlers so panels can update their state
             const handlers = handlersRef.current.get(event.type);
