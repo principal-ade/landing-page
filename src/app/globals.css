@@ -208,3 +208,16 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Fix dnd-kit drag overlay visibility
+   The library's drag overlay has no z-index, causing it to render
+   behind fixed-position containers. This ensures drag previews
+   appear above all application UI. */
+[data-dnd-kit-drag-overlay] {
+  z-index: 99999 !important;
+}
+
+/* Also ensure the drag overlay from the kanban panel styles is visible */
+.drag-overlay {
+  z-index: 99999 !important;
+}
