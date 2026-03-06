@@ -37,7 +37,6 @@ function createEventEmitter() {
       if (wildcardHandlers) {
         wildcardHandlers.forEach(handler => handler(event));
       }
-      console.log('[Demo EventEmitter] Event:', event.type, event.payload);
     },
     on: (type: string, handler: (event: any) => void) => {
       if (!handlers.has(type)) {
@@ -200,6 +199,10 @@ export interface KanbanPanelWrapperProps {
    * Callback when an event is emitted from the panel
    */
   onEvent?: (event: { type: string; source: string; timestamp: number; payload: any }) => void;
+  /**
+   * Callback when the events emitter is ready - use this for programmatic control
+   */
+  onEventsReady?: (events: PanelEventEmitter) => void;
 }
 
 /**
@@ -209,7 +212,7 @@ export interface KanbanPanelWrapperProps {
  * for use in the demo page. Uses @backlog-md/core for realistic
  * file operations with in-memory storage.
  */
-export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
+export function KanbanPanelWrapper({ onEvent, onEventsReady }: KanbanPanelWrapperProps) {
   // Backlog Core adapter - initialized on mount
   const [backlogAdapter, setBacklogAdapter] = useState<BacklogCoreAdapter | null>(null);
   const [fileTree, setFileTree] = useState<FileTree | null>(null);
@@ -257,6 +260,13 @@ export function KanbanPanelWrapper({ onEvent }: KanbanPanelWrapperProps) {
 
     return emitter;
   }, [onEvent]);
+
+  // Notify parent when events emitter is ready (for programmatic control)
+  useEffect(() => {
+    if (events && onEventsReady) {
+      onEventsReady(events as PanelEventEmitter);
+    }
+  }, [events, onEventsReady]);
 
   // Create context with the backlog adapter and reactive fileTree
   const context = useMemo(

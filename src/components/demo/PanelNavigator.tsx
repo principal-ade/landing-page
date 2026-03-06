@@ -262,6 +262,18 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
         }
         lastProcessedEventRef.current = event.timestamp;
 
+        // For task:selected from tour/programmatic sources,
+        // forward to internal handlers so KanbanPanel can process and re-emit with full data.
+        // These sources emit with just taskId, KanbanPanel will re-emit with full task data.
+        const isProgrammaticSource = event.source === 'tour-controller' || event.source === 'landing-page-tour';
+        if (event.type === 'task:selected' && isProgrammaticSource) {
+          const handlers = handlersRef.current.get(event.type);
+          if (handlers) {
+            handlers.forEach(handler => handler(event));
+          }
+          return; // Don't navigate yet - wait for KanbanPanel to re-emit
+        }
+
         const route = findRoute(event);
         if (route && !isAnimating) {
           // Detect if this is a "done" task - slide from left side
@@ -304,7 +316,14 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
 
             // Different task - just replace the top of the stack without animation
             setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
+            // Forward to internal handlers so panels can update their state
+            const handlers = handlersRef.current.get(event.type);
+            if (handlers) {
+              handlers.forEach(handler => handler(event));
+            }
           } else {
+            // Save the event to re-emit after animation
+            lastNavigationEventRef.current = event;
             setPreviousStack(stack);
             setAnimationDirection('left');
             setIsAnimating(true);
@@ -323,6 +342,12 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           return;
         }
         lastProcessedEventRef.current = event.timestamp;
+
+        // Forward to internal handlers so panels can update their state
+        const handlers = handlersRef.current.get(event.type);
+        if (handlers) {
+          handlers.forEach(handler => handler(event));
+        }
 
         if (stack.length > 1 && !isAnimating) {
           setPreviousStack(stack);

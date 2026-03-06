@@ -111,9 +111,14 @@ export function DemoView({
 }: DemoViewProps) {
   const [activeTab, setActiveTab] = useState<DemoTab>('storyboards');
   const storyboardEventsRef = useRef<PanelEventEmitter | null>(null);
+  const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
 
   const handleStoryboardEventsReady = useCallback((events: PanelEventEmitter) => {
     storyboardEventsRef.current = events;
+  }, []);
+
+  const handleKanbanEventsReady = useCallback((events: PanelEventEmitter) => {
+    kanbanEventsRef.current = events;
   }, []);
 
   const handleTourComplete = useCallback(() => {
@@ -300,7 +305,7 @@ export function DemoView({
                   overflow: 'hidden',
                 }}
               >
-                {providerReady && <KanbanPanelWrapper />}
+                {providerReady && <KanbanPanelWrapper onEventsReady={handleKanbanEventsReady} />}
               </div>
             )}
 
@@ -349,7 +354,11 @@ export function DemoView({
         <TourSpotlight />
 
         {/* Tour panel events integration */}
-        <TourPanelEventsConnector eventsRef={storyboardEventsRef} />
+        <TourPanelEventsConnector
+          storyboardEventsRef={storyboardEventsRef}
+          kanbanEventsRef={kanbanEventsRef}
+          onTabChange={(tab) => setActiveTab(tab as DemoTab)}
+        />
       </div>
     </TourProvider>
   );
@@ -758,23 +767,35 @@ function TourHeaderNav() {
 
 // Component to connect panel events to tour context
 function TourPanelEventsConnector({
-  eventsRef,
+  storyboardEventsRef,
+  kanbanEventsRef,
+  onTabChange,
 }: {
-  eventsRef: React.RefObject<PanelEventEmitter | null>;
+  storyboardEventsRef: React.RefObject<PanelEventEmitter | null>;
+  kanbanEventsRef: React.RefObject<PanelEventEmitter | null>;
+  onTabChange: (tab: string) => void;
 }) {
-  const { setPanelEvents } = useTour();
+  const { setPanelEvents, setKanbanEvents, setTabHandler } = useTour();
+
+  useEffect(() => {
+    setTabHandler(onTabChange);
+    return () => setTabHandler(null);
+  }, [onTabChange, setTabHandler]);
 
   useEffect(() => {
     const checkEvents = () => {
-      if (eventsRef.current) {
-        setPanelEvents(eventsRef.current);
+      if (storyboardEventsRef.current) {
+        setPanelEvents(storyboardEventsRef.current);
+      }
+      if (kanbanEventsRef.current) {
+        setKanbanEvents(kanbanEventsRef.current);
       }
     };
 
     checkEvents();
     const interval = setInterval(checkEvents, 500);
     return () => clearInterval(interval);
-  }, [eventsRef, setPanelEvents]);
+  }, [storyboardEventsRef, kanbanEventsRef, setPanelEvents, setKanbanEvents]);
 
   return null;
 }

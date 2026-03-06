@@ -1,4 +1,4 @@
-import type { TourStep } from './TourProvider';
+import type { TourStep, TourPanelAction } from './TourProvider';
 
 /**
  * Default tour steps for the observability demo
@@ -86,8 +86,50 @@ export const observabilityTourSteps: TourStep[] = [
     description:
       'This Kanban board is instrumented with OpenTelemetry. Every interaction generates traces that you can view in the monitoring sections below.',
     duration: 999999999,
+    tab: 'kanban',
     target: {
       selector: '#kanban-section',
+    },
+  },
+  {
+    id: 'kanban-task-selection',
+    title: 'Programmatic Task Selection',
+    description:
+      'The Kanban panel supports programmatic control via events. Watch as we select a task automatically - this is the same mechanism used for guided tours and automated testing.',
+    duration: 999999999,
+    tab: 'kanban',
+    target: {
+      selector: '#kanban-section',
+      tourAction: {
+        panel: 'kanban',
+        action: { type: 'task:selected', taskId: 'task-2' },
+      },
+    },
+  },
+  {
+    id: 'kanban-task-detail',
+    title: 'Task Detail View',
+    description:
+      'The task detail panel slides in automatically when a task is selected. This view shows all task metadata, description, and allows editing. The programmatic control API enables seamless integration with tours and external systems.',
+    duration: 999999999,
+    tab: 'kanban',
+    target: {
+      selector: '#kanban-section',
+    },
+  },
+  {
+    id: 'kanban-deselect',
+    title: 'Closing Task Details',
+    description:
+      'Programmatic control also supports deselecting tasks, opening delete modals, and more. These events follow the same pattern documented in PROGRAMMATIC_CONTROL.md.',
+    duration: 999999999,
+    tab: 'kanban',
+    target: {
+      selector: '#kanban-section',
+      tourAction: {
+        panel: 'kanban',
+        action: { type: 'task:deselected' },
+      },
     },
   },
   {

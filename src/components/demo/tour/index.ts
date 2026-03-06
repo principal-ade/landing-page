@@ -1,5 +1,5 @@
 export { TourProvider, useTour } from './TourProvider';
-export type { TourStep } from './TourProvider';
+export type { TourStep, TourPanelAction, KanbanPanelAction } from './TourProvider';
 
 export { TourOverlay } from './TourOverlay';
 export { TourControls } from './TourControls';

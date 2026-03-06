@@ -13,6 +13,22 @@ import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import type { StoryboardListRequest } from '../StoryboardListPanelWrapper';
 
 /**
+ * Kanban panel action request for programmatic control
+ * See: PROGRAMMATIC_CONTROL.md in backlogmd-kanban-panel
+ */
+export interface KanbanPanelAction {
+  type: 'task:selected' | 'task:deselected' | 'task:delete-open-modal' | 'task:delete-confirm';
+  taskId?: string;
+}
+
+/**
+ * Union type for all panel actions the tour can execute
+ */
+export type TourPanelAction =
+  | { panel: 'storyboard'; action: StoryboardListRequest }
+  | { panel: 'kanban'; action: KanbanPanelAction };
+
+/**
  * Tour step definition
  */
 export interface TourStep {
@@ -21,11 +37,15 @@ export interface TourStep {
   description: string;
   /** Duration in ms before auto-advance (default: 5000) */
   duration?: number;
+  /** Tab to switch to when entering this step */
+  tab?: 'storyboards' | 'kanban' | 'story-monitoring' | 'traditional-monitoring';
   target?: {
     /** CSS selector for spotlight element */
     selector?: string;
-    /** Panel action to execute when entering this step */
+    /** Panel action to execute when entering this step (legacy - storyboard only) */
     panelAction?: StoryboardListRequest;
+    /** Multi-panel action to execute when entering this step */
+    tourAction?: TourPanelAction;
   };
   /** Called when entering this step */
   onEnter?: () => void;
@@ -57,6 +77,9 @@ interface TourContextValue {
 
   // Panel events integration
   setPanelEvents: (events: PanelEventEmitter | null) => void;
+  setKanbanEvents: (events: PanelEventEmitter | null) => void;
+  // Tab switching
+  setTabHandler: (handler: ((tab: string) => void) | null) => void;
 }
 
 const TourContext = createContext<TourContextValue | null>(null);
@@ -93,6 +116,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   const [progress, setProgress] = useState(0);
 
   const panelEventsRef = useRef<PanelEventEmitter | null>(null);
+  const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
+  const tabHandlerRef = useRef<((tab: string) => void) | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -116,15 +141,15 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     }
   }, []);
 
-  // Execute panel action for current step
-  const executePanelAction = useCallback((action: StoryboardListRequest) => {
+  // Execute storyboard panel action (legacy)
+  const executeStoryboardAction = useCallback((action: StoryboardListRequest) => {
     const events = panelEventsRef.current;
     if (!events) {
-      console.warn('[Tour] No panel events available for action:', action);
+      console.warn('[Tour] No storyboard panel events available for action:', action);
       return;
     }
 
-    console.log('[Tour] Executing panel action:', action);
+    console.log('[Tour] Executing storyboard panel action:', action);
     events.emit({
       type: 'storyboard-list:request',
       source: 'tour-controller',
@@ -132,6 +157,31 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       payload: action,
     });
   }, []);
+
+  // Execute kanban panel action
+  const executeKanbanAction = useCallback((action: KanbanPanelAction) => {
+    const events = kanbanEventsRef.current;
+    if (!events) {
+      console.warn('[Tour] No kanban panel events available for action:', action);
+      return;
+    }
+
+    events.emit({
+      type: action.type,
+      source: 'tour-controller',
+      timestamp: Date.now(),
+      payload: { taskId: action.taskId },
+    });
+  }, []);
+
+  // Execute tour panel action (multi-panel)
+  const executeTourAction = useCallback((tourAction: TourPanelAction) => {
+    if (tourAction.panel === 'storyboard') {
+      executeStoryboardAction(tourAction.action);
+    } else if (tourAction.panel === 'kanban') {
+      executeKanbanAction(tourAction.action);
+    }
+  }, [executeStoryboardAction, executeKanbanAction]);
 
   // Enter a step
   const enterStep = useCallback(
@@ -141,15 +191,24 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
       console.log('[Tour] Entering step:', index, step.id);
 
-      // Execute panel action if defined
-      if (step.target?.panelAction) {
-        executePanelAction(step.target.panelAction);
+      // Switch tab if specified
+      if (step.tab && tabHandlerRef.current) {
+        tabHandlerRef.current(step.tab);
+      }
+
+      // Execute tour action if defined (new multi-panel system)
+      if (step.target?.tourAction) {
+        executeTourAction(step.target.tourAction);
+      }
+      // Execute legacy panel action if defined (storyboard only)
+      else if (step.target?.panelAction) {
+        executeStoryboardAction(step.target.panelAction);
       }
 
       // Call onEnter callback
       step.onEnter?.();
     },
-    [steps, executePanelAction]
+    [steps, executeTourAction, executeStoryboardAction]
   );
 
   // Exit current step
@@ -239,16 +298,21 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     clearTimers();
     exitStep();
 
-    // Close any open panels
+    // Close any open storyboard panels
     if (panelEventsRef.current) {
-      executePanelAction({ action: 'closeCanvas' });
+      executeStoryboardAction({ action: 'closeCanvas' });
+    }
+
+    // Deselect any selected kanban task
+    if (kanbanEventsRef.current) {
+      executeKanbanAction({ type: 'task:deselected' });
     }
 
     setIsActive(false);
     setIsPlaying(false);
     setCurrentStepIndex(0);
     setProgress(0);
-  }, [clearTimers, exitStep, executePanelAction]);
+  }, [clearTimers, exitStep, executeStoryboardAction, executeKanbanAction]);
 
   const play = useCallback(() => {
     if (isActive) {
@@ -314,6 +378,14 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     panelEventsRef.current = events;
   }, []);
 
+  const setKanbanEvents = useCallback((events: PanelEventEmitter | null) => {
+    kanbanEventsRef.current = events;
+  }, []);
+
+  const setTabHandler = useCallback((handler: ((tab: string) => void) | null) => {
+    tabHandlerRef.current = handler;
+  }, []);
+
   const value: TourContextValue = useMemo(
     () => ({
       isActive,
@@ -331,6 +403,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       skip,
       goToStep,
       setPanelEvents,
+      setKanbanEvents,
+      setTabHandler,
     }),
     [
       isActive,
@@ -348,6 +422,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       skip,
       goToStep,
       setPanelEvents,
+      setKanbanEvents,
+      setTabHandler,
     ]
   );
 
