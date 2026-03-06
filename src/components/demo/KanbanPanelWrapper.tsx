@@ -189,8 +189,18 @@ function createActions(
       console.log('[Demo Action] notifyPanels:', event);
     },
 
-    // Note: Task operations (create, update, delete) are handled by the panel's
-    // own Core instance via useKanbanData, not through these actions
+    // INTENTIONAL BUG FOR DEMO: This delete action receives a task ID (e.g., "task-2")
+    // but passes it directly to deleteFile without converting to the full path
+    // (should be "backlog/tasks/task-2.md"). This causes the delete to silently fail
+    // because the file doesn't exist at that path. The UI won't update because:
+    // 1. The file isn't actually deleted from the in-memory filesystem
+    // 2. The fileTree sha doesn't change
+    // 3. useBacklogCore sees "already initialized for this version" and skips refresh
+    // This demonstrates how observability can help detect silent failures.
+    deleteTask: async (taskPath: string): Promise<void> => {
+      console.log('[Demo Action] deleteTask:', taskPath);
+      await onDeleteFile(taskPath);
+    },
   };
 }
 
@@ -269,10 +279,11 @@ export function KanbanPanelWrapper({ onEvent, onEventsReady }: KanbanPanelWrappe
   }, [events, onEventsReady]);
 
   // Create context with the backlog adapter and reactive fileTree
-  const context = useMemo(
-    () => fileTree ? createPanelContext(fileTree, backlogAdapter) : null,
-    [fileTree, backlogAdapter]
-  );
+  const context = useMemo(() => {
+    if (!fileTree) return null;
+    console.log('[Demo] Creating context with fileTree sha:', fileTree.sha, 'files:', fileTree.allFiles.length);
+    return createPanelContext(fileTree, backlogAdapter);
+  }, [fileTree, backlogAdapter]);
 
   // Handle file writes using Backlog Core
   const handleWriteFile = useCallback(async (path: string, content: string) => {
@@ -302,7 +313,10 @@ export function KanbanPanelWrapper({ onEvent, onEventsReady }: KanbanPanelWrappe
       await backlogAdapter.deleteFile(path);
       console.log('[Demo] File deleted via Backlog Core:', path);
       // Update fileTree to reflect the change
-      setFileTree(backlogAdapter.getFileTree());
+      const newFileTree = backlogAdapter.getFileTree();
+      console.log('[Demo] New fileTree sha:', newFileTree.sha);
+      console.log('[Demo] New fileTree file count:', newFileTree.allFiles.length);
+      setFileTree(newFileTree);
     } catch (error) {
       console.error('[Demo] Failed to delete file:', path, error);
     }
@@ -379,6 +393,7 @@ export function KanbanPanelWrapper({ onEvent, onEventsReady }: KanbanPanelWrappe
           panels={panelSlots}
           routes={routes}
           backEventTypes={['navigation:back', 'task:deselected', 'task:deleted']}
+          forwardEventTypes={['task:delete-open-modal', 'task:delete-confirm']}
           externalEvents={events}
           animationDuration={300}
         />

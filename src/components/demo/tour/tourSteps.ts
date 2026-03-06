@@ -176,7 +176,7 @@ export const observabilityTourSteps: TourStep[] = [
     id: 'kanban-interaction',
     title: 'Interactive Kanban Board',
     description:
-      'This Kanban board is instrumented with OpenTelemetry. Every interaction generates traces that you can view in the monitoring sections below.',
+      'This Kanban board is instrumented with OpenTelemetry.',
     duration: 999999999,
     tab: 'kanban',
     target: {
@@ -185,9 +185,8 @@ export const observabilityTourSteps: TourStep[] = [
   },
   {
     id: 'kanban-task-selection',
-    title: 'Programmatic Task Selection',
-    description:
-      'The Kanban panel supports programmatic control via events. Watch as we select a task automatically - this is the same mechanism used for guided tours and automated testing.',
+    title: 'Selecting a Task',
+    description: 'Select a task to view details.',
     duration: 999999999,
     tab: 'kanban',
     target: {
@@ -200,27 +199,15 @@ export const observabilityTourSteps: TourStep[] = [
   },
   {
     id: 'kanban-task-detail',
-    title: 'Task Detail View',
-    description:
-      'The task detail panel slides in automatically when a task is selected. This view shows all task metadata, description, and allows editing. The programmatic control API enables seamless integration with tours and external systems.',
-    duration: 999999999,
-    tab: 'kanban',
-    target: {
-      selector: '[data-tour-target="tour-overlay"]',
-    },
-  },
-  {
-    id: 'kanban-deselect',
-    title: 'Closing Task Details',
-    description:
-      'Programmatic control also supports deselecting tasks, opening delete modals, and more. These events follow the same pattern documented in PROGRAMMATIC_CONTROL.md.',
+    title: 'Deleting a Task',
+    description: 'We will delete this task to showcase an issue.',
     duration: 999999999,
     tab: 'kanban',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
       tourAction: {
         panel: 'kanban',
-        action: { type: 'task:deselected' },
+        action: { type: 'task:delete-open-modal', taskId: 'task-2' },
       },
     },
   },

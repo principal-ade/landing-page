@@ -98,7 +98,14 @@ export async function createDemoBacklog(): Promise<BacklogCoreAdapter> {
       const normalized = normalizePath(path);
       const fullPath = `${projectRoot}/${normalized}`;
 
+      const filesBefore = fs.getFiles();
+      console.log('[BacklogCore] Deleting file:', path, '-> fullPath:', fullPath);
+      console.log('[BacklogCore] Files before delete:', Array.from(filesBefore.keys()));
+
       await fs.deleteFile(fullPath);
+
+      const filesAfter = fs.getFiles();
+      console.log('[BacklogCore] Files after delete:', Array.from(filesAfter.keys()));
     },
 
     createDir: async (path: string): Promise<void> => {

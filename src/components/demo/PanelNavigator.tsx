@@ -52,6 +52,8 @@ interface PanelNavigatorProps {
   backEventTypes?: string[];
   /** Event type that triggers going to root (default: 'navigation:pop-to-root') */
   popToRootEventType?: string;
+  /** Event types to forward to panels without navigation (e.g., 'task:delete-open-modal') */
+  forwardEventTypes?: string[];
   /** Animation duration in ms */
   animationDuration?: number;
   /** External events emitter to bridge with */
@@ -83,6 +85,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   routes,
   backEventTypes = ['navigation:back'],
   popToRootEventType = 'navigation:pop-to-root',
+  forwardEventTypes = [],
   animationDuration = 300,
   externalEvents,
 }) => {
@@ -319,10 +322,28 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
       unsubscribes.push(unsubBack);
     });
 
+    // Subscribe to forward events (events that should be passed to panels without navigation)
+    forwardEventTypes.forEach(forwardEventType => {
+      const unsubForward = externalEvents.on(forwardEventType, (event) => {
+        // Skip if already processed (forwarded from internal emitter)
+        if (event.timestamp === lastProcessedEventRef.current) {
+          return;
+        }
+        lastProcessedEventRef.current = event.timestamp;
+
+        // Forward to internal handlers so panels can process the event
+        const handlers = handlersRef.current.get(event.type);
+        if (handlers) {
+          handlers.forEach(handler => handler(event));
+        }
+      });
+      unsubscribes.push(unsubForward);
+    });
+
     return () => {
       unsubscribes.forEach(unsub => unsub());
     };
-  }, [externalEvents, routes, backEventTypes, stack, isAnimating, findRoute]);
+  }, [externalEvents, routes, backEventTypes, forwardEventTypes, stack, isAnimating, findRoute]);
 
   // Get panel render function
   const previousPanel = previousEntry ? panelMap.get(previousEntry.panelId) : null;
