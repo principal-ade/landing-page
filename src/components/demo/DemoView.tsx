@@ -575,6 +575,7 @@ function IntroScreen() {
           color: 'rgba(255, 255, 255, 0.7)',
           margin: 0,
           maxWidth: '600px',
+          minHeight: '87px', // Fixed height for 3 lines to prevent icon/title shifting
           textAlign: 'center',
           lineHeight: 1.6,
         }}

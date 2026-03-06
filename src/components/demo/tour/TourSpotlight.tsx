@@ -24,9 +24,6 @@ export const TourSpotlight: React.FC<TourSpotlightProps> = ({
   borderRadius = 8,
   pulse = true,
 }) => {
-  // Spotlight disabled for now
-  return null;
-
   const { isActive, currentStep } = useTour();
   const [rect, setRect] = useState<SpotlightRect | null>(null);
 
@@ -78,6 +75,7 @@ export const TourSpotlight: React.FC<TourSpotlightProps> = ({
     };
   }, [isActive, updateRect]);
 
+  // Spotlight disabled for now
   // Don't render if tour is not active or no target
   if (!isActive || !rect) {
     return null;
