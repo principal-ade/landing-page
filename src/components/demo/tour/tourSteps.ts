@@ -234,12 +234,25 @@ export const observabilityTourSteps: TourStep[] = [
         action: { type: 'task:delete-open-modal', taskId: 'task-2' },
       },
     },
+    // Auto-advance when delete completes (task:deleted event)
+    advanceOnEvent: 'task:deleted',
+  },
+  {
+    id: 'kanban-delete-failed',
+    title: 'Task Not Deleted',
+    description: "The task was not deleted. Let's figure out why.",
+    descriptionColor: '#ff4444',
+    duration: 999999999,
+    tab: 'kanban',
+    target: {
+      selector: '[data-tour-target="tour-overlay"]',
+    },
   },
   {
     id: 'traditional-monitoring',
     title: 'Traditional Monitoring',
     description:
-      'Standard trace views show raw span data. Useful for debugging, but it lacks business context - you see technical operations without understanding what the user was trying to accomplish.',
+      'Here is the trace data from the kanban board interactions. See what you can figure out.',
     duration: 999999999,
     tab: 'traditional-monitoring',
     target: {
@@ -250,7 +263,7 @@ export const observabilityTourSteps: TourStep[] = [
     id: 'story-based-monitoring',
     title: 'Story-based Monitoring',
     description:
-      'This is where Principal shines. Traces are matched against scenarios from your storyboards, so you see business operations like "Move task to Done" instead of just API calls.',
+      "Let's see what we can figure out when we match traces to context about your app.",
     duration: 999999999,
     tab: 'story-monitoring',
     target: {

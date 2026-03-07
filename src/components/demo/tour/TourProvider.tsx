@@ -63,6 +63,8 @@ export interface TourStep {
   id: string;
   title?: string;
   description: string;
+  /** Optional color for the description text (e.g., '#ff4444' for red) */
+  descriptionColor?: string;
   /** Duration in ms before auto-advance (default: 5000) */
   duration?: number;
   /** Tab to switch to when entering this step */
@@ -81,6 +83,8 @@ export interface TourStep {
   onEnter?: () => void;
   /** Called when leaving this step */
   onExit?: () => void;
+  /** Event type that triggers auto-advance to the next step (e.g., 'task:delete-confirm') */
+  advanceOnEvent?: string;
 }
 
 /**
@@ -355,6 +359,32 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       setIsPlaying(true);
     }
   }, [autoStart, steps.length]);
+
+  // Effect: Listen for advanceOnEvent triggers from kanban panel
+  useEffect(() => {
+    if (!isActive || !currentStep?.advanceOnEvent) return;
+
+    const kanbanEvents = kanbanEventsRef.current;
+    if (!kanbanEvents) return;
+
+    const eventType = currentStep.advanceOnEvent;
+    console.log('[Tour] Listening for event to auto-advance:', eventType);
+
+    const unsubscribe = kanbanEvents.on(eventType, (event: any) => {
+      console.log('[Tour] Received event, auto-advancing:', event);
+      // Small delay to allow the UI to process the event first
+      setTimeout(() => {
+        if (currentStepIndex < steps.length - 1) {
+          clearTimers();
+          exitStep();
+          setCurrentStepIndex((prev) => prev + 1);
+          setProgress(0);
+        }
+      }, 500);
+    });
+
+    return unsubscribe;
+  }, [isActive, currentStep, currentStepIndex, steps.length, clearTimers, exitStep]);
 
   // Methods
   const start = useCallback(() => {

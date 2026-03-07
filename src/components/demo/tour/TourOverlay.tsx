@@ -87,7 +87,7 @@ export const TourOverlay: React.FC = () => {
           <p
             style={{
               margin: 0,
-              color: 'rgba(255, 255, 255, 0.85)',
+              color: currentStep.descriptionColor || 'rgba(255, 255, 255, 0.85)',
               fontSize: '17px',
               lineHeight: 1.5,
               minHeight: '51px',
