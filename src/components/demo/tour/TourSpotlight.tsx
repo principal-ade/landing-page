@@ -91,9 +91,8 @@ export const TourSpotlight: React.FC<TourSpotlightProps> = ({
           width: rect.width,
           height: rect.height,
           borderRadius: `${borderRadius}px`,
-          border: '2px solid #00C2FF',
-          boxShadow: '0 0 20px rgba(0, 194, 255, 0.4)',
-          transition: 'all 0.3s ease-out',
+          border: '1px solid rgba(0, 194, 255, 0.6)',
+          boxShadow: '0 0 12px rgba(0, 194, 255, 0.25)',
           pointerEvents: 'none',
           zIndex: 9999,
           animation: pulse ? 'tourSpotlightPulse 2s ease-in-out infinite' : undefined,
@@ -103,10 +102,10 @@ export const TourSpotlight: React.FC<TourSpotlightProps> = ({
       <style>{`
         @keyframes tourSpotlightPulse {
           0%, 100% {
-            box-shadow: 0 0 20px rgba(0, 194, 255, 0.4);
+            box-shadow: 0 0 12px rgba(0, 194, 255, 0.25);
           }
           50% {
-            box-shadow: 0 0 30px rgba(0, 194, 255, 0.6), 0 0 60px rgba(0, 194, 255, 0.2);
+            box-shadow: 0 0 18px rgba(0, 194, 255, 0.35), 0 0 30px rgba(0, 194, 255, 0.1);
           }
         }
       `}</style>

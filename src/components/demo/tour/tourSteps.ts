@@ -1,4 +1,4 @@
-import type { TourStep, TourPanelAction } from './TourProvider';
+import type { TourStep, TourPanelAction, DelayedTourAction } from './TourProvider';
 
 /**
  * Default tour steps for the observability demo
@@ -85,9 +85,9 @@ export const observabilityTourSteps: TourStep[] = [
   },
   {
     id: 'canvas-close',
-    title: 'Storyboards',
+    title: 'OTel Workflows',
     description:
-      'Returning to the storyboard list.',
+      'Returning to the storyboard list to explore OTel workflows.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
@@ -95,21 +95,15 @@ export const observabilityTourSteps: TourStep[] = [
       panelAction: {
         action: 'closeCanvas',
       },
-    },
-  },
-  {
-    id: 'otel-workflows',
-    title: 'OTel Workflows',
-    description:
-      'These workflows define the expected behavior of your system and are used to match against incoming traces.',
-    duration: 999999999,
-    tab: 'storyboards',
-    target: {
-      selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'switchTab', tab: 'otel' },
-      },
+      tourActions: [
+        {
+          delay: 800,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'switchTab', tab: 'otel' },
+          },
+        },
+      ],
     },
   },
   {

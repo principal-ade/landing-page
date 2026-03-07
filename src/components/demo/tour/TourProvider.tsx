@@ -41,6 +41,16 @@ export type TourPanelAction =
   | { panel: 'kanban'; action: KanbanPanelAction };
 
 /**
+ * Delayed action for executing multiple actions with pauses
+ */
+export interface DelayedTourAction {
+  /** Delay in ms before executing this action */
+  delay: number;
+  /** The action to execute */
+  action: TourPanelAction;
+}
+
+/**
  * Tour step definition
  */
 export interface TourStep {
@@ -58,6 +68,8 @@ export interface TourStep {
     panelAction?: StoryboardListRequest;
     /** Multi-panel action to execute when entering this step */
     tourAction?: TourPanelAction;
+    /** Multiple actions with delays between them */
+    tourActions?: DelayedTourAction[];
   };
   /** Called when entering this step */
   onEnter?: () => void;
@@ -132,6 +144,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   const tabHandlerRef = useRef<((tab: string) => void) | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const delayedActionsRef = useRef<NodeJS.Timeout[]>([]);
   const startTimeRef = useRef<number>(0);
 
   const currentStep = useMemo(
@@ -141,7 +154,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
   const stepDuration = currentStep?.duration ?? defaultDuration;
 
-  // Clear all timers
+  // Clear auto-advance timers (but not delayed step actions)
   const clearTimers = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -151,6 +164,12 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       clearInterval(progressIntervalRef.current);
       progressIntervalRef.current = null;
     }
+  }, []);
+
+  // Clear delayed step actions (called when exiting a step)
+  const clearDelayedActions = useCallback(() => {
+    delayedActionsRef.current.forEach(clearTimeout);
+    delayedActionsRef.current = [];
   }, []);
 
   // Execute storyboard panel action (legacy)
@@ -189,18 +208,20 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   // Execute storyboard panel custom action (selectNode, toggleNode, switchTab)
   const executeStoryboardCustomAction = useCallback((action: StoryboardPanelAction) => {
     const events = panelEventsRef.current;
+    console.log('[Tour] executeStoryboardCustomAction called, events:', !!events, 'action:', action);
     if (!events) {
       console.warn('[Tour] No storyboard panel events available for custom action:', action);
       return;
     }
 
-    console.log('[Tour] Executing storyboard custom action:', action);
+    console.log('[Tour] Emitting custom event with action:', action);
     events.emit({
       type: 'custom',
       source: 'tour-controller',
       timestamp: Date.now(),
       payload: action,
     });
+    console.log('[Tour] Custom event emitted successfully');
   }, []);
 
   // Execute tour panel action (multi-panel)
@@ -236,10 +257,27 @@ export const TourProvider: React.FC<TourProviderProps> = ({
         executeStoryboardAction(step.target.panelAction);
       }
 
+      // Execute delayed tour actions if defined
+      if (step.target?.tourActions) {
+        // Clear any existing delayed actions first
+        clearDelayedActions();
+
+        console.log('[Tour] Scheduling', step.target.tourActions.length, 'delayed actions');
+        step.target.tourActions.forEach((delayedAction) => {
+          const timeoutId = setTimeout(() => {
+            console.log('[Tour] Executing delayed action after', delayedAction.delay, 'ms');
+            console.log('[Tour] Action:', JSON.stringify(delayedAction.action));
+            console.log('[Tour] Panel events available:', !!panelEventsRef.current);
+            executeTourAction(delayedAction.action);
+          }, delayedAction.delay);
+          delayedActionsRef.current.push(timeoutId);
+        });
+      }
+
       // Call onEnter callback
       step.onEnter?.();
     },
-    [steps, executeTourAction, executeStoryboardAction]
+    [steps, executeTourAction, executeStoryboardAction, clearDelayedActions]
   );
 
   // Exit current step
@@ -248,7 +286,9 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     if (step) {
       step.onExit?.();
     }
-  }, [steps, currentStepIndex]);
+    // Clear any pending delayed actions when leaving a step
+    clearDelayedActions();
+  }, [steps, currentStepIndex, clearDelayedActions]);
 
   // Start auto-advance timer
   const startAutoAdvance = useCallback(() => {

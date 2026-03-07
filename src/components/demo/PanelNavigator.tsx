@@ -255,8 +255,10 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
         if (event.type === 'custom' && isProgrammaticSource) {
           const payload = event.payload as Record<string, unknown>;
           const isProgrammaticAction = ['selectNode', 'toggleNode', 'switchTab'].includes(payload?.action as string);
+          console.log('[PanelNavigator] Programmatic custom event:', payload?.action, 'isProgrammaticAction:', isProgrammaticAction);
           if (isProgrammaticAction) {
             const handlers = handlersRef.current.get(event.type);
+            console.log('[PanelNavigator] Forwarding to', handlers?.size ?? 0, 'handlers');
             if (handlers) {
               handlers.forEach(handler => handler(event));
             }
