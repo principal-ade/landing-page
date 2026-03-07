@@ -295,6 +295,13 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
           workflowTemplate={workflowContext?.workflow}
           selectedWorkflowId={workflowContext?.workflowId}
           workflowPath={workflowContext?.workflowPath}
+          selectedScenarioId={workflowContext?.scenarioId}
+          selectedTrace={workflowContext?.trace}
+          traceMatchInfo={workflowContext?.trace?.scenarioMatches?.map(m => ({
+            scenarioId: m.scenarioId,
+            matchType: (m.matchType || 'full') as 'full' | 'partial',
+            coveragePercent: m.coveragePercent,
+          }))}
           onClosePanel={() => {
             // Emit navigation:back event to close the overlay
             navEvents.emit({
