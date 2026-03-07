@@ -107,38 +107,38 @@ export const observabilityTourSteps: TourStep[] = [
     },
   },
   {
-    id: 'task-crud-expand',
-    title: 'Task CRUD Storyboard',
+    id: 'task-lifecycle-expand',
+    title: 'Task Workflow Lifecycle',
     description:
-      'Expanding the Task CRUD storyboard to see its contents.',
+      'Expanding the Task Workflow Lifecycle storyboard to see its contents.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
       tourAction: {
         panel: 'storyboard-custom',
-        action: { action: 'toggleNode', nodeId: 'storyboard:task-crud', open: true },
+        action: { action: 'toggleNode', nodeId: 'storyboard:task-workflow-lifecycle', open: true },
       },
     },
   },
   {
-    id: 'task-crud-canvas',
-    title: 'Task CRUD Canvas',
+    id: 'task-lifecycle-canvas',
+    title: 'Task Workflow Lifecycle Canvas',
     description:
-      'Opening the Task CRUD canvas to view the architecture diagram.',
+      'Opening the Task Workflow Lifecycle canvas to view the architecture diagram.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
       tourAction: {
         panel: 'storyboard-custom',
-        action: { action: 'selectNode', nodeId: 'canvas:task-crud' },
+        action: { action: 'selectNode', nodeId: 'canvas:task-workflow-lifecycle' },
       },
     },
   },
   {
-    id: 'task-crud-workflows-expand',
-    title: 'Task CRUD Workflows',
+    id: 'task-lifecycle-workflows-expand',
+    title: 'Task Lifecycle Workflows',
     description:
       'Expanding the workflows folder to see the available workflow scenarios.',
     duration: 999999999,
@@ -147,23 +147,53 @@ export const observabilityTourSteps: TourStep[] = [
       selector: '[data-tour-target="tour-overlay"]',
       tourAction: {
         panel: 'storyboard-custom',
-        action: { action: 'toggleNode', nodeId: 'workflows:task-crud', open: true },
+        action: { action: 'toggleNode', nodeId: 'workflows:task-workflow-lifecycle', open: true },
       },
     },
   },
   {
-    id: 'task-crud-workflow',
-    title: 'Task Create Workflow',
+    id: 'task-delete-workflow',
+    title: 'Task Delete Workflow',
     description:
-      'This workflow defines the expected traces for task creation operations.',
+      'This workflow defines the expected traces for task deletion operations.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
       tourAction: {
         panel: 'storyboard-custom',
-        action: { action: 'selectNode', nodeId: 'workflow:task-crud/task-create' },
+        action: { action: 'selectNode', nodeId: 'workflow:task-workflow-lifecycle/task-delete' },
       },
+      tourActions: [
+        {
+          delay: 1500,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectScenario', scenarioId: 'success' },
+          },
+        },
+        {
+          delay: 2500,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectEvent', eventIndex: 0 },
+          },
+        },
+        {
+          delay: 3500,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectEvent', eventIndex: 1 },
+          },
+        },
+        {
+          delay: 4500,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectEvent', eventIndex: 2 },
+          },
+        },
+      ],
     },
   },
   {

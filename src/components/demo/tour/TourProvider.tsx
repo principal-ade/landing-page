@@ -26,10 +26,16 @@ export interface KanbanPanelAction {
  * See: PROGRAMMATIC_CONTROL.md in principal-view-panels
  */
 export interface StoryboardPanelAction {
-  action: 'switchTab' | 'toggleNode' | 'selectNode';
+  action: 'switchTab' | 'toggleNode' | 'selectNode' | 'selectScenario' | 'selectEvent';
   tab?: 'otel' | 'regular';
   nodeId?: string;
   open?: boolean;
+  /** For selectScenario action */
+  scenarioId?: string;
+  mode?: 'list' | 'carousel';
+  /** For selectEvent action */
+  eventIndex?: number;
+  eventName?: string;
 }
 
 /**
@@ -205,23 +211,20 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     });
   }, []);
 
-  // Execute storyboard panel custom action (selectNode, toggleNode, switchTab)
+  // Execute storyboard panel custom action (selectNode, toggleNode, switchTab, selectScenario, selectEvent)
   const executeStoryboardCustomAction = useCallback((action: StoryboardPanelAction) => {
     const events = panelEventsRef.current;
-    console.log('[Tour] executeStoryboardCustomAction called, events:', !!events, 'action:', action);
     if (!events) {
       console.warn('[Tour] No storyboard panel events available for custom action:', action);
       return;
     }
 
-    console.log('[Tour] Emitting custom event with action:', action);
     events.emit({
       type: 'custom',
       source: 'tour-controller',
       timestamp: Date.now(),
       payload: action,
     });
-    console.log('[Tour] Custom event emitted successfully');
   }, []);
 
   // Execute tour panel action (multi-panel)
@@ -262,12 +265,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
         // Clear any existing delayed actions first
         clearDelayedActions();
 
-        console.log('[Tour] Scheduling', step.target.tourActions.length, 'delayed actions');
         step.target.tourActions.forEach((delayedAction) => {
           const timeoutId = setTimeout(() => {
-            console.log('[Tour] Executing delayed action after', delayedAction.delay, 'ms');
-            console.log('[Tour] Action:', JSON.stringify(delayedAction.action));
-            console.log('[Tour] Panel events available:', !!panelEventsRef.current);
             executeTourAction(delayedAction.action);
           }, delayedAction.delay);
           delayedActionsRef.current.push(timeoutId);

@@ -269,7 +269,6 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
         // Capture openCanvas payload for CanvasEditorPanel navigation
         if (event.type === 'custom') {
           const payload = event.payload as Record<string, unknown>;
-          console.log('[StoryboardListPanelWrapper] Custom event action:', payload?.action);
           if (payload?.action === 'openCanvas') {
             // Extract canvas path - could be direct or nested in canvas object
             const canvas = payload.canvas as { path?: string; name?: string; id?: string } | undefined;
