@@ -121,7 +121,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   const isAnimatingRef = useRef(isAnimating);
   const backEventTypesRef = useRef(backEventTypes);
   const lastNavigationEventRef = useRef<PanelEvent | null>(null);
-  const lastProcessedEventRef = useRef<number>(0); // Track last processed event timestamp
+  const lastProcessedEventRef = useRef<{ timestamp: number; source: string } | null>(null); // Track last processed event
   stackRef.current = stack;
   isAnimatingRef.current = isAnimating;
   backEventTypesRef.current = backEventTypes;
@@ -129,11 +129,15 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
   // Create internal event emitter that handles navigation
   const internalEvents: PanelEventEmitter = useRef({
     emit: <T,>(event: PanelEvent<T>) => {
-      // Skip duplicate events (same timestamp = already processed)
-      if (event.timestamp === lastProcessedEventRef.current) {
+      console.log('[PanelNavigator] internalEvents.emit:', event.type, 'source:', event.source);
+
+      // Skip duplicate events (same timestamp AND source = already processed)
+      const lastProcessed = lastProcessedEventRef.current;
+      if (lastProcessed && event.timestamp === lastProcessed.timestamp && event.source === lastProcessed.source) {
+        console.log('[PanelNavigator] Skipping internal emit - already processed');
         return;
       }
-      lastProcessedEventRef.current = event.timestamp;
+      lastProcessedEventRef.current = { timestamp: event.timestamp, source: event.source ?? '' };
 
       // Check if this event triggers a navigation
       const route = findRoute(event as PanelEvent);
@@ -153,6 +157,7 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           setStack(prev => [...prev.slice(0, -1), { panelId: route.targetPanelId, data: event.payload, overlaySide }]);
         } else {
           // Save the event to re-emit after animation
+          console.log('[PanelNavigator] Saving event for re-emission after animation:', event.type, event.source);
           lastNavigationEventRef.current = event as PanelEvent;
           // Push to new panel with animation
           setPreviousStack(stackRef.current);
@@ -210,10 +215,13 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
         // Re-emit the navigation event so the new panel receives it
         if (lastNavigationEventRef.current) {
           const handlers = handlersRef.current.get(lastNavigationEventRef.current.type);
+          console.log('[PanelNavigator] Re-emitting event after animation:', lastNavigationEventRef.current.type, 'handlers:', handlers?.size ?? 0);
           if (handlers) {
             handlers.forEach(handler => handler(lastNavigationEventRef.current!));
           }
           lastNavigationEventRef.current = null;
+        } else {
+          console.log('[PanelNavigator] No event to re-emit after animation');
         }
       }, animationDuration);
       return () => clearTimeout(timer);
@@ -232,11 +240,15 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     // Subscribe to route events
     routeEventTypes.forEach(eventType => {
       const unsub = externalEvents.on(eventType, (event) => {
+        console.log('[PanelNavigator] Received external event:', event.type, 'source:', event.source, 'payload:', event.payload);
+
         // Skip if already processed (forwarded from internal emitter)
-        if (event.timestamp === lastProcessedEventRef.current) {
+        const lastProcessed = lastProcessedEventRef.current;
+        if (lastProcessed && event.timestamp === lastProcessed.timestamp && event.source === lastProcessed.source) {
+          console.log('[PanelNavigator] Skipping - already processed');
           return;
         }
-        lastProcessedEventRef.current = event.timestamp;
+        lastProcessedEventRef.current = { timestamp: event.timestamp, source: event.source ?? '' };
 
         // For task:selected from tour/programmatic sources,
         // forward to internal handlers so KanbanPanel can process and re-emit with full data.
@@ -301,10 +313,11 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     backEventTypes.forEach(backEventType => {
       const unsubBack = externalEvents.on(backEventType, (event) => {
         // Skip if already processed (forwarded from internal emitter)
-        if (event.timestamp === lastProcessedEventRef.current) {
+        const lastProcessed = lastProcessedEventRef.current;
+        if (lastProcessed && event.timestamp === lastProcessed.timestamp && event.source === lastProcessed.source) {
           return;
         }
-        lastProcessedEventRef.current = event.timestamp;
+        lastProcessedEventRef.current = { timestamp: event.timestamp, source: event.source ?? '' };
 
         // Forward to internal handlers so panels can update their state
         const handlers = handlersRef.current.get(event.type);
@@ -326,10 +339,11 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
     forwardEventTypes.forEach(forwardEventType => {
       const unsubForward = externalEvents.on(forwardEventType, (event) => {
         // Skip if already processed (forwarded from internal emitter)
-        if (event.timestamp === lastProcessedEventRef.current) {
+        const lastProcessed = lastProcessedEventRef.current;
+        if (lastProcessed && event.timestamp === lastProcessed.timestamp && event.source === lastProcessed.source) {
           return;
         }
-        lastProcessedEventRef.current = event.timestamp;
+        lastProcessedEventRef.current = { timestamp: event.timestamp, source: event.source ?? '' };
 
         // Forward to internal handlers so panels can process the event
         const handlers = handlersRef.current.get(event.type);
