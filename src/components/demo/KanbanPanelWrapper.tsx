@@ -189,18 +189,8 @@ function createActions(
       console.log('[Demo Action] notifyPanels:', event);
     },
 
-    // INTENTIONAL BUG FOR DEMO: This delete action receives a task ID (e.g., "task-2")
-    // but passes it directly to deleteFile without converting to the full path
-    // (should be "backlog/tasks/task-2.md"). This causes the delete to silently fail
-    // because the file doesn't exist at that path. The UI won't update because:
-    // 1. The file isn't actually deleted from the in-memory filesystem
-    // 2. The fileTree sha doesn't change
-    // 3. useBacklogCore sees "already initialized for this version" and skips refresh
-    // This demonstrates how observability can help detect silent failures.
-    deleteTask: async (taskPath: string): Promise<void> => {
-      console.log('[Demo Action] deleteTask:', taskPath);
-      await onDeleteFile(taskPath);
-    },
+    // Note: deleteTask is now handled by the panel's Core instance directly,
+    // which properly resolves file paths. No action needed here.
   };
 }
 
