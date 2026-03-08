@@ -273,7 +273,7 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
             // Extract canvas path - could be direct or nested in canvas object
             const canvas = payload.canvas as { path?: string; name?: string; id?: string } | undefined;
             const canvasPath = (payload.canvasPath as string) || canvas?.path || '';
-            const canvasName = (payload.canvasId as string) || canvas?.name || canvas?.id || '';
+            const canvasName = canvas?.name || (payload.canvasId as string) || canvas?.id || '';
 
             // Extract workflow data
             const workflowPath = payload.workflowPath as string | undefined;
