@@ -5,17 +5,6 @@ import type { RegisteredTrace } from '@principal-ai/principal-view-core';
 import type { OtelSpanData } from '@principal-ai/principal-view-core';
 import { getSpansFromTrace } from '@industry-theme/principal-view-panels';
 
-/**
- * Represents a single visual marker on the tape (span or event)
- */
-interface TapeMarker {
-  id: string;
-  type: 'span-start' | 'span-end' | 'event';
-  timeMs: number;
-  spanId: string;
-  spanName: string;
-  eventName?: string;
-}
 
 /**
  * Color configuration for the tape
@@ -35,6 +24,10 @@ export interface TraceTapeProps {
   traces: RegisteredTrace[];
   /** Currently highlighted span ID (controlled from parent) */
   highlightedSpanId?: string;
+  /** Currently selected trace ID - its spans will glow */
+  selectedTraceId?: string;
+  /** Trace ID to focus/jump to (changes trigger scrubber movement) */
+  focusTraceId?: string | null;
   /** Callback when user scrubs to a new span */
   onSpanHighlight: (spanId: string | null, span: OtelSpanData | null) => void;
   /** Height of the tape in pixels */
@@ -53,26 +46,6 @@ function parseNanoTime(nanoStr: string): number {
   return Number(nanos / BigInt(1_000_000));
 }
 
-/**
- * Represents a compressed gap in the timeline
- */
-interface CompressedGap {
-  startTime: number;
-  endTime: number;
-  originalDuration: number;
-  compressedDuration: number;
-  displayPosition: number; // percentage where gap indicator shows
-}
-
-/**
- * Represents a segment of activity (traces grouped together)
- */
-interface TimeSegment {
-  startTime: number;
-  endTime: number;
-  displayStart: number; // percentage
-  displayEnd: number;   // percentage
-}
 
 /**
  * TraceTape - A horizontal timeline scrubber for navigating trace spans
@@ -83,6 +56,8 @@ interface TimeSegment {
 export function TraceTape({
   traces,
   highlightedSpanId,
+  selectedTraceId,
+  focusTraceId,
   onSpanHighlight,
   height = 48,
   interactive = true,
@@ -91,6 +66,7 @@ export function TraceTape({
   const tapeRef = useRef<HTMLDivElement>(null);
   const [scrubberPercent, setScrubberPercent] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const prevFocusTraceIdRef = useRef<string | null | undefined>(undefined);
 
   // Merge default colors
   const resolvedColors = {
@@ -114,152 +90,24 @@ export function TraceTape({
     };
   }, [traces]);
 
-  // Compute segments and gaps for compression
-  const { segments, gaps } = useMemo(() => {
-    if (traces.length === 0) {
-      return { segments: [] as TimeSegment[], gaps: [] as CompressedGap[] };
-    }
+  // Convert span index to display percentage (equal spacing)
+  const spanIndexToPercent = useCallback((index: number, total: number): number => {
+    if (total <= 1) return 50;
+    // Add padding on edges (5% on each side)
+    const usableRange = 90;
+    const startOffset = 5;
+    return startOffset + (index / (total - 1)) * usableRange;
+  }, []);
 
-    // Sort traces by start time
-    const sortedTraces = [...traces].sort((a, b) => a.startTime - b.startTime);
-
-    // Find contiguous segments (merge overlapping/adjacent traces)
-    const rawSegments: { start: number; end: number }[] = [];
-    for (const trace of sortedTraces) {
-      const last = rawSegments[rawSegments.length - 1];
-      // Gap threshold: if gap is > 500ms, treat as separate segment
-      const gapThreshold = 500;
-
-      if (!last || trace.startTime > last.end + gapThreshold) {
-        rawSegments.push({ start: trace.startTime, end: trace.endTime });
-      } else {
-        last.end = Math.max(last.end, trace.endTime);
-      }
-    }
-
-    // If only one segment, no compression needed
-    if (rawSegments.length <= 1) {
-      return {
-        segments: [{
-          startTime: timeRange.min,
-          endTime: timeRange.max,
-          displayStart: 0,
-          displayEnd: 100,
-        }] as TimeSegment[],
-        gaps: [] as CompressedGap[],
-      };
-    }
-
-    // Calculate compressed layout
-    // Each segment keeps its real duration, gaps are compressed to fixed size
-    const compressedGapSize = 50; // ms equivalent display width for gaps
-    const gapsFound: CompressedGap[] = [];
-
-    let totalRealDuration = 0;
-    for (const seg of rawSegments) {
-      totalRealDuration += seg.end - seg.start;
-    }
-    const totalGapDisplay = (rawSegments.length - 1) * compressedGapSize;
-    const totalDisplay = totalRealDuration + totalGapDisplay;
-
-    // Build segments with display positions
-    const segs: TimeSegment[] = [];
-    let displayOffset = 0;
-
-    for (let i = 0; i < rawSegments.length; i++) {
-      const raw = rawSegments[i];
-      const segDuration = raw.end - raw.start;
-      const displayWidth = (segDuration / totalDisplay) * 100;
-
-      segs.push({
-        startTime: raw.start,
-        endTime: raw.end,
-        displayStart: displayOffset,
-        displayEnd: displayOffset + displayWidth,
-      });
-
-      displayOffset += displayWidth;
-
-      // Add gap after this segment (if not last)
-      if (i < rawSegments.length - 1) {
-        const nextRaw = rawSegments[i + 1];
-        const gapDisplayWidth = (compressedGapSize / totalDisplay) * 100;
-
-        gapsFound.push({
-          startTime: raw.end,
-          endTime: nextRaw.start,
-          originalDuration: nextRaw.start - raw.end,
-          compressedDuration: compressedGapSize,
-          displayPosition: displayOffset + gapDisplayWidth / 2,
-        });
-
-        displayOffset += gapDisplayWidth;
-      }
-    }
-
-    return { segments: segs, gaps: gapsFound };
-  }, [traces, timeRange]);
-
-  // Convert time to display percentage (with gap compression)
-  const timeToPercent = useCallback((timeMs: number): number => {
-    if (segments.length === 0) return 50;
-
-    // Find which segment this time falls into
-    for (const seg of segments) {
-      if (timeMs >= seg.startTime && timeMs <= seg.endTime) {
-        const segProgress = (timeMs - seg.startTime) / (seg.endTime - seg.startTime);
-        return seg.displayStart + segProgress * (seg.displayEnd - seg.displayStart);
-      }
-    }
-
-    // Time is in a gap - clamp to nearest segment edge
-    for (let i = 0; i < gaps.length; i++) {
-      const gap = gaps[i];
-      if (timeMs > gap.startTime && timeMs < gap.endTime) {
-        // Return the gap's display position
-        return gap.displayPosition;
-      }
-    }
-
-    // Before first segment
-    if (timeMs < segments[0].startTime) {
-      return segments[0].displayStart;
-    }
-
-    // After last segment
-    return segments[segments.length - 1].displayEnd;
-  }, [segments, gaps]);
-
-  // Convert display percentage back to time (with gap compression)
-  const percentToTime = useCallback((percent: number): number => {
-    if (segments.length === 0) return timeRange.min;
-
-    // Find which segment this percent falls into
-    for (const seg of segments) {
-      if (percent >= seg.displayStart && percent <= seg.displayEnd) {
-        const displayProgress = (percent - seg.displayStart) / (seg.displayEnd - seg.displayStart);
-        return seg.startTime + displayProgress * (seg.endTime - seg.startTime);
-      }
-    }
-
-    // In a gap - return the gap start time
-    for (let i = 0; i < gaps.length; i++) {
-      const gap = gaps[i];
-      const prevSeg = segments[i];
-      const nextSeg = segments[i + 1];
-      if (percent > prevSeg.displayEnd && percent < nextSeg.displayStart) {
-        return gap.startTime;
-      }
-    }
-
-    // Before first segment
-    if (percent < segments[0].displayStart) {
-      return segments[0].startTime;
-    }
-
-    // After last segment
-    return segments[segments.length - 1].endTime;
-  }, [segments, gaps, timeRange]);
+  // Convert display percentage to nearest span index
+  const percentToSpanIndex = useCallback((percent: number, total: number): number => {
+    if (total <= 1) return 0;
+    const usableRange = 90;
+    const startOffset = 5;
+    const normalizedPercent = Math.max(0, Math.min(100, percent));
+    const index = Math.round(((normalizedPercent - startOffset) / usableRange) * (total - 1));
+    return Math.max(0, Math.min(total - 1, index));
+  }, []);
 
   // Build span lookup map
   const spanMap = useMemo(() => {
@@ -271,16 +119,41 @@ export function TraceTape({
     return map;
   }, [traces]);
 
-  // Extract span bars (for duration display) and event markers
-  const { spanBars, eventMarkers } = useMemo(() => {
+  // Build set of root span IDs - use the earliest-starting span in each trace as the "trace marker"
+  const rootSpanIds = useMemo(() => {
+    const ids = new Set<string>();
+    traces.forEach(trace => {
+      const spans = getSpansFromTrace(trace);
+      if (spans.length === 0) return;
+
+      // Find the span with the earliest start time - that's our trace marker
+      let earliestSpan = spans[0];
+      let earliestTime = parseNanoTime(spans[0].startTimeUnixNano);
+
+      for (let i = 1; i < spans.length; i++) {
+        const spanTime = parseNanoTime(spans[i].startTimeUnixNano);
+        if (spanTime < earliestTime) {
+          earliestTime = spanTime;
+          earliestSpan = spans[i];
+        }
+      }
+
+      ids.add(earliestSpan.spanId);
+    });
+    return ids;
+  }, [traces]);
+
+  // Extract span bars sorted by start time, marking root spans (traces) and trace ownership
+  const spanBars = useMemo(() => {
     const bars: Array<{
       id: string;
       spanId: string;
       spanName: string;
       startMs: number;
       endMs: number;
+      isRoot: boolean;
+      traceId: string;
     }> = [];
-    const events: TapeMarker[] = [];
 
     traces.forEach(trace => {
       const spans = getSpansFromTrace(trace);
@@ -289,73 +162,30 @@ export function TraceTape({
         const startMs = parseNanoTime(span.startTimeUnixNano);
         const endMs = parseNanoTime(span.endTimeUnixNano);
 
-        // Add span bar
         bars.push({
           id: span.spanId,
           spanId: span.spanId,
           spanName: span.name,
           startMs,
           endMs,
-        });
-
-        // Add event markers
-        span.events?.forEach((event, idx) => {
-          const eventMs = parseNanoTime(event.timeUnixNano);
-          events.push({
-            id: `${span.spanId}-event-${idx}`,
-            type: 'event',
-            timeMs: eventMs,
-            spanId: span.spanId,
-            spanName: span.name,
-            eventName: event.name,
-          });
+          isRoot: rootSpanIds.has(span.spanId),
+          traceId: trace.traceId,
         });
       });
     });
 
-    // Sort bars by start time, events by time
+    // Sort by start time to maintain order
     bars.sort((a, b) => a.startMs - b.startMs);
-    events.sort((a, b) => a.timeMs - b.timeMs);
 
-    return { spanBars: bars, eventMarkers: events };
-  }, [traces]);
+    return bars;
+  }, [traces, rootSpanIds]);
 
-  // Keep markers for backward compatibility (used in findNearestSpanToLeft)
-  const markers = useMemo((): TapeMarker[] => {
-    const result: TapeMarker[] = [];
 
-    spanBars.forEach(bar => {
-      result.push({
-        id: `${bar.spanId}-start`,
-        type: 'span-start',
-        timeMs: bar.startMs,
-        spanId: bar.spanId,
-        spanName: bar.spanName,
-      });
-    });
-
-    return result.sort((a, b) => a.timeMs - b.timeMs);
-  }, [spanBars]);
-
-  // Get unique span start markers for "nearest to left" search
-  const spanStartMarkers = useMemo(() => {
-    return markers.filter(m => m.type === 'span-start');
-  }, [markers]);
-
-  // Find the nearest span TO THE LEFT of the given time
-  const findNearestSpanToLeft = useCallback((timeMs: number): OtelSpanData | null => {
-    // Get all span start markers at or before this time
-    const eligible = spanStartMarkers.filter(m => m.timeMs <= timeMs);
-
-    if (eligible.length === 0) return null;
-
-    // Find the closest one (highest time that's still <= timeMs)
-    const closest = eligible.reduce((prev, curr) =>
-      curr.timeMs > prev.timeMs ? curr : prev
-    );
-
-    return spanMap.get(closest.spanId) || null;
-  }, [spanStartMarkers, spanMap]);
+  // Find span by index (spans are sorted by start time)
+  const findSpanByIndex = useCallback((index: number): OtelSpanData | null => {
+    if (index < 0 || index >= spanBars.length) return null;
+    return spanMap.get(spanBars[index].spanId) || null;
+  }, [spanBars, spanMap]);
 
   // Get relative X percentage from mouse/touch event
   const getRelativePercent = useCallback((event: MouseEvent | TouchEvent): number => {
@@ -381,13 +211,13 @@ export function TraceTape({
     setIsDragging(true);
 
     const percent = getRelativePercent(event.nativeEvent);
-    setScrubberPercent(percent);
+    const spanIndex = percentToSpanIndex(percent, spanBars.length);
+    const snappedPercent = spanIndexToPercent(spanIndex, spanBars.length);
+    setScrubberPercent(snappedPercent);
 
-    const timeMs = percentToTime(percent);
-    const span = findNearestSpanToLeft(timeMs);
-
+    const span = findSpanByIndex(spanIndex);
     onSpanHighlight(span?.spanId || null, span);
-  }, [interactive, percentToTime, findNearestSpanToLeft, onSpanHighlight, getRelativePercent]);
+  }, [interactive, percentToSpanIndex, spanIndexToPercent, spanBars.length, findSpanByIndex, onSpanHighlight, getRelativePercent]);
 
   // Handle pointer move - update scrubber position
   const handlePointerMove = useCallback((event: MouseEvent | TouchEvent) => {
@@ -396,18 +226,35 @@ export function TraceTape({
     event.preventDefault();
 
     const percent = getRelativePercent(event);
-    setScrubberPercent(percent);
+    const spanIndex = percentToSpanIndex(percent, spanBars.length);
+    const snappedPercent = spanIndexToPercent(spanIndex, spanBars.length);
+    setScrubberPercent(snappedPercent);
 
-    const timeMs = percentToTime(percent);
-    const span = findNearestSpanToLeft(timeMs);
-
+    const span = findSpanByIndex(spanIndex);
     onSpanHighlight(span?.spanId || null, span);
-  }, [isDragging, percentToTime, findNearestSpanToLeft, onSpanHighlight, getRelativePercent]);
+  }, [isDragging, percentToSpanIndex, spanIndexToPercent, spanBars.length, findSpanByIndex, onSpanHighlight, getRelativePercent]);
 
   // Handle pointer up - stop dragging
   const handlePointerUp = useCallback(() => {
     setIsDragging(false);
   }, []);
+
+  // When focusTraceId changes (from clicking list), move scrubber to first span of that trace
+  useEffect(() => {
+    // Only act when focusTraceId actually changes to a new value
+    if (focusTraceId === prevFocusTraceIdRef.current) return;
+    prevFocusTraceIdRef.current = focusTraceId;
+
+    if (!focusTraceId) return;
+
+    // Find the first span (by index in sorted order) that belongs to this trace
+    const spanIndex = spanBars.findIndex(bar => bar.traceId === focusTraceId);
+    if (spanIndex !== -1) {
+      const snappedPercent = spanIndexToPercent(spanIndex, spanBars.length);
+      setScrubberPercent(snappedPercent);
+    }
+  }, [focusTraceId, spanBars, spanIndexToPercent]);
+
 
   // Attach/detach global listeners for drag tracking
   useEffect(() => {
@@ -427,15 +274,12 @@ export function TraceTape({
   }, [isDragging, handlePointerMove, handlePointerUp]);
 
 
-  const duration = timeRange.max - timeRange.min;
-
-  // Format relative time for display (offset from start)
-  const formatRelativeTime = (ms: number): string => {
-    const offset = ms - timeRange.min;
-    const totalSeconds = Math.floor(offset / 1000);
+  // Format duration for end time label
+  const formatDuration = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    const milliseconds = Math.floor(offset % 1000);
+    const milliseconds = Math.floor(ms % 1000);
 
     if (minutes > 0) {
       return `${minutes}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
@@ -489,75 +333,54 @@ export function TraceTape({
         </div>
       )}
 
-      {/* Gap indicators */}
-      {gaps.map((gap, i) => (
-        <div
-          key={`gap-${i}`}
-          style={{
-            position: 'absolute',
-            left: `${gap.displayPosition}%`,
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            fontSize: '10px',
-            fontFamily: 'Fira Code, monospace',
-            color: '#475569',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'none',
-          }}
-          title={`Gap: ${(gap.originalDuration / 1000).toFixed(1)}s`}
-        >
-          ⋯
-        </div>
-      ))}
-
-      {/* Span duration bars */}
-      {duration > 0 && spanBars.map(bar => {
-        const startPercent = timeToPercent(bar.startMs);
-        const endPercent = timeToPercent(bar.endMs);
-        const widthPercent = Math.max(0.5, endPercent - startPercent); // min width for visibility
+      {/* Span markers (equally spaced) - root spans full height, child spans half height */}
+      {spanBars.map((bar, index) => {
+        const percent = spanIndexToPercent(index, spanBars.length);
         const isHighlighted = bar.spanId === highlightedSpanId;
+        const isInSelectedTrace = bar.traceId === selectedTraceId;
+
+        // Root spans (traces) get full height, child spans get half height - all anchored to bottom
+        const topOffset = bar.isRoot ? '4px' : '50%';
+        const bottomOffset = '4px';
+
+        // Different colors: traces are cyan/teal, spans are blue
+        const traceColor = '#14b8a6'; // teal
+        const spanColor = resolvedColors.line; // blue
+
+        // Selected trace spans: brighter colors, wider, with glow
+        const selectedTraceColor = '#5eead4'; // bright teal
+        const selectedSpanColor = '#93c5fd'; // bright blue
+
+        const getWidth = () => {
+          if (isHighlighted) return '6px';
+          if (isInSelectedTrace) return bar.isRoot ? '6px' : '4px';
+          return bar.isRoot ? '4px' : '2px';
+        };
+
+        const getBackground = () => {
+          if (isHighlighted) return resolvedColors.highlighted;
+          if (isInSelectedTrace) return bar.isRoot ? selectedTraceColor : selectedSpanColor;
+          return bar.isRoot ? traceColor : spanColor;
+        };
 
         return (
           <div
             key={bar.id}
             style={{
               position: 'absolute',
-              left: `${startPercent}%`,
-              width: `${widthPercent}%`,
-              top: '12px',
-              bottom: '12px',
-              background: isHighlighted ? resolvedColors.highlighted : resolvedColors.line,
-              opacity: isHighlighted ? 0.9 : 0.4,
-              borderRadius: '2px',
-              transition: 'opacity 0.1s',
-              pointerEvents: 'none',
-            }}
-            title={`${bar.spanName} (${(bar.endMs - bar.startMs).toFixed(1)}ms)`}
-          />
-        );
-      })}
-
-      {/* Event markers */}
-      {duration > 0 && eventMarkers.map(marker => {
-        const percent = timeToPercent(marker.timeMs);
-        const isHighlighted = marker.spanId === highlightedSpanId;
-
-        return (
-          <div
-            key={marker.id}
-            style={{
-              position: 'absolute',
               left: `${percent}%`,
-              top: '4px',
-              bottom: '4px',
-              width: '2px',
-              marginLeft: '-1px',
-              background: isHighlighted ? '#fbbf24' : '#f59e0b',
-              opacity: isHighlighted ? 1 : 0.6,
-              borderRadius: '1px',
+              transform: 'translateX(-50%)',
+              top: topOffset,
+              bottom: bottomOffset,
+              width: getWidth(),
+              background: getBackground(),
+              opacity: isHighlighted ? 1 : (isInSelectedTrace ? 1 : (bar.isRoot ? 0.9 : 0.5)),
+              borderRadius: '2px',
+              transition: 'all 0.15s',
               pointerEvents: 'none',
+              boxShadow: isInSelectedTrace ? `0 0 8px 2px ${getBackground()}` : 'none',
             }}
-            title={`${marker.spanName} - ${marker.eventName}`}
+            title={`${bar.isRoot ? '⬤ Trace: ' : ''}${bar.spanName} (${(bar.endMs - bar.startMs).toFixed(1)}ms)`}
           />
         );
       })}
@@ -577,7 +400,7 @@ export function TraceTape({
             zIndex: 10,
           }}
         >
-          {/* Time label above scrubber */}
+          {/* Label above scrubber */}
           <div
             style={{
               position: 'absolute',
@@ -591,36 +414,12 @@ export function TraceTape({
               background: 'rgba(0, 0, 0, 0.8)',
               padding: '2px 6px',
               borderRadius: '3px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
             }}
           >
-            {formatRelativeTime(percentToTime(scrubberPercent))}s
+            {spanBars[percentToSpanIndex(scrubberPercent, spanBars.length)]?.isRoot ? 'trace' : 'span'}
           </div>
-          {/* Scrubber handle */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '-4px',
-              left: '-5px',
-              width: '12px',
-              height: '12px',
-              background: resolvedColors.scrubber,
-              borderRadius: '50%',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-            }}
-          />
-          {/* Bottom handle */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-4px',
-              left: '-5px',
-              width: '12px',
-              height: '12px',
-              background: resolvedColors.scrubber,
-              borderRadius: '50%',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-            }}
-          />
         </div>
       )}
       </div>
@@ -634,7 +433,7 @@ export function TraceTape({
         minWidth: '60px',
         textAlign: 'right',
       }}>
-        {traces.length > 0 ? formatRelativeTime(timeRange.max) : '--.---'}
+        {traces.length > 0 ? formatDuration(timeRange.max - timeRange.min) : '--.---'}
       </div>
     </div>
   );

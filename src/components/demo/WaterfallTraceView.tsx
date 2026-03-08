@@ -83,6 +83,7 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
   const [highlightedSpanId, setHighlightedSpanId] = useState<string | null>(null);
   const [highlightedTraceId, setHighlightedTraceId] = useState<string | null>(null);
   const [scrubberTime, setScrubberTime] = useState<number | null>(null);
+  const [focusTraceId, setFocusTraceId] = useState<string | null>(null);
   const context = usePanelContext();
   const actions = usePanelActions();
   const events = usePanelEvents();
@@ -180,16 +181,21 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
         {/* TraceTape */}
         <div style={{
           padding: '16px',
+          paddingTop: '24px', // extra space for glow
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           flexShrink: 0,
+          overflow: 'visible',
         }}>
           <TraceTape
             traces={traces}
             highlightedSpanId={highlightedSpanId ?? undefined}
+            selectedTraceId={selectedTrace?.traceId ?? highlightedTraceId ?? undefined}
+            focusTraceId={focusTraceId}
             onSpanHighlight={(spanId) => {
               setHighlightedSpanId(spanId);
               setHighlightedTraceId(spanId ? findTraceForSpan(spanId) : null);
               setScrubberTime(spanId ? getSpanStartTime(spanId) : null);
+              setFocusTraceId(null); // Clear focus when scrubbing
             }}
           />
         </div>
@@ -221,18 +227,22 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {[...traces].reverse().map((trace) => (
-                <TraceRow
-                  key={trace.traceId}
-                  trace={trace}
-                  isSelected={selectedTrace?.traceId === trace.traceId}
-                  isHighlighted={highlightedTraceId === trace.traceId}
-                  isDimmed={scrubberTime !== null && trace.startTime > scrubberTime}
-                  onClick={() => setSelectedTrace(
-                    selectedTrace?.traceId === trace.traceId ? null : trace
-                  )}
-                />
-              ))}
+              {[...traces]
+                .sort((a, b) => a.startTime - b.startTime)
+                .filter((trace) => scrubberTime === null || trace.startTime <= scrubberTime)
+                .map((trace) => (
+                  <TraceRow
+                    key={trace.traceId}
+                    trace={trace}
+                    isSelected={selectedTrace?.traceId === trace.traceId}
+                    isHighlighted={highlightedTraceId === trace.traceId}
+                    onClick={() => {
+                      const newTrace = selectedTrace?.traceId === trace.traceId ? null : trace;
+                      setSelectedTrace(newTrace);
+                      setFocusTraceId(newTrace?.traceId ?? null);
+                    }}
+                  />
+                ))}
             </div>
           )}
         </div>
@@ -263,13 +273,11 @@ function TraceRow({
   trace,
   isSelected,
   isHighlighted,
-  isDimmed,
   onClick,
 }: {
   trace: RegisteredTrace;
   isSelected: boolean;
   isHighlighted: boolean;
-  isDimmed: boolean;
   onClick: () => void;
 }) {
   const rootSpan = getRootSpan(trace);
@@ -298,7 +306,6 @@ function TraceRow({
         overflow: 'hidden',
         cursor: 'pointer',
         transition: 'all 0.15s ease',
-        opacity: isDimmed ? 0.3 : 1,
       }}
     >
       {/* Trace Header */}
