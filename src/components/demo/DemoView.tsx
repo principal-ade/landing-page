@@ -350,7 +350,7 @@ export function DemoView({
 
         {/* Tour UI */}
         <TourOverlay />
-        <TourSpotlight />
+        <TourSpotlight borderRadius={10} />
         <TourDebugPanel />
 
         {/* Tour panel events integration */}

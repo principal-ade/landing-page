@@ -227,13 +227,16 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {[...traces]
-                .sort((a, b) => a.startTime - b.startTime)
-                .filter((trace) => scrubberTime === null || trace.startTime <= scrubberTime)
-                .map((trace) => (
+              {(() => {
+                const sortedFiltered = [...traces]
+                  .sort((a, b) => b.startTime - a.startTime)
+                  .filter((trace) => scrubberTime === null || trace.startTime <= scrubberTime);
+                const total = sortedFiltered.length;
+                return sortedFiltered.map((trace, index) => (
                   <TraceRow
                     key={trace.traceId}
                     trace={trace}
+                    index={total - index}
                     isSelected={selectedTrace?.traceId === trace.traceId}
                     isHighlighted={highlightedTraceId === trace.traceId}
                     onClick={() => {
@@ -242,7 +245,8 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
                       setFocusTraceId(newTrace?.traceId ?? null);
                     }}
                   />
-                ))}
+                ));
+              })()}
             </div>
           )}
         </div>
@@ -271,11 +275,13 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
 
 function TraceRow({
   trace,
+  index,
   isSelected,
   isHighlighted,
   onClick,
 }: {
   trace: RegisteredTrace;
+  index: number;
   isSelected: boolean;
   isHighlighted: boolean;
   onClick: () => void;
@@ -318,6 +324,15 @@ function TraceRow({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            fontSize: '13px',
+            fontWeight: 500,
+            color: '#666',
+            fontFamily: 'Fira Code, monospace',
+            minWidth: '24px',
+          }}>
+            {index}
+          </div>
           <div>
             <div style={{
               fontSize: '16px',
