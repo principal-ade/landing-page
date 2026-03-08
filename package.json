@@ -30,7 +30,7 @@
     "@principal-ade/panel-layouts": "^0.4.0",
     "@principal-ai/codebase-composition": "^0.2.45",
     "@principal-ai/logo-component": "^0.1.5",
-    "@principal-ai/principal-view-core": "^0.24.47",
+    "@principal-ai/principal-view-core": "^0.24.54",
     "@principal-ai/repository-abstraction": "^0.5.7",
     "framer-motion": "^12.23.24",
     "hast-util-sanitize": "^5.0.2",
