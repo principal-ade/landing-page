@@ -252,11 +252,11 @@ export const PanelNavigator: React.FC<PanelNavigatorProps> = ({
           return; // Don't navigate yet - wait for KanbanPanel to re-emit
         }
 
-        // For custom events with programmatic control actions (selectNode, toggleNode, switchTab),
+        // For custom events with programmatic control actions (selectNode, toggleNode, switchTab, selectTrace, clickSpan),
         // forward to internal handlers so the panel can process them.
         if (event.type === 'custom' && isProgrammaticSource) {
           const payload = event.payload as Record<string, unknown>;
-          const isProgrammaticAction = ['selectNode', 'toggleNode', 'switchTab', 'selectScenario', 'selectEvent'].includes(payload?.action as string);
+          const isProgrammaticAction = ['selectNode', 'toggleNode', 'switchTab', 'selectScenario', 'selectEvent', 'selectTrace', 'clickSpan'].includes(payload?.action as string);
           if (isProgrammaticAction) {
             const handlers = handlersRef.current.get(event.type);
             if (handlers) {

@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import type { StoryboardListRequest } from '../StoryboardListPanelWrapper';
+import type { TraceListPanelAction } from '@industry-theme/principal-view-panels';
 
 /**
  * Kanban panel action request for programmatic control
@@ -44,7 +45,8 @@ export interface StoryboardPanelAction {
 export type TourPanelAction =
   | { panel: 'storyboard'; action: StoryboardListRequest }
   | { panel: 'storyboard-custom'; action: StoryboardPanelAction }
-  | { panel: 'kanban'; action: KanbanPanelAction };
+  | { panel: 'kanban'; action: KanbanPanelAction }
+  | { panel: 'trace-list'; action: TraceListPanelAction };
 
 /**
  * Delayed action for executing multiple actions with pauses
@@ -112,6 +114,7 @@ interface TourContextValue {
   // Panel events integration
   setPanelEvents: (events: PanelEventEmitter | null) => void;
   setKanbanEvents: (events: PanelEventEmitter | null) => void;
+  setTraceListEvents: (events: PanelEventEmitter | null) => void;
   // Tab switching
   setTabHandler: (handler: ((tab: string) => void) | null) => void;
 }
@@ -151,6 +154,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
   const panelEventsRef = useRef<PanelEventEmitter | null>(null);
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
+  const traceListEventsRef = useRef<PanelEventEmitter | null>(null);
   const tabHandlerRef = useRef<((tab: string) => void) | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -215,6 +219,23 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     });
   }, []);
 
+  // Execute trace list panel action (selectTrace, clickSpan)
+  const executeTraceListAction = useCallback((action: TraceListPanelAction) => {
+    const events = traceListEventsRef.current;
+    if (!events) {
+      console.warn('[Tour] No trace list panel events available for action:', action);
+      return;
+    }
+
+    console.log('[Tour] Executing trace list panel action:', action);
+    events.emit({
+      type: 'custom',
+      source: 'tour-controller',
+      timestamp: Date.now(),
+      payload: action,
+    });
+  }, []);
+
   // Execute storyboard panel custom action (selectNode, toggleNode, switchTab, selectScenario, selectEvent)
   const executeStoryboardCustomAction = useCallback((action: StoryboardPanelAction) => {
     const events = panelEventsRef.current;
@@ -239,8 +260,10 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       executeStoryboardCustomAction(tourAction.action);
     } else if (tourAction.panel === 'kanban') {
       executeKanbanAction(tourAction.action);
+    } else if (tourAction.panel === 'trace-list') {
+      executeTraceListAction(tourAction.action);
     }
-  }, [executeStoryboardAction, executeStoryboardCustomAction, executeKanbanAction]);
+  }, [executeStoryboardAction, executeStoryboardCustomAction, executeKanbanAction, executeTraceListAction]);
 
   // Enter a step
   const enterStep = useCallback(
@@ -482,6 +505,10 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     kanbanEventsRef.current = events;
   }, []);
 
+  const setTraceListEvents = useCallback((events: PanelEventEmitter | null) => {
+    traceListEventsRef.current = events;
+  }, []);
+
   const setTabHandler = useCallback((handler: ((tab: string) => void) | null) => {
     tabHandlerRef.current = handler;
   }, []);
@@ -504,6 +531,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       goToStep,
       setPanelEvents,
       setKanbanEvents,
+      setTraceListEvents,
       setTabHandler,
     }),
     [
@@ -523,6 +551,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       goToStep,
       setPanelEvents,
       setKanbanEvents,
+      setTraceListEvents,
       setTabHandler,
     ]
   );

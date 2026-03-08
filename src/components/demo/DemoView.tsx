@@ -113,6 +113,7 @@ export function DemoView({
   const [activeTab, setActiveTab] = useState<DemoTab>('storyboards');
   const storyboardEventsRef = useRef<PanelEventEmitter | null>(null);
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
+  const traceListEventsRef = useRef<PanelEventEmitter | null>(null);
 
   const handleStoryboardEventsReady = useCallback((events: PanelEventEmitter) => {
     storyboardEventsRef.current = events;
@@ -120,6 +121,10 @@ export function DemoView({
 
   const handleKanbanEventsReady = useCallback((events: PanelEventEmitter) => {
     kanbanEventsRef.current = events;
+  }, []);
+
+  const handleTraceListEventsReady = useCallback((events: PanelEventEmitter) => {
+    traceListEventsRef.current = events;
   }, []);
 
   const handleTourComplete = useCallback(() => {
@@ -324,6 +329,7 @@ export function DemoView({
                   traces={registeredTraces}
                   schematics={schematics}
                   onClear={onClearTraces}
+                  onEventsReady={handleTraceListEventsReady}
                 />
               </div>
             )}
@@ -357,6 +363,7 @@ export function DemoView({
         <TourPanelEventsConnector
           storyboardEventsRef={storyboardEventsRef}
           kanbanEventsRef={kanbanEventsRef}
+          traceListEventsRef={traceListEventsRef}
           onTabChange={(tab) => setActiveTab(tab as DemoTab)}
         />
       </div>
@@ -694,13 +701,15 @@ function IntroScreen() {
 function TourPanelEventsConnector({
   storyboardEventsRef,
   kanbanEventsRef,
+  traceListEventsRef,
   onTabChange,
 }: {
   storyboardEventsRef: React.RefObject<PanelEventEmitter | null>;
   kanbanEventsRef: React.RefObject<PanelEventEmitter | null>;
+  traceListEventsRef: React.RefObject<PanelEventEmitter | null>;
   onTabChange: (tab: string) => void;
 }) {
-  const { setPanelEvents, setKanbanEvents, setTabHandler } = useTour();
+  const { setPanelEvents, setKanbanEvents, setTraceListEvents, setTabHandler } = useTour();
 
   useEffect(() => {
     setTabHandler(onTabChange);
@@ -715,12 +724,15 @@ function TourPanelEventsConnector({
       if (kanbanEventsRef.current) {
         setKanbanEvents(kanbanEventsRef.current);
       }
+      if (traceListEventsRef.current) {
+        setTraceListEvents(traceListEventsRef.current);
+      }
     };
 
     checkEvents();
     const interval = setInterval(checkEvents, 500);
     return () => clearInterval(interval);
-  }, [storyboardEventsRef, kanbanEventsRef, setPanelEvents, setKanbanEvents]);
+  }, [storyboardEventsRef, kanbanEventsRef, traceListEventsRef, setPanelEvents, setKanbanEvents, setTraceListEvents]);
 
   return null;
 }

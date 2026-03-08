@@ -268,6 +268,25 @@ export const observabilityTourSteps: TourStep[] = [
     tab: 'story-monitoring',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
+      // Use delayed actions since the panel needs time to mount after tab switch
+      tourActions: [
+        {
+          // Small delay to let the panel mount
+          delay: 500,
+          action: {
+            panel: 'trace-list',
+            action: { action: 'selectTrace', traceIndex: 0 },
+          },
+        },
+        {
+          // After selecting, click on the first span to open the workflow panel
+          delay: 2000,
+          action: {
+            panel: 'trace-list',
+            action: { action: 'clickSpan', traceIndex: 0, spanIndex: 0 },
+          },
+        },
+      ],
     },
   },
   {

@@ -17,6 +17,8 @@ interface TraceListPanelWrapperProps {
   onClear?: () => void;
   onTraceSelect?: (trace: RegisteredTrace) => void;
   onWorkflowClick?: (storyboardId: string, workflowId: string, scenarioId: string) => void;
+  /** Callback when panel events emitter is ready (for external control) */
+  onEventsReady?: (events: PanelEventEmitter) => void;
 }
 
 /**
@@ -29,6 +31,7 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
   onClear,
   onTraceSelect,
   onWorkflowClick,
+  onEventsReady,
 }) => {
   // Store workflow context when navigating to WorkflowScenariosPanel
   const [workflowContext, setWorkflowContext] = useState<OpenCanvasPayload | null>(null);
@@ -268,6 +271,13 @@ export const TraceListPanelWrapper: React.FC<TraceListPanelWrapperProps> = ({
       },
     };
   }, [onTraceSelect, onWorkflowClick]);
+
+  // Notify parent when events are ready
+  useEffect(() => {
+    if (events && onEventsReady) {
+      onEventsReady(events);
+    }
+  }, [events, onEventsReady]);
 
   // Panel slots for PanelNavigator
   const panelSlots: PanelSlot[] = useMemo(() => [
