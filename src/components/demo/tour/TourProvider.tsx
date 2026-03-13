@@ -71,6 +71,8 @@ export interface TourStep {
   duration?: number;
   /** Tab to switch to when entering this step */
   tab?: 'storyboards' | 'kanban' | 'story-monitoring' | 'traditional-monitoring';
+  /** Show as a centered white lightbox card instead of full-screen or bottom overlay */
+  lightbox?: boolean;
   target?: {
     /** CSS selector for spotlight element */
     selector?: string;

@@ -15,6 +15,7 @@ export const Header: React.FC = () => {
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
   const isFeaturesPage = pathname?.startsWith('/product');
+  const isDemoPage = pathname?.startsWith('/observability-demo');
 
   useEffect(() => {
     const handleResize = () => {
@@ -80,11 +81,11 @@ export const Header: React.FC = () => {
               AI
             </span>
           </Link>
-          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage) && (
+          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage || isDemoPage) && (
             <>
               <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
               <Link
-                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : '/product'}
+                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : isDemoPage ? '/observability-demo' : '/product'}
                 style={{
                   color: '#00C2FF',
                   textDecoration: 'none',
@@ -93,7 +94,7 @@ export const Header: React.FC = () => {
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 }}
               >
-                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Features'}
+                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : isDemoPage ? 'Demo' : 'Features'}
               </Link>
             </>
           )}
@@ -150,6 +151,28 @@ export const Header: React.FC = () => {
             }}
           >
             Features
+          </Link>
+          <Link
+            href="/observability-demo"
+            style={{
+              color: isDemoPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isDemoPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: isTablet ? '15px' : '14px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              transition: 'color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00C2FF';
+            }}
+            onMouseLeave={(e) => {
+              if (!isDemoPage) {
+                e.currentTarget.style.color = '#d1d5db';
+              }
+            }}
+          >
+            Demo
           </Link>
           <Link
             href="/blog"
@@ -264,6 +287,20 @@ export const Header: React.FC = () => {
             }}
           >
             Features
+          </Link>
+          <Link
+            href="/observability-demo"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isDemoPage ? '#00C2FF' : '#d1d5db',
+              textDecoration: isDemoPage ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              fontSize: '16px',
+              fontWeight: '500',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            }}
+          >
+            Demo
           </Link>
           <Link
             href="/blog"

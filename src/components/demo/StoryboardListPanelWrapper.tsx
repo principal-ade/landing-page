@@ -223,6 +223,8 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
     schematics: schematicsSlice,
     // Controlled selection for programmatic control (tours)
     selectedNodeId,
+    // Add stable gitStatusData to prevent useMemo dependency array size changes
+    gitStatusData: undefined,
   }), [slicesMap, fileTreeSlice, schematicsSlice, selectedNodeId]);
 
   // Create panel actions with readFile for CanvasEditorPanel

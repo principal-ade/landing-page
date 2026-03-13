@@ -12,6 +12,11 @@ export const TourOverlay: React.FC = () => {
     return null;
   }
 
+  // Don't show during lightbox steps (they have their own overlay)
+  if (currentStep.lightbox) {
+    return null;
+  }
+
   const isFirstInteractiveStep = currentStepIndex === introStepIds.length;
   const isLastStep = currentStepIndex === steps.length - 1;
 

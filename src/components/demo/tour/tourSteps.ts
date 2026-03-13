@@ -7,72 +7,33 @@ import type { TourStep, TourPanelAction, DelayedTourAction } from './TourProvide
 export const observabilityTourSteps: TourStep[] = [
   {
     id: 'welcome',
-    title: 'Welcome to Principal Observability',
+    title: '',
     description:
-      'This demo shows how Principal transforms traditional monitoring into story-based observability. Let\'s take a quick tour of the key features.',
-    duration: 999999999, // Don't auto-advance - user clicks "Start Tour" button
+      "Using Principal's skill, the agent reads the codebase, maps the workflows, sets up monitoring. The live app you'll interact with is Backlog.md, an open source task manager.",
+    duration: 999999999, // Don't auto-advance - user clicks "Start" button
     target: {
       selector: '[data-tour-target="next-button"]',
     },
   },
-  // Tab introductions - spotlight the corresponding tab
+  // Introduction to the demo app and what the agent generated
   {
-    id: 'tab-storyboards',
-    title: 'Storyboards',
+    id: 'app-intro',
+    title: 'Agent-Generated Storyboards',
     description:
-      'Browse architecture canvases that define how your application is structured. Each storyboard visualizes components, data flows, and workflows.',
-    duration: 999999999,
-    target: {
-      selector: '[data-tour-tab="storyboards"]',
-    },
-  },
-  {
-    id: 'tab-backlog',
-    title: 'Backlog.md',
-    description:
-      'An interactive Kanban board powered by Backlog.md. Every interaction is instrumented with OpenTelemetry, generating real traces you can explore.',
-    duration: 999999999,
-    target: {
-      selector: '[data-tour-tab="kanban"]',
-    },
-  },
-  {
-    id: 'tab-traditional-monitoring',
-    title: 'Traditional Monitoring',
-    description:
-      'Standard trace views showing Otel data. Aims to provide the monitoring experience provided by systems today.',
-    duration: 999999999,
-    target: {
-      selector: '[data-tour-tab="traditional-monitoring"]',
-    },
-  },
-  {
-    id: 'tab-story-monitoring',
-    title: 'Story-Based Monitoring',
-    description:
-      'See traces matched against business scenarios from your storyboards. Converting terse Otel data into actionable insights.',
-    duration: 999999999,
-    target: {
-      selector: '[data-tour-tab="story-monitoring"]',
-    },
-  },
-  // Interactive sections - spotlight the tour overlay so users read the instructions
-  {
-    id: 'storyboard-discovery',
-    title: 'Storyboards',
-    description:
-      'Canvas files are used to capture the architecture of your system.',
+      "Principal's agent defines storyboards and workflows specific to your app. In this case, Backlog.md.",
     duration: 999999999,
     tab: 'storyboards',
+    lightbox: true,
     target: {
-      selector: '[data-tour-target="tour-overlay"]',
+      selector: '[data-tour-target="lightbox-next"]',
     },
   },
+  // Show the canvas architecture diagram
   {
-    id: 'canvas-detail',
-    title: 'Task Lifecycle Canvas',
+    id: 'canvas-architecture',
+    title: 'The Architecture Canvas',
     description:
-      'This shows the lifecycle of the tasks in the kanban UI.',
+      'The agent mapped the task lifecycle as a flow diagram. Every state. Every transition. Defined before anything ran.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
@@ -83,88 +44,58 @@ export const observabilityTourSteps: TourStep[] = [
       },
     },
   },
+  // Show OTEL Workflows - Storyboard view with Workflows folder expanded
   {
-    id: 'canvas-close',
-    title: 'OTel Workflows',
+    id: 'storyboard-workflows',
+    title: 'Expected Scenarios',
     description:
-      'Returning to the storyboard list to explore OTel workflows.',
+      'Every path a task can take. The agent mapped it. The developer confirmed it. This is the behavior contract.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
-      panelAction: {
-        action: 'closeCanvas',
-      },
       tourActions: [
         {
-          delay: 800,
+          delay: 0,
           action: {
             panel: 'storyboard-custom',
             action: { action: 'switchTab', tab: 'otel' },
+          },
+        },
+        {
+          delay: 500,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectNode', nodeId: 'storyboard:task-workflow-lifecycle' },
+          },
+        },
+        {
+          delay: 1000,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'toggleNode', nodeId: 'workflows:task-workflow-lifecycle' },
           },
         },
       ],
     },
   },
   {
-    id: 'task-lifecycle-expand',
-    title: 'Task Workflow Lifecycle',
+    id: 'task-delete-behavior-contract',
+    title: 'The Behavior Contract',
     description:
-      'Expanding the Task Workflow Lifecycle storyboard to see its contents.',
+      'This is what success should look like for a task deletion.',
     duration: 999999999,
     tab: 'storyboards',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'toggleNode', nodeId: 'storyboard:task-workflow-lifecycle', open: true },
-      },
-    },
-  },
-  {
-    id: 'task-lifecycle-canvas',
-    title: 'Task Workflow Lifecycle Canvas',
-    description:
-      'Opening the Task Workflow Lifecycle canvas to view the architecture diagram.',
-    duration: 999999999,
-    tab: 'storyboards',
-    target: {
-      selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'selectNode', nodeId: 'canvas:task-workflow-lifecycle' },
-      },
-    },
-  },
-  {
-    id: 'task-lifecycle-workflows-expand',
-    title: 'Task Lifecycle Workflows',
-    description:
-      'Expanding the workflows folder to see the available workflow scenarios.',
-    duration: 999999999,
-    tab: 'storyboards',
-    target: {
-      selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'toggleNode', nodeId: 'workflows:task-workflow-lifecycle', open: true },
-      },
-    },
-  },
-  {
-    id: 'task-delete-workflow',
-    title: 'Task Delete Workflow',
-    description:
-      'This workflow defines the expected traces for task deletion operations.',
-    duration: 999999999,
-    tab: 'storyboards',
-    target: {
-      selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'selectNode', nodeId: 'workflow:task-workflow-lifecycle/task-delete' },
-      },
       tourActions: [
+        {
+          delay: 0,
+          action: {
+            panel: 'storyboard-custom',
+            action: { action: 'selectNode', nodeId: 'workflow:task-workflow-lifecycle/task-delete' },
+          },
+        },
         {
           delay: 1500,
           action: {
@@ -197,10 +128,25 @@ export const observabilityTourSteps: TourStep[] = [
     },
   },
   {
-    id: 'kanban-interaction',
-    title: 'Interactive Kanban Board',
+    id: 'task-delete-template',
+    title: 'The Template',
     description:
-      'This Kanban board is instrumented with OpenTelemetry.',
+      "See those variables? {{task.id}} and {{task.title}}. When the code runs, they fill in with real data. That's how a trace becomes a story you can read.",
+    duration: 999999999,
+    tab: 'storyboards',
+    target: {
+      selector: '[data-tour-target="tour-overlay"]',
+      tourAction: {
+        panel: 'storyboard-custom',
+        action: { action: 'selectEvent', eventIndex: 0 },
+      },
+    },
+  },
+  {
+    id: 'kanban-interaction',
+    title: 'The Live App',
+    description:
+      "This is the Kanban UI in Backlog.md. Instrumented with OpenTelemetry. We're going to delete a task and watch what the monitoring sees.",
     duration: 999999999,
     tab: 'kanban',
     target: {
@@ -210,7 +156,7 @@ export const observabilityTourSteps: TourStep[] = [
   {
     id: 'kanban-task-selection',
     title: 'Selecting a Task',
-    description: 'Select a task to view details.',
+    description: 'Every interaction is being traced against the workflows the agent defined.',
     duration: 999999999,
     tab: 'kanban',
     target: {
@@ -224,7 +170,7 @@ export const observabilityTourSteps: TourStep[] = [
   {
     id: 'kanban-task-detail',
     title: 'Deleting a Task',
-    description: 'We will delete this task to showcase an issue.',
+    description: 'We will delete this task to showcase an issue. Hit delete.',
     duration: 999999999,
     tab: 'kanban',
     target: {
@@ -239,8 +185,8 @@ export const observabilityTourSteps: TourStep[] = [
   },
   {
     id: 'kanban-delete-failed',
-    title: 'Task Not Deleted',
-    description: "The task was not deleted. Let's figure out why.",
+    title: 'Something Broke',
+    description: "The task wasn't deleted. The app has no idea. Let's see what the monitoring sees.",
     descriptionColor: '#ff4444',
     duration: 999999999,
     tab: 'kanban',
@@ -252,7 +198,7 @@ export const observabilityTourSteps: TourStep[] = [
     id: 'traditional-monitoring',
     title: 'Traditional Monitoring',
     description:
-      'Here is the trace data from the kanban board interactions. See what you can figure out.',
+      "You can see task.delete. But can you tell if it succeeded? Can you tell what should have happened? This is what you're used to.",
     duration: 999999999,
     tab: 'traditional-monitoring',
     target: {
@@ -261,9 +207,9 @@ export const observabilityTourSteps: TourStep[] = [
   },
   {
     id: 'story-based-monitoring',
-    title: 'Story-based Monitoring',
+    title: 'Story-Based: Instant Context',
     description:
-      "Let's see what we can figure out when we match traces to context about your app.",
+      "Same traces. Now matched to the behavior contract. The variables are filled in. You know what went wrong without a single query.",
     duration: 999999999,
     tab: 'story-monitoring',
     target: {
@@ -275,7 +221,7 @@ export const observabilityTourSteps: TourStep[] = [
           delay: 500,
           action: {
             panel: 'trace-list',
-            action: { action: 'selectTrace', traceIndex: 0 },
+            action: { action: 'selectTrace', traceIndex: 3 },
           },
         },
         {
@@ -283,17 +229,32 @@ export const observabilityTourSteps: TourStep[] = [
           delay: 2000,
           action: {
             panel: 'trace-list',
-            action: { action: 'clickSpan', traceIndex: 0, spanIndex: 0 },
+            action: { action: 'clickSpan', traceIndex: 3, spanIndex: 0 },
           },
         },
       ],
     },
   },
   {
-    id: 'try-it',
-    title: 'Try It Yourself!',
+    id: 'trace-coverage',
+    title: 'Trace Coverage',
     description:
-      'Drag a task on the Kanban board, then scroll down to see how the trace appears in both monitoring views. Notice how story-based monitoring provides meaningful context.',
+      'Which workflows have actually been exercised? See the gaps before production does.',
+    duration: 999999999,
+    tab: 'storyboards',
+    target: {
+      selector: '[data-tour-target="tour-overlay"]',
+      tourAction: {
+        panel: 'storyboard-custom',
+        action: { action: 'switchTab', tab: 'coverage' },
+      },
+    },
+  },
+  {
+    id: 'try-it',
+    title: 'Try It Yourself',
+    description:
+      'Drag a task on the Kanban board. Then use the tabs above to switch between Traditional Monitoring and Story-Based Monitoring. Notice the difference.',
     duration: 999999999,
     tab: 'kanban',
     target: {

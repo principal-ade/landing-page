@@ -5,5 +5,6 @@ export { TourOverlay } from './TourOverlay';
 export { TourControls } from './TourControls';
 export { TourSpotlight } from './TourSpotlight';
 export { TourDebugPanel } from './TourDebugPanel';
+export { TourLightbox } from './TourLightbox';
 
 export { observabilityTourSteps, quickTourSteps } from './tourSteps';

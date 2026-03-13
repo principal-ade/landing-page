@@ -10,6 +10,7 @@ import {
   TourOverlay,
   TourSpotlight,
   TourDebugPanel,
+  TourLightbox,
   useTour,
   observabilityTourSteps,
 } from './tour';
@@ -102,7 +103,8 @@ interface DemoViewProps {
   onClearTraces: () => void;
 }
 
-export function DemoView({
+// Inner component to access tour context
+function DemoViewInner({
   isOpen,
   onClose,
   schematics,
@@ -114,6 +116,7 @@ export function DemoView({
   const storyboardEventsRef = useRef<PanelEventEmitter | null>(null);
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
   const traceListEventsRef = useRef<PanelEventEmitter | null>(null);
+  const { currentStep, isActive: isTourActive, start: startTour } = useTour();
 
   const handleStoryboardEventsReady = useCallback((events: PanelEventEmitter) => {
     storyboardEventsRef.current = events;
@@ -127,10 +130,6 @@ export function DemoView({
     traceListEventsRef.current = events;
   }, []);
 
-  const handleTourComplete = useCallback(() => {
-    console.log('[Tour] Completed');
-  }, []);
-
   // Reset to first tab when opening
   useEffect(() => {
     if (isOpen) {
@@ -142,130 +141,191 @@ export function DemoView({
     return null;
   }
 
-  const tabs: { id: DemoTab; label: string; icon: React.ReactNode }[] = [
-    {
-      id: 'storyboards',
-      label: 'Storyboards',
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-        </svg>
-      ),
-    },
-    {
-      id: 'kanban',
-      label: 'Backlog.md',
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="3" width="5" height="18" rx="1" />
-          <rect x="10" y="3" width="5" height="12" rx="1" />
-          <rect x="17" y="3" width="5" height="8" rx="1" />
-        </svg>
-      ),
-    },
-    {
-      id: 'traditional-monitoring',
-      label: 'Traditional Otel',
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-        </svg>
-      ),
-    },
-    {
-      id: 'story-monitoring',
-      label: 'Story-Based Otel',
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-      ),
-    },
-  ];
+  // Check if we're on an intro step (don't show context bar during intro)
+  const isOnIntroStep = isTourActive && currentStep && isIntroStep(currentStep.id);
+
+  // Get context header based on active tab
+  const getContextHeader = () => {
+    switch (activeTab) {
+      case 'storyboards':
+        return {
+          label: 'Principal AI',
+          sublabel: 'Story-Based Monitoring',
+          color: '#00C2FF',
+          bgColor: 'rgba(0, 194, 255, 0.1)',
+        };
+      case 'kanban':
+        return {
+          label: 'Live App',
+          sublabel: 'Backlog.md',
+          color: '#00C2FF',
+          bgColor: 'rgba(0, 194, 255, 0.1)',
+        };
+      case 'traditional-monitoring':
+        return {
+          label: 'Traditional Monitoring',
+          sublabel: 'Traces',
+          color: '#00C2FF',
+          bgColor: 'rgba(0, 194, 255, 0.1)',
+        };
+      case 'story-monitoring':
+        return {
+          label: 'Principal AI',
+          sublabel: 'Story-Based Monitoring',
+          color: '#00C2FF',
+          bgColor: 'rgba(0, 194, 255, 0.1)',
+        };
+      default:
+        return null;
+    }
+  };
+
+  const contextHeader = getContextHeader();
+
+  // Check if we should show exploration controls (on try-it step)
+  const showExplorationControls = isTourActive && currentStep?.id === 'try-it';
 
   return (
-    <TourProvider
-      steps={observabilityTourSteps}
-      autoStart={true}
-      onComplete={handleTourComplete}
+    <div
+      style={{
+        position: 'fixed',
+        top: '70px', // Position below main site header
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 100,
+        background: '#0a0e17',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
     >
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 9000,
-          background: '#0a0e17',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Header with Tabs */}
-        <header
+      {/* Context Header Bar - hide during intro screens */}
+      {contextHeader && !isOnIntroStep && (
+        <div
           style={{
+            height: '50px',
+            background: contextHeader.bgColor,
+            borderBottom: `1px solid ${contextHeader.color}`,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: showExplorationControls ? 'space-between' : 'center',
             padding: '0 24px',
-            height: '70px',
-            background: 'rgba(0, 0, 0, 0.4)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             flexShrink: 0,
           }}
         >
           <div
             style={{
-              width: '100%',
-              maxWidth: '1400px',
-              height: '100%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
+              gap: '8px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '14px',
+              fontWeight: 500,
             }}
           >
-            {/* Logo - left side */}
+            <span style={{ color: contextHeader.color }}>{contextHeader.label}</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>•</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{contextHeader.sublabel}</span>
+          </div>
+
+          {/* Segmented Controls - shown only on try-it step */}
+          {showExplorationControls && (
             <div
               style={{
-                position: 'absolute',
-                left: 0,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                fontSize: '18px',
-                fontWeight: 600,
-                fontFamily: 'Inter, sans-serif',
+                gap: '16px',
               }}
             >
-              <Logo width={40} height={40} color="#00C2FF" />
-              <span style={{ color: '#ffffff' }}>Principal</span>
-              <span
+              {/* Segmented Control */}
+              <div
                 style={{
-                  fontWeight: 300,
-                  background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  display: 'inline-flex',
+                  padding: '4px',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  borderRadius: '8px',
+                  gap: '2px',
                 }}
               >
-                AI
-              </span>
+                {[
+                  { id: 'storyboards' as DemoTab, label: 'Architecture' },
+                  { id: 'kanban' as DemoTab, label: 'Kanban' },
+                  { id: 'traditional-monitoring' as DemoTab, label: 'Traditional' },
+                  { id: 'story-monitoring' as DemoTab, label: 'Story-Based' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    style={{
+                      padding: '6px 16px',
+                      background: activeTab === tab.id ? 'rgba(0, 194, 255, 0.2)' : 'transparent',
+                      color: activeTab === tab.id ? '#00C2FF' : 'rgba(255, 255, 255, 0.6)',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== tab.id) {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== tab.id) {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
+                      }
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Restart Tour Button */}
+              <button
+                onClick={() => {
+                  if (startTour) {
+                    startTour();
+                  }
+                }}
+                style={{
+                  padding: '6px 12px',
+                  background: 'transparent',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '6px',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)';
+                }}
+              >
+                Restart Tour
+              </button>
             </div>
+          )}
+        </div>
+      )}
 
-            {/* Tabs - centered */}
-            <DemoTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-          </div>
-        </header>
-
-        {/* Tab Content */}
-        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Tab Content */}
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
           {/* Intro Screen - shown during welcome and tab intro steps */}
           <IntroScreen />
 
@@ -357,6 +417,7 @@ export function DemoView({
         {/* Tour UI */}
         <TourOverlay />
         <TourSpotlight borderRadius={10} />
+        <TourLightbox />
         <TourDebugPanel />
 
         {/* Tour panel events integration */}
@@ -366,138 +427,32 @@ export function DemoView({
           traceListEventsRef={traceListEventsRef}
           onTabChange={(tab) => setActiveTab(tab as DemoTab)}
         />
-      </div>
-    </TourProvider>
+    </div>
   );
 }
 
-// Map intro step IDs to tab IDs
-const introStepToTab: Record<string, DemoTab> = {
-  'tab-storyboards': 'storyboards',
-  'tab-backlog': 'kanban',
-  'tab-story-monitoring': 'story-monitoring',
-  'tab-traditional-monitoring': 'traditional-monitoring',
-};
-
-// Tabs component that highlights the corresponding tab during intro screens
-function DemoTabs({
-  tabs,
-  activeTab,
-  onTabChange,
-}: {
-  tabs: { id: DemoTab; label: string; icon: React.ReactNode }[];
-  activeTab: DemoTab;
-  onTabChange: (tab: DemoTab) => void;
-}) {
-  const { currentStep, isActive: isTourActive } = useTour();
-  const isIntroScreen = isTourActive && isIntroStep(currentStep?.id);
-
-  // Get the tab that should be highlighted based on current intro step
-  const highlightedTab = currentStep?.id ? introStepToTab[currentStep.id] : undefined;
+// Outer component to provide tour context
+export function DemoView(props: DemoViewProps) {
+  const handleTourComplete = useCallback(() => {
+    console.log('[Tour] Completed');
+  }, []);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', height: '100%' }}>
-      {tabs.map((tab) => {
-        // During intro screens, highlight the tab being explained
-        const isHighlighted = isIntroScreen && highlightedTab === tab.id;
-        // Normal active state when not on intro screen
-        const isActive = !isIntroScreen && activeTab === tab.id;
-        // Dim tabs during intro screens unless they're the highlighted one
-        const isDimmed = isIntroScreen && !isHighlighted;
-
-        return (
-          <button
-            key={tab.id}
-            data-tour-tab={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            disabled={isIntroScreen}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              padding: '0 20px',
-              height: '100%',
-              background: isActive || isHighlighted ? 'rgba(0, 194, 255, 0.15)' : 'transparent',
-              border: 'none',
-              borderBottom: isActive || isHighlighted ? '2px solid #00C2FF' : '2px solid transparent',
-              color: isActive || isHighlighted ? '#00C2FF' : 'rgba(255, 255, 255, 0.6)',
-              cursor: isIntroScreen ? 'default' : 'pointer',
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '13px',
-              fontWeight: isActive || isHighlighted ? 600 : 400,
-              transition: 'all 0.2s ease',
-              opacity: isDimmed ? 0.4 : 1,
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive && !isIntroScreen) {
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive && !isIntroScreen) {
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
-                e.currentTarget.style.background = 'transparent';
-              }
-            }}
-          >
-            {tab.icon}
-            {tab.label}
-          </button>
-        );
-      })}
-    </div>
+    <TourProvider
+      steps={observabilityTourSteps}
+      autoStart={true}
+      onComplete={handleTourComplete}
+    >
+      <DemoViewInner {...props} />
+    </TourProvider>
   );
 }
 
 // Intro screen content for each step
 const introStepContent: Record<string, { title: string; description: string; icon?: React.ReactNode }> = {
   welcome: {
-    title: 'Welcome to Principal AI',
-    description: 'Principal AI enhances traditional monitoring signals into stories to improve system design clarity during operation.',
-  },
-  'tab-storyboards': {
-    title: 'Storyboards',
-    description: 'Browse architecture files that define how the Backlog.md Kanban Board is structured.',
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00C2FF" strokeWidth="1.5">
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-    ),
-  },
-  'tab-backlog': {
-    title: 'Backlog.md',
-    description: 'An interactive Kanban board powered by Backlog.md. Every interaction is instrumented with OpenTelemetry, generating real traces you can explore.',
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00C2FF" strokeWidth="1.5">
-        <rect x="3" y="3" width="5" height="18" rx="1" />
-        <rect x="10" y="3" width="5" height="12" rx="1" />
-        <rect x="17" y="3" width="5" height="8" rx="1" />
-      </svg>
-    ),
-  },
-  'tab-traditional-monitoring': {
-    title: 'Traditional Monitoring',
-    description: 'Standard trace views showing Otel data. Aims to provide the monitoring experience provided by systems today.',
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00C2FF" strokeWidth="1.5">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-      </svg>
-    ),
-  },
-  'tab-story-monitoring': {
-    title: 'Story-Based Monitoring',
-    description: 'See traces matched against business scenarios from your storyboards. Converting terse Otel data into actionable insights.',
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00C2FF" strokeWidth="1.5">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-      </svg>
-    ),
+    title: '',
+    description: "Using Principal's skill, the agent reads the codebase,\nmaps the workflows, and sets up story-based monitoring.\n\nThe live app you'll interact with is Backlog.md,\nan open source task manager.",
   },
 };
 
@@ -517,7 +472,6 @@ function IntroScreen() {
 
   const content = introStepContent[currentStep.id];
   const isWelcome = currentStep.id === 'welcome';
-  const isLastIntro = !isIntroStep(steps[currentStepIndex + 1]?.id);
 
   return (
     <div
@@ -537,55 +491,53 @@ function IntroScreen() {
       }}
     >
       {isWelcome ? (
-        <Logo width={80} height={80} color="#00C2FF" />
+        <div style={{ marginBottom: '32px' }}>
+          <Logo
+            width={100}
+            height={100}
+            color="#00C2FF"
+            particleColor="#0088CC"
+            opacity={0.9}
+          />
+        </div>
       ) : (
         content.icon
       )}
 
-      <h1
-        style={{
-          fontSize: isWelcome ? '36px' : '32px',
-          fontWeight: 600,
-          fontFamily: 'Inter, sans-serif',
-          color: '#ffffff',
-          margin: '32px 0 16px 0',
-          textAlign: 'center',
-        }}
-      >
-        {isWelcome ? (
-          <>
-            Welcome to Principal{' '}
-            <span
-              style={{
-                fontWeight: 300,
-                background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              AI
-            </span>
-          </>
-        ) : (
+      {content.title && (
+        <h1
+          style={{
+            fontSize: isWelcome ? '36px' : '32px',
+            fontWeight: 600,
+            fontFamily: 'Inter, sans-serif',
+            color: '#ffffff',
+            margin: '32px 0 16px 0',
+            textAlign: 'center',
+          }}
+        >
           <span style={{ color: '#00C2FF' }}>{content.title}</span>
-        )}
-      </h1>
+        </h1>
+      )}
 
-      <p
+      <div
         style={{
-          fontSize: '18px',
+          fontSize: '24px',
           fontFamily: 'Inter, sans-serif',
           color: 'rgba(255, 255, 255, 0.7)',
-          margin: 0,
-          maxWidth: '600px',
+          margin: content.title ? 0 : '32px 0 0 0',
+          maxWidth: '800px',
           minHeight: '87px', // Fixed height for 3 lines to prevent icon/title shifting
           textAlign: 'center',
           lineHeight: 1.6,
+          whiteSpace: 'pre-line',
         }}
       >
-        {content.description}
-      </p>
+        {content.description.split('\n\n').map((paragraph, index) => (
+          <p key={index} style={{ margin: index === 0 ? 0 : '16px 0 0 0' }}>
+            {paragraph}
+          </p>
+        ))}
+      </div>
 
       <div
         style={{
@@ -663,36 +615,12 @@ function IntroScreen() {
             e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 194, 255, 0.4)';
           }}
         >
-          {isWelcome ? 'Start Tour' : isLastIntro ? 'Start Exploring' : 'Next'}
+          Start
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
       </div>
-
-      {/* Progress dots for intro steps */}
-      {!isWelcome && (
-        <div
-          style={{
-            marginTop: '24px',
-            display: 'flex',
-            gap: '8px',
-          }}
-        >
-          {Object.keys(introStepContent).filter(id => id !== 'welcome').map((id, index) => (
-            <div
-              key={id}
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: currentStep.id === id ? '#00C2FF' : 'rgba(255, 255, 255, 0.3)',
-                transition: 'background 0.2s ease',
-              }}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
