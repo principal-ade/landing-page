@@ -20,6 +20,54 @@ export default function FeaturesPage() {
 
   const isMobile = windowWidth < 768;
 
+  // File City form state
+  const [repoUrl, setRepoUrl] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitResult, setSubmitResult] = React.useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+
+  const handleFileCitySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitResult(null);
+
+    try {
+      const response = await fetch("/api/filecity-request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, repoUrl }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitResult({
+          success: true,
+          message: "We'll send your File City map to your inbox soon!",
+        });
+        setRepoUrl("");
+        setEmail("");
+      } else {
+        setSubmitResult({
+          success: false,
+          message: data.error || "Something went wrong. Please try again.",
+        });
+      }
+    } catch {
+      setSubmitResult({
+        success: false,
+        message: "Network error. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div
       style={{
@@ -240,7 +288,7 @@ export default function FeaturesPage() {
                 Drop your GitHub URL. We'll generate yours and send it to you.
               </p>
 
-              <form>
+              <form onSubmit={handleFileCitySubmit}>
                 <div
                   style={{
                     display: "flex",
@@ -252,6 +300,9 @@ export default function FeaturesPage() {
                   <input
                     type="text"
                     placeholder="github.com/your/repo"
+                    value={repoUrl}
+                    onChange={(e) => setRepoUrl(e.target.value)}
+                    disabled={isSubmitting}
                     style={{
                       background: "rgba(15, 23, 42, 0.8)",
                       border: "1px solid rgba(51, 65, 85, 0.6)",
@@ -262,6 +313,7 @@ export default function FeaturesPage() {
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       outline: "none",
+                      opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
                       e.currentTarget.style.borderColor = "#34d399";
@@ -274,6 +326,9 @@ export default function FeaturesPage() {
                   <input
                     type="email"
                     placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitting}
                     style={{
                       background: "rgba(15, 23, 42, 0.8)",
                       border: "1px solid rgba(51, 65, 85, 0.6)",
@@ -284,6 +339,7 @@ export default function FeaturesPage() {
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       outline: "none",
+                      opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
                       e.currentTarget.style.borderColor = "#34d399";
@@ -295,41 +351,61 @@ export default function FeaturesPage() {
                   />
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     style={{
-                      background: "#00C2FF",
+                      background: isSubmitting ? "#64748b" : "#00C2FF",
                       color: "#ffffff",
                       border: "none",
                       borderRadius: "8px",
                       padding: "12px 24px",
                       fontSize: "15px",
                       fontWeight: "600",
-                      cursor: "pointer",
+                      cursor: isSubmitting ? "not-allowed" : "pointer",
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       transition: "background-color 0.2s ease",
                       whiteSpace: "nowrap",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#00d4ff";
+                      if (!isSubmitting) {
+                        e.currentTarget.style.backgroundColor = "#00d4ff";
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#00C2FF";
+                      if (!isSubmitting) {
+                        e.currentTarget.style.backgroundColor = "#00C2FF";
+                      }
                     }}
                   >
-                    Map It
+                    {isSubmitting ? "Submitting..." : "Map It"}
                   </button>
                 </div>
-                <p
-                  style={{
-                    fontSize: "13px",
-                    color: "#6b7280",
-                    margin: "0",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-                  }}
-                >
-                  We'll send your File City map to your inbox when ready.
-                </p>
+                {submitResult && (
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      color: submitResult.success ? "#34d399" : "#f87171",
+                      margin: "0 0 8px 0",
+                      fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    }}
+                  >
+                    {submitResult.message}
+                  </p>
+                )}
+                {!submitResult && (
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      color: "#6b7280",
+                      margin: "0",
+                      fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    }}
+                  >
+                    We'll send your File City map to your inbox when ready.
+                  </p>
+                )}
               </form>
             </div>
           </div>
