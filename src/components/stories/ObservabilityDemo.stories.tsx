@@ -163,6 +163,14 @@ function InteractiveDemo() {
 }
 
 export const Interactive: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    schematics: mockSchematics,
+    providerReady: true,
+    registeredTraces: mockTraces,
+    onClearTraces: () => {},
+  },
   render: () => <InteractiveDemo />,
 };
 

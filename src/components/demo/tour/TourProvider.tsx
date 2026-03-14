@@ -40,13 +40,22 @@ export interface StoryboardPanelAction {
 }
 
 /**
+ * Raw event to emit directly to a panel's event emitter
+ */
+export interface RawPanelEvent {
+  type: string;
+  payload?: unknown;
+}
+
+/**
  * Union type for all panel actions the tour can execute
  */
 export type TourPanelAction =
   | { panel: 'storyboard'; action: StoryboardListRequest }
   | { panel: 'storyboard-custom'; action: StoryboardPanelAction }
   | { panel: 'kanban'; action: KanbanPanelAction }
-  | { panel: 'trace-list'; action: TraceListPanelAction };
+  | { panel: 'trace-list'; action: TraceListPanelAction }
+  | { panel: 'trace-list-event'; event: RawPanelEvent };
 
 /**
  * Delayed action for executing multiple actions with pauses
@@ -149,8 +158,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   defaultDuration = 5000,
   onComplete,
 }) => {
-  const [isActive, setIsActive] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isActive, setIsActive] = useState(autoStart);
+  const [isPlaying, setIsPlaying] = useState(autoStart);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -254,6 +263,23 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     });
   }, []);
 
+  // Execute raw event on trace-list panel
+  const executeTraceListEvent = useCallback((event: RawPanelEvent) => {
+    const events = traceListEventsRef.current;
+    if (!events) {
+      console.warn('[Tour] No trace list panel events available for raw event:', event);
+      return;
+    }
+
+    console.log('[Tour] Emitting raw event to trace-list:', event);
+    events.emit({
+      type: event.type,
+      source: 'tour-controller',
+      timestamp: Date.now(),
+      payload: event.payload ?? {},
+    });
+  }, []);
+
   // Execute tour panel action (multi-panel)
   const executeTourAction = useCallback((tourAction: TourPanelAction) => {
     if (tourAction.panel === 'storyboard') {
@@ -264,8 +290,10 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       executeKanbanAction(tourAction.action);
     } else if (tourAction.panel === 'trace-list') {
       executeTraceListAction(tourAction.action);
+    } else if (tourAction.panel === 'trace-list-event') {
+      executeTraceListEvent(tourAction.event);
     }
-  }, [executeStoryboardAction, executeStoryboardCustomAction, executeKanbanAction, executeTraceListAction]);
+  }, [executeStoryboardAction, executeStoryboardCustomAction, executeKanbanAction, executeTraceListAction, executeTraceListEvent]);
 
   // Enter a step
   const enterStep = useCallback(

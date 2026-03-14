@@ -241,13 +241,27 @@ export const observabilityTourSteps: TourStep[] = [
     description:
       'Which workflows have actually been exercised? See the gaps before production does.',
     duration: 999999999,
-    tab: 'storyboards',
+    tab: 'story-monitoring',
     target: {
       selector: '[data-tour-target="tour-overlay"]',
-      tourAction: {
-        panel: 'storyboard-custom',
-        action: { action: 'switchTab', tab: 'coverage' },
-      },
+      tourActions: [
+        {
+          // Close any open canvas first
+          delay: 0,
+          action: {
+            panel: 'trace-list-event',
+            event: { type: 'navigation:back' },
+          },
+        },
+        {
+          // Then switch to coverage tab
+          delay: 300,
+          action: {
+            panel: 'trace-list',
+            action: { action: 'switchTab', tab: 'coverage' },
+          },
+        },
+      ],
     },
   },
   {
