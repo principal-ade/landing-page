@@ -1,0 +1,528 @@
+{
+  "pv": {
+    "name": "ADE Download Flow",
+    "version": "1.0.0",
+    "markdown": ".principal-views/download-flow.md",
+    "description": "How the ADE desktop application download works - from page load to file delivery",
+    "nodeTypes": {
+      "page": {
+        "description": "Next.js Page Component",
+        "color": "#3b82f6",
+        "shape": "rectangle"
+      },
+      "api": {
+        "description": "API Route Handler",
+        "color": "#8b5cf6",
+        "shape": "hexagon"
+      },
+      "external": {
+        "description": "External System",
+        "color": "#6b7280",
+        "shape": "rectangle"
+      },
+      "action": {
+        "description": "User Action",
+        "color": "#f59e0b",
+        "shape": "diamond"
+      },
+      "process": {
+        "description": "Internal Process",
+        "color": "#10b981",
+        "shape": "rectangle"
+      },
+      "data": {
+        "description": "Data/State",
+        "color": "#06b6d4",
+        "shape": "rectangle"
+      }
+    },
+    "edgeTypes": {
+      "request": {
+        "style": "solid",
+        "color": "#3b82f6",
+        "width": 2,
+        "animation": {
+          "type": "flow",
+          "duration": 1500
+        }
+      },
+      "response": {
+        "style": "dashed",
+        "color": "#10b981",
+        "width": 2
+      },
+      "trigger": {
+        "style": "solid",
+        "color": "#f59e0b",
+        "width": 2
+      },
+      "call": {
+        "style": "solid",
+        "color": "#8b5cf6",
+        "width": 2,
+        "animation": {
+          "type": "flow",
+          "duration": 1000
+        }
+      },
+      "data-flow": {
+        "style": "solid",
+        "color": "#06b6d4",
+        "width": 2
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "user-browser",
+      "type": "text",
+      "text": "User Browser",
+      "x": -100,
+      "y": -50,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "external",
+        "description": "User visits /download page"
+      }
+    },
+    {
+      "id": "download-page",
+      "type": "text",
+      "text": "Download Page",
+      "x": 150,
+      "y": -50,
+      "width": 180,
+      "height": 80,
+      "pv": {
+        "nodeType": "page",
+        "description": "src/app/download/page.tsx - Main download page component with platform selection",
+        "references": ["src/app/download/page.tsx"]
+      }
+    },
+    {
+      "id": "platform-detection",
+      "type": "text",
+      "text": "Platform Detection",
+      "x": 150,
+      "y": 100,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "detectPlatform() checks userAgent for mac/win/linux and auto-selects if download available"
+      }
+    },
+    {
+      "id": "releases-api",
+      "type": "text",
+      "text": "/api/github/releases",
+      "x": 450,
+      "y": -50,
+      "width": 180,
+      "height": 80,
+      "pv": {
+        "nodeType": "api",
+        "description": "Fetches releases from GitHub API, sanitizes response, adds caching headers",
+        "references": ["src/app/api/github/releases/route.ts"]
+      }
+    },
+    {
+      "id": "github-releases-api",
+      "type": "text",
+      "text": "GitHub Releases API",
+      "x": 750,
+      "y": -50,
+      "width": 180,
+      "height": 80,
+      "pv": {
+        "nodeType": "external",
+        "description": "api.github.com/repos/principal-ade/landing-page/releases"
+      }
+    },
+    {
+      "id": "releases-state",
+      "type": "text",
+      "text": "releases[] state",
+      "x": 450,
+      "y": 100,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "data",
+        "description": "Array of GitHubRelease objects with id, tag_name, name, body, published_at, assets[]"
+      }
+    },
+    {
+      "id": "platform-buttons",
+      "type": "text",
+      "text": "Platform Buttons",
+      "x": 150,
+      "y": 220,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "page",
+        "description": "macOS, Windows, Linux buttons - available platforms are clickable, others show Coming Soon"
+      }
+    },
+    {
+      "id": "select-platform",
+      "type": "text",
+      "text": "Select Platform",
+      "x": -100,
+      "y": 220,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "action",
+        "description": "User clicks platform button or auto-selected based on userAgent"
+      }
+    },
+    {
+      "id": "asset-lookup",
+      "type": "text",
+      "text": "getAssetForPlatform()",
+      "x": 150,
+      "y": 340,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "Finds matching asset by file extension: .dmg for mac, .exe/.msi for windows, .AppImage/.deb/.rpm for linux"
+      }
+    },
+    {
+      "id": "download-button",
+      "type": "text",
+      "text": "Download Button",
+      "x": 150,
+      "y": 460,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "page",
+        "description": "Shows Download ({fileSize}) with gradient background"
+      }
+    },
+    {
+      "id": "click-download",
+      "type": "text",
+      "text": "Click Download",
+      "x": -100,
+      "y": 460,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "action",
+        "description": "User clicks download button, triggers trackDownload() analytics"
+      }
+    },
+    {
+      "id": "download-link",
+      "type": "text",
+      "text": "/api/github/download",
+      "x": 150,
+      "y": 580,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "api",
+        "description": "href='/api/github/download?assetId={id}&filename={name}'",
+        "references": ["src/app/api/github/download/route.ts"]
+      }
+    },
+    {
+      "id": "download-api",
+      "type": "text",
+      "text": "Download Redirect",
+      "x": 450,
+      "y": 580,
+      "width": 180,
+      "height": 80,
+      "pv": {
+        "nodeType": "api",
+        "description": "Validates assetId, does HEAD request to GitHub to get signed CDN URL, returns 302 redirect",
+        "references": ["src/app/api/github/download/route.ts"]
+      }
+    },
+    {
+      "id": "github-assets-api",
+      "type": "text",
+      "text": "GitHub Assets API",
+      "x": 750,
+      "y": 580,
+      "width": 180,
+      "height": 80,
+      "pv": {
+        "nodeType": "external",
+        "description": "HEAD request to api.github.com/.../assets/{assetId} - returns signed S3/CDN URL"
+      }
+    },
+    {
+      "id": "cdn-redirect",
+      "type": "text",
+      "text": "302 Redirect",
+      "x": 450,
+      "y": 720,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "data",
+        "description": "Browser redirected to GitHub's signed S3/CloudFront URL for direct CDN download"
+      }
+    },
+    {
+      "id": "github-cdn",
+      "type": "text",
+      "text": "GitHub CDN",
+      "x": 750,
+      "y": 720,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "external",
+        "description": "S3/CloudFront - serves binary directly to user at full CDN speed"
+      }
+    },
+    {
+      "id": "file-saved",
+      "type": "text",
+      "text": "File Saved",
+      "x": 150,
+      "y": 720,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "external",
+        "description": "Browser downloads directly from CDN and saves to user's downloads folder"
+      }
+    },
+    {
+      "id": "desktop-config",
+      "type": "text",
+      "text": "desktop-app.ts",
+      "x": 750,
+      "y": 250,
+      "width": 180,
+      "height": 60,
+      "pv": {
+        "nodeType": "data",
+        "description": "Config with GitHub repo info (principal-ade/landing-page), helper functions for API URLs",
+        "references": ["src/config/desktop-app.ts"]
+      }
+    },
+    {
+      "id": "analytics",
+      "type": "text",
+      "text": "trackDownload()",
+      "x": -100,
+      "y": 580,
+      "width": 160,
+      "height": 60,
+      "pv": {
+        "nodeType": "process",
+        "description": "Sends analytics event with filename, platform, assetId",
+        "references": ["src/app/lib/analytics.ts"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "visit-page",
+      "fromNode": "user-browser",
+      "toNode": "download-page",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "visits",
+      "pv": { "edgeType": "request" }
+    },
+    {
+      "id": "page-fetch-releases",
+      "fromNode": "download-page",
+      "toNode": "releases-api",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "fetch()",
+      "pv": { "edgeType": "request" }
+    },
+    {
+      "id": "api-github-releases",
+      "fromNode": "releases-api",
+      "toNode": "github-releases-api",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "GET",
+      "pv": { "edgeType": "call" }
+    },
+    {
+      "id": "github-returns-releases",
+      "fromNode": "github-releases-api",
+      "toNode": "releases-api",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "releases[]",
+      "pv": { "edgeType": "response" }
+    },
+    {
+      "id": "api-returns-sanitized",
+      "fromNode": "releases-api",
+      "toNode": "releases-state",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "sanitized",
+      "pv": { "edgeType": "response" }
+    },
+    {
+      "id": "state-to-page",
+      "fromNode": "releases-state",
+      "toNode": "download-page",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "setReleases()",
+      "pv": { "edgeType": "data-flow" }
+    },
+    {
+      "id": "page-detect-platform",
+      "fromNode": "download-page",
+      "toNode": "platform-detection",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "useEffect",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "detection-to-buttons",
+      "fromNode": "platform-detection",
+      "toNode": "platform-buttons",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "auto-select",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "user-selects-platform",
+      "fromNode": "select-platform",
+      "toNode": "platform-buttons",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "click",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "buttons-lookup-asset",
+      "fromNode": "platform-buttons",
+      "toNode": "asset-lookup",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "lookup-to-button",
+      "fromNode": "asset-lookup",
+      "toNode": "download-button",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "asset found",
+      "pv": { "edgeType": "data-flow" }
+    },
+    {
+      "id": "user-clicks-download",
+      "fromNode": "click-download",
+      "toNode": "download-button",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "click",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "download-to-analytics",
+      "fromNode": "click-download",
+      "toNode": "analytics",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "pv": { "edgeType": "trigger" }
+    },
+    {
+      "id": "button-to-link",
+      "fromNode": "download-button",
+      "toNode": "download-link",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "href",
+      "pv": { "edgeType": "request" }
+    },
+    {
+      "id": "link-to-api",
+      "fromNode": "download-link",
+      "toNode": "download-api",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "GET",
+      "pv": { "edgeType": "request" }
+    },
+    {
+      "id": "api-to-github-assets",
+      "fromNode": "download-api",
+      "toNode": "github-assets-api",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "HEAD",
+      "pv": { "edgeType": "call" }
+    },
+    {
+      "id": "github-returns-url",
+      "fromNode": "github-assets-api",
+      "toNode": "download-api",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "signed URL",
+      "pv": { "edgeType": "response" }
+    },
+    {
+      "id": "api-redirects",
+      "fromNode": "download-api",
+      "toNode": "cdn-redirect",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "302",
+      "pv": { "edgeType": "response" }
+    },
+    {
+      "id": "redirect-to-cdn",
+      "fromNode": "cdn-redirect",
+      "toNode": "github-cdn",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "follow redirect",
+      "pv": { "edgeType": "request" }
+    },
+    {
+      "id": "cdn-to-browser",
+      "fromNode": "github-cdn",
+      "toNode": "file-saved",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "direct download",
+      "pv": { "edgeType": "response" }
+    },
+    {
+      "id": "config-to-releases-api",
+      "fromNode": "desktop-config",
+      "toNode": "releases-api",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "getGitHubApiUrl()",
+      "pv": { "edgeType": "data-flow" }
+    },
+    {
+      "id": "config-to-download-api",
+      "fromNode": "desktop-config",
+      "toNode": "download-api",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "getAssetDownloadUrl()",
+      "pv": { "edgeType": "data-flow" }
+    }
+  ]
+}

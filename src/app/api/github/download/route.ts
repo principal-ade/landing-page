@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAssetDownloadUrl } from "@/config/desktop-app";
 
-// This endpoint proxies download requests to GitHub releases
-// Uses the same security token as the releases endpoint
+// This endpoint redirects download requests to GitHub's CDN
+// Uses a read-only GitHub token to get the signed download URL
 const RELEASES_ONLY_TOKEN = process.env.GITHUB_RELEASES_READONLY_TOKEN;
 
 export async function GET(request: NextRequest) {
   try {
-    // Get the asset ID and filename from query parameters
+    // Get the asset ID from query parameters
     const { searchParams } = new URL(request.url);
     const assetId = searchParams.get("assetId");
     const filename = searchParams.get("filename");
@@ -29,14 +29,13 @@ export async function GET(request: NextRequest) {
         console.log(`Attempted download of asset ID: ${assetId}`);
         console.log(`Filename: ${filename || "not provided"}`);
         console.log("");
-        console.log("In production, this would download from GitHub releases.");
+        console.log("In production, this would redirect to GitHub's CDN.");
         console.log("Token required: GITHUB_RELEASES_READONLY_TOKEN");
         console.log("========================================");
 
-        // In development, return a helpful message instead of error
         return NextResponse.json(
           {
-            message: "Download would work in production with proper token",
+            message: "Download would redirect in production with proper token",
             assetId,
             filename,
             note: "Set GITHUB_RELEASES_READONLY_TOKEN in .env.local to test downloads",
@@ -57,13 +56,16 @@ export async function GET(request: NextRequest) {
     // SECURITY: Only allow downloads from our specific repository
     const DOWNLOAD_ENDPOINT = getAssetDownloadUrl(assetId);
 
-    // Fetch the asset from GitHub with proper authentication
+    // Use HEAD request to get GitHub's signed CDN URL without downloading the file
+    // GitHub redirects to a signed S3 URL - we follow that redirect to get the final URL
     const response = await fetch(DOWNLOAD_ENDPOINT, {
+      method: "HEAD",
       headers: {
         Authorization: `Bearer ${RELEASES_ONLY_TOKEN}`,
-        Accept: "application/octet-stream", // This tells GitHub to return the binary file
+        Accept: "application/octet-stream",
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      redirect: "follow",
     });
 
     if (!response.ok) {
@@ -89,53 +91,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Use the filename from query params or try to get it from headers
-    let downloadFilename = filename || "download";
+    // response.url contains the final URL after following redirects
+    // This is GitHub's signed S3/CDN URL that allows direct download
+    const cdnUrl = response.url;
 
-    // Try to get filename from GitHub's response headers if not provided
-    if (!filename) {
-      const contentDisposition = response.headers.get("content-disposition");
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="([^"]+)"/);
-        if (match) {
-          downloadFilename = match[1];
-        }
-      }
-    }
+    console.log(`Redirecting download for asset ${assetId} to CDN`);
 
-    // Determine content type based on file extension
-    const getContentType = (filename: string) => {
-      const ext = filename.toLowerCase().split(".").pop();
-      const contentTypes: { [key: string]: string } = {
-        dmg: "application/x-apple-diskimage",
-        exe: "application/x-msdownload",
-        msi: "application/x-msi",
-        deb: "application/vnd.debian.binary-package",
-        rpm: "application/x-rpm",
-        appimage: "application/x-executable",
-        zip: "application/zip",
-        "tar.gz": "application/gzip",
-        gz: "application/gzip",
-      };
-      return contentTypes[ext || ""] || "application/octet-stream";
-    };
-
-    // Stream the file content back to the user
-    const headers = new Headers();
-    headers.set("Content-Type", getContentType(downloadFilename));
-    headers.set(
-      "Content-Disposition",
-      `attachment; filename="${downloadFilename}"`,
-    );
-    headers.set(
-      "Content-Length",
-      response.headers.get("content-length") || "0",
-    );
-
-    return new NextResponse(response.body, {
-      status: 200,
-      headers,
-    });
+    // Redirect user directly to GitHub's CDN for fast, direct download
+    // The signed URL is temporary and doesn't expose our token
+    return NextResponse.redirect(cdnUrl);
   } catch (error) {
     console.error("[SECURITY] Error in download endpoint:", error);
     return NextResponse.json(
