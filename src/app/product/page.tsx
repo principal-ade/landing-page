@@ -118,6 +118,35 @@ export default function FeaturesPage() {
           Understand what agents build. Verify it does what you intended.
           Monitor it in production.
         </p>
+        <a
+          href="/download"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            marginTop: "1.5rem",
+            background: "#22d3ee",
+            color: "#0a0e17",
+            padding: "0.75rem 2rem",
+            borderRadius: "8px",
+            fontWeight: "600",
+            fontSize: "1rem",
+            textDecoration: "none",
+            transition: "opacity 0.2s, transform 0.2s",
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = "0.9";
+            e.currentTarget.style.transform = "translateY(-1px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = "1";
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          Download App
+        </a>
       </section>
 
       {/* Product Navigation */}
