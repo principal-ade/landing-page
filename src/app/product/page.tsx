@@ -78,89 +78,97 @@ export default function FeaturesPage() {
     >
       <Header />
 
-      {/* Page Header */}
+      {/* Hero Section - fills viewport */}
       <section
         style={{
-          padding: isMobile ? "7rem 2rem 2rem" : "8rem 2rem 2rem",
-          maxWidth: "800px",
-          margin: "0 auto",
-          textAlign: "center",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: isMobile ? "2rem" : "3.25rem",
-            fontWeight: "700",
-            lineHeight: "1.15",
-            letterSpacing: "-0.03em",
-            marginBottom: "1rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-          }}
-        >
-          Story-based software.
-          <br />
-          <em style={{ fontStyle: "normal", color: "#22d3ee" }}>
-            From dev to production.
-          </em>
-        </h1>
-        <p
-          style={{
-            color: "#94a3b8",
-            fontSize: isMobile ? "16px" : "1.1rem",
-            maxWidth: "600px",
-            margin: "0 auto",
-            lineHeight: "1.7",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-          }}
-        >
-          Understand what agents build. Verify it does what you intended.
-          Monitor it in production.
-        </p>
-        <a
-          href="/download"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            marginTop: "1.5rem",
-            background: "#22d3ee",
-            color: "#0a0e17",
-            padding: "0.75rem 2rem",
-            borderRadius: "8px",
-            fontWeight: "600",
-            fontSize: "1rem",
-            textDecoration: "none",
-            transition: "opacity 0.2s, transform 0.2s",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = "0.9";
-            e.currentTarget.style.transform = "translateY(-1px)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = "1";
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
-        >
-          Download App
-        </a>
-      </section>
-
-      {/* Product Navigation */}
-      <div
-        style={{
+          minHeight: "calc(100vh - 70px)",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
-          gap: "0.5rem",
-          padding: "2rem 2rem 0",
-          maxWidth: "700px",
-          margin: "0 auto",
-          flexWrap: "wrap",
+          alignItems: "center",
+          padding: isMobile ? "2rem" : "2rem",
         }}
       >
+        {/* Page Header */}
+        <div
+          style={{
+            maxWidth: "800px",
+            textAlign: "center",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: isMobile ? "2rem" : "3.25rem",
+              fontWeight: "700",
+              lineHeight: "1.15",
+              letterSpacing: "-0.03em",
+              marginBottom: "1rem",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            }}
+          >
+            Story-based software.
+            <br />
+            <em style={{ fontStyle: "normal", color: "#22d3ee" }}>
+              From dev to production.
+            </em>
+          </h1>
+          <p
+            style={{
+              color: "#94a3b8",
+              fontSize: isMobile ? "16px" : "1.1rem",
+              maxWidth: "600px",
+              margin: "0 auto",
+              lineHeight: "1.7",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            }}
+          >
+            Understand what agents build. Verify it does what you intended.
+            Monitor it in production.
+          </p>
+          <a
+            href="/download"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              marginTop: "1.5rem",
+              background: "#22d3ee",
+              color: "#0a0e17",
+              padding: "0.75rem 2rem",
+              borderRadius: "8px",
+              fontWeight: "600",
+              fontSize: "1rem",
+              textDecoration: "none",
+              transition: "opacity 0.2s, transform 0.2s",
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = "0.9";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = "1";
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
+          >
+            Download App
+          </a>
+        </div>
+
+        {/* Product Navigation */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "0.5rem",
+            paddingTop: "3rem",
+            maxWidth: "700px",
+            flexWrap: "wrap",
+          }}
+        >
         <a
           href="#filecity"
           style={{
@@ -215,15 +223,21 @@ export default function FeaturesPage() {
         >
           System Stories
         </a>
-      </div>
+        </div>
+      </section>
 
       {/* File City Tours Section */}
       <section
         id="filecity"
         style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1200px",
           margin: "0 auto",
+          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
         }}
       >
         <div
@@ -470,6 +484,10 @@ export default function FeaturesPage() {
       <section
         id="radar"
         style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1000px",
           margin: "0 auto",
@@ -614,6 +632,10 @@ export default function FeaturesPage() {
       <section
         id="stories"
         style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1000px",
           margin: "0 auto",
@@ -789,6 +811,11 @@ export default function FeaturesPage() {
       {/* How They Connect */}
       <section
         style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           padding: isMobile ? "4rem 2rem" : "5rem 2rem",
           maxWidth: "800px",
           margin: "0 auto",
@@ -963,10 +990,16 @@ export default function FeaturesPage() {
       {/* Bottom CTA */}
       <section
         style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           padding: isMobile ? "4rem 2rem" : "5rem 2rem",
           textAlign: "center",
           maxWidth: "600px",
           margin: "0 auto",
+          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
         }}
       >
         <h2

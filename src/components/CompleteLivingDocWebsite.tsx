@@ -48,11 +48,14 @@ export const CompleteLivingDocWebsite: React.FC = () => {
         {/* The Experience - Show don't tell - Navy Blue */}
         <div style={{
           background: '#1b263b',
-          paddingTop: isMobile ? '80px' : '120px',
-          paddingBottom: isMobile ? '80px' : '120px',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
           position: 'relative',
           width: '100%',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          borderTop: '1px solid rgba(148, 163, 184, 0.1)',
         }}>
           <TelemetryVisualization isMobile={isMobile} />
         </div>
@@ -60,10 +63,13 @@ export const CompleteLivingDocWebsite: React.FC = () => {
         {/* The Agent Shift - Problem Statement - Deep Blue-Gray */}
         <div style={{
           background: '#1a2332',
-          paddingTop: isMobile ? '60px' : '100px',
-          paddingBottom: isMobile ? '60px' : '100px',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
           width: '100%',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          borderTop: '1px solid rgba(148, 163, 184, 0.1)',
         }}>
           <AgentShift isMobile={isMobile} />
         </div>

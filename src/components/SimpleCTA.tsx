@@ -9,9 +9,15 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
   return (
     <section
       style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
         padding: isMobile ? "60px 24px" : "100px 40px",
         textAlign: "center",
         background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
+        borderTop: "1px solid rgba(148, 163, 184, 0.1)",
       }}
     >
       <motion.div

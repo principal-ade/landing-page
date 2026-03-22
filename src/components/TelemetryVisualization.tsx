@@ -12,12 +12,12 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
   return (
     <section
       style={{
-        padding: isMobile ? "60px 24px 0px 24px" : "80px 40px 0px 40px",
+        padding: isMobile ? "40px 24px" : "60px 40px",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: "800px", margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
         {/* Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -31,8 +31,8 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 position: "relative",
                 background: COLORS.royalBlue,
                 borderRadius: "8px",
-                padding: isMobile ? "48px 32px" : "64px 56px",
-                marginBottom: "64px",
+                padding: isMobile ? "40px 28px" : "48px 48px",
+                marginBottom: "0px",
                 overflow: "hidden",
                 backgroundImage: `
                   linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
@@ -45,12 +45,12 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Eyebrow */}
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11px",
                   fontWeight: "600",
                   color: COLORS.accentAlt,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  marginBottom: "24px",
+                  marginBottom: "16px",
                   fontFamily: "monospace",
                 }}
               >
@@ -60,11 +60,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Headline */}
               <h2
                 style={{
-                  fontSize: isMobile ? "32px" : "48px",
+                  fontSize: isMobile ? "28px" : "40px",
                   fontWeight: "700",
                   color: COLORS.white,
                   lineHeight: "1.2",
-                  marginBottom: "24px",
+                  marginBottom: "16px",
                   fontFamily:
                     '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 }}
@@ -75,9 +75,9 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Body */}
               <p
                 style={{
-                  fontSize: isMobile ? "16px" : "18px",
+                  fontSize: isMobile ? "15px" : "16px",
                   color: COLORS.white,
-                  lineHeight: "1.7",
+                  lineHeight: "1.6",
                   fontFamily:
                     '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 }}
@@ -90,11 +90,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               </p>
 
               {/* Link */}
-              <div style={{ marginTop: "32px" }}>
+              <div style={{ marginTop: "24px" }}>
                 <a
                   href="/about"
                   style={{
-                    fontSize: isMobile ? "16px" : "18px",
+                    fontSize: isMobile ? "14px" : "15px",
                     fontWeight: "600",
                     color: COLORS.white,
                     textDecoration: "underline",
@@ -122,8 +122,8 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               style={{
                 display: "grid",
                 gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: isMobile ? "24px" : "32px",
-                marginTop: "64px",
+                gap: isMobile ? "16px" : "24px",
+                marginTop: isMobile ? "24px" : "32px",
                 width: "100%",
                 boxSizing: "border-box",
               }}
@@ -132,8 +132,8 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               <div
                 style={{
                   background: COLORS.gray100,
-                  borderRadius: "16px",
-                  padding: isMobile ? "24px" : "32px",
+                  borderRadius: "12px",
+                  padding: isMobile ? "20px" : "24px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
@@ -143,17 +143,17 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               >
                 <h3
                   style={{
-                    fontSize: isMobile ? "16px" : "18px",
+                    fontSize: isMobile ? "14px" : "16px",
                     fontWeight: "600",
                     color: COLORS.gray500,
-                    marginBottom: "24px",
+                    marginBottom: "16px",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                   }}
                 >
                   Traditional Monitoring
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {[
                     { num: 1, text: "Execute code", color: COLORS.gray400 },
                     { num: 2, text: "Emit raw telemetry", color: COLORS.gray400 },
@@ -168,20 +168,20 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "12px",
+                        gap: "10px",
                       }}
                     >
                       <div
                         style={{
-                          width: "32px",
-                          height: "32px",
+                          width: "26px",
+                          height: "26px",
                           borderRadius: "50%",
                           background: step.color,
                           color: COLORS.white,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          fontSize: "14px",
+                          fontSize: "12px",
                           fontWeight: "600",
                           flexShrink: 0,
                         }}
@@ -190,7 +190,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       </div>
                       <span
                         style={{
-                          fontSize: isMobile ? "14px" : "16px",
+                          fontSize: isMobile ? "13px" : "14px",
                           color: COLORS.gray800,
                           fontFamily:
                             '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -208,8 +208,8 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 style={{
                   background: COLORS.white,
                   border: `2px solid ${COLORS.info}`,
-                  borderRadius: "16px",
-                  padding: isMobile ? "24px" : "32px",
+                  borderRadius: "12px",
+                  padding: isMobile ? "20px" : "24px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
@@ -219,17 +219,17 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               >
                 <h3
                   style={{
-                    fontSize: isMobile ? "16px" : "18px",
+                    fontSize: isMobile ? "14px" : "16px",
                     fontWeight: "600",
                     color: COLORS.info,
-                    marginBottom: "24px",
+                    marginBottom: "16px",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                   }}
                 >
                   Story-Based Monitoring
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {[
                     { num: 1, text: "Start from what should happen", color: COLORS.royalBlue },
                     { num: 2, text: "Run the code", color: COLORS.info },
@@ -242,20 +242,20 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "12px",
+                        gap: "10px",
                       }}
                     >
                       <div
                         style={{
-                          width: "32px",
-                          height: "32px",
+                          width: "26px",
+                          height: "26px",
                           borderRadius: "50%",
                           background: step.color,
                           color: COLORS.white,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          fontSize: "14px",
+                          fontSize: "12px",
                           fontWeight: "600",
                           flexShrink: 0,
                         }}
@@ -264,7 +264,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       </div>
                       <span
                         style={{
-                          fontSize: isMobile ? "14px" : "16px",
+                          fontSize: isMobile ? "13px" : "14px",
                           color: COLORS.gray800,
                           fontFamily:
                             '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -277,21 +277,6 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 </div>
               </div>
             </div>
-
-            {/* Tagline */}
-            <p
-              style={{
-                fontSize: isMobile ? "20px" : "24px",
-                fontWeight: "700",
-                color: COLORS.gray400,
-                textAlign: "center",
-                marginTop: "48px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
-              }}
-            >
-              Not after the fire. Before the smoke.
-            </p>
 
           </motion.div>
       </div>
