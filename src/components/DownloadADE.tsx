@@ -215,7 +215,7 @@ export const DownloadADE: React.FC = () => {
             <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
               Windows + Linux coming soon.{' '}
               <a
-                href="https://discord.gg/principal"
+                href="https://discord.gg/G3qdcC2DXq"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#5865F2', textDecoration: 'none' }}
@@ -585,7 +585,7 @@ export const DownloadADE: React.FC = () => {
             <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
               Windows + Linux.{' '}
               <a
-                href="https://discord.gg/principal"
+                href="https://discord.gg/G3qdcC2DXq"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#5865F2', textDecoration: 'none' }}
