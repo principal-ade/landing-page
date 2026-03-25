@@ -45,7 +45,7 @@ export const DownloadADE: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding: isMobile ? '80px 24px 60px' : '120px 40px 80px',
+          padding: isMobile ? '60px 24px 60px' : '80px 40px 80px',
         }}
       >
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
@@ -59,46 +59,47 @@ export const DownloadADE: React.FC = () => {
               color: '#06b6d4',
               lineHeight: 1.1,
               letterSpacing: '-0.03em',
-              marginBottom: '20px',
+              marginBottom: '40px',
             }}
           >
             Download Principal AI
           </motion.h1>
 
-          <motion.p
+          <motion.blockquote
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
             style={{
-              fontSize: isMobile ? '22px' : isTablet ? '26px' : '30px',
-              fontWeight: 600,
-              color: '#ffffff',
-              lineHeight: 1.3,
-              letterSpacing: '-0.02em',
-              marginBottom: '32px',
-            }}
-          >
-            Your agents worked. Here&rsquo;s what they built.
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            style={{
-              fontSize: isMobile ? '16px' : '18px',
-              fontWeight: 400,
-              color: '#b0b8c4',
-              lineHeight: 1.7,
-              maxWidth: '720px',
               margin: '0 auto 48px',
-              letterSpacing: '-0.01em',
+              maxWidth: '680px',
+              textAlign: 'center',
             }}
           >
-            8 repos active. 47 commits. A codebase that&rsquo;s moving right now, across your team and your agents simultaneously.
-            Open Principal AI and it&rsquo;s already there: what changed, where it changed, what it looks like now.
-            No digging. No guessing. Just the shape of your work.
-          </motion.p>
+            <p
+              style={{
+                fontSize: isMobile ? '20px' : '24px',
+                fontWeight: 400,
+                fontStyle: 'italic',
+                color: '#ffffff',
+                lineHeight: 1.5,
+                letterSpacing: '-0.01em',
+                margin: '0 0 12px 0',
+              }}
+            >
+              For the polymath developer, this is kind of like catnip.
+            </p>
+            <footer
+              style={{
+                fontSize: isMobile ? '14px' : '16px',
+                fontWeight: 400,
+                color: '#8a919c',
+                fontStyle: 'normal',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              &mdash; Garry Tan, President of Y Combinator
+            </footer>
+          </motion.blockquote>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -170,8 +171,27 @@ export const DownloadADE: React.FC = () => {
             style={{ marginTop: '64px' }}
           >
             <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Activity Feed</p>
-            <Screenshot src="/come-in-for-this.png" alt="Principal AI activity feed showing agent commits across repos" />
+            <Screenshot src="/gary-tan-activity-feed.png" alt="Principal AI activity feed showing agent commits across repos" />
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.45 }}
+            style={{
+              fontSize: isMobile ? '16px' : '18px',
+              fontWeight: 400,
+              color: '#b0b8c4',
+              lineHeight: 1.7,
+              maxWidth: '720px',
+              margin: '32px auto 0',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            Your codebase doesn&rsquo;t stand still, see what&rsquo;s going on across your team and your agents simultaneously.
+            Open Principal AI and it&rsquo;s already there: what changed, where it changed, what it looks like now.
+            No digging. No guessing. Just the shape of your work.
+          </motion.p>
         </div>
       </section>
 
@@ -226,14 +246,14 @@ export const DownloadADE: React.FC = () => {
             style={{ marginBottom: '48px' }}
           >
             <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Story-based Monitoring</p>
-            <Screenshot src="/canvas-storyboard-conversation.png" alt="Principal AI canvas storyboard conversation view" />
+            <Screenshot src="/codex-runner-error-with-file-city.png" alt="Principal AI codex runner error with file city view" />
           </motion.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '48px' }}>
             {[
               "Your agents didn\u2019t just build something. They either followed your intent, or they didn\u2019t.",
-              "Most tools tell you what happened after something breaks. Principal AI asks you to say what should happen before anything runs.",
-              "When something goes wrong, you\u2019re not searching logs. You\u2019re reading the story. And you can see exactly where reality diverged from intent.",
+              "Most tools tell you what happened after something breaks. Principal AI shows you whether it happened right \u2014 so you know before it becomes a problem.",
+              "And when something does go wrong, you\u2019re not searching logs. You\u2019re reading the story. You can see exactly where reality diverged from intent.",
             ].map((text, i) => (
               <motion.p
                 key={i}
@@ -297,7 +317,7 @@ export const DownloadADE: React.FC = () => {
               marginBottom: '48px',
             }}
           >
-            What You Get
+            What&rsquo;s Inside
           </h2>
           <div
             style={{
@@ -318,7 +338,7 @@ export const DownloadADE: React.FC = () => {
               },
               {
                 title: 'File City',
-                description: 'Know your codebase. You see it change. Your agents navigate it.',
+                description: 'See inside your codebase. Every change, every file. Agents and humans, one view.',
                 icon: (
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" />
@@ -430,7 +450,7 @@ export const DownloadADE: React.FC = () => {
               marginBottom: '16px',
             }}
           >
-            See the work. Read the story.
+            See the work. <span style={{ color: '#06b6d4' }}>Read the story.</span>
             <br />
             Know if it went right.
           </motion.h2>
