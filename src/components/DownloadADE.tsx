@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { trackDownload } from '../app/lib/analytics';
 
 const fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif';
+
+interface GitHubRelease {
+  id: number;
+  tag_name: string;
+  name: string;
+  body: string;
+  published_at: string;
+  assets: {
+    id: number;
+    name: string;
+    browser_download_url: string;
+    size: number;
+  }[];
+}
 
 const Screenshot: React.FC<{ src: string; alt: string }> = ({ src, alt }) => (
   <img
@@ -17,15 +32,50 @@ const Screenshot: React.FC<{ src: string; alt: string }> = ({ src, alt }) => (
 );
 
 export const DownloadADE: React.FC = () => {
-  const [windowWidth, setWindowWidth] = React.useState(
+  const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
+  const [releases, setReleases] = useState<GitHubRelease[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const fetchReleases = async () => {
+      try {
+        const response = await fetch("/api/github/releases");
+        if (response.ok) {
+          const data = await response.json();
+          setReleases(data);
+        }
+      } catch {
+        // Silently fail - buttons will show fallback
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReleases();
+  }, []);
+
+  const getAssetForPlatform = (release: GitHubRelease, platform: "mac" | "windows" | "linux") => {
+    const patterns = {
+      mac: [".dmg", "darwin", "macos"],
+      windows: [".exe", ".msi", "win32", "windows"],
+      linux: [".AppImage", ".deb", ".rpm", "linux"],
+    };
+    return release.assets.find((asset) =>
+      patterns[platform].some((pattern) => asset.name.toLowerCase().includes(pattern))
+    );
+  };
+
+  const macAsset = releases[0] ? getAssetForPlatform(releases[0], "mac") : null;
+  const downloadUrl = macAsset
+    ? `/api/github/download?assetId=${macAsset.id}&filename=${encodeURIComponent(macAsset.name)}`
+    : "/download";
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -113,13 +163,22 @@ export const DownloadADE: React.FC = () => {
             }}
           >
             <a
-              href="#download"
+              href={downloadUrl}
+              onClick={() => {
+                if (macAsset) {
+                  trackDownload({
+                    filename: macAsset.name,
+                    platform: 'mac',
+                    assetId: macAsset.id,
+                  });
+                }
+              }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
                 padding: isMobile ? '16px 36px' : '18px 44px',
-                background: '#06b6d4',
+                background: loading ? '#4b5563' : '#06b6d4',
                 color: '#000000',
                 textDecoration: 'none',
                 fontSize: isMobile ? '16px' : '18px',
@@ -127,18 +186,23 @@ export const DownloadADE: React.FC = () => {
                 borderRadius: '12px',
                 fontFamily,
                 letterSpacing: '-0.01em',
-                boxShadow: '0 4px 20px rgba(6, 182, 212, 0.4)',
+                boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
                 transition: 'all 0.2s ease',
+                pointerEvents: loading ? 'none' : 'auto',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#22d3ee';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                if (!loading) {
+                  e.currentTarget.style.background = '#22d3ee';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#06b6d4';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                if (!loading) {
+                  e.currentTarget.style.background = '#06b6d4';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                }
               }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -146,7 +210,7 @@ export const DownloadADE: React.FC = () => {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Download for macOS — Free
+              {loading ? 'Loading...' : 'Download for macOS — Free'}
             </a>
             <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
               Windows + Linux coming soon.{' '}
@@ -469,13 +533,22 @@ export const DownloadADE: React.FC = () => {
             }}
           >
             <a
-              href="#download"
+              href={downloadUrl}
+              onClick={() => {
+                if (macAsset) {
+                  trackDownload({
+                    filename: macAsset.name,
+                    platform: 'mac',
+                    assetId: macAsset.id,
+                  });
+                }
+              }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
                 padding: isMobile ? '16px 36px' : '18px 44px',
-                background: '#06b6d4',
+                background: loading ? '#4b5563' : '#06b6d4',
                 color: '#000000',
                 textDecoration: 'none',
                 fontSize: isMobile ? '16px' : '18px',
@@ -483,18 +556,23 @@ export const DownloadADE: React.FC = () => {
                 borderRadius: '12px',
                 fontFamily,
                 letterSpacing: '-0.01em',
-                boxShadow: '0 4px 20px rgba(6, 182, 212, 0.4)',
+                boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
                 transition: 'all 0.2s ease',
+                pointerEvents: loading ? 'none' : 'auto',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#22d3ee';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                if (!loading) {
+                  e.currentTarget.style.background = '#22d3ee';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#06b6d4';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                if (!loading) {
+                  e.currentTarget.style.background = '#06b6d4';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                }
               }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -502,7 +580,7 @@ export const DownloadADE: React.FC = () => {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Download for macOS — Free
+              {loading ? 'Loading...' : 'Download for macOS — Free'}
             </a>
             <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
               Windows + Linux.{' '}
