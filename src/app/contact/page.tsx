@@ -112,7 +112,7 @@ export default function ContactPage() {
                 Email Us
               </h2>
               <a
-                href="mailto:info@noetic-labs.ai"
+                href="mailto:principalai@noetic-labs.ai"
                 style={{
                   fontSize: isMobile ? "20px" : "24px",
                   color: "#00C2FF",
@@ -130,7 +130,7 @@ export default function ContactPage() {
                   e.currentTarget.style.color = "#00C2FF";
                 }}
               >
-                info@noetic-labs.ai
+                principalai@noetic-labs.ai
               </a>
             </div>
 
