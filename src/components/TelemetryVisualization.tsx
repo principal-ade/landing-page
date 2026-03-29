@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
-import { COLORS } from "../styles/colors";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface TelemetryVisualizationProps {
   isMobile?: boolean;
@@ -9,6 +11,7 @@ interface TelemetryVisualizationProps {
 export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
   isMobile = false,
 }) => {
+  const { theme } = useTheme();
   return (
     <section
       style={{
@@ -25,11 +28,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
           viewport={{ once: true }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         >
-            {/* Blue quote block with grid */}
+            {/* Quote block with grid */}
             <div
               style={{
                 position: "relative",
-                background: COLORS.royalBlue,
+                background: theme.colors.accent,
                 borderRadius: "8px",
                 padding: isMobile ? "40px 28px" : "48px 48px",
                 marginBottom: "0px",
@@ -39,7 +42,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
                 `,
                 backgroundSize: "20px 20px",
-                boxShadow: "0 8px 24px rgba(30, 64, 175, 0.3)",
+                boxShadow: `0 8px 24px ${theme.colors.accent}4D`,
               }}
             >
               {/* Eyebrow */}
@@ -47,7 +50,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 style={{
                   fontSize: "11px",
                   fontWeight: "600",
-                  color: COLORS.accentAlt,
+                  color: theme.colors.primary,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   marginBottom: "16px",
@@ -62,7 +65,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 style={{
                   fontSize: isMobile ? "28px" : "40px",
                   fontWeight: "700",
-                  color: COLORS.white,
+                  color: theme.colors.textOnAccent,
                   lineHeight: "1.2",
                   marginBottom: "16px",
                   fontFamily:
@@ -76,7 +79,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               <p
                 style={{
                   fontSize: isMobile ? "15px" : "16px",
-                  color: COLORS.white,
+                  color: theme.colors.textOnAccent,
                   lineHeight: "1.6",
                   fontFamily:
                     '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -96,7 +99,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   style={{
                     fontSize: isMobile ? "14px" : "15px",
                     fontWeight: "600",
-                    color: COLORS.white,
+                    color: theme.colors.textOnAccent,
                     textDecoration: "underline",
                     display: "inline-flex",
                     alignItems: "center",
@@ -131,21 +134,21 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Traditional Monitoring Card */}
               <div
                 style={{
-                  background: COLORS.gray100,
+                  background: theme.colors.muted,
                   borderRadius: "12px",
                   padding: isMobile ? "20px" : "24px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
                   wordBreak: "break-word",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
                 }}
               >
                 <h3
                   style={{
                     fontSize: isMobile ? "14px" : "16px",
                     fontWeight: "600",
-                    color: COLORS.gray500,
+                    color: theme.colors.textTertiary,
                     marginBottom: "16px",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -155,13 +158,13 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {[
-                    { num: 1, text: "Execute code", color: COLORS.gray400 },
-                    { num: 2, text: "Emit raw telemetry", color: COLORS.gray400 },
-                    { num: 3, text: "Store everything", color: COLORS.gray400 },
-                    { num: 4, text: "Something breaks", color: COLORS.error },
-                    { num: 5, text: "Search the haystack", color: COLORS.gray400 },
-                    { num: 6, text: "Reconstruct what happened", color: COLORS.gray400 },
-                    { num: 7, text: "Hope you find it", color: COLORS.gray400 },
+                    { num: 1, text: "Execute code", color: theme.colors.secondary },
+                    { num: 2, text: "Emit raw telemetry", color: theme.colors.secondary },
+                    { num: 3, text: "Store everything", color: theme.colors.secondary },
+                    { num: 4, text: "Something breaks", color: theme.colors.error },
+                    { num: 5, text: "Search the haystack", color: theme.colors.secondary },
+                    { num: 6, text: "Reconstruct what happened", color: theme.colors.secondary },
+                    { num: 7, text: "Hope you find it", color: theme.colors.secondary },
                   ].map((step) => (
                     <div
                       key={step.num}
@@ -177,7 +180,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                           height: "26px",
                           borderRadius: "50%",
                           background: step.color,
-                          color: COLORS.white,
+                          color: theme.colors.textOnSecondary,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -191,7 +194,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       <span
                         style={{
                           fontSize: isMobile ? "13px" : "14px",
-                          color: COLORS.gray800,
+                          color: theme.colors.text,
                           fontFamily:
                             '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                         }}
@@ -206,22 +209,22 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Story-Based Monitoring Card */}
               <div
                 style={{
-                  background: COLORS.white,
-                  border: `2px solid ${COLORS.info}`,
+                  background: theme.colors.surface,
+                  border: `2px solid ${theme.colors.primary}`,
                   borderRadius: "12px",
                   padding: isMobile ? "20px" : "24px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
                   wordBreak: "break-word",
-                  boxShadow: "0 4px 12px rgba(8, 145, 178, 0.15)",
+                  boxShadow: `0 4px 12px ${theme.colors.primary}26`,
                 }}
               >
                 <h3
                   style={{
                     fontSize: isMobile ? "14px" : "16px",
                     fontWeight: "600",
-                    color: COLORS.info,
+                    color: theme.colors.primary,
                     marginBottom: "16px",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -231,11 +234,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {[
-                    { num: 1, text: "Start from what should happen", color: COLORS.royalBlue },
-                    { num: 2, text: "Run the code", color: COLORS.info },
-                    { num: 3, text: "See the story of what did", color: COLORS.success },
-                    { num: 4, text: "Every divergence surfaced", color: COLORS.info },
-                    { num: 5, text: "Root cause in minutes", color: COLORS.accentAlt },
+                    { num: 1, text: "Start from what should happen", color: theme.colors.accent },
+                    { num: 2, text: "Run the code", color: theme.colors.info },
+                    { num: 3, text: "See the story of what did", color: theme.colors.success },
+                    { num: 4, text: "Every divergence surfaced", color: theme.colors.info },
+                    { num: 5, text: "Root cause in minutes", color: theme.colors.primary },
                   ].map((step) => (
                     <div
                       key={step.num}
@@ -251,7 +254,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                           height: "26px",
                           borderRadius: "50%",
                           background: step.color,
-                          color: COLORS.white,
+                          color: theme.colors.textOnSecondary,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -265,7 +268,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                       <span
                         style={{
                           fontSize: isMobile ? "13px" : "14px",
-                          color: COLORS.gray800,
+                          color: theme.colors.text,
                           fontFamily:
                             '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                         }}

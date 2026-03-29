@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import { useTheme } from '@principal-ade/industry-theme';
 
 export const Header: React.FC = () => {
   const pathname = usePathname();
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
@@ -26,7 +28,6 @@ export const Header: React.FC = () => {
   }, []);
 
   const isMobile = windowWidth < 768;
-  const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
   return (
     <nav
@@ -36,8 +37,8 @@ export const Header: React.FC = () => {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: '#000000',
-        borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
+        background: theme.colors.background,
+        borderBottom: `1px solid ${theme.colors.border}`,
         height: '70px',
         padding: isMobile ? '0 20px' : '0 24px',
         display: 'flex',
@@ -63,19 +64,16 @@ export const Header: React.FC = () => {
               alignItems: 'center',
               gap: '8px',
               textDecoration: 'none',
-              fontSize: isTablet ? '22px' : isMobile ? '18px' : '20px',
+              fontSize: isMobile ? '18px' : '20px',
               fontWeight: '600',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            <span style={{ color: '#ffffff' }}>Principal</span>
+            <span style={{ color: theme.colors.text }}>Principal</span>
             <span
               style={{
                 fontWeight: '300',
-                background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: theme.colors.primary,
               }}
             >
               AI
@@ -83,11 +81,11 @@ export const Header: React.FC = () => {
           </Link>
           {isMobile && (isBlogPage || isAboutPage || isFeaturesPage || isDemoPage) && (
             <>
-              <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>/</span>
+              <span style={{ color: theme.colors.textMuted }}>/</span>
               <Link
                 href={isBlogPage ? '/blog' : isAboutPage ? '/about' : isDemoPage ? '/observability-demo' : '/product'}
                 style={{
-                  color: '#00C2FF',
+                  color: theme.colors.primary,
                   textDecoration: 'none',
                   fontSize: '18px',
                   fontWeight: '500',
@@ -105,26 +103,26 @@ export const Header: React.FC = () => {
           style={{
             display: isMobile ? 'none' : 'flex',
             alignItems: 'center',
-            gap: isTablet ? '20px' : '24px',
+            gap: '24px',
           }}
         >
           <Link
             href="/about"
             style={{
-              color: isAboutPage ? '#00C2FF' : '#d1d5db',
+              color: isAboutPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isAboutPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
+              fontSize: '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'color 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
+              e.currentTarget.style.color = theme.colors.primary;
             }}
             onMouseLeave={(e) => {
               if (!isAboutPage) {
-                e.currentTarget.style.color = '#d1d5db';
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }
             }}
           >
@@ -133,20 +131,20 @@ export const Header: React.FC = () => {
           <Link
             href="/product"
             style={{
-              color: isFeaturesPage ? '#00C2FF' : '#d1d5db',
+              color: isFeaturesPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isFeaturesPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
+              fontSize: '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'color 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
+              e.currentTarget.style.color = theme.colors.primary;
             }}
             onMouseLeave={(e) => {
               if (!isFeaturesPage) {
-                e.currentTarget.style.color = '#d1d5db';
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }
             }}
           >
@@ -155,20 +153,20 @@ export const Header: React.FC = () => {
           <Link
             href="/observability-demo"
             style={{
-              color: isDemoPage ? '#00C2FF' : '#d1d5db',
+              color: isDemoPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isDemoPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
+              fontSize: '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'color 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
+              e.currentTarget.style.color = theme.colors.primary;
             }}
             onMouseLeave={(e) => {
               if (!isDemoPage) {
-                e.currentTarget.style.color = '#d1d5db';
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }
             }}
           >
@@ -177,20 +175,20 @@ export const Header: React.FC = () => {
           <Link
             href="/blog"
             style={{
-              color: isBlogPage ? '#00C2FF' : '#d1d5db',
+              color: isBlogPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isBlogPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
-              fontSize: isTablet ? '15px' : '14px',
+              fontSize: '14px',
               fontWeight: '500',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               transition: 'color 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#00C2FF';
+              e.currentTarget.style.color = theme.colors.primary;
             }}
             onMouseLeave={(e) => {
               if (!isBlogPage) {
-                e.currentTarget.style.color = '#d1d5db';
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }
             }}
           >
@@ -199,11 +197,11 @@ export const Header: React.FC = () => {
           <Link
             href="/early-access"
             style={{
-              padding: isTablet ? '10px 24px' : '8px 20px',
-              background: '#00C2FF',
-              color: '#000000',
+              padding: '8px 20px',
+              background: theme.colors.primary,
+              color: theme.colors.textOnPrimary,
               textDecoration: 'none',
-              fontSize: isTablet ? '15px' : '14px',
+              fontSize: '14px',
               fontWeight: '600',
               borderRadius: '8px',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -212,7 +210,7 @@ export const Header: React.FC = () => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+              e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
@@ -230,7 +228,7 @@ export const Header: React.FC = () => {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#ffffff',
+              color: theme.colors.text,
               cursor: 'pointer',
               padding: '8px',
               display: 'flex',
@@ -252,8 +250,8 @@ export const Header: React.FC = () => {
             top: '100%',
             left: 0,
             right: 0,
-            background: 'rgba(0, 0, 0, 0.98)',
-            borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
+            background: theme.colors.background,
+            borderBottom: `1px solid ${theme.colors.border}`,
             padding: '24px',
             display: 'flex',
             flexDirection: 'column',
@@ -264,7 +262,7 @@ export const Header: React.FC = () => {
             href="/about"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: isAboutPage ? '#00C2FF' : '#d1d5db',
+              color: isAboutPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isAboutPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
               fontSize: '16px',
@@ -278,7 +276,7 @@ export const Header: React.FC = () => {
             href="/product"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: isFeaturesPage ? '#00C2FF' : '#d1d5db',
+              color: isFeaturesPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isFeaturesPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
               fontSize: '16px',
@@ -292,7 +290,7 @@ export const Header: React.FC = () => {
             href="/observability-demo"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: isDemoPage ? '#00C2FF' : '#d1d5db',
+              color: isDemoPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isDemoPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
               fontSize: '16px',
@@ -306,7 +304,7 @@ export const Header: React.FC = () => {
             href="/blog"
             onClick={() => setMobileMenuOpen(false)}
             style={{
-              color: isBlogPage ? '#00C2FF' : '#d1d5db',
+              color: isBlogPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isBlogPage ? 'underline' : 'none',
               textUnderlineOffset: '4px',
               fontSize: '16px',
@@ -321,8 +319,8 @@ export const Header: React.FC = () => {
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',
-              background: '#00C2FF',
-              color: '#000000',
+              background: theme.colors.primary,
+              color: theme.colors.textOnPrimary,
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '600',

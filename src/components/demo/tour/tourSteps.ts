@@ -1,4 +1,4 @@
-import type { TourStep, TourPanelAction, DelayedTourAction } from './TourProvider';
+import type { TourStep } from './TourProvider';
 
 /**
  * Default tour steps for the observability demo

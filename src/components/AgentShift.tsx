@@ -1,11 +1,16 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface AgentShiftProps {
   isMobile?: boolean;
 }
 
 export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
+  const { theme } = useTheme();
+
   return (
     <section
       style={{
@@ -25,7 +30,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
             style={{
               fontSize: isMobile ? "20px" : "24px",
               fontWeight: "600",
-              color: "#9ca3af",
+              color: theme.colors.textTertiary,
               marginBottom: "32px",
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -44,9 +49,9 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
           >
-            <span style={{ color: "#00C2FF" }}>Three features.</span>
+            <span style={{ color: theme.colors.primary }}>Three features.</span>
             <br />
-            <span style={{ color: "#ffffff" }}>One platform.</span>
+            <span style={{ color: theme.colors.text }}>One platform.</span>
           </h2>
           <a
             href="/product"
@@ -55,8 +60,8 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               alignItems: "center",
               gap: "8px",
               padding: isMobile ? "14px 32px" : "16px 40px",
-              background: "#00C2FF",
-              color: "#000000",
+              background: theme.colors.primary,
+              color: theme.colors.textOnPrimary,
               textDecoration: "none",
               fontSize: isMobile ? "16px" : "18px",
               fontWeight: "600",
@@ -66,12 +71,12 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#00d4ff";
+              e.currentTarget.style.filter = "brightness(1.1)";
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 194, 255, 0.4)";
+              e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#00C2FF";
+              e.currentTarget.style.filter = "brightness(1)";
               e.currentTarget.style.transform = "translateY(0)";
               e.currentTarget.style.boxShadow = "none";
             }}

@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import { Logo } from '@principal-ai/logo-component';
+import { useTheme } from '@principal-ade/industry-theme';
 import {
   TourProvider,
   TourOverlay,
@@ -45,7 +46,7 @@ const TraceListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#00C2FF',
+        color: '#E4C04A',
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Trace Panel...
@@ -64,7 +65,7 @@ const StoryboardListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#00C2FF',
+        color: '#E4C04A',
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Storyboards...
@@ -106,12 +107,13 @@ interface DemoViewProps {
 // Inner component to access tour context
 function DemoViewInner({
   isOpen,
-  onClose,
+  onClose: _onClose,
   schematics,
   providerReady,
   registeredTraces,
   onClearTraces,
 }: DemoViewProps) {
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<DemoTab>('storyboards');
   const storyboardEventsRef = useRef<PanelEventEmitter | null>(null);
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
@@ -151,29 +153,29 @@ function DemoViewInner({
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: '#00C2FF',
-          bgColor: 'rgba(0, 194, 255, 0.1)',
+          color: theme.colors.primary,
+          bgColor: `${theme.colors.primary}1A`,
         };
       case 'kanban':
         return {
           label: 'Live App',
           sublabel: 'Backlog.md',
-          color: '#00C2FF',
-          bgColor: 'rgba(0, 194, 255, 0.1)',
+          color: theme.colors.primary,
+          bgColor: `${theme.colors.primary}1A`,
         };
       case 'traditional-monitoring':
         return {
           label: 'Traditional Monitoring',
           sublabel: 'Traces',
-          color: '#00C2FF',
-          bgColor: 'rgba(0, 194, 255, 0.1)',
+          color: theme.colors.primary,
+          bgColor: `${theme.colors.primary}1A`,
         };
       case 'story-monitoring':
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: '#00C2FF',
-          bgColor: 'rgba(0, 194, 255, 0.1)',
+          color: theme.colors.primary,
+          bgColor: `${theme.colors.primary}1A`,
         };
       default:
         return null;
@@ -194,7 +196,7 @@ function DemoViewInner({
         right: 0,
         bottom: 0,
         zIndex: 100,
-        background: '#0a0e17',
+        background: theme.colors.background,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -259,8 +261,8 @@ function DemoViewInner({
                     onClick={() => setActiveTab(tab.id)}
                     style={{
                       padding: '6px 16px',
-                      background: activeTab === tab.id ? 'rgba(0, 194, 255, 0.2)' : 'transparent',
-                      color: activeTab === tab.id ? '#00C2FF' : 'rgba(255, 255, 255, 0.6)',
+                      background: activeTab === tab.id ? `${theme.colors.primary}33` : 'transparent',
+                      color: activeTab === tab.id ? theme.colors.primary : theme.colors.textMuted,
                       border: 'none',
                       borderRadius: '6px',
                       fontFamily: 'Inter, sans-serif',
@@ -272,14 +274,14 @@ function DemoViewInner({
                     }}
                     onMouseEnter={(e) => {
                       if (activeTab !== tab.id) {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                        e.currentTarget.style.background = `${theme.colors.primary}1A`;
+                        e.currentTarget.style.color = theme.colors.text;
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (activeTab !== tab.id) {
                         e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
+                        e.currentTarget.style.color = theme.colors.textMuted;
                       }
                     }}
                   >
@@ -350,7 +352,7 @@ function DemoViewInner({
                   display: 'flex',
                   flexDirection: 'column',
                   overflow: 'hidden',
-                  background: 'rgb(10, 10, 10)',
+                  background: theme.colors.background,
                 }}
               >
                 <StoryboardListPanelWrapper
@@ -382,7 +384,7 @@ function DemoViewInner({
                   display: 'flex',
                   flexDirection: 'column',
                   overflow: 'hidden',
-                  background: 'rgb(10, 10, 10)',
+                  background: theme.colors.background,
                 }}
               >
                 <TraceListPanelWrapper
@@ -463,7 +465,8 @@ function isIntroStep(stepId: string | undefined): boolean {
 
 // Intro screen shown during welcome and tab introduction steps
 function IntroScreen() {
-  const { currentStep, isActive, next, prev, currentStepIndex, steps } = useTour();
+  const { theme } = useTheme();
+  const { currentStep, isActive, next, prev, currentStepIndex: _currentStepIndex, steps: _steps } = useTour();
 
   // Only show on intro steps
   if (!isActive || !currentStep || !isIntroStep(currentStep.id)) {
@@ -485,7 +488,7 @@ function IntroScreen() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(180deg, #0a0e17 0%, #0d1520 100%)',
+        background: `linear-gradient(180deg, ${theme.colors.background} 0%, ${theme.colors.backgroundSecondary} 100%)`,
         zIndex: 100,
         padding: '40px',
       }}
@@ -495,8 +498,9 @@ function IntroScreen() {
           <Logo
             width={100}
             height={100}
-            color="#00C2FF"
-            particleColor="#0088CC"
+            color={theme.colors.primary}
+            particleColor={theme.colors.accent}
+            letterColor={theme.colors.text}
             opacity={0.9}
           />
         </div>
@@ -510,12 +514,12 @@ function IntroScreen() {
             fontSize: isWelcome ? '36px' : '32px',
             fontWeight: 600,
             fontFamily: 'Inter, sans-serif',
-            color: '#ffffff',
+            color: theme.colors.text,
             margin: '32px 0 16px 0',
             textAlign: 'center',
           }}
         >
-          <span style={{ color: '#00C2FF' }}>{content.title}</span>
+          <span style={{ color: theme.colors.primary }}>{content.title}</span>
         </h1>
       )}
 
@@ -523,7 +527,7 @@ function IntroScreen() {
         style={{
           fontSize: '24px',
           fontFamily: 'Inter, sans-serif',
-          color: 'rgba(255, 255, 255, 0.7)',
+          color: theme.colors.textTertiary,
           margin: content.title ? 0 : '32px 0 0 0',
           maxWidth: '800px',
           minHeight: '87px', // Fixed height for 3 lines to prevent icon/title shifting
@@ -559,9 +563,9 @@ function IntroScreen() {
               padding: '14px 28px',
               minWidth: '120px',
               background: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              border: `1px solid ${theme.colors.border}`,
               borderRadius: '10px',
-              color: 'rgba(255, 255, 255, 0.8)',
+              color: theme.colors.textSecondary,
               fontSize: '16px',
               fontWeight: 500,
               fontFamily: 'Inter, sans-serif',
@@ -569,12 +573,12 @@ function IntroScreen() {
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-              e.currentTarget.style.color = '#fff';
+              e.currentTarget.style.borderColor = theme.colors.primary;
+              e.currentTarget.style.color = theme.colors.text;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+              e.currentTarget.style.borderColor = theme.colors.border;
+              e.currentTarget.style.color = theme.colors.textSecondary;
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -595,24 +599,24 @@ function IntroScreen() {
             gap: '8px',
             padding: '14px 28px',
             minWidth: '120px',
-            background: 'linear-gradient(135deg, #00C2FF 0%, #0088CC 100%)',
+            background: theme.colors.primary,
             border: 'none',
             borderRadius: '10px',
-            color: '#fff',
+            color: theme.colors.textOnPrimary,
             fontSize: '16px',
             fontWeight: 600,
             fontFamily: 'Inter, sans-serif',
             cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(0, 194, 255, 0.4)',
+            boxShadow: `0 4px 20px ${theme.colors.primary}66`,
             transition: 'all 0.2s ease',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 6px 24px rgba(0, 194, 255, 0.5)';
+            e.currentTarget.style.boxShadow = `0 6px 24px ${theme.colors.primary}80`;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 194, 255, 0.4)';
+            e.currentTarget.style.boxShadow = `0 4px 20px ${theme.colors.primary}66`;
           }}
         >
           Start

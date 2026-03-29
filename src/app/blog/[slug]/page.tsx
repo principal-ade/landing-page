@@ -141,8 +141,7 @@ export default function BlogPostPage() {
   return (
     <div
       style={{
-        height: "100vh",
-        paddingTop: "72px",
+        height: "100%",
         boxSizing: "border-box",
       }}
     >

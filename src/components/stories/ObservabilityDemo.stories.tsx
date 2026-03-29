@@ -99,7 +99,7 @@ export const Default: Story = {
  */
 function InteractiveDemo() {
   const [traces, setTraces] = useState<RegisteredTrace[]>(mockTraces);
-  const [providerReady, setProviderReady] = useState(true);
+  const [providerReady, _setProviderReady] = useState(true);
 
   const handleClearTraces = () => {
     setTraces([]);

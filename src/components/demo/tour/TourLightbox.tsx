@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTheme } from '@principal-ade/industry-theme';
 import { useTour } from './TourProvider';
 
 /**
@@ -8,6 +9,7 @@ import { useTour } from './TourProvider';
  * Shows a white card on top of dimmed background content
  */
 export function TourLightbox() {
+  const { theme } = useTheme();
   const { currentStep, isActive, next, prev } = useTour();
 
   // Only show for lightbox steps
@@ -36,7 +38,8 @@ export function TourLightbox() {
     >
       <div
         style={{
-          background: 'rgba(255, 255, 255, 0.85)',
+          background: theme.colors.backgroundSecondary,
+          border: `1px solid ${theme.colors.border}`,
           borderRadius: '16px',
           padding: '48px',
           maxWidth: '600px',
@@ -52,7 +55,7 @@ export function TourLightbox() {
               fontSize: '28px',
               fontWeight: 600,
               fontFamily: 'Inter, sans-serif',
-              color: '#00C2FF',
+              color: theme.colors.primary,
               margin: '0 0 24px 0',
               textAlign: 'center',
             }}
@@ -65,7 +68,7 @@ export function TourLightbox() {
           style={{
             fontSize: '16px',
             fontFamily: 'Inter, sans-serif',
-            color: '#4a4a4a',
+            color: theme.colors.textSecondary,
             margin: 0,
             textAlign: 'center',
             lineHeight: 1.6,
@@ -95,9 +98,9 @@ export function TourLightbox() {
                 padding: '12px 24px',
                 minWidth: '100px',
                 background: 'transparent',
-                border: '1px solid rgba(0, 0, 0, 0.2)',
+                border: `1px solid ${theme.colors.border}`,
                 borderRadius: '10px',
-                color: '#4a4a4a',
+                color: theme.colors.textSecondary,
                 fontSize: '15px',
                 fontWeight: 500,
                 fontFamily: 'Inter, sans-serif',
@@ -105,12 +108,12 @@ export function TourLightbox() {
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.4)';
-                e.currentTarget.style.color = '#1a1a1a';
+                e.currentTarget.style.borderColor = theme.colors.primary;
+                e.currentTarget.style.color = theme.colors.text;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.2)';
-                e.currentTarget.style.color = '#4a4a4a';
+                e.currentTarget.style.borderColor = theme.colors.border;
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -131,24 +134,24 @@ export function TourLightbox() {
               gap: '8px',
               padding: '12px 24px',
               minWidth: '100px',
-              background: 'linear-gradient(135deg, #00C2FF 0%, #0088CC 100%)',
+              background: theme.colors.primary,
               border: 'none',
               borderRadius: '10px',
-              color: '#fff',
+              color: theme.colors.textOnPrimary,
               fontSize: '15px',
               fontWeight: 600,
               fontFamily: 'Inter, sans-serif',
               cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(0, 194, 255, 0.4)',
+              boxShadow: `0 4px 20px ${theme.colors.primary}66`,
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 6px 24px rgba(0, 194, 255, 0.5)';
+              e.currentTarget.style.boxShadow = `0 6px 24px ${theme.colors.primary}80`;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 194, 255, 0.4)';
+              e.currentTarget.style.boxShadow = `0 4px 20px ${theme.colors.primary}66`;
             }}
           >
             Next

@@ -120,7 +120,7 @@ export const StoryboardListPanelWrapper: React.FC<StoryboardListPanelWrapperProp
   }, [schematics]);
 
   // Build file content map and file paths from schematics
-  const { fileContentMap, filePaths, storyboardCount } = useMemo(() => {
+  const { fileContentMap, filePaths, storyboardCount: _storyboardCount } = useMemo(() => {
     const map = new Map<string, string>();
     const paths: string[] = [];
     let count = 0;

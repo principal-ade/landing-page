@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { useTheme } from '@principal-ade/industry-theme';
 import { LivingDocHomepage } from './LivingDocHomepage';
 import { TelemetryVisualization } from './TelemetryVisualization';
 import { AgentShift } from './AgentShift';
@@ -6,6 +9,7 @@ import { SimpleCTA } from './SimpleCTA';
 import { Footer } from './Footer';
 
 export const CompleteLivingDocWebsite: React.FC = () => {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(1024);
 
   React.useEffect(() => {
@@ -25,16 +29,16 @@ export const CompleteLivingDocWebsite: React.FC = () => {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: '#0d1117',
+      background: theme.colors.background,
       width: '100%',
       maxWidth: '100vw',
       overflowX: 'hidden',
       boxSizing: 'border-box'
     }}>
       <main style={{ flex: 1, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
-        {/* Hero - The Hook - Dark Navy */}
+        {/* Hero - The Hook */}
         <div style={{
-          background: 'radial-gradient(ellipse at top, rgba(0, 194, 255, 0.1) 0%, transparent 50%), #0d1b2a',
+          background: `radial-gradient(ellipse at top, ${theme.colors.primary}1A 0%, transparent 50%), ${theme.colors.background}`,
           paddingBottom: '0px',
           width: '100%',
           boxSizing: 'border-box',
@@ -45,9 +49,9 @@ export const CompleteLivingDocWebsite: React.FC = () => {
           <LivingDocHomepage />
         </div>
 
-        {/* The Experience - Show don't tell - Navy Blue */}
+        {/* The Experience - Show don't tell */}
         <div style={{
-          background: '#1b263b',
+          background: theme.colors.backgroundSecondary,
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -55,26 +59,26 @@ export const CompleteLivingDocWebsite: React.FC = () => {
           position: 'relative',
           width: '100%',
           boxSizing: 'border-box',
-          borderTop: '1px solid rgba(148, 163, 184, 0.1)',
+          borderTop: `1px solid ${theme.colors.border}`,
         }}>
           <TelemetryVisualization isMobile={isMobile} />
         </div>
 
-        {/* The Agent Shift - Problem Statement - Deep Blue-Gray */}
+        {/* The Agent Shift - Problem Statement */}
         <div style={{
-          background: '#1a2332',
+          background: theme.colors.backgroundTertiary,
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           width: '100%',
           boxSizing: 'border-box',
-          borderTop: '1px solid rgba(148, 163, 184, 0.1)',
+          borderTop: `1px solid ${theme.colors.border}`,
         }}>
           <AgentShift isMobile={isMobile} />
         </div>
 
-        {/* Final CTA - Deep Navy */}
+        {/* Final CTA */}
         <SimpleCTA isMobile={isMobile} />
       </main>
       <Footer />

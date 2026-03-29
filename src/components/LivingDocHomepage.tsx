@@ -1,10 +1,13 @@
+"use client";
+
 import React from "react";
 import { Logo } from "@principal-ai/logo-component";
-import { COLORS } from "../styles/colors";
+import { useTheme } from "@principal-ade/industry-theme";
 
 const HeroSection: React.FC = () => {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(1024);
-  const [windowHeight, setWindowHeight] = React.useState(768);
+  const [windowHeight, setWindowHeight] = React.useState(900);
   const [showHeadlineLine2, setShowHeadlineLine2] = React.useState(false);
   const [showSubheadingLine1, setShowSubheadingLine1] = React.useState(false);
   const [showButton, setShowButton] = React.useState(false);
@@ -33,20 +36,12 @@ const HeroSection: React.FC = () => {
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
   const isConstrainedHeight = windowHeight < 850;
 
-  const gridBackground = `
-    linear-gradient(rgba(0, 194, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 194, 255, 0.08) 1px, transparent 1px)
-  `;
-
   return (
     <div
       style={{
         flex: 1,
         minHeight: "100%",
-        background: `linear-gradient(180deg, ${COLORS.navyDark} 0%, ${COLORS.black} 100%)`,
-        backgroundImage: gridBackground,
-        backgroundSize: "80px 80px",
-        backgroundPosition: "-1px -1px",
+        background: theme.colors.background,
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -56,21 +51,6 @@ const HeroSection: React.FC = () => {
         padding: isMobile ? "16px 24px 40px 24px" : "24px 24px 48px 24px",
       }}
     >
-      {/* Subtle circular gradient */}
-      <div
-        style={{
-          position: "absolute",
-          top: "30%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "150%",
-          height: "150%",
-          background:
-            "radial-gradient(circle at center, rgba(0, 194, 255, 0.08) 0%, transparent 50%)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
 
       <div
         style={{
@@ -93,8 +73,9 @@ const HeroSection: React.FC = () => {
           <Logo
             width={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
             height={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
-            color={COLORS.primary}
-            particleColor={COLORS.primaryDark}
+            color={theme.colors.primary}
+            particleColor={theme.colors.accent}
+            letterColor={theme.colors.text}
             opacity={0.9}
           />
         </div>
@@ -114,8 +95,8 @@ const HeroSection: React.FC = () => {
               alignItems: "center",
               gap: "8px",
               padding: "8px 16px",
-              background: `rgba(0, 194, 255, 0.1)`,
-              border: `1px solid rgba(0, 194, 255, 0.3)`,
+              background: `${theme.colors.accent}1A`,
+              border: `1px solid ${theme.colors.accent}4D`,
               borderRadius: "24px",
               marginBottom: "24px",
             }}
@@ -124,7 +105,7 @@ const HeroSection: React.FC = () => {
               style={{
                 fontFamily: "monospace",
                 fontSize: "12px",
-                color: COLORS.primary,
+                color: theme.colors.accent,
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
                 fontWeight: "600",
@@ -145,7 +126,7 @@ const HeroSection: React.FC = () => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 lineHeight: "1.05",
-                color: COLORS.primary,
+                color: theme.colors.primary,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
               }}
@@ -161,7 +142,7 @@ const HeroSection: React.FC = () => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 lineHeight: "1.05",
-                color: COLORS.white,
+                color: theme.colors.text,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
                 opacity: showHeadlineLine2 ? 1 : 0,
@@ -199,12 +180,12 @@ const HeroSection: React.FC = () => {
                     gap: "12px",
                     fontSize: isMobile ? "16px" : "18px",
                     fontWeight: "400",
-                    color: COLORS.white,
+                    color: theme.colors.text,
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                   }}
                 >
-                  <span style={{ color: COLORS.primary, fontSize: "20px" }}>✓</span>
+                  <span style={{ color: theme.colors.primary, fontSize: "20px" }}>✓</span>
                   <span>{benefit}</span>
                 </div>
               ))}
@@ -224,8 +205,8 @@ const HeroSection: React.FC = () => {
             <a
               href="/early-access"
               style={{
-                backgroundColor: COLORS.primary,
-                color: COLORS.black,
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 padding: isMobile ? "16px 32px" : "16px 40px",
                 borderRadius: "8px",
                 fontSize: isMobile ? "16px" : "20px",
@@ -239,18 +220,18 @@ const HeroSection: React.FC = () => {
                 transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
                 border: "none",
-                boxShadow: "0 4px 12px rgba(0, 194, 255, 0.3)",
+                boxShadow: `0 4px 12px ${theme.colors.primary}4D`,
                 transform: "scale(1)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = COLORS.primaryHover;
+                e.currentTarget.style.filter = "brightness(1.1)";
                 e.currentTarget.style.transform = "scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 6px 16px rgba(0, 194, 255, 0.4)";
+                e.currentTarget.style.boxShadow = `0 6px 16px ${theme.colors.primary}66`;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = COLORS.primary;
+                e.currentTarget.style.filter = "brightness(1)";
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 194, 255, 0.3)";
+                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}4D`;
               }}
             >
               Get Early Access
@@ -262,7 +243,7 @@ const HeroSection: React.FC = () => {
             style={{
               marginTop: "48px",
               paddingTop: "24px",
-              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+              borderTop: `1px solid ${theme.colors.border}`,
               opacity: showButton ? 1 : 0,
               transition: showButton ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
             }}
@@ -275,16 +256,16 @@ const HeroSection: React.FC = () => {
                 gap: isMobile ? "12px" : "16px",
                 flexWrap: "wrap",
                 fontSize: isMobile ? "12px" : "14px",
-                color: COLORS.gray400,
+                color: theme.colors.textTertiary,
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 textAlign: "center",
               }}
             >
               <span>Built by engineers, for engineers</span>
-              <span style={{ color: COLORS.gray600 }}>•</span>
+              <span style={{ color: theme.colors.textMuted }}>•</span>
               <span>Dogfooding in production</span>
-              <span style={{ color: COLORS.gray600 }}>•</span>
+              <span style={{ color: theme.colors.textMuted }}>•</span>
               <span>7 patents pending</span>
             </div>
           </div>

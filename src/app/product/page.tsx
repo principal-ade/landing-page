@@ -2,10 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 
 export default function FeaturesPage() {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -72,8 +74,8 @@ export default function FeaturesPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0e17",
-        color: "#f1f5f9",
+        background: theme.colors.background,
+        color: theme.colors.text,
       }}
     >
       <Header />
@@ -109,13 +111,13 @@ export default function FeaturesPage() {
           >
             Story-based software.
             <br />
-            <em style={{ fontStyle: "normal", color: "#22d3ee" }}>
+            <em style={{ fontStyle: "normal", color: theme.colors.primary }}>
               From dev to production.
             </em>
           </h1>
           <p
             style={{
-              color: "#94a3b8",
+              color: theme.colors.textTertiary,
               fontSize: isMobile ? "16px" : "1.1rem",
               maxWidth: "600px",
               margin: "0 auto",
@@ -134,8 +136,8 @@ export default function FeaturesPage() {
               alignItems: "center",
               gap: "0.5rem",
               marginTop: "1.5rem",
-              background: "#22d3ee",
-              color: "#0a0e17",
+              background: theme.colors.primary,
+              color: theme.colors.textOnPrimary,
               padding: "0.75rem 2rem",
               borderRadius: "8px",
               fontWeight: "600",
@@ -237,7 +239,7 @@ export default function FeaturesPage() {
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1200px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div
@@ -267,7 +269,7 @@ export default function FeaturesPage() {
               style={{
                 fontSize: isMobile ? "28px" : "40px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: theme.colors.text,
                 margin: "0 0 20px 0",
                 lineHeight: "1.15",
                 letterSpacing: "-0.025em",
@@ -281,7 +283,7 @@ export default function FeaturesPage() {
               style={{
                 fontSize: isMobile ? "15px" : "16px",
                 fontWeight: "400",
-                color: "#9ca3af",
+                color: theme.colors.textTertiary,
                 margin: "0 0 40px 0",
                 lineHeight: "1.6",
                 fontFamily:
@@ -298,8 +300,8 @@ export default function FeaturesPage() {
             {/* Form Card */}
             <div
               style={{
-                background: "rgba(17, 24, 39, 0.6)",
-                border: "1px solid rgba(55, 65, 81, 0.5)",
+                background: theme.colors.surface,
+                border: `1px solid ${theme.colors.border}`,
                 borderRadius: "16px",
                 padding: isMobile ? "32px 24px" : "40px",
                 backdropFilter: "blur(12px)",
@@ -309,7 +311,7 @@ export default function FeaturesPage() {
                 style={{
                   fontSize: isMobile ? "18px" : "20px",
                   fontWeight: "600",
-                  color: "#ffffff",
+                  color: theme.colors.text,
                   margin: "0 0 8px 0",
                   fontFamily:
                     '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -321,7 +323,7 @@ export default function FeaturesPage() {
                 style={{
                   fontSize: isMobile ? "14px" : "15px",
                   fontWeight: "400",
-                  color: "#9ca3af",
+                  color: theme.colors.textTertiary,
                   margin: "0 0 24px 0",
                   lineHeight: "1.5",
                   fontFamily:
@@ -347,23 +349,22 @@ export default function FeaturesPage() {
                     onChange={(e) => setRepoUrl(e.target.value)}
                     disabled={isSubmitting}
                     style={{
-                      background: "rgba(15, 23, 42, 0.8)",
-                      border: "1px solid rgba(51, 65, 85, 0.6)",
+                      background: theme.colors.background,
+                      border: `1px solid ${theme.colors.border}`,
                       borderRadius: "8px",
                       padding: "12px 16px",
                       fontSize: "15px",
-                      color: "#ffffff",
+                      color: theme.colors.text,
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#34d399";
+                      e.currentTarget.style.borderColor = theme.colors.primary;
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(51, 65, 85, 0.6)";
+                      e.currentTarget.style.borderColor = theme.colors.border;
                     }}
                   />
                   <input
@@ -373,31 +374,30 @@ export default function FeaturesPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
                     style={{
-                      background: "rgba(15, 23, 42, 0.8)",
-                      border: "1px solid rgba(51, 65, 85, 0.6)",
+                      background: theme.colors.background,
+                      border: `1px solid ${theme.colors.border}`,
                       borderRadius: "8px",
                       padding: "12px 16px",
                       fontSize: "15px",
-                      color: "#ffffff",
+                      color: theme.colors.text,
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#34d399";
+                      e.currentTarget.style.borderColor = theme.colors.primary;
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(51, 65, 85, 0.6)";
+                      e.currentTarget.style.borderColor = theme.colors.border;
                     }}
                   />
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     style={{
-                      background: isSubmitting ? "#64748b" : "#00C2FF",
-                      color: "#ffffff",
+                      background: isSubmitting ? theme.colors.muted : theme.colors.primary,
+                      color: theme.colors.textOnPrimary,
                       border: "none",
                       borderRadius: "8px",
                       padding: "12px 24px",
@@ -411,12 +411,12 @@ export default function FeaturesPage() {
                     }}
                     onMouseEnter={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = "#00d4ff";
+                        e.currentTarget.style.filter = "brightness(1.1)";
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = "#00C2FF";
+                        e.currentTarget.style.filter = "brightness(1)";
                       }
                     }}
                   >
@@ -427,7 +427,7 @@ export default function FeaturesPage() {
                   <p
                     style={{
                       fontSize: "14px",
-                      color: submitResult.success ? "#34d399" : "#f87171",
+                      color: submitResult.success ? theme.colors.success : theme.colors.error,
                       margin: "0 0 8px 0",
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -440,7 +440,7 @@ export default function FeaturesPage() {
                   <p
                     style={{
                       fontSize: "13px",
-                      color: "#6b7280",
+                      color: theme.colors.textMuted,
                       margin: "0",
                       fontFamily:
                         '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -456,8 +456,8 @@ export default function FeaturesPage() {
           {/* Right Column - File City Visualization */}
           <div
             style={{
-              background: "rgba(17, 24, 39, 0.4)",
-              border: "1px solid rgba(55, 65, 81, 0.5)",
+              background: theme.colors.surface,
+              border: `1px solid ${theme.colors.border}`,
               borderRadius: "16px",
               padding: "24px",
               backdropFilter: "blur(8px)",
@@ -491,7 +491,7 @@ export default function FeaturesPage() {
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1000px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div
@@ -531,7 +531,7 @@ export default function FeaturesPage() {
             <p
               style={{
                 fontSize: isMobile ? "16px" : "1.1rem",
-                color: "#94a3b8",
+                color: theme.colors.textTertiary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
                 fontFamily:
@@ -569,7 +569,7 @@ export default function FeaturesPage() {
                     gap: "0.75rem",
                     alignItems: "flex-start",
                     fontSize: isMobile ? "14px" : "0.95rem",
-                    color: "#94a3b8",
+                    color: theme.colors.textTertiary,
                     lineHeight: "1.6",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -593,7 +593,7 @@ export default function FeaturesPage() {
                     →
                   </div>
                   <div>
-                    <strong style={{ color: "#f1f5f9", fontWeight: "600" }}>
+                    <strong style={{ color: theme.colors.text, fontWeight: "600" }}>
                       {feature.title}
                     </strong>{" "}
                     {feature.desc}
@@ -605,8 +605,8 @@ export default function FeaturesPage() {
 
           <div
             style={{
-              background: "#000000",
-              border: "1px solid rgba(30, 58, 138, 0.5)",
+              background: theme.colors.background,
+              border: `1px solid ${theme.colors.border}`,
               borderRadius: "16px",
               overflow: "hidden",
               order: isMobile ? 2 : 1,
@@ -639,7 +639,7 @@ export default function FeaturesPage() {
           padding: isMobile ? "4rem 2rem" : "6rem 2rem",
           maxWidth: "1000px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div
@@ -679,7 +679,7 @@ export default function FeaturesPage() {
             <p
               style={{
                 fontSize: isMobile ? "16px" : "1.1rem",
-                color: "#94a3b8",
+                color: theme.colors.textTertiary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
                 fontFamily:
@@ -717,7 +717,7 @@ export default function FeaturesPage() {
                     gap: "0.75rem",
                     alignItems: "flex-start",
                     fontSize: isMobile ? "14px" : "0.95rem",
-                    color: "#94a3b8",
+                    color: theme.colors.textTertiary,
                     lineHeight: "1.6",
                     fontFamily:
                       '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
@@ -734,14 +734,14 @@ export default function FeaturesPage() {
                       flexShrink: 0,
                       fontSize: "0.7rem",
                       marginTop: "2px",
-                      background: "rgba(34, 211, 238, 0.15)",
-                      color: "#22d3ee",
+                      background: `${theme.colors.primary}26`,
+                      color: theme.colors.primary,
                     }}
                   >
                     →
                   </div>
                   <div>
-                    <strong style={{ color: "#f1f5f9", fontWeight: "600" }}>
+                    <strong style={{ color: theme.colors.text, fontWeight: "600" }}>
                       {feature.title}
                     </strong>{" "}
                     {feature.desc}
@@ -753,8 +753,8 @@ export default function FeaturesPage() {
 
           <div
             style={{
-              background: "#111827",
-              border: "1px solid rgba(148, 163, 184, 0.1)",
+              background: theme.colors.backgroundSecondary,
+              border: `1px solid ${theme.colors.border}`,
               borderRadius: "16px",
               overflow: "hidden",
             }}
@@ -765,18 +765,18 @@ export default function FeaturesPage() {
                 alignItems: "center",
                 gap: "6px",
                 padding: "0.75rem 1rem",
-                borderBottom: "1px solid rgba(148, 163, 184, 0.1)",
+                borderBottom: `1px solid ${theme.colors.border}`,
               }}
             >
-              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ef4444" }} />
-              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#eab308" }} />
-              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#22c55e" }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: theme.colors.error }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: theme.colors.warning }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: theme.colors.success }} />
               <span
                 style={{
                   marginLeft: "0.75rem",
                   fontFamily: "monospace",
                   fontSize: "0.7rem",
-                  color: "#64748b",
+                  color: theme.colors.textMuted,
                 }}
               >
                 system-stories — production
@@ -788,7 +788,7 @@ export default function FeaturesPage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "#000000",
+                background: theme.colors.background,
               }}
             >
               <Image
@@ -820,7 +820,7 @@ export default function FeaturesPage() {
           maxWidth: "800px",
           margin: "0 auto",
           textAlign: "center",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div
@@ -830,7 +830,7 @@ export default function FeaturesPage() {
             textTransform: "uppercase",
             letterSpacing: "0.15em",
             marginBottom: "1rem",
-            color: "#22d3ee",
+            color: theme.colors.primary,
           }}
         >
           One Platform
@@ -849,7 +849,7 @@ export default function FeaturesPage() {
         </h2>
         <p
           style={{
-            color: "#94a3b8",
+            color: theme.colors.textTertiary,
             fontSize: isMobile ? "15px" : "1.05rem",
             lineHeight: "1.8",
             maxWidth: "650px",
@@ -891,7 +891,7 @@ export default function FeaturesPage() {
           </div>
           <div
             style={{
-              color: "#64748b",
+              color: theme.colors.textMuted,
               fontSize: "1.5rem",
               fontWeight: "300",
               transform: isMobile ? "rotate(90deg)" : "none",
@@ -916,7 +916,7 @@ export default function FeaturesPage() {
           </div>
           <div
             style={{
-              color: "#64748b",
+              color: theme.colors.textMuted,
               fontSize: "1.5rem",
               fontWeight: "300",
               transform: isMobile ? "rotate(90deg)" : "none",
@@ -930,9 +930,9 @@ export default function FeaturesPage() {
               borderRadius: "12px",
               fontWeight: "600",
               fontSize: "0.9rem",
-              border: "1px solid rgba(34,211,238,0.25)",
-              background: "rgba(34, 211, 238, 0.15)",
-              color: "#22d3ee",
+              border: `1px solid ${theme.colors.primary}40`,
+              background: `${theme.colors.primary}26`,
+              color: theme.colors.primary,
               fontFamily:
                 '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
             }}
@@ -957,7 +957,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: theme.colors.textMuted,
             }}
           >
             Understand
@@ -968,7 +968,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: theme.colors.textMuted,
             }}
           >
             Assess
@@ -979,7 +979,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: theme.colors.textMuted,
             }}
           >
             Verify
@@ -999,7 +999,7 @@ export default function FeaturesPage() {
           textAlign: "center",
           maxWidth: "600px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <h2
@@ -1016,7 +1016,7 @@ export default function FeaturesPage() {
         </h2>
         <p
           style={{
-            color: "#94a3b8",
+            color: theme.colors.textTertiary,
             fontSize: isMobile ? "15px" : "1rem",
             marginBottom: "2rem",
             fontFamily:
@@ -1028,8 +1028,8 @@ export default function FeaturesPage() {
         <a
           href="/early-access"
           style={{
-            background: "#22d3ee",
-            color: "#0a0e17",
+            background: theme.colors.primary,
+            color: theme.colors.textOnPrimary,
             padding: "0.75rem 2rem",
             borderRadius: "8px",
             fontWeight: "600",

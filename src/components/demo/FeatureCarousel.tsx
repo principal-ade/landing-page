@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Logo } from '@principal-ai/logo-component';
+import { useTheme } from '@principal-ade/industry-theme';
 
 interface FeatureItem {
   id: string;
@@ -9,39 +10,6 @@ interface FeatureItem {
   title: string;
   description: string;
 }
-
-const features: FeatureItem[] = [
-  {
-    id: 'story-based',
-    icon: <Logo width={90} height={90} color="#07c0ca" />,
-    title: 'Story-based Dev',
-    description: 'Design your systems expected behaviors first',
-  },
-  {
-    id: 'ai-native',
-    icon: (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '12px' }}>
-        <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#13120a', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
-          <img src="/cursor-logo.svg" alt="Cursor" width={38} height={38} />
-        </div>
-        <div style={{ width: 58, height: 58, borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', transform: 'translateY(-3px)', zIndex: 3, position: 'relative' }}>
-          <img src="/claude-logo.svg" alt="Claude" width={36} height={36} />
-        </div>
-        <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', zIndex: 1, position: 'relative' }}>
-          <img src="/openai-logo.svg" alt="OpenAI Codex" width={38} height={38} />
-        </div>
-      </div>
-    ),
-    title: 'AI Native Validation',
-    description: 'Confirm agent code changes in development',
-  },
-  {
-    id: 'otel',
-    icon: <img src="/otel-logo.png" alt="OpenTelemetry" width={54} height={54} />,
-    title: 'Built on OTel',
-    description: 'Works with your existing OpenTelemetry setup',
-  },
-];
 
 const ROTATION_INTERVAL = 4000; // 4 seconds per slide
 const TRANSITION_DURATION = 500; // 0.5s transition
@@ -99,6 +67,41 @@ function RevealText({
 }
 
 export function FeatureCarousel() {
+  const { theme } = useTheme();
+
+  const features: FeatureItem[] = [
+    {
+      id: 'story-based',
+      icon: <Logo width={90} height={90} color={theme.colors.primary} particleColor={theme.colors.accent} letterColor={theme.colors.text} />,
+      title: 'Story-based Dev',
+      description: 'Design your systems expected behaviors first',
+    },
+    {
+      id: 'ai-native',
+      icon: (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '12px' }}>
+          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#13120a', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
+            <img src="/cursor-logo.svg" alt="Cursor" width={38} height={38} />
+          </div>
+          <div style={{ width: 58, height: 58, borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', transform: 'translateY(-3px)', zIndex: 3, position: 'relative' }}>
+            <img src="/claude-logo.svg" alt="Claude" width={36} height={36} />
+          </div>
+          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', zIndex: 1, position: 'relative' }}>
+            <img src="/openai-logo.svg" alt="OpenAI Codex" width={38} height={38} />
+          </div>
+        </div>
+      ),
+      title: 'AI Native Validation',
+      description: 'Confirm agent code changes in development',
+    },
+    {
+      id: 'otel',
+      icon: <img src="/otel-logo.png" alt="OpenTelemetry" width={54} height={54} />,
+      title: 'Built on OTel',
+      description: 'Works with your existing OpenTelemetry setup',
+    },
+  ];
+
   // We use an extended array: [...features, features[0]] for seamless looping
   const [position, setPosition] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
@@ -219,7 +222,7 @@ export function FeatureCarousel() {
                   style={{
                     height: '80px',
                     marginBottom: '16px',
-                    color: '#07c0ca',
+                    color: theme.colors.primary,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'flex-end',
@@ -232,7 +235,7 @@ export function FeatureCarousel() {
                     fontSize: '20px',
                     fontWeight: 600,
                     fontFamily: 'Inter, sans-serif',
-                    color: '#ffffff',
+                    color: theme.colors.text,
                     margin: 0,
                     marginBottom: '8px',
                     minHeight: '28px',
@@ -244,7 +247,7 @@ export function FeatureCarousel() {
                   style={{
                     fontSize: '16px',
                     fontFamily: 'Inter, sans-serif',
-                    color: '#6b7280',
+                    color: theme.colors.textSecondary,
                     margin: 0,
                     lineHeight: 1.5,
                     maxWidth: '280px',
@@ -282,7 +285,7 @@ export function FeatureCarousel() {
               height: '10px',
               borderRadius: '50%',
               border: 'none',
-              background: index === displayIndex ? '#07c0ca' : 'rgba(255, 255, 255, 0.2)',
+              background: index === displayIndex ? theme.colors.primary : 'rgba(255, 255, 255, 0.2)',
               cursor: 'pointer',
               padding: 0,
               transition: 'background 0.3s ease, transform 0.2s ease',

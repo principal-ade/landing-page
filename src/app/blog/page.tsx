@@ -45,8 +45,7 @@ export default function BlogPage() {
   return (
     <div
       style={{
-        height: "100vh",
-        paddingTop: "72px",
+        height: "100%",
         boxSizing: "border-box",
       }}
     >
@@ -61,7 +60,7 @@ export default function BlogPage() {
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
-            padding: isMobile ? "40px 20px" : "60px 40px",
+            padding: isMobile ? "24px 20px" : "32px 40px",
             width: "100%",
           }}
         >

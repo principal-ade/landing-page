@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Footer } from "../../components/Footer";
 
 export default function DemoPage() {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -71,7 +73,7 @@ export default function DemoPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#000000",
+        background: theme.colors.background,
       }}
     >
       <div
@@ -114,12 +116,12 @@ export default function DemoPage() {
         {status === "success" && (
           <div
             style={{
-              background: "rgba(0, 194, 255, 0.1)",
-              border: "1px solid #00C2FF",
+              background: `${theme.colors.primary}1A`,
+              border: `1px solid ${theme.colors.primary}`,
               borderRadius: "8px",
               padding: "16px",
               marginBottom: "24px",
-              color: "#00C2FF",
+              color: theme.colors.primary,
               fontFamily:
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
@@ -181,7 +183,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -191,10 +193,10 @@ export default function DemoPage() {
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             />
           </div>
@@ -226,7 +228,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -236,10 +238,10 @@ export default function DemoPage() {
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             />
           </div>
@@ -270,7 +272,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -280,10 +282,10 @@ export default function DemoPage() {
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             />
           </div>
@@ -313,7 +315,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -323,10 +325,10 @@ export default function DemoPage() {
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             >
               <option value="" style={{ background: "#1a1a1a" }}>
@@ -377,7 +379,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -387,10 +389,10 @@ export default function DemoPage() {
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             />
           </div>
@@ -422,7 +424,7 @@ export default function DemoPage() {
                 width: "100%",
                 padding: "12px 16px",
                 background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                border: `1px solid ${theme.colors.primary}33`,
                 borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "16px",
@@ -433,10 +435,10 @@ export default function DemoPage() {
                 resize: "vertical",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = theme.colors.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = `${theme.colors.primary}33`;
               }}
             />
           </div>
@@ -451,8 +453,8 @@ export default function DemoPage() {
               background:
                 status === "submitting"
                   ? "#666666"
-                  : "linear-gradient(135deg, #0055DD, #003399)",
-              color: "#ffffff",
+                  : theme.colors.primary,
+              color: theme.colors.textOnPrimary,
               border: "none",
               borderRadius: "8px",
               fontSize: "16px",
@@ -465,12 +467,13 @@ export default function DemoPage() {
             onMouseEnter={(e) => {
               if (status !== "submitting") {
                 e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0, 85, 221, 0.4)";
+                e.currentTarget.style.filter = "brightness(1.1)";
+                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
               }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.filter = "brightness(1)";
               e.currentTarget.style.boxShadow = "none";
             }}
           >
@@ -482,7 +485,7 @@ export default function DemoPage() {
           style={{
             marginTop: "24px",
             fontSize: "14px",
-            color: "#888888",
+            color: theme.colors.textMuted,
             textAlign: "center",
             fontFamily:
               'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -491,7 +494,7 @@ export default function DemoPage() {
           Or email us directly at{" "}
           <a
             href="mailto:principalai@noetic-labs.ai"
-            style={{ color: "#00C2FF", textDecoration: "underline" }}
+            style={{ color: theme.colors.primary, textDecoration: "underline" }}
           >
             principalai@noetic-labs.ai
           </a>

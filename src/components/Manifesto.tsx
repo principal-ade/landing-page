@@ -1,8 +1,12 @@
+"use client";
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTheme } from '@principal-ade/industry-theme';
 
 export const Manifesto: React.FC = () => {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -17,10 +21,29 @@ export const Manifesto: React.FC = () => {
 
   const isMobile = windowWidth < 768;
 
+  // Helper style functions using theme
+  const bodyTextStyle = (mobile: boolean): React.CSSProperties => ({
+    fontSize: mobile ? "17px" : "19px",
+    lineHeight: "1.75",
+    color: theme.colors.textSecondary,
+    marginBottom: "24px",
+    fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+    fontWeight: "400",
+  });
+
+  const sectionHeadingStyle = (mobile: boolean): React.CSSProperties => ({
+    fontSize: mobile ? "24px" : "30px",
+    fontWeight: "700",
+    color: theme.colors.primary,
+    marginBottom: "32px",
+    lineHeight: "1.2",
+    fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+  });
+
   return (
     <div
       style={{
-        background: "#0d1b2a",
+        background: theme.colors.background,
       }}
     >
       {/* Hero Section */}
@@ -41,7 +64,7 @@ export const Manifesto: React.FC = () => {
             transition={{ duration: 0.6 }}
             style={{
               fontSize: "11px",
-              color: "#ec4899",
+              color: theme.colors.primary,
               textAlign: "center",
               marginBottom: "24px",
               fontFamily: '"JetBrains Mono", monospace',
@@ -61,7 +84,7 @@ export const Manifesto: React.FC = () => {
             style={{
               fontSize: isMobile ? "40px" : "64px",
               fontWeight: "700",
-              color: "#ffffff",
+              color: theme.colors.text,
               textAlign: "center",
               marginBottom: isMobile ? "64px" : "80px",
               lineHeight: "1.05",
@@ -86,7 +109,7 @@ export const Manifesto: React.FC = () => {
               Not because the code is bad. It passes tests. It deploys. It runs. But when production breaks at 3 AM, you're staring at a wall of logs for a system you didn't build, trying to reconstruct what happened from evidence that was never designed to tell you.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>It's called comprehension debt.</strong> The growing gap between what machines produce and what humans can supervise. It compounds with every agent-written commit. And every tool in your stack makes it worse.
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>It's called comprehension debt.</strong> The growing gap between what machines produce and what humans can supervise. It compounds with every agent-written commit. And every tool in your stack makes it worse.
             </p>
           </motion.div>
         </div>
@@ -100,7 +123,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -146,7 +169,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -162,20 +185,20 @@ export const Manifesto: React.FC = () => {
             <p style={bodyTextStyle(isMobile)}>
               Your brain doesn't store raw data. It stores narrative. Causal chains with a beginning, middle, and end. Every postmortem is a story. Every incident review is a story. Every time you explain a bug, you reconstruct a narrative from fragments.
             </p>
-            <p style={{ ...bodyTextStyle(isMobile), fontFamily: '"JetBrains Mono", monospace', color: "#ff6b6b", fontSize: isMobile ? "15px" : "16px" }}>
+            <p style={{ ...bodyTextStyle(isMobile), fontFamily: '"JetBrains Mono", monospace', color: theme.colors.error, fontSize: isMobile ? "15px" : "16px" }}>
               A log line says: ERROR: Connection timeout at 14:32:07.
             </p>
-            <p style={{ ...bodyTextStyle(isMobile), fontStyle: "italic", fontFamily: '"JetBrains Mono", monospace', color: "#14b8a6", fontSize: isMobile ? "15px" : "16px" }}>
+            <p style={{ ...bodyTextStyle(isMobile), fontStyle: "italic", fontFamily: '"JetBrains Mono", monospace', color: theme.colors.success, fontSize: isMobile ? "15px" : "16px" }}>
               A story says: User authenticates. Gateway validates. Auth service receives request. Connection pool exhausted. Session never created. User sees blank screen.
             </p>
             <p style={bodyTextStyle(isMobile)}>
               Same failure. One is a needle in a haystack. The other is a five-second visual diagnosis.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>Events with stories are more efficient than raw logs.</strong> Not metaphorically. Literally. Stories compress complexity into something the human brain was built to process. And here's what should change how you think about monitoring forever: stories aren't just retrospective. They're predictive. Your brain uses narrative to simulate the future, to anticipate what happens next.
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>Events with stories are more efficient than raw logs.</strong> Not metaphorically. Literally. Stories compress complexity into something the human brain was built to process. And here's what should change how you think about monitoring forever: stories aren't just retrospective. They're predictive. Your brain uses narrative to simulate the future, to anticipate what happens next.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>Monitoring shows you what already happened. Stories prepare you for what's about to.</strong>
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>Monitoring shows you what already happened. Stories prepare you for what's about to.</strong>
             </p>
           </motion.div>
         </div>
@@ -189,7 +212,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -209,7 +232,7 @@ export const Manifesto: React.FC = () => {
               We flip it.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>Start from what should happen. Run the code. See the story of what actually did, with every divergence surfaced visually, instantly.</strong>
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>Start from what should happen. Run the code. See the story of what actually did, with every divergence surfaced visually, instantly.</strong>
             </p>
             <p style={bodyTextStyle(isMobile)}>
               Not after the fire. Before the smoke.
@@ -229,7 +252,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -246,13 +269,13 @@ export const Manifesto: React.FC = () => {
               Two years ago this wasn't possible. Three things had to converge:
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>Agents had to write real production code.</strong> Not autocomplete — actual systems shipped without humans writing most of it. Done.
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>Agents had to write real production code.</strong> Not autocomplete — actual systems shipped without humans writing most of it. Done.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>The supervision gap had to become undeniable.</strong> Nobody carries the mental model anymore. Not the agent. Not the engineer. Done.
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>The supervision gap had to become undeniable.</strong> Nobody carries the mental model anymore. Not the agent. Not the engineer. Done.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>Agents had to become capable enough to help build the supervision layer.</strong> The same machines creating the comprehension problem can now help solve it. Discovering patterns, generating narrative structure, instrumenting telemetry. That's the unlock.
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>Agents had to become capable enough to help build the supervision layer.</strong> The same machines creating the comprehension problem can now help solve it. Discovering patterns, generating narrative structure, instrumenting telemetry. That's the unlock.
             </p>
             <p style={bodyTextStyle(isMobile)}>
               Every agent-written system deployed without narrative structure is another codebase no human fully understands. That debt is compounding. Right now.
@@ -269,7 +292,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -289,7 +312,7 @@ export const Manifesto: React.FC = () => {
               Everything lives in Git, alongside the code. No cloud lock-in. No dashboard to learn.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: "#ffffff" }}>That's not a feature. That's a new category.</strong>
+              <strong style={{ fontWeight: "700", color: theme.colors.text }}>That's not a feature. That's a new category.</strong>
             </p>
           </motion.div>
         </div>
@@ -303,7 +326,7 @@ export const Manifesto: React.FC = () => {
           flexDirection: "column",
           justifyContent: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -338,7 +361,7 @@ export const Manifesto: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           padding: isMobile ? "80px 24px" : "120px 40px",
-          borderTop: "1px solid rgba(0, 194, 255, 0.1)",
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
@@ -356,8 +379,8 @@ export const Manifesto: React.FC = () => {
               marginBottom: "20px",
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
             }}>
-              <span style={{ color: "#00C2FF" }}>Stories are how</span><br />
-              <span style={{ color: "#ffffff" }}>humans have understood the world for 40,000 years.</span>
+              <span style={{ color: theme.colors.primary }}>Stories are how</span><br />
+              <span style={{ color: theme.colors.text }}>humans have understood the world for 40,000 years.</span>
             </p>
             <p style={{
               fontSize: isMobile ? "24px" : "28px",
@@ -365,8 +388,8 @@ export const Manifesto: React.FC = () => {
               fontWeight: "500",
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
             }}>
-              <span style={{ color: "#00C2FF" }}>Stories are how</span><br />
-              <span style={{ color: "#ffffff" }}>we'll understand the systems that run it next.</span>
+              <span style={{ color: theme.colors.primary }}>Stories are how</span><br />
+              <span style={{ color: theme.colors.text }}>we'll understand the systems that run it next.</span>
             </p>
           </motion.div>
 
@@ -380,12 +403,12 @@ export const Manifesto: React.FC = () => {
           >
             <p style={{
               fontSize: isMobile ? "16px" : "18px",
-              color: "rgba(255, 255, 255, 0.6)",
+              color: theme.colors.textTertiary,
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
             }}>
               Want to feel the difference instead of read about it?{" "}
               <Link href="/game" style={{
-                color: "#00C2FF",
+                color: theme.colors.primary,
                 textDecoration: "none",
                 fontWeight: "600",
               }}>
@@ -405,8 +428,8 @@ export const Manifesto: React.FC = () => {
               href="/#access"
               style={{
                 display: "inline-block",
-                backgroundColor: "#00C2FF",
-                color: "#000000",
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 padding: "14px 32px",
                 borderRadius: "8px",
                 fontSize: "16px",
@@ -424,26 +447,4 @@ export const Manifesto: React.FC = () => {
     </div>
   );
 };
-
-// Helper style functions
-const bodyTextStyle = (isMobile: boolean): React.CSSProperties => ({
-  fontSize: isMobile ? "17px" : "19px",
-  lineHeight: "1.75",
-  color: "rgba(255, 255, 255, 0.75)",
-  marginBottom: "24px",
-  fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-  fontWeight: "400",
-});
-
-const sectionHeadingStyle = (isMobile: boolean): React.CSSProperties => ({
-  fontSize: isMobile ? "24px" : "30px",
-  fontWeight: "700",
-  background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-  marginBottom: "32px",
-  lineHeight: "1.2",
-  fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-});
 

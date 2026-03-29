@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Footer } from "../../components/Footer";
 import ReactMarkdown from "react-markdown";
 
 export default function PrivacyPage() {
+  const { theme } = useTheme();
   const [content, setContent] = React.useState<string>("");
 
   React.useEffect(() => {
@@ -15,7 +17,7 @@ export default function PrivacyPage() {
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#000000" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: theme.colors.background }}>
       <main style={{ flex: 1, paddingTop: "120px", paddingBottom: "60px" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px" }}>
           <ReactMarkdown
@@ -26,7 +28,7 @@ export default function PrivacyPage() {
                     fontSize: "48px",
                     fontWeight: "700",
                     margin: "0 0 32px 0",
-                    color: "#00C2FF",
+                    color: theme.colors.primary,
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
                 >
@@ -39,7 +41,7 @@ export default function PrivacyPage() {
                     fontSize: "32px",
                     fontWeight: "600",
                     margin: "48px 0 24px 0",
-                    color: "#ffffff",
+                    color: theme.colors.text,
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
                 >
@@ -52,7 +54,7 @@ export default function PrivacyPage() {
                     fontSize: "20px",
                     fontWeight: "600",
                     margin: "32px 0 16px 0",
-                    color: "#ffffff",
+                    color: theme.colors.text,
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
                 >
@@ -65,7 +67,7 @@ export default function PrivacyPage() {
                     fontSize: "16px",
                     lineHeight: "1.7",
                     margin: "0 0 16px 0",
-                    color: "#d1d5db",
+                    color: theme.colors.textSecondary,
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                   }}
                 >
@@ -73,7 +75,7 @@ export default function PrivacyPage() {
                 </p>
               ),
               strong: ({ children }) => (
-                <strong style={{ color: "#00C2FF", fontWeight: "600" }}>
+                <strong style={{ color: theme.colors.primary, fontWeight: "600" }}>
                   {children}
                 </strong>
               ),
@@ -81,16 +83,16 @@ export default function PrivacyPage() {
                 <a
                   href={href}
                   style={{
-                    color: "#00C2FF",
+                    color: theme.colors.primary,
                     textDecoration: "none",
-                    borderBottom: "1px solid rgba(0, 194, 255, 0.3)",
+                    borderBottom: `1px solid ${theme.colors.primary}4D`,
                     transition: "border-color 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#00C2FF";
+                    e.currentTarget.style.borderColor = theme.colors.primary;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.3)";
+                    e.currentTarget.style.borderColor = `${theme.colors.primary}4D`;
                   }}
                 >
                   {children}
@@ -101,7 +103,7 @@ export default function PrivacyPage() {
                   style={{
                     margin: "0 0 16px 0",
                     paddingLeft: "24px",
-                    color: "#d1d5db",
+                    color: theme.colors.textSecondary,
                   }}
                 >
                   {children}

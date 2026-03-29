@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Footer } from "../../components/Footer";
 import { Mail, HelpCircle, Clock } from "lucide-react";
 
@@ -24,6 +25,7 @@ const faqs = [
 ];
 
 export default function SupportPage() {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -42,7 +44,7 @@ export default function SupportPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#000000",
+        background: theme.colors.background,
       }}
     >
       <main
@@ -66,10 +68,7 @@ export default function SupportPage() {
                 fontSize: isMobile ? "40px" : "56px",
                 fontWeight: "700",
                 margin: "0 0 24px 0",
-                background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                color: theme.colors.primary,
                 fontFamily:
                   'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
@@ -79,7 +78,7 @@ export default function SupportPage() {
             <p
               style={{
                 fontSize: isMobile ? "18px" : "20px",
-                color: "#d1d5db",
+                color: theme.colors.textSecondary,
                 margin: "0 auto",
                 maxWidth: "600px",
                 lineHeight: "1.6",
@@ -94,8 +93,8 @@ export default function SupportPage() {
           {/* Contact Card */}
           <div
             style={{
-              background: "rgba(0, 194, 255, 0.05)",
-              border: "1px solid rgba(0, 194, 255, 0.2)",
+              background: `${theme.colors.primary}0D`,
+              border: `1px solid ${theme.colors.primary}33`,
               borderRadius: "16px",
               padding: isMobile ? "32px 24px" : "40px 48px",
               maxWidth: "800px",
@@ -118,18 +117,18 @@ export default function SupportPage() {
                   width: "56px",
                   height: "56px",
                   borderRadius: "50%",
-                  background: "rgba(0, 194, 255, 0.1)",
-                  border: "1px solid rgba(0, 194, 255, 0.3)",
+                  background: `${theme.colors.primary}1A`,
+                  border: `1px solid ${theme.colors.primary}4D`,
                 }}
               >
-                <Mail size={28} style={{ color: "#00C2FF" }} />
+                <Mail size={28} style={{ color: theme.colors.primary }} />
               </div>
               <div>
                 <h2
                   style={{
                     fontSize: "24px",
                     fontWeight: "600",
-                    color: "#ffffff",
+                    color: theme.colors.text,
                     margin: "0 0 8px 0",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -141,17 +140,17 @@ export default function SupportPage() {
                   href="mailto:principalai@noetic-labs.ai"
                   style={{
                     fontSize: "18px",
-                    color: "#00C2FF",
+                    color: theme.colors.primary,
                     textDecoration: "none",
                     fontFamily:
                       'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                     transition: "color 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#ffffff";
+                    e.currentTarget.style.color = theme.colors.text;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#00C2FF";
+                    e.currentTarget.style.color = theme.colors.primary;
                   }}
                 >
                   principalai@noetic-labs.ai
@@ -165,14 +164,14 @@ export default function SupportPage() {
                 alignItems: "center",
                 gap: "12px",
                 paddingTop: "24px",
-                borderTop: "1px solid rgba(0, 194, 255, 0.2)",
+                borderTop: `1px solid ${theme.colors.primary}33`,
               }}
             >
-              <Clock size={20} style={{ color: "#00C2FF" }} />
+              <Clock size={20} style={{ color: theme.colors.primary }} />
               <p
                 style={{
                   fontSize: "14px",
-                  color: "#9ca3af",
+                  color: theme.colors.textMuted,
                   margin: 0,
                   fontFamily:
                     'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -194,12 +193,12 @@ export default function SupportPage() {
                 marginBottom: "32px",
               }}
             >
-              <HelpCircle size={32} style={{ color: "#00C2FF" }} />
+              <HelpCircle size={32} style={{ color: theme.colors.primary }} />
               <h2
                 style={{
                   fontSize: "28px",
                   fontWeight: "600",
-                  color: "#ffffff",
+                  color: theme.colors.text,
                   margin: 0,
                   fontFamily:
                     'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -214,8 +213,8 @@ export default function SupportPage() {
                 <div
                   key={index}
                   style={{
-                    background: "rgba(0, 194, 255, 0.05)",
-                    border: "1px solid rgba(0, 194, 255, 0.2)",
+                    background: `${theme.colors.primary}0D`,
+                    border: `1px solid ${theme.colors.primary}33`,
                     borderRadius: "12px",
                     padding: isMobile ? "20px" : "24px",
                   }}
@@ -224,7 +223,7 @@ export default function SupportPage() {
                     style={{
                       fontSize: "18px",
                       fontWeight: "600",
-                      color: "#ffffff",
+                      color: theme.colors.text,
                       marginBottom: "12px",
                       fontFamily:
                         'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -236,7 +235,7 @@ export default function SupportPage() {
                     style={{
                       fontSize: "16px",
                       lineHeight: "1.6",
-                      color: "#9ca3af",
+                      color: theme.colors.textMuted,
                       margin: 0,
                       fontFamily:
                         'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -255,8 +254,8 @@ export default function SupportPage() {
               textAlign: "center",
               marginTop: "60px",
               padding: isMobile ? "40px 20px" : "60px 40px",
-              background: "rgba(0, 194, 255, 0.05)",
-              border: "1px solid rgba(0, 194, 255, 0.2)",
+              background: `${theme.colors.primary}0D`,
+              border: `1px solid ${theme.colors.primary}33`,
               borderRadius: "16px",
             }}
           >
@@ -264,7 +263,7 @@ export default function SupportPage() {
               style={{
                 fontSize: "24px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: theme.colors.text,
                 marginBottom: "16px",
                 fontFamily:
                   'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -275,7 +274,7 @@ export default function SupportPage() {
             <p
               style={{
                 fontSize: "16px",
-                color: "#9ca3af",
+                color: theme.colors.textMuted,
                 marginBottom: "24px",
                 fontFamily:
                   'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -290,8 +289,8 @@ export default function SupportPage() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "14px 28px",
-                background: "#00C2FF",
-                color: "#000000",
+                background: theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 textDecoration: "none",
                 fontSize: "16px",
                 fontWeight: "600",
@@ -302,8 +301,7 @@ export default function SupportPage() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0, 194, 255, 0.4)";
+                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";

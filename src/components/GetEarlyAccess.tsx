@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface GetEarlyAccessProps {
   isMobile?: boolean;
@@ -8,6 +9,7 @@ interface GetEarlyAccessProps {
 export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
   isMobile = false,
 }) => {
+  const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [teamSize, setTeamSize] = useState("");
@@ -51,7 +53,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
+          background: `linear-gradient(180deg, ${theme.colors.backgroundSecondary} 0%, ${theme.colors.background} 100%)`,
           padding: isMobile ? "40px 24px" : "80px 40px",
         }}
       >
@@ -69,7 +71,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               width: "80px",
               height: "80px",
               borderRadius: "50%",
-              background: "rgba(0, 194, 255, 0.1)",
+              background: `${theme.colors.primary}1A`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -81,7 +83,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               height="40"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#00C2FF"
+              stroke={theme.colors.primary}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -124,7 +126,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
+        background: `linear-gradient(180deg, ${theme.colors.backgroundSecondary} 0%, ${theme.colors.background} 100%)`,
         padding: isMobile ? "40px 24px" : "80px 40px",
       }}
     >
@@ -214,7 +216,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = theme.colors.primary;
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
@@ -258,7 +260,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = theme.colors.primary;
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
@@ -311,7 +313,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = theme.colors.primary;
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
@@ -354,8 +356,8 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               style={{
                 width: "100%",
                 padding: "14px 24px",
-                background: isLoading ? "#6b7280" : "#00C2FF",
-                color: "#000000",
+                background: isLoading ? "#6b7280" : theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 border: "none",
                 borderRadius: "8px",
                 fontSize: "16px",
@@ -368,15 +370,14 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               }}
               onMouseEnter={(e) => {
                 if (!isLoading) {
-                  e.currentTarget.style.background = "#00d4ff";
+                  e.currentTarget.style.filter = "brightness(1.1)";
                   e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 12px rgba(0, 194, 255, 0.4)";
+                  e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isLoading) {
-                  e.currentTarget.style.background = "#00C2FF";
+                  e.currentTarget.style.filter = "brightness(1)";
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = "none";
                 }
@@ -402,15 +403,15 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
           <a
             href="/demo"
             style={{
-              color: "#00C2FF",
+              color: theme.colors.primary,
               textDecoration: "none",
-              transition: "color 0.2s ease",
+              transition: "filter 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#00d4ff";
+              e.currentTarget.style.filter = "brightness(1.2)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#00C2FF";
+              e.currentTarget.style.filter = "brightness(1)";
             }}
           >
             Schedule a demo

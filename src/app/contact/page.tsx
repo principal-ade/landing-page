@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import { useTheme } from "@principal-ade/industry-theme";
 import { Footer } from "../../components/Footer";
 import { Mail, Clock, MessageCircle } from "lucide-react";
 
 export default function ContactPage() {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -23,7 +25,7 @@ export default function ContactPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#000000",
+        background: theme.colors.background,
       }}
     >
       <main
@@ -47,10 +49,7 @@ export default function ContactPage() {
               fontSize: isMobile ? "40px" : "56px",
               fontWeight: "700",
               margin: "0 0 24px 0",
-              background: "linear-gradient(135deg, #00C2FF, #0098CC)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+              color: theme.colors.primary,
               fontFamily:
                 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
@@ -60,7 +59,7 @@ export default function ContactPage() {
           <p
             style={{
               fontSize: isMobile ? "18px" : "20px",
-              color: "#d1d5db",
+              color: theme.colors.textSecondary,
               margin: "0 auto 60px auto",
               maxWidth: "600px",
               lineHeight: "1.6",
@@ -74,8 +73,8 @@ export default function ContactPage() {
           {/* Contact Card */}
           <div
             style={{
-              background: "rgba(0, 194, 255, 0.05)",
-              border: "1px solid rgba(0, 194, 255, 0.2)",
+              background: `${theme.colors.primary}0D`,
+              border: `1px solid ${theme.colors.primary}33`,
               borderRadius: "16px",
               padding: isMobile ? "40px 24px" : "60px 48px",
               maxWidth: "600px",
@@ -92,18 +91,18 @@ export default function ContactPage() {
                   width: "64px",
                   height: "64px",
                   borderRadius: "50%",
-                  background: "rgba(0, 194, 255, 0.1)",
-                  border: "1px solid rgba(0, 194, 255, 0.3)",
+                  background: `${theme.colors.primary}1A`,
+                  border: `1px solid ${theme.colors.primary}4D`,
                   marginBottom: "24px",
                 }}
               >
-                <Mail size={32} style={{ color: "#00C2FF" }} />
+                <Mail size={32} style={{ color: theme.colors.primary }} />
               </div>
               <h2
                 style={{
                   fontSize: "24px",
                   fontWeight: "600",
-                  color: "#ffffff",
+                  color: theme.colors.text,
                   marginBottom: "16px",
                   fontFamily:
                     'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -115,7 +114,7 @@ export default function ContactPage() {
                 href="mailto:principalai@noetic-labs.ai"
                 style={{
                   fontSize: isMobile ? "20px" : "24px",
-                  color: "#00C2FF",
+                  color: theme.colors.primary,
                   textDecoration: "none",
                   fontFamily:
                     'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -124,10 +123,10 @@ export default function ContactPage() {
                   display: "inline-block",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#ffffff";
+                  e.currentTarget.style.color = theme.colors.text;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#00C2FF";
+                  e.currentTarget.style.color = theme.colors.primary;
                 }}
               >
                 principalai@noetic-labs.ai
@@ -141,7 +140,7 @@ export default function ContactPage() {
                 gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
                 gap: "32px",
                 paddingTop: "32px",
-                borderTop: "1px solid rgba(0, 194, 255, 0.2)",
+                borderTop: `1px solid ${theme.colors.primary}33`,
               }}
             >
               <div style={{ textAlign: isMobile ? "center" : "left" }}>
@@ -154,12 +153,12 @@ export default function ContactPage() {
                     marginBottom: "8px",
                   }}
                 >
-                  <Clock size={20} style={{ color: "#00C2FF" }} />
+                  <Clock size={20} style={{ color: theme.colors.primary }} />
                   <h3
                     style={{
                       fontSize: "16px",
                       fontWeight: "600",
-                      color: "#ffffff",
+                      color: theme.colors.text,
                       margin: 0,
                       fontFamily:
                         'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -171,7 +170,7 @@ export default function ContactPage() {
                 <p
                   style={{
                     fontSize: "14px",
-                    color: "#9ca3af",
+                    color: theme.colors.textMuted,
                     margin: 0,
                     lineHeight: "1.6",
                     fontFamily:
@@ -192,12 +191,12 @@ export default function ContactPage() {
                     marginBottom: "8px",
                   }}
                 >
-                  <MessageCircle size={20} style={{ color: "#00C2FF" }} />
+                  <MessageCircle size={20} style={{ color: theme.colors.primary }} />
                   <h3
                     style={{
                       fontSize: "16px",
                       fontWeight: "600",
-                      color: "#ffffff",
+                      color: theme.colors.text,
                       margin: 0,
                       fontFamily:
                         'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -209,7 +208,7 @@ export default function ContactPage() {
                 <p
                   style={{
                     fontSize: "14px",
-                    color: "#9ca3af",
+                    color: theme.colors.textMuted,
                     margin: 0,
                     lineHeight: "1.6",
                     fontFamily:
