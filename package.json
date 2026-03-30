@@ -28,7 +28,7 @@
     "@principal-ade/industry-theme": "^0.1.18",
     "@principal-ade/panel-framework-core": "^0.5.1",
     "@principal-ade/panel-layouts": "^0.4.0",
-    "@principal-ai/logo-component": "^0.1.13",
+    "@principal-ai/logo-component": "^0.1.14",
     "framer-motion": "^12.23.24",
     "hast-util-sanitize": "^5.0.2",
     "jsonwebtoken": "^9.0.2",

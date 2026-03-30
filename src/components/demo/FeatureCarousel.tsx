@@ -72,7 +72,7 @@ export function FeatureCarousel() {
   const features: FeatureItem[] = [
     {
       id: 'story-based',
-      icon: <Logo width={90} height={90} color={theme.colors.primary} particleColor={theme.colors.accent} letterColor={theme.colors.text} />,
+      icon: <Logo width={90} height={90} color={theme.colors.accent} particleColor={theme.colors.primary} letterColor={theme.colors.text} />,
       title: 'Story-based Dev',
       description: 'Design your systems expected behaviors first',
     },

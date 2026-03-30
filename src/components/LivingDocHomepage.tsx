@@ -73,8 +73,8 @@ const HeroSection: React.FC = () => {
           <Logo
             width={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
             height={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
-            color={theme.colors.primary}
-            particleColor={theme.colors.accent}
+            color={theme.colors.accent}
+            particleColor={theme.colors.primary}
             letterColor={theme.colors.text}
             opacity={0.9}
           />
@@ -95,8 +95,8 @@ const HeroSection: React.FC = () => {
               alignItems: "center",
               gap: "8px",
               padding: "8px 16px",
-              background: `${theme.colors.accent}1A`,
-              border: `1px solid ${theme.colors.accent}4D`,
+              background: `${theme.colors.primary}1A`,
+              border: `1px solid ${theme.colors.primary}4D`,
               borderRadius: "24px",
               marginBottom: "24px",
             }}
@@ -105,7 +105,7 @@ const HeroSection: React.FC = () => {
               style={{
                 fontFamily: "monospace",
                 fontSize: "12px",
-                color: theme.colors.accent,
+                color: theme.colors.primary,
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
                 fontWeight: "600",
@@ -126,7 +126,7 @@ const HeroSection: React.FC = () => {
                 fontFamily:
                   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                 lineHeight: "1.05",
-                color: theme.colors.primary,
+                color: theme.colors.accent,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
               }}
