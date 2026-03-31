@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Footer } from "../../components/Footer";
+import { COLORS } from "../../styles/colors";
 
 export default function DemoPage() {
   const [windowWidth, setWindowWidth] = useState(
@@ -71,7 +72,7 @@ export default function DemoPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#000000",
+        background: COLORS.background,
       }}
     >
       <div
@@ -88,10 +89,9 @@ export default function DemoPage() {
           style={{
             fontSize: isMobile ? "32px" : "48px",
             fontWeight: "700",
-            color: "#ffffff",
+            color: COLORS.text,
             marginBottom: "16px",
-            fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Schedule a Demo
@@ -100,11 +100,10 @@ export default function DemoPage() {
         <p
           style={{
             fontSize: isMobile ? "16px" : "18px",
-            color: "#d1d5db",
+            color: COLORS.textSecondary,
             marginBottom: "40px",
             lineHeight: "1.6",
-            fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Schedule a 30-minute walkthrough with our team. We'll show you Living Documentation, tour Principal ADE, and answer questions about your specific use case.
@@ -114,14 +113,13 @@ export default function DemoPage() {
         {status === "success" && (
           <div
             style={{
-              background: "rgba(0, 194, 255, 0.1)",
-              border: "1px solid #00C2FF",
+              background: "rgba(255, 107, 53, 0.1)",
+              border: `1px solid ${COLORS.primary}`,
               borderRadius: "8px",
               padding: "16px",
               marginBottom: "24px",
-              color: "#00C2FF",
-              fontFamily:
-                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              color: COLORS.primary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Thank you! We've received your demo request and will be in touch shortly.
@@ -132,20 +130,19 @@ export default function DemoPage() {
         {status === "error" && (
           <div
             style={{
-              background: "rgba(255, 77, 77, 0.1)",
-              border: "1px solid #ff4d4d",
+              background: "rgba(220, 38, 38, 0.1)",
+              border: "1px solid #dc2626",
               borderRadius: "8px",
               padding: "16px",
               marginBottom: "24px",
-              color: "#ff4d4d",
-              fontFamily:
-                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              color: "#dc2626",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Something went wrong. Please try again or email us directly at{" "}
             <a
               href="mailto:info@noetic-labs.ai"
-              style={{ color: "#ff4d4d", textDecoration: "underline" }}
+              style={{ color: "#dc2626", textDecoration: "underline" }}
             >
               info@noetic-labs.ai
             </a>
@@ -162,10 +159,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Name *
@@ -180,21 +176,20 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             />
           </div>
@@ -207,10 +202,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Email *
@@ -225,21 +219,20 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             />
           </div>
@@ -252,10 +245,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Company
@@ -269,21 +261,20 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             />
           </div>
@@ -296,10 +287,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Team Size
@@ -312,39 +302,38 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             >
-              <option value="" style={{ background: "#1a1a1a" }}>
+              <option value="" style={{ background: COLORS.white }}>
                 Select team size
               </option>
-              <option value="1-5" style={{ background: "#1a1a1a" }}>
+              <option value="1-5" style={{ background: COLORS.white }}>
                 1-5 people
               </option>
-              <option value="6-20" style={{ background: "#1a1a1a" }}>
+              <option value="6-20" style={{ background: COLORS.white }}>
                 6-20 people
               </option>
-              <option value="21-50" style={{ background: "#1a1a1a" }}>
+              <option value="21-50" style={{ background: COLORS.white }}>
                 21-50 people
               </option>
-              <option value="51-200" style={{ background: "#1a1a1a" }}>
+              <option value="51-200" style={{ background: COLORS.white }}>
                 51-200 people
               </option>
-              <option value="200+" style={{ background: "#1a1a1a" }}>
+              <option value="200+" style={{ background: COLORS.white }}>
                 200+ people
               </option>
             </select>
@@ -358,10 +347,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Preferred Date/Time
@@ -376,21 +364,20 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             />
           </div>
@@ -403,10 +390,9 @@ export default function DemoPage() {
                 display: "block",
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 marginBottom: "8px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Questions or Specific Use Cases
@@ -421,22 +407,21 @@ export default function DemoPage() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid rgba(0, 194, 255, 0.2)",
+                background: COLORS.background,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "8px",
-                color: "#ffffff",
+                color: COLORS.text,
                 fontSize: "16px",
-                fontFamily:
-                  'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s ease",
                 resize: "vertical",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#00C2FF";
+                e.currentTarget.style.borderColor = COLORS.primary;
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(0, 194, 255, 0.2)";
+                e.currentTarget.style.borderColor = COLORS.border;
               }}
             />
           </div>
@@ -450,28 +435,31 @@ export default function DemoPage() {
               padding: "16px 32px",
               background:
                 status === "submitting"
-                  ? "#666666"
-                  : "linear-gradient(135deg, #0055DD, #003399)",
+                  ? COLORS.textSecondary
+                  : COLORS.primary,
               color: "#ffffff",
               border: "none",
               borderRadius: "8px",
               fontSize: "16px",
               fontWeight: "600",
-              fontFamily:
-                'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               cursor: status === "submitting" ? "not-allowed" : "pointer",
               transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
               if (status !== "submitting") {
                 e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.background = COLORS.accent;
                 e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0, 85, 221, 0.4)";
+                  "0 4px 12px rgba(255, 107, 53, 0.4)";
               }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
+              if (status !== "submitting") {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = COLORS.primary;
+                e.currentTarget.style.boxShadow = "none";
+              }
             }}
           >
             {status === "submitting" ? "Submitting..." : "Request Demo"}
@@ -482,16 +470,15 @@ export default function DemoPage() {
           style={{
             marginTop: "24px",
             fontSize: "14px",
-            color: "#888888",
+            color: COLORS.textSecondary,
             textAlign: "center",
-            fontFamily:
-              'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Or email us directly at{" "}
           <a
             href="mailto:info@noetic-labs.ai"
-            style={{ color: "#00C2FF", textDecoration: "underline" }}
+            style={{ color: COLORS.primary, textDecoration: "underline" }}
           >
             info@noetic-labs.ai
           </a>

@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import { Logo } from '@principal-ai/logo-component';
+import { COLORS } from '../../styles/colors';
 import {
   TourProvider,
   TourOverlay,
@@ -45,7 +46,7 @@ const TraceListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#00C2FF',
+        color: '#ff6b35',
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Trace Panel...
@@ -64,7 +65,7 @@ const StoryboardListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#00C2FF',
+        color: '#ff6b35',
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Storyboards...
@@ -151,28 +152,28 @@ function DemoViewInner({
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: '#00C2FF',
+          color: '#ff6b35',
           bgColor: 'rgba(0, 194, 255, 0.1)',
         };
       case 'kanban':
         return {
           label: 'Live App',
           sublabel: 'Backlog.md',
-          color: '#00C2FF',
+          color: '#ff6b35',
           bgColor: 'rgba(0, 194, 255, 0.1)',
         };
       case 'traditional-monitoring':
         return {
           label: 'Traditional Monitoring',
           sublabel: 'Traces',
-          color: '#00C2FF',
+          color: '#ff6b35',
           bgColor: 'rgba(0, 194, 255, 0.1)',
         };
       case 'story-monitoring':
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: '#00C2FF',
+          color: '#ff6b35',
           bgColor: 'rgba(0, 194, 255, 0.1)',
         };
       default:
@@ -194,7 +195,7 @@ function DemoViewInner({
         right: 0,
         bottom: 0,
         zIndex: 100,
-        background: '#0a0e17',
+        background: COLORS.background,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -225,8 +226,8 @@ function DemoViewInner({
             }}
           >
             <span style={{ color: contextHeader.color }}>{contextHeader.label}</span>
-            <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>•</span>
-            <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{contextHeader.sublabel}</span>
+            <span style={{ color: COLORS.textSecondary }}>•</span>
+            <span style={{ color: COLORS.text }}>{contextHeader.sublabel}</span>
           </div>
 
           {/* Segmented Controls - shown only on try-it step */}
@@ -260,7 +261,7 @@ function DemoViewInner({
                     style={{
                       padding: '6px 16px',
                       background: activeTab === tab.id ? 'rgba(0, 194, 255, 0.2)' : 'transparent',
-                      color: activeTab === tab.id ? '#00C2FF' : 'rgba(255, 255, 255, 0.6)',
+                      color: activeTab === tab.id ? '#ff6b35' : 'rgba(255, 255, 255, 0.6)',
                       border: 'none',
                       borderRadius: '6px',
                       fontFamily: 'Inter, sans-serif',
@@ -350,7 +351,7 @@ function DemoViewInner({
                   display: 'flex',
                   flexDirection: 'column',
                   overflow: 'hidden',
-                  background: 'rgb(10, 10, 10)',
+                  background: COLORS.white,
                 }}
               >
                 <StoryboardListPanelWrapper
@@ -382,7 +383,7 @@ function DemoViewInner({
                   display: 'flex',
                   flexDirection: 'column',
                   overflow: 'hidden',
-                  background: 'rgb(10, 10, 10)',
+                  background: COLORS.white,
                 }}
               >
                 <TraceListPanelWrapper
@@ -485,7 +486,7 @@ function IntroScreen() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(180deg, #0a0e17 0%, #0d1520 100%)',
+        background: COLORS.background,
         zIndex: 100,
         padding: '40px',
       }}
@@ -495,8 +496,8 @@ function IntroScreen() {
           <Logo
             width={100}
             height={100}
-            color="#00C2FF"
-            particleColor="#0088CC"
+            color="#ff6b35"
+            particleColor={COLORS.accent}
             opacity={0.9}
           />
         </div>
@@ -509,21 +510,21 @@ function IntroScreen() {
           style={{
             fontSize: isWelcome ? '36px' : '32px',
             fontWeight: 600,
-            fontFamily: 'Inter, sans-serif',
-            color: '#ffffff',
+            fontFamily: 'var(--font-inter), sans-serif',
+            color: COLORS.text,
             margin: '32px 0 16px 0',
             textAlign: 'center',
           }}
         >
-          <span style={{ color: '#00C2FF' }}>{content.title}</span>
+          <span style={{ color: '#ff6b35' }}>{content.title}</span>
         </h1>
       )}
 
       <div
         style={{
           fontSize: '24px',
-          fontFamily: 'Inter, sans-serif',
-          color: 'rgba(255, 255, 255, 0.7)',
+          fontFamily: 'var(--font-inter), sans-serif',
+          color: COLORS.textSecondary,
           margin: content.title ? 0 : '32px 0 0 0',
           maxWidth: '800px',
           minHeight: '87px', // Fixed height for 3 lines to prevent icon/title shifting
@@ -595,7 +596,7 @@ function IntroScreen() {
             gap: '8px',
             padding: '14px 28px',
             minWidth: '120px',
-            background: 'linear-gradient(135deg, #00C2FF 0%, #0088CC 100%)',
+            background: COLORS.primary,
             border: 'none',
             borderRadius: '10px',
             color: '#fff',
@@ -603,16 +604,16 @@ function IntroScreen() {
             fontWeight: 600,
             fontFamily: 'Inter, sans-serif',
             cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(0, 194, 255, 0.4)',
+            boxShadow: '0 4px 20px rgba(255, 107, 53, 0.4)',
             transition: 'all 0.2s ease',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 6px 24px rgba(0, 194, 255, 0.5)';
+            e.currentTarget.style.boxShadow = '0 6px 24px rgba(255, 107, 53, 0.5)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 194, 255, 0.4)';
+            e.currentTarget.style.boxShadow = '0 4px 20px rgba(255, 107, 53, 0.4)';
           }}
         >
           Start

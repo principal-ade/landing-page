@@ -70,10 +70,10 @@ export function TraceTape({
 
   // Merge default colors
   const resolvedColors = {
-    line: '#3b82f6',
-    scrubber: '#22d3ee',  // cyan
+    line: '#ff6b35',  // tangerine
+    scrubber: '#ff6b35',  // tangerine
     highlighted: '#ffffff',
-    background: 'rgba(0, 0, 0, 0.3)',
+    background: 'rgba(0, 0, 0, 0.05)',
     ...colors,
   };
 
@@ -343,13 +343,13 @@ export function TraceTape({
         const topOffset = bar.isRoot ? '4px' : '50%';
         const bottomOffset = '4px';
 
-        // Different colors: traces are cyan/teal, spans are blue
-        const traceColor = '#14b8a6'; // teal
-        const spanColor = resolvedColors.line; // blue
+        // Different colors: traces are tangerine, spans are tangerine
+        const traceColor = '#ff6b35'; // tangerine
+        const spanColor = resolvedColors.line; // tangerine
 
         // Selected trace spans: brighter colors, wider, with glow
-        const selectedTraceColor = '#5eead4'; // bright teal
-        const selectedSpanColor = '#93c5fd'; // bright blue
+        const selectedTraceColor = '#ff8755'; // bright tangerine
+        const selectedSpanColor = '#ff8755'; // bright tangerine
 
         const getWidth = () => {
           if (isHighlighted) return '6px';

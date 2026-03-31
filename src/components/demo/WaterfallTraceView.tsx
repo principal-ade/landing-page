@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { BarChart3 } from 'lucide-react';
 import type { RegisteredTrace } from '@principal-ai/principal-view-core';
 import type { PanelEvent, PanelEventEmitter } from '@principal-ade/panel-framework-core';
+import { COLORS } from '../../styles/colors';
 import {
   TraceDetailsPanel,
   getSpansFromTrace,
@@ -134,20 +135,20 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
         {/* Header */}
         <div style={{
           padding: '16px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: `1px solid ${COLORS.border}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(0, 0, 0, 0.2)',
+          background: COLORS.white,
           flexShrink: 0,
         }}>
           <div>
             <h2 style={{
               fontSize: '16px',
               fontWeight: 600,
-              color: '#ffffff',
+              color: COLORS.text,
               margin: 0,
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-inter), sans-serif',
             }}>
               Traces
             </h2>
@@ -156,22 +157,22 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
             onClick={onClear}
             style={{
               padding: '8px 16px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: COLORS.background,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: '6px',
-              color: '#94a3b8',
+              color: COLORS.textSecondary,
               fontSize: '13px',
               cursor: 'pointer',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-inter), sans-serif',
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.background = COLORS.primary;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-              e.currentTarget.style.color = '#94a3b8';
+              e.currentTarget.style.background = COLORS.background;
+              e.currentTarget.style.color = COLORS.textSecondary;
             }}
           >
             Clear
@@ -182,7 +183,7 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
         <div style={{
           padding: '16px',
           paddingTop: '24px', // extra space for glow
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: `1px solid ${COLORS.border}`,
           flexShrink: 0,
           overflow: 'visible',
         }}>
@@ -212,16 +213,16 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
               alignItems: 'center',
               justifyContent: 'center',
               height: '100%',
-              color: '#666',
-              fontFamily: 'Inter, sans-serif',
+              color: COLORS.textSecondary,
+              fontFamily: 'var(--font-inter), sans-serif',
               textAlign: 'center',
               padding: '40px',
             }}>
-              <BarChart3 size={48} strokeWidth={1.5} color="#666" style={{ marginBottom: '16px' }} />
+              <BarChart3 size={48} strokeWidth={1.5} color={COLORS.textSecondary} style={{ marginBottom: '16px' }} />
               <p style={{ fontSize: '14px', margin: 0 }}>
                 No traces yet. Interact with the Kanban board to generate telemetry.
               </p>
-              <p style={{ fontSize: '12px', margin: '8px 0 0 0', color: '#555' }}>
+              <p style={{ fontSize: '12px', margin: '8px 0 0 0', color: COLORS.textSecondary }}>
                 Try dragging a task to another column, or clicking on a task.
               </p>
             </div>
@@ -256,7 +257,7 @@ export function WaterfallTraceView({ traces, onClear }: WaterfallTraceViewProps)
       {selectedTrace && (
         <div style={{
           width: '50%',
-          borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+          borderLeft: `1px solid ${COLORS.border}`,
           overflow: 'hidden',
         }}>
           <ThemeProvider>
@@ -291,15 +292,15 @@ function TraceRow({
   const spanCount = spans.length;
 
   const getBackground = () => {
-    if (isSelected) return 'rgba(255, 255, 255, 0.08)';
-    if (isHighlighted) return 'rgba(59, 130, 246, 0.15)';
-    return 'rgba(255, 255, 255, 0.02)';
+    if (isSelected) return 'rgba(255, 107, 53, 0.1)';
+    if (isHighlighted) return 'rgba(255, 107, 53, 0.08)';
+    return COLORS.white;
   };
 
   const getBorderLeft = () => {
-    if (isSelected) return '3px solid #3b82f6';
-    if (isHighlighted) return '3px solid #60a5fa';
-    return '1px solid rgba(255, 255, 255, 0.08)';
+    if (isSelected) return `3px solid ${COLORS.primary}`;
+    if (isHighlighted) return `3px solid ${COLORS.accent}`;
+    return `1px solid ${COLORS.border}`;
   };
 
   return (
@@ -307,7 +308,7 @@ function TraceRow({
       onClick={onClick}
       style={{
         background: getBackground(),
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: `1px solid ${COLORS.border}`,
         borderLeft: getBorderLeft(),
         overflow: 'hidden',
         cursor: 'pointer',
@@ -327,8 +328,8 @@ function TraceRow({
           <div style={{
             fontSize: '13px',
             fontWeight: 500,
-            color: '#666',
-            fontFamily: 'Fira Code, monospace',
+            color: COLORS.textSecondary,
+            fontFamily: 'var(--font-fira-code), monospace',
             minWidth: '24px',
           }}>
             {index}
@@ -337,15 +338,15 @@ function TraceRow({
             <div style={{
               fontSize: '16px',
               fontWeight: 600,
-              color: '#ffffff',
-              fontFamily: 'Fira Code, monospace',
+              color: COLORS.text,
+              fontFamily: 'var(--font-fira-code), monospace',
             }}>
               {rootSpan?.name || trace.name || 'Unknown'}
             </div>
             <div style={{
               fontSize: '13px',
-              color: '#666',
-              fontFamily: 'Fira Code, monospace',
+              color: COLORS.textSecondary,
+              fontFamily: 'var(--font-fira-code), monospace',
               marginTop: '2px',
             }}>
               {trace.traceId}
@@ -355,15 +356,15 @@ function TraceRow({
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <span style={{
             fontSize: '14px',
-            color: '#94a3b8',
-            fontFamily: 'Inter, sans-serif',
+            color: COLORS.textSecondary,
+            fontFamily: 'var(--font-inter), sans-serif',
           }}>
             {spanCount} spans
           </span>
           <span style={{
             fontSize: '15px',
             color: '#84CC16',
-            fontFamily: 'Fira Code, monospace',
+            fontFamily: 'var(--font-fira-code), monospace',
             fontWeight: 600,
           }}>
             {formatDuration(trace.duration)}
