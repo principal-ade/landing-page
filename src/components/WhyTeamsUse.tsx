@@ -72,8 +72,7 @@ export function WhyTeamsUse() {
             textAlign: "center",
             color: "#ffffff",
             marginBottom: isMobile ? "48px" : "64px",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             letterSpacing: "-0.02em",
             lineHeight: "1.1",
           }}
@@ -163,8 +162,7 @@ export function WhyTeamsUse() {
                         fontWeight: "400",
                         color: "#ffffff",
                         marginBottom: "8px",
-                        fontFamily:
-                          '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                        fontFamily: "var(--font-inter), system-ui, sans-serif",
                         letterSpacing: "-0.01em",
                       }}
                     >
@@ -176,8 +174,7 @@ export function WhyTeamsUse() {
                         fontWeight: "400",
                         color: descriptionColor,
                         margin: "0",
-                        fontFamily:
-                          '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                        fontFamily: "var(--font-inter), system-ui, sans-serif",
                         letterSpacing: "-0.01em",
                         lineHeight: "1.5",
                       }}
@@ -209,8 +206,7 @@ export function WhyTeamsUse() {
               color: "#d1d5db",
               maxWidth: "900px",
               margin: "0 auto",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               letterSpacing: "-0.01em",
               lineHeight: "1.5",
             }}

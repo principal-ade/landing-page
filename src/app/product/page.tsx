@@ -105,8 +105,7 @@ export default function FeaturesPage() {
               lineHeight: "1.15",
               letterSpacing: "-0.03em",
               marginBottom: "1rem",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             Story-based software.
@@ -122,8 +121,7 @@ export default function FeaturesPage() {
               maxWidth: "600px",
               margin: "0 auto",
               lineHeight: "1.7",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Understand what agents build. Verify it does what you intended.
@@ -144,8 +142,7 @@ export default function FeaturesPage() {
               fontSize: "1rem",
               textDecoration: "none",
               transition: "opacity 0.2s, transform 0.2s",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.opacity = "0.9";
@@ -183,8 +180,7 @@ export default function FeaturesPage() {
             border: "1px solid rgba(52,211,153,0.3)",
             color: "#34d399",
             background: "rgba(52, 211, 153, 0.15)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           File City Tours
@@ -201,8 +197,7 @@ export default function FeaturesPage() {
             border: "1px solid rgba(168,85,247,0.3)",
             color: "#a855f7",
             background: "rgba(168, 85, 247, 0.12)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Quality Radar
@@ -219,8 +214,7 @@ export default function FeaturesPage() {
             border: "1px solid rgba(34,211,238,0.3)",
             color: "#22d3ee",
             background: "rgba(34, 211, 238, 0.15)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           System Stories
@@ -273,8 +267,7 @@ export default function FeaturesPage() {
                 margin: "0 0 20px 0",
                 lineHeight: "1.15",
                 letterSpacing: "-0.025em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               Your codebase is a city. Take the tour.
@@ -286,8 +279,7 @@ export default function FeaturesPage() {
                 color: theme.colors.textTertiary,
                 margin: "0 0 40px 0",
                 lineHeight: "1.6",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               3,762 files. 645 folders. Understood in seconds. File City turns
@@ -313,8 +305,7 @@ export default function FeaturesPage() {
                   fontWeight: "600",
                   color: theme.colors.text,
                   margin: "0 0 8px 0",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 }}
               >
                 Get your repo mapped free →
@@ -326,8 +317,7 @@ export default function FeaturesPage() {
                   color: theme.colors.textTertiary,
                   margin: "0 0 24px 0",
                   lineHeight: "1.5",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Drop your GitHub URL. We'll generate yours and send it to you.
@@ -355,8 +345,7 @@ export default function FeaturesPage() {
                       padding: "12px 16px",
                       fontSize: "15px",
                       color: theme.colors.text,
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
@@ -380,8 +369,7 @@ export default function FeaturesPage() {
                       padding: "12px 16px",
                       fontSize: "15px",
                       color: theme.colors.text,
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
@@ -404,8 +392,7 @@ export default function FeaturesPage() {
                       fontSize: "15px",
                       fontWeight: "600",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       transition: "background-color 0.2s ease",
                       whiteSpace: "nowrap",
                     }}
@@ -429,8 +416,7 @@ export default function FeaturesPage() {
                       fontSize: "14px",
                       color: submitResult.success ? theme.colors.success : theme.colors.error,
                       margin: "0 0 8px 0",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     {submitResult.message}
@@ -442,8 +428,7 @@ export default function FeaturesPage() {
                       fontSize: "13px",
                       color: theme.colors.textMuted,
                       margin: "0",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     We'll send your File City map to your inbox when ready.
@@ -522,8 +507,7 @@ export default function FeaturesPage() {
                 letterSpacing: "-0.02em",
                 marginBottom: "1rem",
                 lineHeight: "1.2",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               Quality Radar
@@ -534,8 +518,7 @@ export default function FeaturesPage() {
                 color: theme.colors.textTertiary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Now that you can see what was built, the question is: how much of
@@ -571,8 +554,7 @@ export default function FeaturesPage() {
                     fontSize: isMobile ? "14px" : "0.95rem",
                     color: theme.colors.textTertiary,
                     lineHeight: "1.6",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   <div
@@ -670,8 +652,7 @@ export default function FeaturesPage() {
                 letterSpacing: "-0.02em",
                 marginBottom: "1rem",
                 lineHeight: "1.2",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               System Stories
@@ -682,8 +663,7 @@ export default function FeaturesPage() {
                 color: theme.colors.textTertiary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               This is the payoff. Your production system tells its own story. Not
@@ -719,8 +699,7 @@ export default function FeaturesPage() {
                     fontSize: isMobile ? "14px" : "0.95rem",
                     color: theme.colors.textTertiary,
                     lineHeight: "1.6",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   <div
@@ -841,8 +820,7 @@ export default function FeaturesPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "1rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Three features. One story.
@@ -854,8 +832,7 @@ export default function FeaturesPage() {
             lineHeight: "1.8",
             maxWidth: "650px",
             margin: "0 auto 2.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           File City Tours shows you what was built. Quality Radar tells you what's
@@ -883,8 +860,7 @@ export default function FeaturesPage() {
               border: "1px solid rgba(52,211,153,0.25)",
               background: "rgba(52, 211, 153, 0.15)",
               color: "#34d399",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             File City Tours
@@ -908,8 +884,7 @@ export default function FeaturesPage() {
               border: "1px solid rgba(168,85,247,0.25)",
               background: "rgba(168, 85, 247, 0.12)",
               color: "#a855f7",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Quality Radar
@@ -933,8 +908,7 @@ export default function FeaturesPage() {
               border: `1px solid ${theme.colors.primary}40`,
               background: `${theme.colors.primary}26`,
               color: theme.colors.primary,
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             System Stories
@@ -1008,8 +982,7 @@ export default function FeaturesPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "0.75rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Ready to see the story?
@@ -1019,8 +992,7 @@ export default function FeaturesPage() {
             color: theme.colors.textTertiary,
             fontSize: isMobile ? "15px" : "1rem",
             marginBottom: "2rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Our alpha is live. We're onboarding individual devs and teams now.
@@ -1039,8 +1011,7 @@ export default function FeaturesPage() {
             display: "inline-flex",
             alignItems: "center",
             gap: "0.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = "0.9";

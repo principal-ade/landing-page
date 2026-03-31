@@ -305,8 +305,7 @@ export const LogToEventDecomposition: React.FC<LogToEventDecompositionProps> = (
               lineHeight: "1.15",
               letterSpacing: "-0.025em",
               marginBottom: "16px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -323,8 +322,7 @@ export const LogToEventDecomposition: React.FC<LogToEventDecompositionProps> = (
               lineHeight: "1.6",
               maxWidth: "700px",
               margin: "0 auto",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             <span style={{ color: "#ef4444" }}>

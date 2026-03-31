@@ -95,10 +95,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             style={{
               fontSize: isMobile ? "28px" : "36px",
               fontWeight: "600",
-              color: "#ffffff",
+              color: theme.colors.text,
               marginBottom: "16px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             You're in.
@@ -108,8 +107,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               fontSize: isMobile ? "16px" : "18px",
               color: "#9ca3af",
               lineHeight: "1.6",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             We'll reach out with access.
@@ -145,12 +143,11 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             style={{
               fontSize: isMobile ? "32px" : "44px",
               fontWeight: "600",
-              color: "#ffffff",
+              color: theme.colors.text,
               marginBottom: "16px",
               lineHeight: "1.1",
               letterSpacing: "-0.02em",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             Get Early Access
@@ -160,8 +157,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               fontSize: isMobile ? "15px" : "17px",
               color: "#9ca3af",
               lineHeight: "1.6",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Our alpha is live.<br />We're onboarding individual devs and teams now.
@@ -189,8 +185,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Email
@@ -210,8 +205,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: "#ffffff",
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   transition: "border-color 0.2s ease",
                 }}
@@ -234,8 +228,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 What's your role?
@@ -253,8 +246,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: role ? "#ffffff" : "#6b7280",
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
@@ -287,8 +279,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Team size
@@ -306,8 +297,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: teamSize ? "#ffffff" : "#6b7280",
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
@@ -341,8 +331,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: "#f87171",
                   fontSize: "14px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 {error}
@@ -362,8 +351,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 borderRadius: "8px",
                 fontSize: "16px",
                 fontWeight: "600",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 cursor: isLoading ? "not-allowed" : "pointer",
                 transition: "all 0.2s ease",
                 opacity: isLoading ? 0.7 : 1,
@@ -395,8 +383,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             textAlign: "center",
             fontSize: "13px",
             color: "#6b7280",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Investor or partner?{" "}

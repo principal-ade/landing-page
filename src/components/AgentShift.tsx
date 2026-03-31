@@ -32,8 +32,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               fontWeight: "600",
               color: theme.colors.textTertiary,
               marginBottom: "32px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Not after the fire. Before the smoke.
@@ -45,8 +44,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               lineHeight: "1.15",
               letterSpacing: "-0.025em",
               marginBottom: "32px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             <span style={{ color: theme.colors.primary }}>Three features.</span>
@@ -66,8 +64,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
               fontSize: isMobile ? "16px" : "18px",
               fontWeight: "600",
               borderRadius: "8px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {

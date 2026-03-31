@@ -71,6 +71,7 @@ export default function BlogPage() {
               textAlign: "center",
               padding: "60px 20px",
               color: theme.colors.textSecondary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Loading blog posts...
@@ -84,6 +85,7 @@ export default function BlogPage() {
               textAlign: "center",
               padding: "60px 20px",
               color: theme.colors.textSecondary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             No blog posts found.
@@ -137,6 +139,7 @@ export default function BlogPage() {
                       fontWeight: "600",
                       color: theme.colors.text,
                       margin: "0 0 12px 0",
+                      fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                     }}
                   >
                     {post.title}
@@ -148,9 +151,10 @@ export default function BlogPage() {
                       marginBottom: "16px",
                       fontSize: "14px",
                       color: theme.colors.textSecondary,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
-                    {post.date && <span>{post.date}</span>}
+                    {post.date && <span style={{ color: theme.colors.primary }}>{post.date}</span>}
                     {post.author && <span style={{ margin: "0 10px" }}>•</span>}
                     {post.author && <span>{post.author}</span>}
                   </div>
@@ -160,6 +164,7 @@ export default function BlogPage() {
                       lineHeight: "1.6",
                       color: theme.colors.textSecondary,
                       margin: 0,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     {post.excerpt}

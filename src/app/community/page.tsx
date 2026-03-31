@@ -45,8 +45,7 @@ export default function CommunityPage() {
             lineHeight: "1.15",
             letterSpacing: "-0.03em",
             marginBottom: "1rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           The conversation is <em style={{ fontStyle: "normal", color: "#22d3ee" }}>happening</em>
@@ -58,8 +57,7 @@ export default function CommunityPage() {
             maxWidth: "550px",
             margin: "0 auto",
             lineHeight: "1.7",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Engineers, founders, and CTOs are rethinking how we monitor agent-written code. Here's where it's playing out.
@@ -92,8 +90,7 @@ export default function CommunityPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "2.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           What people are saying
@@ -170,8 +167,7 @@ export default function CommunityPage() {
                   style={{
                     fontSize: "0.85rem",
                     fontWeight: "600",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   Michael Flannery
@@ -258,8 +254,7 @@ export default function CommunityPage() {
                   style={{
                     fontSize: "0.85rem",
                     fontWeight: "600",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   FileCity
@@ -346,8 +341,7 @@ export default function CommunityPage() {
                   style={{
                     fontSize: "0.85rem",
                     fontWeight: "600",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   Fernando Ramirez
@@ -460,8 +454,7 @@ export default function CommunityPage() {
                 fontWeight: "700",
                 letterSpacing: "-0.02em",
                 marginBottom: "0.75rem",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Try it yourself
@@ -473,8 +466,7 @@ export default function CommunityPage() {
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
                 maxWidth: "520px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               A maze. A bug. No map. That's what debugging agent-written code feels like without stories. Play two rounds and feel the difference.
@@ -564,8 +556,7 @@ export default function CommunityPage() {
                 fontSize: "0.95rem",
                 textDecoration: "none",
                 transition: "opacity 0.2s, transform 0.2s",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.opacity = "0.9";
@@ -597,8 +588,7 @@ export default function CommunityPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "0.75rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Join the conversation
@@ -609,8 +599,7 @@ export default function CommunityPage() {
             fontSize: "1rem",
             marginBottom: "2rem",
             lineHeight: "1.7",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           We're building in public. Follow along, push back, tell us what we're getting wrong.
@@ -632,8 +621,7 @@ export default function CommunityPage() {
             display: "inline-flex",
             alignItems: "center",
             gap: "0.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = "0.9";
@@ -666,8 +654,7 @@ export default function CommunityPage() {
               fontSize: "0.85rem",
               fontWeight: "500",
               transition: "color 0.2s",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#94a3b8";
@@ -688,8 +675,7 @@ export default function CommunityPage() {
               fontSize: "0.85rem",
               fontWeight: "500",
               transition: "color 0.2s",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#94a3b8";
@@ -710,8 +696,7 @@ export default function CommunityPage() {
               fontSize: "0.85rem",
               fontWeight: "500",
               transition: "color 0.2s",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#94a3b8";

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fira_Code } from "next/font/google";
+import { Inter, Fira_Code, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
@@ -7,6 +7,11 @@ import { Header } from "@/components/Header";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
 
@@ -53,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${firaCode.variable} antialiased`}
         style={{ overflow: 'hidden', height: '100vh' }}
       >
         {process.env.NEXT_PUBLIC_GA_ID && (

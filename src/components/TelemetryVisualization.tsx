@@ -68,8 +68,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   color: theme.colors.textOnAccent,
                   lineHeight: "1.2",
                   marginBottom: "16px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 }}
               >
                 Monitoring starts from the wrong end.
@@ -81,8 +80,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   fontSize: isMobile ? "15px" : "16px",
                   color: theme.colors.textOnAccent,
                   lineHeight: "1.6",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Agents write the code. Nobody understands it.{" "}
@@ -104,8 +102,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                     transition: "opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                   onMouseEnter={(e) => {
@@ -150,8 +147,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     fontWeight: "600",
                     color: theme.colors.textTertiary,
                     marginBottom: "16px",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                   }}
                 >
                   Traditional Monitoring
@@ -195,8 +191,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                         style={{
                           fontSize: isMobile ? "13px" : "14px",
                           color: theme.colors.text,
-                          fontFamily:
-                            '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                          fontFamily: "var(--font-inter), system-ui, sans-serif",
                         }}
                       >
                         {step.text}
@@ -226,8 +221,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     fontWeight: "600",
                     color: theme.colors.primary,
                     marginBottom: "16px",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                   }}
                 >
                   Story-Based Monitoring
@@ -269,8 +263,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                         style={{
                           fontSize: isMobile ? "13px" : "14px",
                           color: theme.colors.text,
-                          fontFamily:
-                            '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                          fontFamily: "var(--font-inter), system-ui, sans-serif",
                         }}
                       >
                         {step.text}

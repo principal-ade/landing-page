@@ -123,8 +123,7 @@ const HeroSection: React.FC = () => {
                 fontWeight: "700",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 lineHeight: "1.05",
                 color: theme.colors.accent,
                 wordWrap: "break-word",
@@ -139,8 +138,7 @@ const HeroSection: React.FC = () => {
                 fontWeight: "700",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 lineHeight: "1.05",
                 color: theme.colors.text,
                 wordWrap: "break-word",
@@ -181,8 +179,7 @@ const HeroSection: React.FC = () => {
                     fontSize: isMobile ? "16px" : "18px",
                     fontWeight: "400",
                     color: theme.colors.text,
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   <span style={{ color: theme.colors.primary, fontSize: "20px" }}>✓</span>
@@ -215,8 +212,7 @@ const HeroSection: React.FC = () => {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
                 border: "none",
@@ -257,8 +253,7 @@ const HeroSection: React.FC = () => {
                 flexWrap: "wrap",
                 fontSize: isMobile ? "12px" : "14px",
                 color: theme.colors.textTertiary,
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 textAlign: "center",
               }}
             >

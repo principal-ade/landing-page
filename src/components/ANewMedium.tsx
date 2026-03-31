@@ -29,8 +29,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
             lineHeight: "1.15",
             letterSpacing: "-0.025em",
             marginBottom: isMobile ? "56px" : "80px",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           A new workflow for an
@@ -61,8 +60,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               1
@@ -73,8 +71,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               See the system
@@ -85,8 +82,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Map the codebase. Understand the shape.
@@ -106,8 +102,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               2
@@ -118,8 +113,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Let agents build
@@ -130,8 +124,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Let them move fast.
@@ -151,8 +144,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               3
@@ -163,8 +155,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Review what actually happened
@@ -175,8 +166,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Not in diffs. Not in logs. In behavior.
@@ -197,8 +187,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
               fontWeight: "500",
               color: "#ffffff",
               lineHeight: "1.5",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             You don't read logs.

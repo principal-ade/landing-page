@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { trackDownload } from '../app/lib/analytics';
 
-const fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif';
+const fontFamily = "var(--font-inter), system-ui, sans-serif";
 
 interface GitHubRelease {
   id: number;

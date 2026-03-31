@@ -78,8 +78,7 @@ export function LivingDocumentationSection() {
                   fontSize: isMobile ? "16px" : "18px",
                   fontWeight: "600",
                   color: "#ffffff",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 The <span style={{ color: "#06b6d4" }}>.alexandria/</span> Folder
@@ -94,8 +93,7 @@ export function LivingDocumentationSection() {
                 color: "#ffffff",
                 lineHeight: "1.1",
                 letterSpacing: "-0.02em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 margin: "0",
               }}
             >
@@ -110,8 +108,7 @@ export function LivingDocumentationSection() {
                 color: "#d1d5db",
                 lineHeight: "1.6",
                 letterSpacing: "-0.01em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 margin: "0",
               }}
             >
@@ -126,8 +123,7 @@ export function LivingDocumentationSection() {
                 fontWeight: "400",
                 color: "#a0aec0",
                 lineHeight: "1.6",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 margin: "32px 0 0 0",
                 fontStyle: "italic",
               }}

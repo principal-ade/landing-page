@@ -43,8 +43,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             marginBottom: "16px",
             lineHeight: "1.2",
             letterSpacing: "-0.02em",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Ready to see the story?
@@ -55,8 +54,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             color: theme.colors.textTertiary,
             marginBottom: "32px",
             lineHeight: "1.6",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Our alpha is live. We're onboarding now.
@@ -74,8 +72,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             fontSize: isMobile ? "16px" : "18px",
             fontWeight: "600",
             borderRadius: "8px",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             transition: "all 0.2s ease",
             cursor: "pointer",
           }}
@@ -97,8 +94,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             marginTop: "24px",
             fontSize: isMobile ? "14px" : "15px",
             color: theme.colors.textMuted,
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Investor or partner?{" "}
