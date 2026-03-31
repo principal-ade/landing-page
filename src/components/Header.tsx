@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: '#000000',
+        background: '#0c3741',
         borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
         height: '70px',
         padding: isMobile ? '0 20px' : '0 24px',
@@ -72,10 +72,7 @@ export const Header: React.FC = () => {
             <span
               style={{
                 fontWeight: '300',
-                background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: '#0891b2',
               }}
             >
               AI
@@ -200,8 +197,8 @@ export const Header: React.FC = () => {
             href="/early-access"
             style={{
               padding: isTablet ? '10px 24px' : '8px 20px',
-              background: '#00C2FF',
-              color: '#000000',
+              background: '#0891b2',
+              color: '#ffffff',
               textDecoration: 'none',
               fontSize: isTablet ? '15px' : '14px',
               fontWeight: '600',
@@ -212,14 +209,14 @@ export const Header: React.FC = () => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(8, 145, 178, 0.4)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            Get Early Access
+            Early Access
           </Link>
         </div>
 
@@ -252,7 +249,7 @@ export const Header: React.FC = () => {
             top: '100%',
             left: 0,
             right: 0,
-            background: 'rgba(0, 0, 0, 0.98)',
+            background: '#0c3741',
             borderBottom: '1px solid rgba(0, 194, 255, 0.2)',
             padding: '24px',
             display: 'flex',
@@ -321,8 +318,8 @@ export const Header: React.FC = () => {
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',
-              background: '#00C2FF',
-              color: '#000000',
+              background: '#0891b2',
+              color: '#ffffff',
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '600',
@@ -331,7 +328,7 @@ export const Header: React.FC = () => {
               textAlign: 'center',
             }}
           >
-            Get Early Access
+            Early Access
           </Link>
         </div>
       )}

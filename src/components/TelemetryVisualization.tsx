@@ -25,11 +25,11 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
           viewport={{ once: true }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         >
-            {/* Blue quote block with grid */}
+            {/* Teal quote block with grid */}
             <div
               style={{
                 position: "relative",
-                background: COLORS.royalBlue,
+                background: "#0891b2",
                 borderRadius: "8px",
                 padding: isMobile ? "40px 28px" : "48px 48px",
                 marginBottom: "0px",
@@ -39,7 +39,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
                 `,
                 backgroundSize: "20px 20px",
-                boxShadow: "0 8px 24px rgba(30, 64, 175, 0.3)",
+                boxShadow: "0 8px 24px rgba(8, 145, 178, 0.3)",
               }}
             >
               {/* Eyebrow */}
@@ -47,7 +47,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 style={{
                   fontSize: "11px",
                   fontWeight: "600",
-                  color: COLORS.accentAlt,
+                  color: "#0c3741",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   marginBottom: "16px",
@@ -65,8 +65,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   color: COLORS.white,
                   lineHeight: "1.2",
                   marginBottom: "16px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 }}
               >
                 Monitoring starts from the wrong end.
@@ -78,8 +77,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                   fontSize: isMobile ? "15px" : "16px",
                   color: COLORS.white,
                   lineHeight: "1.6",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Agents write the code. Nobody understands it.{" "}
@@ -147,8 +145,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                     fontWeight: "600",
                     color: COLORS.gray500,
                     marginBottom: "16px",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                   }}
                 >
                   Traditional Monitoring
@@ -207,35 +204,34 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               <div
                 style={{
                   background: COLORS.white,
-                  border: `2px solid ${COLORS.info}`,
+                  border: `2px solid ${COLORS.primary}`,
                   borderRadius: "12px",
                   padding: isMobile ? "20px" : "24px",
                   width: "100%",
                   boxSizing: "border-box",
                   overflowWrap: "break-word",
                   wordBreak: "break-word",
-                  boxShadow: "0 4px 12px rgba(8, 145, 178, 0.15)",
+                  boxShadow: "0 4px 12px rgba(255, 107, 53, 0.15)",
                 }}
               >
                 <h3
                   style={{
                     fontSize: isMobile ? "14px" : "16px",
                     fontWeight: "600",
-                    color: COLORS.info,
+                    color: COLORS.primary,
                     marginBottom: "16px",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                   }}
                 >
                   Story-Based Monitoring
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {[
-                    { num: 1, text: "Start from what should happen", color: COLORS.royalBlue },
-                    { num: 2, text: "Run the code", color: COLORS.info },
+                    { num: 1, text: "Start from what should happen", color: COLORS.secondary },
+                    { num: 2, text: "Run the code", color: COLORS.primary },
                     { num: 3, text: "See the story of what did", color: COLORS.success },
-                    { num: 4, text: "Every divergence surfaced", color: COLORS.info },
-                    { num: 5, text: "Root cause in minutes", color: COLORS.accentAlt },
+                    { num: 4, text: "Every divergence surfaced", color: COLORS.accent },
+                    { num: 5, text: "Root cause in minutes", color: COLORS.accent2 },
                   ].map((step) => (
                     <div
                       key={step.num}

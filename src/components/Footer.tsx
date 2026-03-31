@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { COLORS } from '../styles/colors';
 
 interface FooterLink {
   label: string;
@@ -84,8 +85,8 @@ export const Footer: React.FC = () => {
   return (
     <footer
       style={{
-        background: 'linear-gradient(180deg, #000000 0%, #0a1628 100%)',
-        borderTop: '1px solid rgba(0, 194, 255, 0.2)',
+        background: `linear-gradient(180deg, ${COLORS.background} 0%, ${COLORS.white} 100%)`,
+        borderTop: `1px solid ${COLORS.border}`,
         padding: '80px 24px 40px 24px',
       }}
     >
@@ -109,14 +110,11 @@ export const Footer: React.FC = () => {
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
-              <span style={{ color: '#ffffff' }}>Principal</span>
+              <span style={{ color: COLORS.text }}>Principal</span>
               <span
                 style={{
                   fontWeight: '300',
-                  background: 'linear-gradient(135deg, #00C2FF, #0098CC)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  color: '#0891b2',
                 }}
               >
                 AI
@@ -124,7 +122,7 @@ export const Footer: React.FC = () => {
             </div>
             <p
               style={{
-                color: '#9ca3af',
+                color: COLORS.textSecondary,
                 fontSize: '14px',
                 lineHeight: '1.6',
                 marginBottom: '24px',
@@ -149,19 +147,19 @@ export const Footer: React.FC = () => {
                       width: '40px',
                       height: '40px',
                       borderRadius: '8px',
-                      background: 'rgba(0, 194, 255, 0.1)',
-                      border: '1px solid rgba(0, 194, 255, 0.2)',
+                      background: 'rgba(8, 147, 210, 0.1)',
+                      border: `1px solid rgba(8, 147, 210, 0.2)`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#00C2FF',
+                      color: COLORS.secondary,
                       textDecoration: 'none',
                       transition: 'all 0.2s ease',
                     }}
                     whileHover={{
                       scale: 1.1,
-                      background: 'rgba(0, 194, 255, 0.2)',
-                      borderColor: '#00C2FF',
+                      background: 'rgba(8, 147, 210, 0.2)',
+                      borderColor: COLORS.secondary,
                     }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -177,7 +175,7 @@ export const Footer: React.FC = () => {
             <div key={section.title}>
               <h3
                 style={{
-                  color: '#ffffff',
+                  color: COLORS.text,
                   fontSize: '14px',
                   fontWeight: '600',
                   marginBottom: '16px',
@@ -194,17 +192,17 @@ export const Footer: React.FC = () => {
                     <a
                       href={link.href}
                       style={{
-                        color: '#9ca3af',
+                        color: COLORS.textSecondary,
                         textDecoration: 'none',
                         fontSize: '14px',
                         fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                         transition: 'color 0.2s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#00C2FF';
+                        e.currentTarget.style.color = COLORS.secondary;
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#9ca3af';
+                        e.currentTarget.style.color = COLORS.textSecondary;
                       }}
                     >
                       {link.label}
@@ -219,8 +217,8 @@ export const Footer: React.FC = () => {
         {/* Newsletter Subscription */}
         <div
           style={{
-            background: 'rgba(0, 194, 255, 0.05)',
-            border: '1px solid rgba(0, 194, 255, 0.2)',
+            background: 'rgba(8, 145, 178, 0.05)',
+            border: `2px solid rgba(8, 145, 178, 0.2)`,
             borderRadius: '12px',
             padding: '32px',
             marginBottom: '60px',
@@ -238,7 +236,7 @@ export const Footer: React.FC = () => {
             <div>
               <h3
                 style={{
-                  color: '#ffffff',
+                  color: COLORS.text,
                   fontSize: '18px',
                   fontWeight: '600',
                   marginBottom: '8px',
@@ -249,7 +247,7 @@ export const Footer: React.FC = () => {
               </h3>
               <p
                 style={{
-                  color: '#9ca3af',
+                  color: COLORS.textSecondary,
                   fontSize: '14px',
                   margin: 0,
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -278,20 +276,20 @@ export const Footer: React.FC = () => {
                     flex: '1 1 150px',
                     minWidth: '0',
                     padding: '8px 10px',
-                    background: 'rgba(0, 0, 0, 0.5)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: COLORS.white,
+                    border: `1px solid ${COLORS.border}`,
                     borderRadius: '8px',
-                    color: '#ffffff',
+                    color: COLORS.text,
                     fontSize: '13px',
                     fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                     outline: 'none',
                     opacity: status === 'loading' ? 0.6 : 1,
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#00C2FF';
+                    e.currentTarget.style.borderColor = COLORS.secondary;
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.borderColor = COLORS.border;
                   }}
                 />
                 <button
@@ -300,8 +298,8 @@ export const Footer: React.FC = () => {
                   style={{
                     flex: '0 0 auto',
                     padding: '8px 16px',
-                    background: status === 'loading' ? '#999' : '#00C2FF',
-                    color: '#000000',
+                    background: status === 'loading' ? '#999' : '#0891b2',
+                    color: COLORS.white,
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '13px',
@@ -314,7 +312,7 @@ export const Footer: React.FC = () => {
                   onMouseEnter={(e) => {
                     if (status !== 'loading') {
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 194, 255, 0.4)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(8, 145, 178, 0.4)';
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -355,7 +353,7 @@ export const Footer: React.FC = () => {
         >
           <p
             style={{
-              color: '#6b7280',
+              color: COLORS.gray500,
               fontSize: '14px',
               margin: 0,
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -367,17 +365,17 @@ export const Footer: React.FC = () => {
             <a
               href="/privacy"
               style={{
-                color: '#6b7280',
+                color: COLORS.gray500,
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00C2FF';
+                e.currentTarget.style.color = COLORS.secondary;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#6b7280';
+                e.currentTarget.style.color = COLORS.gray500;
               }}
             >
               Privacy Policy
@@ -385,17 +383,17 @@ export const Footer: React.FC = () => {
             <a
               href="/terms"
               style={{
-                color: '#6b7280',
+                color: COLORS.gray500,
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00C2FF';
+                e.currentTarget.style.color = COLORS.secondary;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#6b7280';
+                e.currentTarget.style.color = COLORS.gray500;
               }}
             >
               Terms of Service
@@ -403,17 +401,17 @@ export const Footer: React.FC = () => {
             <a
               href="/cookies"
               style={{
-                color: '#6b7280',
+                color: COLORS.gray500,
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00C2FF';
+                e.currentTarget.style.color = COLORS.secondary;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#6b7280';
+                e.currentTarget.style.color = COLORS.gray500;
               }}
             >
               Cookie Policy

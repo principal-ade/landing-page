@@ -1,21 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Ice Tangerine Color Palette */
+  --background: #f7fcfd;
+  --surface: #ffffff;
+  --primary: #ff6b35;
+  --secondary: #0893d2;
+  --accent: #ff8755;
+  --accent-2: #22d3ee;
+  --foreground: #0c1741;
+  --text: #0c1741;
+  --text-secondary: #3e6b77;
+  --border: #dffff5;
 }
 
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
   --color-foreground: var(--foreground);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border);
+
+  /* Fonts */
   --font-sans: var(--font-inter);
+  --font-display: var(--font-space-grotesk);
   --font-mono: var(--font-fira-code);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0e17;
-    --foreground: #f8f8f8;
+    /* Keep Ice Tangerine theme in dark mode */
+    --background: #f7fcfd;
+    --foreground: #0c1741;
   }
 }
 

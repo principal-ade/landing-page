@@ -2,8 +2,6 @@
 
 **Published:** February 2026
 
-**Author:** Principal Team
-
 ## When AI agents write production code, observability tools tell you what broke. Story-based monitoring tells you if what shipped is what you intended.
 
 Last week, Datadog dropped their Q4 2025 earnings. Buried in the call was a number that lit up X (formerly Twitter): an 8-figure annualized deal with "one of the largest AI foundational model companies."

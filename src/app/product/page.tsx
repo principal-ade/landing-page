@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
+import { COLORS } from "../../styles/colors";
 
 export default function FeaturesPage() {
   const [windowWidth, setWindowWidth] = React.useState(
@@ -72,8 +73,8 @@ export default function FeaturesPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0e17",
-        color: "#f1f5f9",
+        background: COLORS.background,
+        color: COLORS.text,
       }}
     >
       <Header />
@@ -103,25 +104,23 @@ export default function FeaturesPage() {
               lineHeight: "1.15",
               letterSpacing: "-0.03em",
               marginBottom: "1rem",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             Story-based software.
             <br />
-            <em style={{ fontStyle: "normal", color: "#22d3ee" }}>
+            <em style={{ fontStyle: "normal", color: COLORS.primary }}>
               From dev to production.
             </em>
           </h1>
           <p
             style={{
-              color: "#94a3b8",
+              color: COLORS.textSecondary,
               fontSize: isMobile ? "16px" : "1.1rem",
               maxWidth: "600px",
               margin: "0 auto",
               lineHeight: "1.7",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Understand what agents build. Verify it does what you intended.
@@ -134,23 +133,22 @@ export default function FeaturesPage() {
               alignItems: "center",
               gap: "0.5rem",
               marginTop: "1.5rem",
-              background: "#22d3ee",
-              color: "#0a0e17",
+              background: COLORS.primary,
+              color: COLORS.white,
               padding: "0.75rem 2rem",
               borderRadius: "8px",
               fontWeight: "600",
               fontSize: "1rem",
               textDecoration: "none",
-              transition: "opacity 0.2s, transform 0.2s",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              transition: "all 0.2s",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = "0.9";
+              e.currentTarget.style.background = COLORS.primaryHover;
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = "1";
+              e.currentTarget.style.background = COLORS.primary;
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >
@@ -178,11 +176,10 @@ export default function FeaturesPage() {
             fontWeight: "600",
             textDecoration: "none",
             transition: "all 0.2s",
-            border: "1px solid rgba(52,211,153,0.3)",
-            color: "#34d399",
-            background: "rgba(52, 211, 153, 0.15)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            border: `1px solid ${COLORS.secondary}`,
+            color: COLORS.secondary,
+            background: "rgba(8, 147, 210, 0.1)",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           File City Tours
@@ -196,11 +193,10 @@ export default function FeaturesPage() {
             fontWeight: "600",
             textDecoration: "none",
             transition: "all 0.2s",
-            border: "1px solid rgba(168,85,247,0.3)",
-            color: "#a855f7",
-            background: "rgba(168, 85, 247, 0.12)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            border: `1px solid ${COLORS.accent}`,
+            color: COLORS.accent,
+            background: "rgba(255, 135, 85, 0.1)",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Quality Radar
@@ -214,11 +210,10 @@ export default function FeaturesPage() {
             fontWeight: "600",
             textDecoration: "none",
             transition: "all 0.2s",
-            border: "1px solid rgba(34,211,238,0.3)",
-            color: "#22d3ee",
-            background: "rgba(34, 211, 238, 0.15)",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            border: `1px solid ${COLORS.accent2}`,
+            color: COLORS.accent2,
+            background: "rgba(34, 211, 238, 0.1)",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           System Stories
@@ -230,14 +225,13 @@ export default function FeaturesPage() {
       <section
         id="filecity"
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: isMobile ? "4rem 2rem" : "6rem 2rem",
+          padding: isMobile ? "80px 24px" : "120px 40px",
           maxWidth: "1200px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${COLORS.border}`,
         }}
       >
         <div
@@ -255,7 +249,7 @@ export default function FeaturesPage() {
               style={{
                 fontFamily: "monospace",
                 fontSize: "11px",
-                color: "#34d399",
+                color: COLORS.secondary,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 marginBottom: "24px",
@@ -267,12 +261,11 @@ export default function FeaturesPage() {
               style={{
                 fontSize: isMobile ? "28px" : "40px",
                 fontWeight: "600",
-                color: "#ffffff",
+                color: COLORS.text,
                 margin: "0 0 20px 0",
                 lineHeight: "1.15",
                 letterSpacing: "-0.025em",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               Your codebase is a city. Take the tour.
@@ -281,11 +274,10 @@ export default function FeaturesPage() {
               style={{
                 fontSize: isMobile ? "15px" : "16px",
                 fontWeight: "400",
-                color: "#9ca3af",
+                color: COLORS.textSecondary,
                 margin: "0 0 40px 0",
                 lineHeight: "1.6",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               3,762 files. 645 folders. Understood in seconds. File City turns
@@ -298,21 +290,20 @@ export default function FeaturesPage() {
             {/* Form Card */}
             <div
               style={{
-                background: "rgba(17, 24, 39, 0.6)",
-                border: "1px solid rgba(55, 65, 81, 0.5)",
+                background: COLORS.white,
+                border: `1px solid ${COLORS.border}`,
                 borderRadius: "16px",
                 padding: isMobile ? "32px 24px" : "40px",
-                backdropFilter: "blur(12px)",
+                boxShadow: "0 4px 12px rgba(8, 145, 178, 0.1)",
               }}
             >
               <h2
                 style={{
                   fontSize: isMobile ? "18px" : "20px",
                   fontWeight: "600",
-                  color: "#ffffff",
+                  color: COLORS.text,
                   margin: "0 0 8px 0",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                 }}
               >
                 Get your repo mapped free →
@@ -321,11 +312,10 @@ export default function FeaturesPage() {
                 style={{
                   fontSize: isMobile ? "14px" : "15px",
                   fontWeight: "400",
-                  color: "#9ca3af",
+                  color: COLORS.textSecondary,
                   margin: "0 0 24px 0",
                   lineHeight: "1.5",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Drop your GitHub URL. We'll generate yours and send it to you.
@@ -347,23 +337,21 @@ export default function FeaturesPage() {
                     onChange={(e) => setRepoUrl(e.target.value)}
                     disabled={isSubmitting}
                     style={{
-                      background: "rgba(15, 23, 42, 0.8)",
-                      border: "1px solid rgba(51, 65, 85, 0.6)",
+                      background: COLORS.background,
+                      border: `1px solid ${COLORS.border}`,
                       borderRadius: "8px",
                       padding: "12px 16px",
                       fontSize: "15px",
-                      color: "#ffffff",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      color: COLORS.text,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#34d399";
+                      e.currentTarget.style.borderColor = COLORS.secondary;
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(51, 65, 85, 0.6)";
+                      e.currentTarget.style.borderColor = COLORS.border;
                     }}
                   />
                   <input
@@ -373,50 +361,47 @@ export default function FeaturesPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
                     style={{
-                      background: "rgba(15, 23, 42, 0.8)",
-                      border: "1px solid rgba(51, 65, 85, 0.6)",
+                      background: COLORS.background,
+                      border: `1px solid ${COLORS.border}`,
                       borderRadius: "8px",
                       padding: "12px 16px",
                       fontSize: "15px",
-                      color: "#ffffff",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      color: COLORS.text,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       outline: "none",
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#34d399";
+                      e.currentTarget.style.borderColor = COLORS.secondary;
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(51, 65, 85, 0.6)";
+                      e.currentTarget.style.borderColor = COLORS.border;
                     }}
                   />
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     style={{
-                      background: isSubmitting ? "#64748b" : "#00C2FF",
-                      color: "#ffffff",
+                      background: isSubmitting ? COLORS.gray400 : COLORS.primary,
+                      color: COLORS.white,
                       border: "none",
                       borderRadius: "8px",
                       padding: "12px 24px",
                       fontSize: "15px",
                       fontWeight: "600",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       transition: "background-color 0.2s ease",
                       whiteSpace: "nowrap",
                     }}
                     onMouseEnter={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = "#00d4ff";
+                        e.currentTarget.style.backgroundColor = COLORS.primaryHover;
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = "#00C2FF";
+                        e.currentTarget.style.backgroundColor = COLORS.primary;
                       }
                     }}
                   >
@@ -427,10 +412,9 @@ export default function FeaturesPage() {
                   <p
                     style={{
                       fontSize: "14px",
-                      color: submitResult.success ? "#34d399" : "#f87171",
+                      color: submitResult.success ? COLORS.success : COLORS.error,
                       margin: "0 0 8px 0",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     {submitResult.message}
@@ -440,10 +424,9 @@ export default function FeaturesPage() {
                   <p
                     style={{
                       fontSize: "13px",
-                      color: "#6b7280",
+                      color: COLORS.gray500,
                       margin: "0",
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     We'll send your File City map to your inbox when ready.
@@ -456,11 +439,11 @@ export default function FeaturesPage() {
           {/* Right Column - File City Visualization */}
           <div
             style={{
-              background: "rgba(17, 24, 39, 0.4)",
-              border: "1px solid rgba(55, 65, 81, 0.5)",
+              background: COLORS.white,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: "16px",
               padding: "24px",
-              backdropFilter: "blur(8px)",
+              boxShadow: "0 2px 8px rgba(8, 145, 178, 0.08)",
               position: "relative",
             }}
           >
@@ -484,14 +467,13 @@ export default function FeaturesPage() {
       <section
         id="radar"
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: isMobile ? "4rem 2rem" : "6rem 2rem",
+          padding: isMobile ? "80px 24px" : "120px 40px",
           maxWidth: "1000px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${COLORS.border}`,
         }}
       >
         <div
@@ -510,7 +492,7 @@ export default function FeaturesPage() {
                 textTransform: "uppercase",
                 letterSpacing: "0.15em",
                 marginBottom: "1rem",
-                color: "#a855f7",
+                color: COLORS.accent,
               }}
             >
               Code Health
@@ -522,8 +504,7 @@ export default function FeaturesPage() {
                 letterSpacing: "-0.02em",
                 marginBottom: "1rem",
                 lineHeight: "1.2",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               Quality Radar
@@ -531,11 +512,10 @@ export default function FeaturesPage() {
             <p
               style={{
                 fontSize: isMobile ? "16px" : "1.1rem",
-                color: "#94a3b8",
+                color: COLORS.textSecondary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               Now that you can see what was built, the question is: how much of
@@ -569,10 +549,9 @@ export default function FeaturesPage() {
                     gap: "0.75rem",
                     alignItems: "flex-start",
                     fontSize: isMobile ? "14px" : "0.95rem",
-                    color: "#94a3b8",
+                    color: COLORS.textSecondary,
                     lineHeight: "1.6",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   <div
@@ -586,14 +565,14 @@ export default function FeaturesPage() {
                       flexShrink: 0,
                       fontSize: "0.7rem",
                       marginTop: "2px",
-                      background: "rgba(168, 85, 247, 0.12)",
-                      color: "#a855f7",
+                      background: "rgba(255, 135, 85, 0.1)",
+                      color: COLORS.accent,
                     }}
                   >
                     →
                   </div>
                   <div>
-                    <strong style={{ color: "#f1f5f9", fontWeight: "600" }}>
+                    <strong style={{ color: COLORS.text, fontWeight: "600" }}>
                       {feature.title}
                     </strong>{" "}
                     {feature.desc}
@@ -605,11 +584,12 @@ export default function FeaturesPage() {
 
           <div
             style={{
-              background: "#000000",
-              border: "1px solid rgba(30, 58, 138, 0.5)",
+              background: COLORS.white,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: "16px",
               overflow: "hidden",
               order: isMobile ? 2 : 1,
+              boxShadow: "0 2px 8px rgba(8, 145, 178, 0.08)",
             }}
           >
             <Image
@@ -632,14 +612,13 @@ export default function FeaturesPage() {
       <section
         id="stories"
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: isMobile ? "4rem 2rem" : "6rem 2rem",
+          padding: isMobile ? "80px 24px" : "120px 40px",
           maxWidth: "1000px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${COLORS.border}`,
         }}
       >
         <div
@@ -658,7 +637,7 @@ export default function FeaturesPage() {
                 textTransform: "uppercase",
                 letterSpacing: "0.15em",
                 marginBottom: "1rem",
-                color: "#22d3ee",
+                color: COLORS.accent2,
               }}
             >
               Production Monitoring
@@ -670,8 +649,7 @@ export default function FeaturesPage() {
                 letterSpacing: "-0.02em",
                 marginBottom: "1rem",
                 lineHeight: "1.2",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
               }}
             >
               System Stories
@@ -679,11 +657,10 @@ export default function FeaturesPage() {
             <p
               style={{
                 fontSize: isMobile ? "16px" : "1.1rem",
-                color: "#94a3b8",
+                color: COLORS.textSecondary,
                 lineHeight: "1.7",
                 marginBottom: "1.5rem",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
               This is the payoff. Your production system tells its own story. Not
@@ -717,10 +694,9 @@ export default function FeaturesPage() {
                     gap: "0.75rem",
                     alignItems: "flex-start",
                     fontSize: isMobile ? "14px" : "0.95rem",
-                    color: "#94a3b8",
+                    color: COLORS.textSecondary,
                     lineHeight: "1.6",
-                    fontFamily:
-                      '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   <div
@@ -734,14 +710,14 @@ export default function FeaturesPage() {
                       flexShrink: 0,
                       fontSize: "0.7rem",
                       marginTop: "2px",
-                      background: "rgba(34, 211, 238, 0.15)",
-                      color: "#22d3ee",
+                      background: "rgba(34, 211, 238, 0.1)",
+                      color: COLORS.accent2,
                     }}
                   >
                     →
                   </div>
                   <div>
-                    <strong style={{ color: "#f1f5f9", fontWeight: "600" }}>
+                    <strong style={{ color: COLORS.text, fontWeight: "600" }}>
                       {feature.title}
                     </strong>{" "}
                     {feature.desc}
@@ -753,10 +729,11 @@ export default function FeaturesPage() {
 
           <div
             style={{
-              background: "#111827",
-              border: "1px solid rgba(148, 163, 184, 0.1)",
+              background: COLORS.white,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: "16px",
               overflow: "hidden",
+              boxShadow: "0 2px 8px rgba(8, 145, 178, 0.08)",
             }}
           >
             <div
@@ -765,7 +742,7 @@ export default function FeaturesPage() {
                 alignItems: "center",
                 gap: "6px",
                 padding: "0.75rem 1rem",
-                borderBottom: "1px solid rgba(148, 163, 184, 0.1)",
+                borderBottom: `1px solid ${COLORS.border}`,
               }}
             >
               <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ef4444" }} />
@@ -776,7 +753,7 @@ export default function FeaturesPage() {
                   marginLeft: "0.75rem",
                   fontFamily: "monospace",
                   fontSize: "0.7rem",
-                  color: "#64748b",
+                  color: COLORS.gray500,
                 }}
               >
                 system-stories — production
@@ -788,7 +765,7 @@ export default function FeaturesPage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "#000000",
+                background: COLORS.background,
               }}
             >
               <Image
@@ -811,16 +788,15 @@ export default function FeaturesPage() {
       {/* How They Connect */}
       <section
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: isMobile ? "4rem 2rem" : "5rem 2rem",
+          padding: isMobile ? "80px 24px" : "120px 40px",
           maxWidth: "800px",
           margin: "0 auto",
           textAlign: "center",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${COLORS.border}`,
         }}
       >
         <div
@@ -830,7 +806,7 @@ export default function FeaturesPage() {
             textTransform: "uppercase",
             letterSpacing: "0.15em",
             marginBottom: "1rem",
-            color: "#22d3ee",
+            color: COLORS.accent2,
           }}
         >
           One Platform
@@ -841,21 +817,19 @@ export default function FeaturesPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "1rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Three features. One story.
         </h2>
         <p
           style={{
-            color: "#94a3b8",
+            color: COLORS.textSecondary,
             fontSize: isMobile ? "15px" : "1.05rem",
             lineHeight: "1.8",
             maxWidth: "650px",
             margin: "0 auto 2.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           File City Tours shows you what was built. Quality Radar tells you what's
@@ -880,18 +854,17 @@ export default function FeaturesPage() {
               borderRadius: "12px",
               fontWeight: "600",
               fontSize: "0.9rem",
-              border: "1px solid rgba(52,211,153,0.25)",
-              background: "rgba(52, 211, 153, 0.15)",
-              color: "#34d399",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              border: `1px solid ${COLORS.secondary}`,
+              background: "rgba(8, 147, 210, 0.1)",
+              color: COLORS.secondary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             File City Tours
           </div>
           <div
             style={{
-              color: "#64748b",
+              color: COLORS.gray500,
               fontSize: "1.5rem",
               fontWeight: "300",
               transform: isMobile ? "rotate(90deg)" : "none",
@@ -905,18 +878,17 @@ export default function FeaturesPage() {
               borderRadius: "12px",
               fontWeight: "600",
               fontSize: "0.9rem",
-              border: "1px solid rgba(168,85,247,0.25)",
-              background: "rgba(168, 85, 247, 0.12)",
-              color: "#a855f7",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              border: `1px solid ${COLORS.accent}`,
+              background: "rgba(255, 135, 85, 0.1)",
+              color: COLORS.accent,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Quality Radar
           </div>
           <div
             style={{
-              color: "#64748b",
+              color: COLORS.gray500,
               fontSize: "1.5rem",
               fontWeight: "300",
               transform: isMobile ? "rotate(90deg)" : "none",
@@ -930,11 +902,10 @@ export default function FeaturesPage() {
               borderRadius: "12px",
               fontWeight: "600",
               fontSize: "0.9rem",
-              border: "1px solid rgba(34,211,238,0.25)",
-              background: "rgba(34, 211, 238, 0.15)",
-              color: "#22d3ee",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              border: `1px solid ${COLORS.accent2}`,
+              background: "rgba(34, 211, 238, 0.1)",
+              color: COLORS.accent2,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             System Stories
@@ -957,7 +928,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: COLORS.gray500,
             }}
           >
             Understand
@@ -968,7 +939,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: COLORS.gray500,
             }}
           >
             Assess
@@ -979,7 +950,7 @@ export default function FeaturesPage() {
               fontSize: "0.65rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#64748b",
+              color: COLORS.gray500,
             }}
           >
             Verify
@@ -990,16 +961,15 @@ export default function FeaturesPage() {
       {/* Bottom CTA */}
       <section
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: isMobile ? "4rem 2rem" : "5rem 2rem",
+          padding: isMobile ? "80px 24px" : "120px 40px",
           textAlign: "center",
           maxWidth: "600px",
           margin: "0 auto",
-          borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+          borderTop: `1px solid ${COLORS.border}`,
         }}
       >
         <h2
@@ -1008,19 +978,17 @@ export default function FeaturesPage() {
             fontWeight: "700",
             letterSpacing: "-0.02em",
             marginBottom: "0.75rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Ready to see the story?
         </h2>
         <p
           style={{
-            color: "#94a3b8",
+            color: COLORS.textSecondary,
             fontSize: isMobile ? "15px" : "1rem",
             marginBottom: "2rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Our alpha is live. We're onboarding individual devs and teams now.
@@ -1028,26 +996,25 @@ export default function FeaturesPage() {
         <a
           href="/early-access"
           style={{
-            background: "#22d3ee",
-            color: "#0a0e17",
+            background: COLORS.primary,
+            color: COLORS.white,
             padding: "0.75rem 2rem",
             borderRadius: "8px",
             fontWeight: "600",
             fontSize: "1rem",
             textDecoration: "none",
-            transition: "opacity 0.2s, transform 0.2s",
+            transition: "all 0.2s",
             display: "inline-flex",
             alignItems: "center",
             gap: "0.5rem",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = "0.9";
+            e.currentTarget.style.background = COLORS.primaryHover;
             e.currentTarget.style.transform = "translateY(-1px)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = "1";
+            e.currentTarget.style.background = COLORS.primary;
             e.currentTarget.style.transform = "translateY(0)";
           }}
         >

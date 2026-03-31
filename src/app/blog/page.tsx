@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "@principal-ade/industry-theme";
 import Link from "next/link";
 import { Footer } from "../../components/Footer";
+import { COLORS } from "../../styles/colors";
 
 interface BlogPost {
   slug: string;
@@ -14,7 +14,6 @@ interface BlogPost {
 }
 
 export default function BlogPage() {
-  const { theme } = useTheme();
   const [posts, setPosts] = React.useState<BlogPost[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [windowWidth, setWindowWidth] = React.useState(
@@ -54,7 +53,7 @@ export default function BlogPage() {
         style={{
           height: "100%",
           overflow: "auto",
-          backgroundColor: theme.colors.background,
+          backgroundColor: COLORS.background,
         }}
       >
         <div
@@ -71,7 +70,8 @@ export default function BlogPage() {
             style={{
               textAlign: "center",
               padding: "60px 20px",
-              color: theme.colors.textSecondary,
+              color: COLORS.textSecondary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Loading blog posts...
@@ -84,7 +84,8 @@ export default function BlogPage() {
             style={{
               textAlign: "center",
               padding: "60px 20px",
-              color: theme.colors.textSecondary,
+              color: COLORS.textSecondary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             No blog posts found.
@@ -113,8 +114,8 @@ export default function BlogPage() {
               >
                 <article
                   style={{
-                    backgroundColor: theme.colors.backgroundSecondary,
-                    border: `1px solid ${theme.colors.border}`,
+                    backgroundColor: COLORS.white,
+                    border: `1px solid ${COLORS.border}`,
                     borderRadius: "12px",
                     padding: "24px",
                     height: "100%",
@@ -122,12 +123,12 @@ export default function BlogPage() {
                     cursor: "pointer",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.primary;
+                    e.currentTarget.style.borderColor = COLORS.primary;
                     e.currentTarget.style.transform = "translateY(-4px)";
-                    e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}20`;
+                    e.currentTarget.style.boxShadow = `0 8px 24px rgba(255, 107, 53, 0.2)`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.border;
+                    e.currentTarget.style.borderColor = COLORS.border;
                     e.currentTarget.style.transform = "translateY(0)";
                     e.currentTarget.style.boxShadow = "none";
                   }}
@@ -136,8 +137,9 @@ export default function BlogPage() {
                     style={{
                       fontSize: "24px",
                       fontWeight: "600",
-                      color: theme.colors.text,
+                      color: "#0c3741",
                       margin: "0 0 12px 0",
+                      fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
                     }}
                   >
                     {post.title}
@@ -148,10 +150,11 @@ export default function BlogPage() {
                       alignItems: "center",
                       marginBottom: "16px",
                       fontSize: "14px",
-                      color: theme.colors.textSecondary,
+                      color: COLORS.textSecondary,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
-                    {post.date && <span>{post.date}</span>}
+                    {post.date && <span style={{ color: COLORS.primary }}>{post.date}</span>}
                     {post.author && <span style={{ margin: "0 10px" }}>•</span>}
                     {post.author && <span>{post.author}</span>}
                   </div>
@@ -159,8 +162,9 @@ export default function BlogPage() {
                     style={{
                       fontSize: "16px",
                       lineHeight: "1.6",
-                      color: theme.colors.textSecondary,
+                      color: COLORS.textSecondary,
                       margin: 0,
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                     }}
                   >
                     {post.excerpt}

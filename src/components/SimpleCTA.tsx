@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { COLORS } from "../styles/colors";
 
 interface SimpleCTAProps {
   isMobile?: boolean;
@@ -9,15 +10,14 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
   return (
     <section
       style={{
-        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding: isMobile ? "60px 24px" : "100px 40px",
+        padding: isMobile ? "80px 24px" : "120px 40px",
         textAlign: "center",
-        background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
-        borderTop: "1px solid rgba(148, 163, 184, 0.1)",
+        background: COLORS.white,
+        borderTop: `1px solid ${COLORS.border}`,
       }}
     >
       <motion.div
@@ -34,12 +34,11 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
           style={{
             fontSize: isMobile ? "32px" : "44px",
             fontWeight: "600",
-            color: "#ffffff",
+            color: COLORS.text,
             marginBottom: "16px",
             lineHeight: "1.2",
             letterSpacing: "-0.02em",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
           }}
         >
           Ready to see the story?
@@ -47,11 +46,10 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
         <p
           style={{
             fontSize: isMobile ? "16px" : "18px",
-            color: "#9ca3af",
+            color: COLORS.textSecondary,
             marginBottom: "32px",
             lineHeight: "1.6",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Our alpha is live. We're onboarding now.
@@ -63,8 +61,8 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             alignItems: "center",
             gap: "8px",
             padding: isMobile ? "14px 32px" : "16px 40px",
-            background: "#00C2FF",
-            color: "#000000",
+            background: COLORS.primary,
+            color: COLORS.white,
             textDecoration: "none",
             fontSize: isMobile ? "16px" : "18px",
             fontWeight: "600",
@@ -75,12 +73,12 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
             cursor: "pointer",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#00d4ff";
+            e.currentTarget.style.background = COLORS.primaryHover;
             e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 194, 255, 0.4)";
+            e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 107, 53, 0.4)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#00C2FF";
+            e.currentTarget.style.background = COLORS.primary;
             e.currentTarget.style.transform = "translateY(0)";
             e.currentTarget.style.boxShadow = "none";
           }}
@@ -91,24 +89,23 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
           style={{
             marginTop: "24px",
             fontSize: isMobile ? "14px" : "15px",
-            color: "#6b7280",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            color: COLORS.gray500,
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Investor or partner?{" "}
           <a
             href="/demo"
             style={{
-              color: "#00C2FF",
+              color: COLORS.secondary,
               textDecoration: "none",
               transition: "color 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#00d4ff";
+              e.currentTarget.style.color = COLORS.secondaryHover;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#00C2FF";
+              e.currentTarget.style.color = COLORS.secondary;
             }}
           >
             Schedule a demo

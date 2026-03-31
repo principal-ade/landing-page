@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { COLORS } from "../styles/colors";
 
 interface GetEarlyAccessProps {
   isMobile?: boolean;
@@ -51,7 +52,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
+          background: COLORS.background,
           padding: isMobile ? "40px 24px" : "80px 40px",
         }}
       >
@@ -69,7 +70,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               width: "80px",
               height: "80px",
               borderRadius: "50%",
-              background: "rgba(0, 194, 255, 0.1)",
+              background: "rgba(255, 107, 53, 0.1)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -81,7 +82,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               height="40"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#00C2FF"
+              stroke={COLORS.primary}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -93,10 +94,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             style={{
               fontSize: isMobile ? "28px" : "36px",
               fontWeight: "600",
-              color: "#ffffff",
+              color: COLORS.text,
               marginBottom: "16px",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             You're in.
@@ -104,10 +104,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
           <p
             style={{
               fontSize: isMobile ? "16px" : "18px",
-              color: "#9ca3af",
+              color: COLORS.textSecondary,
               lineHeight: "1.6",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             We'll reach out with access.
@@ -124,7 +123,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(180deg, #0d1b2a 0%, #0a0d12 100%)",
+        background: COLORS.background,
         padding: isMobile ? "40px 24px" : "80px 40px",
       }}
     >
@@ -143,12 +142,11 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             style={{
               fontSize: isMobile ? "32px" : "44px",
               fontWeight: "600",
-              color: "#ffffff",
+              color: COLORS.text,
               marginBottom: "16px",
               lineHeight: "1.1",
               letterSpacing: "-0.02em",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
             }}
           >
             Get Early Access
@@ -156,10 +154,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
           <p
             style={{
               fontSize: isMobile ? "15px" : "17px",
-              color: "#9ca3af",
+              color: COLORS.textSecondary,
               lineHeight: "1.6",
-              fontFamily:
-                '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Our alpha is live.<br />We're onboarding individual devs and teams now.
@@ -170,9 +167,8 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
         <form onSubmit={handleSubmit}>
           <div
             style={{
-              background: "rgba(255, 255, 255, 0.02)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
+              background: COLORS.surface,
+              border: `1px solid ${COLORS.border}`,
               borderRadius: "16px",
               padding: isMobile ? "32px 24px" : "40px",
             }}
@@ -185,10 +181,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   display: "block",
                   fontSize: "14px",
                   fontWeight: "500",
-                  color: "#ffffff",
+                  color: COLORS.text,
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Email
@@ -203,21 +198,20 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  background: "rgba(0, 0, 0, 0.3)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: COLORS.background,
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: "8px",
-                  color: "#ffffff",
+                  color: COLORS.text,
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = COLORS.primary;
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.borderColor = COLORS.border;
                 }}
               />
             </div>
@@ -230,10 +224,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   display: "block",
                   fontSize: "14px",
                   fontWeight: "500",
-                  color: "#ffffff",
+                  color: COLORS.text,
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 What's your role?
@@ -246,22 +239,21 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  background: "rgba(0, 0, 0, 0.3)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: COLORS.background,
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: "8px",
-                  color: role ? "#ffffff" : "#6b7280",
+                  color: role ? COLORS.text : COLORS.textSecondary,
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = COLORS.primary;
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.borderColor = COLORS.border;
                 }}
               >
                 <option value="" disabled>
@@ -283,10 +275,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   display: "block",
                   fontSize: "14px",
                   fontWeight: "500",
-                  color: "#ffffff",
+                  color: COLORS.text,
                   marginBottom: "8px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 Team size
@@ -299,22 +290,21 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  background: "rgba(0, 0, 0, 0.3)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: COLORS.background,
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: "8px",
-                  color: teamSize ? "#ffffff" : "#6b7280",
+                  color: teamSize ? COLORS.text : COLORS.textSecondary,
                   fontSize: "15px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#00C2FF";
+                  e.currentTarget.style.borderColor = COLORS.primary;
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.borderColor = COLORS.border;
                 }}
               >
                 <option value="" disabled>
@@ -337,10 +327,9 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   background: "rgba(239, 68, 68, 0.1)",
                   border: "1px solid rgba(239, 68, 68, 0.3)",
                   borderRadius: "8px",
-                  color: "#f87171",
+                  color: "#dc2626",
                   fontSize: "14px",
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                 }}
               >
                 {error}
@@ -354,29 +343,28 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               style={{
                 width: "100%",
                 padding: "14px 24px",
-                background: isLoading ? "#6b7280" : "#00C2FF",
-                color: "#000000",
+                background: isLoading ? COLORS.textSecondary : COLORS.primary,
+                color: "#ffffff",
                 border: "none",
                 borderRadius: "8px",
                 fontSize: "16px",
                 fontWeight: "600",
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 cursor: isLoading ? "not-allowed" : "pointer",
                 transition: "all 0.2s ease",
                 opacity: isLoading ? 0.7 : 1,
               }}
               onMouseEnter={(e) => {
                 if (!isLoading) {
-                  e.currentTarget.style.background = "#00d4ff";
+                  e.currentTarget.style.background = COLORS.accent;
                   e.currentTarget.style.transform = "translateY(-1px)";
                   e.currentTarget.style.boxShadow =
-                    "0 4px 12px rgba(0, 194, 255, 0.4)";
+                    "0 4px 12px rgba(255, 107, 53, 0.4)";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isLoading) {
-                  e.currentTarget.style.background = "#00C2FF";
+                  e.currentTarget.style.background = COLORS.primary;
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = "none";
                 }
@@ -393,24 +381,23 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
             marginTop: "24px",
             textAlign: "center",
             fontSize: "13px",
-            color: "#6b7280",
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+            color: COLORS.textSecondary,
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Investor or partner?{" "}
           <a
             href="/demo"
             style={{
-              color: "#00C2FF",
+              color: COLORS.primary,
               textDecoration: "none",
               transition: "color 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#00d4ff";
+              e.currentTarget.style.color = COLORS.accent;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#00C2FF";
+              e.currentTarget.style.color = COLORS.primary;
             }}
           >
             Schedule a demo
