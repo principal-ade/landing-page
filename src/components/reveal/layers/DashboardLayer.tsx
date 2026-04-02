@@ -41,7 +41,17 @@ export const DashboardLayer: React.FC<DashboardLayerProps> = ({ className, fillC
       >
         01
       </div>
-      <span style={{ color: theme.colors.primary, fontFamily: "monospace", fontSize: "24px", fontWeight: 700, position: "absolute", top: "30%" }}>
+      <span
+        style={{
+          color: theme.colors.primary,
+          fontFamily: "monospace",
+          fontSize: "24px",
+          fontWeight: 700,
+          position: "absolute",
+          top: 40,
+          left: 40,
+        }}
+      >
         OBSERVE
       </span>
     </div>

@@ -3,12 +3,12 @@
 import React from "react";
 import { useTheme } from "@principal-ade/industry-theme";
 
-interface WorkflowLayerProps {
+interface Layer04Props {
   className?: string;
   fillContainer?: boolean;
 }
 
-export const WorkflowLayer: React.FC<WorkflowLayerProps> = ({ className, fillContainer = false }) => {
+export const Layer04: React.FC<Layer04Props> = ({ className, fillContainer = false }) => {
   const { theme } = useTheme();
 
   return (
@@ -31,7 +31,7 @@ export const WorkflowLayer: React.FC<WorkflowLayerProps> = ({ className, fillCon
         style={{
           position: "absolute",
           top: 8,
-          left: 48,
+          left: 112,
           background: theme.colors.backgroundSecondary,
           padding: "2px 8px",
           fontSize: "10px",
@@ -39,24 +39,10 @@ export const WorkflowLayer: React.FC<WorkflowLayerProps> = ({ className, fillCon
           fontFamily: "monospace",
         }}
       >
-        02
+        04
       </div>
-      <span
-        style={{
-          color: theme.colors.primary,
-          fontFamily: "monospace",
-          fontSize: "24px",
-          fontWeight: 700,
-          position: "absolute",
-          top: 40,
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
-      >
-        YOUR
-      </span>
     </div>
   );
 };
 
-export default WorkflowLayer;
+export default Layer04;

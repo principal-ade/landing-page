@@ -41,7 +41,17 @@ export const CanvasLayer: React.FC<CanvasLayerProps> = ({ className, fillContain
       >
         03
       </div>
-      <span style={{ color: theme.colors.primary, fontFamily: "monospace", fontSize: "24px", fontWeight: 700, position: "absolute", top: "60%" }}>
+      <span
+        style={{
+          color: theme.colors.primary,
+          fontFamily: "monospace",
+          fontSize: "24px",
+          fontWeight: 700,
+          position: "absolute",
+          top: 40,
+          right: 40,
+        }}
+      >
         SYSTEMS
       </span>
     </div>

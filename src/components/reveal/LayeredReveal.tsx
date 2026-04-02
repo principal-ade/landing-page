@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
-import { DashboardLayer, WorkflowLayer, CanvasLayer } from "./layers";
+import { DashboardLayer, WorkflowLayer, CanvasLayer, Layer04 } from "./layers";
 
 export type AnimationStyle = "paperLift";
 export type ScrollHeight = "200vh" | "300vh" | "400vh" | "500vh";
@@ -19,40 +19,129 @@ const layers = [
   { id: "dashboard", label: "Dashboard", Component: DashboardLayer },
   { id: "workflow", label: "workflow.json", Component: WorkflowLayer },
   { id: "canvas", label: "otel.canvas", Component: CanvasLayer },
+  { id: "layer04", label: "Layer 04", Component: Layer04 },
 ];
 
 // Paper lift - bottom edge lifts up, rotating around top edge
 const usePaperLiftAnimation = (
   scrollYProgress: MotionValue<number>,
   index: number,
-  total: number
+  total: number,
+  shadowColor: string
 ) => {
   const layerStart = index / total;
   const layerEnd = (index + 1) / total;
+  const isLastLayer = index >= total - 1;
 
   // Rotate on X axis - negative value lifts the bottom edge up
+  // Top stays almost fixed initially, rotation kicks in later
   const rotateX = useTransform(
     scrollYProgress,
-    [layerStart, layerEnd],
-    [0, index < total - 1 ? -90 : 0]
+    [
+      layerStart,
+      layerStart + (layerEnd - layerStart) * 0.25,  // stay flat longer
+      layerStart + (layerEnd - layerStart) * 0.5,
+      layerEnd
+    ],
+    [0, isLastLayer ? 0 : -2, isLastLayer ? 0 : -40, isLastLayer ? 0 : -95]
   );
 
-  // Slight lift as it rotates to clear the layer below
-  const y = useTransform(
+  // No Y movement - top edge stays completely fixed
+  // The rotation + perspective handles the lift illusion
+  const y = 0;
+
+  // Dynamic shadow that grows as paper lifts - simulates light from above
+  const shadowBlur = useTransform(
     scrollYProgress,
     [layerStart, layerStart + (layerEnd - layerStart) * 0.5, layerEnd],
-    [0, index < total - 1 ? -30 : 0, index < total - 1 ? -50 : 0]
+    [4, isLastLayer ? 4 : 25, isLastLayer ? 4 : 0]
+  );
+
+  const shadowY = useTransform(
+    scrollYProgress,
+    [layerStart, layerStart + (layerEnd - layerStart) * 0.5, layerEnd],
+    [2, isLastLayer ? 2 : 15, isLastLayer ? 2 : 0]
+  );
+
+  const shadowOpacity = useTransform(
+    scrollYProgress,
+    [layerStart, layerStart + (layerEnd - layerStart) * 0.3, layerEnd - 0.05, layerEnd],
+    [0.15, isLastLayer ? 0.15 : 0.3, isLastLayer ? 0.15 : 0.1, isLastLayer ? 0.15 : 0]
+  );
+
+  // Combine shadow values into a boxShadow string
+  const boxShadow = useTransform(
+    [shadowY, shadowBlur, shadowOpacity],
+    ([y, blur, opacity]) =>
+      `0px ${y}px ${blur}px rgba(${shadowColor}, ${opacity})`
   );
 
   // All layers stay fully visible - z-index handles stacking
   // Only fade out once fully flipped to avoid visual glitch
   const opacity = useTransform(
     scrollYProgress,
-    [layerStart, layerEnd - 0.01, layerEnd],
-    [1, 1, index < total - 1 ? 0 : 1]
+    [layerStart, layerEnd - 0.02, layerEnd],
+    [1, 1, isLastLayer ? 1 : 0]
   );
 
-  return { rotateX, y, opacity };
+  // Non-uniform scale - bottom comes toward viewer more than top
+  // Delayed significantly so top doesn't move initially
+  const scaleY = useTransform(
+    scrollYProgress,
+    [
+      layerStart,
+      layerStart + (layerEnd - layerStart) * 0.3,  // no scale initially
+      layerStart + (layerEnd - layerStart) * 0.55,
+      layerEnd
+    ],
+    [1, 1, isLastLayer ? 1 : 1.06, isLastLayer ? 1 : 1.02]
+  );
+
+  // Slight X scale - also delayed
+  const scaleX = useTransform(
+    scrollYProgress,
+    [
+      layerStart,
+      layerStart + (layerEnd - layerStart) * 0.3,
+      layerStart + (layerEnd - layerStart) * 0.55,
+      layerEnd
+    ],
+    [1, 1, isLastLayer ? 1 : 1.015, isLastLayer ? 1 : 1]
+  );
+
+  // Grid reveal effect - starts when rotation begins (at 25%), grows to fill layer
+  const gridHeight = useTransform(
+    scrollYProgress,
+    [
+      layerStart + (layerEnd - layerStart) * 0.25, // Match rotation start
+      layerStart + (layerEnd - layerStart) * 0.9,
+      layerEnd
+    ],
+    ["0%", isLastLayer ? "0%" : "100%", isLastLayer ? "0%" : "100%"]
+  );
+
+  // Grid opacity - fades in when lift starts, out when layer flips away
+  const gridOpacity = useTransform(
+    scrollYProgress,
+    [
+      layerStart + (layerEnd - layerStart) * 0.25, // Match rotation start
+      layerStart + (layerEnd - layerStart) * 0.3,
+      layerEnd - 0.1,
+      layerEnd
+    ],
+    [0, isLastLayer ? 0 : 1, isLastLayer ? 0 : 1, 0]
+  );
+
+  return { rotateX, y, opacity, boxShadow, scaleX, scaleY, gridHeight, gridOpacity };
+};
+
+// Parse hex color to RGB for shadow
+const hexToRgb = (hex: string): string => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (result) {
+    return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
+  }
+  return "0, 0, 0";
 };
 
 // Individual layer wrapper with animation
@@ -67,16 +156,11 @@ const AnimatedLayer: React.FC<{
 }> = ({ index, total, scrollYProgress, children, label, showLabels }) => {
   const { theme } = useTheme();
 
-  const paperLiftProps = usePaperLiftAnimation(scrollYProgress, index, total);
+  // Use a dark shadow color based on theme
+  const shadowColorRgb = hexToRgb(theme.colors.text || "#000000");
+  const paperLiftProps = usePaperLiftAnimation(scrollYProgress, index, total, shadowColorRgb);
 
-  const style = {
-    rotateX: paperLiftProps.rotateX,
-    y: paperLiftProps.y,
-    opacity: paperLiftProps.opacity,
-    transformStyle: "preserve-3d" as const,
-    transformOrigin: "top center",
-    backfaceVisibility: "hidden" as const,
-  };
+  const isLastLayer = index >= total - 1;
 
   return (
     <motion.div
@@ -87,25 +171,59 @@ const AnimatedLayer: React.FC<{
         width: "100%",
         height: "100%",
         zIndex: total - index,
-        ...style,
+        rotateX: paperLiftProps.rotateX,
+        y: paperLiftProps.y,
+        opacity: paperLiftProps.opacity,
+        scaleX: paperLiftProps.scaleX,
+        scaleY: paperLiftProps.scaleY,
+        boxShadow: paperLiftProps.boxShadow,
+        transformStyle: "preserve-3d",
+        // Origin at top so scaleY stretches downward (bottom comes toward viewer)
+        transformOrigin: "top center",
+        backfaceVisibility: "hidden",
+        borderRadius: "2px",
       }}
     >
-      {showLabels && (
-        <div
+      {/* Content layer */}
+      <div style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+      }}>
+        {showLabels && (
+          <div
+            style={{
+              position: "absolute",
+              top: -30,
+              left: 0,
+              fontSize: "12px",
+              fontWeight: "600",
+              color: theme.colors.primary,
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
+            }}
+          >
+            {label}
+          </div>
+        )}
+        {children}
+      </div>
+
+      {/* Shadow reveal effect - grows from bottom as layer lifts */}
+      {!isLastLayer && (
+        <motion.div
           style={{
             position: "absolute",
-            top: -30,
+            bottom: 0,
             left: 0,
-            fontSize: "12px",
-            fontWeight: "600",
-            color: theme.colors.primary,
-            fontFamily: "var(--font-inter), system-ui, sans-serif",
+            right: 0,
+            height: paperLiftProps.gridHeight,
+            opacity: paperLiftProps.gridOpacity,
+            pointerEvents: "none",
+            // Gradient shadow from bottom
+            background: `linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 40%, transparent 100%)`,
           }}
-        >
-          {label}
-        </div>
+        />
       )}
-      {children}
     </motion.div>
   );
 };
@@ -143,7 +261,9 @@ export const LayeredReveal: React.FC<LayeredRevealProps> = ({
           justifyContent: "center",
           padding: "40px",
           boxSizing: "border-box",
-          perspective: "1000px",
+          // Closer perspective for more dramatic paper lift effect
+          perspective: "800px",
+          perspectiveOrigin: "center 40%",
         }}
       >
         {/* Layer container */}
