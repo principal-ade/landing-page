@@ -145,7 +145,7 @@ const HeroSection: React.FC = () => {
                 fontFamily: theme.fonts.body,
               }}
             >
-              The code is moving faster than you can read it. We made it visible. So you can confidently know it's right.
+              The code is moving faster than you can read it. <strong>We made it visible.</strong> So you can confidently know it's right.
             </div>
           </div>
 
