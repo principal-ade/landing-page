@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import React from "react";
+import { useTheme } from "@principal-ade/industry-theme";
 
 export function LivingDocumentationSection() {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -78,7 +80,7 @@ export function LivingDocumentationSection() {
                   fontSize: isMobile ? "16px" : "18px",
                   fontWeight: "600",
                   color: "#ffffff",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 The <span style={{ color: "#06b6d4" }}>.alexandria/</span> Folder

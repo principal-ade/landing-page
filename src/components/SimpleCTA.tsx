@@ -8,21 +8,32 @@ interface SimpleCTAProps {
   isMobile?: boolean;
 }
 
+const ArrowRight: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
+
 export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
   const { theme } = useTheme();
+  const [hovered, setHovered] = React.useState(false);
 
   return (
     <section
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: isMobile ? "60px 24px" : "100px 40px",
-        textAlign: "center",
-        background: `linear-gradient(180deg, ${theme.colors.backgroundSecondary} 0%, ${theme.colors.background} 100%)`,
+        padding: isMobile ? "60px 24px" : "80px 64px",
         borderTop: `1px solid ${theme.colors.border}`,
+        background: theme.colors.background,
+        textAlign: "center",
       }}
     >
       <motion.div
@@ -30,91 +41,77 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        style={{
-          maxWidth: "600px",
-          margin: "0 auto",
-        }}
       >
         <h2
           style={{
+            fontFamily: theme.fonts.heading,
             fontSize: isMobile ? "32px" : "44px",
-            fontWeight: "600",
+            fontWeight: "700",
+            letterSpacing: "-0.03em",
             color: theme.colors.text,
-            marginBottom: "16px",
-            lineHeight: "1.2",
-            letterSpacing: "-0.02em",
-            fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+            marginBottom: "12px",
           }}
         >
-          Ready to see the story?
+          Download Principal. Free.
         </h2>
         <p
           style={{
-            fontSize: isMobile ? "16px" : "18px",
-            color: theme.colors.textTertiary,
+            fontSize: "18px",
+            color: theme.colors.textSecondary,
+            fontFamily: theme.fonts.body,
             marginBottom: "32px",
-            lineHeight: "1.6",
-            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
-          Our alpha is live. We're onboarding now.
+          macOS now. Windows and Linux coming soon.
         </p>
+
         <a
-          href="/early-access"
+          href="/download"
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
-            padding: isMobile ? "14px 32px" : "16px 40px",
+            padding: "16px 36px",
             background: theme.colors.primary,
-            color: theme.colors.textOnPrimary,
+            color: "#fff",
             textDecoration: "none",
-            fontSize: isMobile ? "16px" : "18px",
-            fontWeight: "600",
             borderRadius: "8px",
-            fontFamily: "var(--font-inter), system-ui, sans-serif",
+            fontSize: "17px",
+            fontWeight: "600",
+            fontFamily: theme.fonts.body,
+            boxShadow: hovered
+              ? `0 8px 28px ${theme.colors.primary}48`
+              : `0 4px 20px ${theme.colors.primary}38`,
+            transform: hovered ? "translateY(-2px)" : "translateY(0)",
             transition: "all 0.2s ease",
-            cursor: "pointer",
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.filter = "brightness(1.1)";
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.filter = "brightness(1)";
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
-          Get Early Access →
+          Download for macOS
+          <ArrowRight size={16} />
         </a>
+
         <p
           style={{
-            marginTop: "24px",
-            fontSize: isMobile ? "14px" : "15px",
-            color: theme.colors.textMuted,
-            fontFamily: "var(--font-inter), system-ui, sans-serif",
+            marginTop: "18px",
+            fontSize: "14px",
+            color: theme.colors.textSecondary,
+            fontFamily: theme.fonts.body,
+            opacity: 0.75,
           }}
         >
-          Investor or partner?{" "}
+          Team or enterprise?{" "}
           <a
             href="/demo"
             style={{
               color: theme.colors.primary,
               textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter = "brightness(1.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.filter = "brightness(1)";
+              fontWeight: "500",
             }}
           >
             Schedule a demo
           </a>
-          .
         </p>
       </motion.div>
     </section>

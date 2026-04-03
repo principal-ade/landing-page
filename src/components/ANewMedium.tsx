@@ -1,11 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface ANewMediumProps {
   isMobile?: boolean;
 }
 
 export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
+  const { theme } = useTheme();
   return (
     <section
       style={{
@@ -60,7 +62,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               1
@@ -71,7 +73,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               See the system
@@ -82,7 +84,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               Map the codebase. Understand the shape.
@@ -102,7 +104,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               2
@@ -113,7 +115,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               Let agents build
@@ -124,7 +126,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               Let them move fast.
@@ -144,7 +146,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "600",
                 color: "#0099FF",
                 marginBottom: "16px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               3
@@ -155,7 +157,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "500",
                 color: "#ffffff",
                 marginBottom: "8px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               Review what actually happened
@@ -166,7 +168,7 @@ export const ANewMedium: React.FC<ANewMediumProps> = ({ isMobile = false }) => {
                 fontWeight: "400",
                 color: "#9ca3af",
                 lineHeight: "1.5",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
               }}
             >
               Not in diffs. Not in logs. In behavior.

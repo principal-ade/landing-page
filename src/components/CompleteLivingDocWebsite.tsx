@@ -38,7 +38,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
       <main style={{ flex: 1, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
         {/* Hero - The Hook */}
         <div style={{
-          background: '#b5d3d8',
+          background: theme.colors.backgroundPrimary || theme.colors.background,
           backgroundImage: `
             linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)

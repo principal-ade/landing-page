@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { trackDownload } from '../app/lib/analytics';
-
-const fontFamily = "var(--font-inter), system-ui, sans-serif";
+import { useTheme } from '@principal-ade/industry-theme';
 
 interface GitHubRelease {
   id: number;
@@ -32,6 +31,7 @@ const Screenshot: React.FC<{ src: string; alt: string }> = ({ src, alt }) => (
 );
 
 export const DownloadADE: React.FC = () => {
+  const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -85,7 +85,7 @@ export const DownloadADE: React.FC = () => {
       style={{
         minHeight: "100vh",
         background: "#0a0a0a",
-        fontFamily,
+        fontFamily: theme.fonts.body,
       }}
     >
       {/* ── SECTION 1: HERO ── */}
@@ -184,7 +184,7 @@ export const DownloadADE: React.FC = () => {
                 fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 600,
                 borderRadius: '12px',
-                fontFamily,
+                fontFamily: theme.fonts.body,
                 letterSpacing: '-0.01em',
                 boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
                 transition: 'all 0.2s ease',
@@ -467,7 +467,7 @@ export const DownloadADE: React.FC = () => {
                     color: '#ffffff',
                     marginBottom: '10px',
                     letterSpacing: '-0.02em',
-                    fontFamily,
+                    fontFamily: theme.fonts.body,
                   }}
                 >
                   {feature.title}
@@ -480,7 +480,7 @@ export const DownloadADE: React.FC = () => {
                     lineHeight: 1.6,
                     letterSpacing: '-0.01em',
                     margin: 0,
-                    fontFamily,
+                    fontFamily: theme.fonts.body,
                   }}
                 >
                   {feature.description}
@@ -554,7 +554,7 @@ export const DownloadADE: React.FC = () => {
                 fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 600,
                 borderRadius: '12px',
-                fontFamily,
+                fontFamily: theme.fonts.body,
                 letterSpacing: '-0.01em',
                 boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
                 transition: 'all 0.2s ease',

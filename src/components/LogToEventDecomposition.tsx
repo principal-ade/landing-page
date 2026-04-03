@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "@principal-ade/industry-theme";
 
 interface LogToEventDecompositionProps {
   isMobile?: boolean;
@@ -109,6 +110,7 @@ const EXAMPLES = {
 export const LogToEventDecomposition: React.FC<LogToEventDecompositionProps> = ({
   isMobile = false,
 }) => {
+  const { theme } = useTheme();
   const selectedExample = 'login';
   const [animationStage, setAnimationStage] = useState<'plain' | 'highlighting' | 'show_event_container' | 'populating_event' | 'replacing_variables' | 'complete'>('plain');
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
@@ -305,7 +307,7 @@ export const LogToEventDecomposition: React.FC<LogToEventDecompositionProps> = (
               lineHeight: "1.15",
               letterSpacing: "-0.025em",
               marginBottom: "16px",
-              fontFamily: "var(--font-inter), system-ui, sans-serif",
+              fontFamily: theme.fonts.body,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -322,7 +324,7 @@ export const LogToEventDecomposition: React.FC<LogToEventDecompositionProps> = (
               lineHeight: "1.6",
               maxWidth: "700px",
               margin: "0 auto",
-              fontFamily: "var(--font-inter), system-ui, sans-serif",
+              fontFamily: theme.fonts.body,
             }}
           >
             <span style={{ color: "#ef4444" }}>

@@ -41,7 +41,13 @@ const HeroSection: React.FC = () => {
       style={{
         flex: 1,
         minHeight: "100%",
-        background: "transparent",
+        background: theme.colors.backgroundPrimary || theme.colors.background,
+        backgroundImage: `
+          linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.02) 100%),
+          linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: "100% 100%, 150px 150px, 150px 150px",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -88,44 +94,17 @@ const HeroSection: React.FC = () => {
             textAlign: "center",
           }}
         >
-          {/* Badge */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "8px 16px",
-              background: `${theme.colors.primary}1A`,
-              border: `1px solid ${theme.colors.primary}4D`,
-              borderRadius: "24px",
-              marginBottom: "24px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "monospace",
-                fontSize: "12px",
-                color: theme.colors.primary,
-                letterSpacing: "0.05em",
-                textTransform: "uppercase",
-                fontWeight: "600",
-              }}
-            >
-              Alpha — Now onboarding
-            </span>
-          </div>
-
           {/* Main Headline */}
           <div style={{ margin: "0 0 24px 0" }}>
             <div
               style={{
-                fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
+                fontSize: isMobile ? "56px" : isTablet ? "80px" : "120px",
                 fontWeight: "700",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
-                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+                fontFamily: theme.fonts.heading,
                 lineHeight: "1.05",
-                color: theme.colors.accent,
+                color: theme.colors.primary,
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
               }}
@@ -135,10 +114,10 @@ const HeroSection: React.FC = () => {
             <div
               style={{
                 fontSize: isMobile ? "36px" : isTablet ? "48px" : "64px",
-                fontWeight: "700",
+                fontWeight: "400",
                 textAlign: "center",
                 letterSpacing: "-0.04em",
-                fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+                fontFamily: theme.fonts.heading,
                 lineHeight: "1.05",
                 color: theme.colors.text,
                 wordWrap: "break-word",
@@ -152,40 +131,21 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Key Benefits */}
+          {/* Subheading */}
           <div style={{ margin: "0 auto 48px auto", maxWidth: "700px" }}>
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
                 opacity: showSubheadingLine1 ? 1 : 0,
                 transform: showSubheadingLine1 ? "translateY(0)" : "translateY(20px)",
                 transition: showSubheadingLine1 ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+                textAlign: "center",
+                fontSize: isMobile ? "18px" : "22px",
+                fontWeight: "400",
+                color: theme.colors.text,
+                fontFamily: theme.fonts.body,
               }}
             >
-              {[
-                "Reduce monthly database costs by storing context in Git",
-                "Verify AI agent work without reviewing every line of code",
-                "Debug production issues in minutes instead of hours",
-              ].map((benefit, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "12px",
-                    fontSize: isMobile ? "16px" : "18px",
-                    fontWeight: "400",
-                    color: theme.colors.text,
-                    fontFamily: "var(--font-inter), system-ui, sans-serif",
-                  }}
-                >
-                  <span style={{ color: theme.colors.primary, fontSize: "20px" }}>✓</span>
-                  <span>{benefit}</span>
-                </div>
-              ))}
+              You're the principal. <strong>Principal Feed</strong> shows you what every agent built. The <strong>Principal Manifest</strong> proves it did what you intended.
             </div>
           </div>
 
@@ -212,7 +172,7 @@ const HeroSection: React.FC = () => {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
+                fontFamily: theme.fonts.body,
                 transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
                 border: "none",
@@ -230,39 +190,8 @@ const HeroSection: React.FC = () => {
                 e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}4D`;
               }}
             >
-              Get Early Access
+              Download Alpha
             </a>
-          </div>
-
-          {/* Proof Bar */}
-          <div
-            style={{
-              marginTop: "48px",
-              paddingTop: "24px",
-              borderTop: `1px solid ${theme.colors.border}`,
-              opacity: showButton ? 1 : 0,
-              transition: showButton ? "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: isMobile ? "12px" : "16px",
-                flexWrap: "wrap",
-                fontSize: isMobile ? "12px" : "14px",
-                color: theme.colors.textTertiary,
-                fontFamily: "var(--font-inter), system-ui, sans-serif",
-                textAlign: "center",
-              }}
-            >
-              <span>Built by engineers, for engineers</span>
-              <span style={{ color: theme.colors.textMuted }}>•</span>
-              <span>Dogfooding in production</span>
-              <span style={{ color: theme.colors.textMuted }}>•</span>
-              <span>7 patents pending</span>
-            </div>
           </div>
         </div>
       </div>

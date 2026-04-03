@@ -11,75 +11,145 @@ interface AgentShiftProps {
 export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
   const { theme } = useTheme();
 
+  const cards = [
+    {
+      num: "File City",
+      title: "See the territory",
+      desc: "The map of your codebase. What exists, what changed, what agents touched.",
+      accent: theme.colors.primary,
+    },
+    {
+      num: "Principal Feed",
+      title: "Watch the work",
+      desc: "Real-time activity from every agent and human across every repo.",
+      accent: "#0893d2",
+    },
+    {
+      num: "System Stories",
+      title: "Verify the outcome",
+      desc: "Production matched against declared intent. You know if it went right.",
+      accent: theme.colors.text,
+    },
+  ];
+
   return (
     <section
       style={{
-        padding: isMobile ? "0 24px" : "0 40px",
+        padding: isMobile ? "60px 24px" : "80px 40px",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ maxWidth: "800px", margin: "0 auto", width: "100%", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p
-            style={{
-              fontSize: isMobile ? "20px" : "24px",
-              fontWeight: "600",
-              color: theme.colors.textTertiary,
-              marginBottom: "32px",
-              fontFamily: "var(--font-inter), system-ui, sans-serif",
-            }}
-          >
-            Not after the fire. Before the smoke.
-          </p>
           <h2
             style={{
-              fontSize: isMobile ? "32px" : "48px",
-              fontWeight: "600",
-              lineHeight: "1.15",
-              letterSpacing: "-0.025em",
-              marginBottom: "32px",
-              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+              fontFamily: theme.fonts.heading,
+              fontSize: isMobile ? "32px" : "44px",
+              fontWeight: "700",
+              letterSpacing: "-0.035em",
+              color: theme.colors.text,
+              marginBottom: "14px",
             }}
           >
-            <span style={{ color: theme.colors.primary }}>Three features.</span>
-            <br />
-            <span style={{ color: theme.colors.text }}>One platform.</span>
+            Three tools. One principal.
           </h2>
-          <a
-            href="/product"
+          <p
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: isMobile ? "14px 32px" : "16px 40px",
-              background: theme.colors.primary,
-              color: theme.colors.textOnPrimary,
-              textDecoration: "none",
-              fontSize: isMobile ? "16px" : "18px",
-              fontWeight: "600",
-              borderRadius: "8px",
-              fontFamily: "var(--font-inter), system-ui, sans-serif",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter = "brightness(1.1)";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.filter = "brightness(1)";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
+              fontSize: "18px",
+              lineHeight: "1.65",
+              color: theme.colors.textSecondary,
+              fontFamily: theme.fonts.body,
+              maxWidth: "560px",
+              margin: "0 auto 52px",
             }}
           >
-            See the product →
-          </a>
+            You're the principal. Agents report to you. This is how you stay in that
+            seat as they take on more of the work.
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
+              gap: isMobile ? "16px" : "1px",
+              borderRadius: "12px",
+              overflow: "hidden",
+              border: `1px solid ${theme.colors.border}`,
+            }}
+          >
+            {cards.map((card, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "28px 24px",
+                  textAlign: "left",
+                  background: theme.colors.surface || "#fff",
+                  borderRight:
+                    i < cards.length - 1 && !isMobile
+                      ? `1px solid ${theme.colors.border}`
+                      : "none",
+                  borderBottom:
+                    i < cards.length - 1 && isMobile
+                      ? `1px solid ${theme.colors.border}`
+                      : "none",
+                  position: "relative",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background: card.accent,
+                    opacity: 0.6,
+                  }}
+                />
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: "700",
+                    letterSpacing: "0.07em",
+                    textTransform: "uppercase",
+                    color: card.accent,
+                    fontFamily: theme.fonts.body,
+                    marginBottom: "8px",
+                  }}
+                >
+                  {card.num}
+                </div>
+                <div
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: "600",
+                    color: theme.colors.text,
+                    fontFamily: theme.fonts.heading,
+                    marginBottom: "8px",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {card.title}
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    color: theme.colors.textSecondary,
+                    fontFamily: theme.fonts.body,
+                    lineHeight: "1.55",
+                  }}
+                >
+                  {card.desc}
+                </div>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

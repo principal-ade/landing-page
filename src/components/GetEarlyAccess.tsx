@@ -97,7 +97,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               fontWeight: "600",
               color: theme.colors.text,
               marginBottom: "16px",
-              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+              fontFamily: theme.fonts.heading,
             }}
           >
             You're in.
@@ -147,7 +147,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
               marginBottom: "16px",
               lineHeight: "1.1",
               letterSpacing: "-0.02em",
-              fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
+              fontFamily: theme.fonts.heading,
             }}
           >
             Get Early Access
@@ -185,7 +185,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 Email
@@ -205,7 +205,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: "#ffffff",
                   fontSize: "15px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                   outline: "none",
                   transition: "border-color 0.2s ease",
                 }}
@@ -228,7 +228,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 What's your role?
@@ -246,7 +246,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: role ? "#ffffff" : "#6b7280",
                   fontSize: "15px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
@@ -279,7 +279,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   fontWeight: "500",
                   color: "#ffffff",
                   marginBottom: "8px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 Team size
@@ -297,7 +297,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: teamSize ? "#ffffff" : "#6b7280",
                   fontSize: "15px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                   outline: "none",
                   cursor: "pointer",
                   transition: "border-color 0.2s ease",
@@ -331,7 +331,7 @@ export const GetEarlyAccess: React.FC<GetEarlyAccessProps> = ({
                   borderRadius: "8px",
                   color: "#f87171",
                   fontSize: "14px",
-                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontFamily: theme.fonts.body,
                 }}
               >
                 {error}
