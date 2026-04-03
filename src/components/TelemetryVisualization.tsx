@@ -50,7 +50,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
                 style={{
                   fontSize: "11px",
                   fontWeight: "600",
-                  color: theme.colors.primary,
+                  color: "#FFFFFF",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   marginBottom: "16px",

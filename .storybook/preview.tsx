@@ -1,4 +1,7 @@
 import type { Preview } from '@storybook/nextjs-vite'
+import React from 'react'
+import { ThemeProvider, iceTangerineTheme } from '@principal-ade/industry-theme'
+import '../src/app/globals.css'
 
 const preview: Preview = {
   parameters: {
@@ -16,6 +19,13 @@ const preview: Preview = {
       test: 'todo'
     }
   },
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={iceTangerineTheme}>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 };
 
 export default preview;
