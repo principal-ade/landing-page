@@ -25,7 +25,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
       accent: "#0893d2",
     },
     {
-      num: "System Stories",
+      num: "Story-Based Monitoring",
       title: "Verify the outcome",
       desc: "Production matched against declared intent. You know if it went right.",
       accent: theme.colors.text,

@@ -112,6 +112,18 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
           >
             Schedule a demo
           </a>
+          <br />
+          Design partner?{" "}
+          <a
+            href="/contact"
+            style={{
+              color: theme.colors.primary,
+              textDecoration: "none",
+              fontWeight: "500",
+            }}
+          >
+            Get in touch
+          </a>
         </p>
       </motion.div>
     </section>

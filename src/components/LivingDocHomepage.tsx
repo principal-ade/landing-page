@@ -145,7 +145,7 @@ const HeroSection: React.FC = () => {
                 fontFamily: theme.fonts.body,
               }}
             >
-              You're the principal. <strong>Principal Feed</strong> shows you what every agent built. The <strong>Principal Manifest</strong> proves it did what you intended.
+              The code is moving faster than you can read it. We made it visible. So you can confidently know it's right.
             </div>
           </div>
 
