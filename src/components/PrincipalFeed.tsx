@@ -3,6 +3,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
+import { HumanVsAICounter } from "./HumanVsAICounter";
+import { FileCityDemo } from "./FileCityDemo";
+import { TimelineScrubber } from "./TimelineScrubber";
+import { ContributorAvatarFlow } from "./ContributorAvatarFlow";
 
 interface PrincipalFeedProps {
   isMobile?: boolean;
@@ -75,9 +79,9 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
               lineHeight: "1.15",
             }}
           >
-            Watch the work.
+            Every push. Every file.
             <br />
-            Across every repo.
+            Every builder. Right now.
           </h2>
 
           {/* Subheading */}
@@ -91,7 +95,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
               fontWeight: "500",
             }}
           >
-            Real-time activity from every agent and human.
+            Feel the pulse of the builder world. Streaming live across every repo that matters.
           </p>
 
           {/* Body Copy */}
@@ -101,11 +105,59 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
               lineHeight: "1.7",
               color: theme.colors.textSecondary,
               fontFamily: theme.fonts.body,
-              marginBottom: "32px",
+              marginBottom: "48px",
             }}
           >
-            Paste any GitHub URL. See every commit, organized by time of day. Morning, afternoon, evening. Who did what, when they did it, and exactly what moved. Click "Explain" for a plain-English summary. No more reading diffs.
+            Like having a window into every dev shop at once. See what's changing, who's building, and where the work is happening. Watch humans and AI collaborate in real time. The codebase becomes a place you recognize, not a list you read.
           </p>
+
+          {/* Human vs AI Counter */}
+          <HumanVsAICounter isMobile={isMobile} />
+
+          {/* File City Demo */}
+          <FileCityDemo isMobile={isMobile} />
+
+          {/* Timeline Scrubber */}
+          <TimelineScrubber isMobile={isMobile} />
+
+          {/* Contributor Avatar Flow */}
+          <ContributorAvatarFlow isMobile={isMobile} />
+
+          {/* Divider */}
+          <div
+            style={{
+              height: "1px",
+              background: `linear-gradient(to right, transparent, ${theme.colors.border}, transparent)`,
+              marginBottom: "48px",
+            }}
+          />
+
+          {/* Real-World Examples Section */}
+          <div style={{ marginBottom: "24px" }}>
+            <h3
+              style={{
+                fontFamily: theme.fonts.heading,
+                fontSize: isMobile ? "24px" : "28px",
+                fontWeight: "700",
+                letterSpacing: "-0.02em",
+                color: theme.colors.text,
+                marginBottom: "12px",
+              }}
+            >
+              See it in action
+            </h3>
+            <p
+              style={{
+                fontSize: isMobile ? "14px" : "15px",
+                lineHeight: "1.6",
+                color: theme.colors.textSecondary,
+                fontFamily: theme.fonts.body,
+                marginBottom: "32px",
+              }}
+            >
+              The feed is already live. Developers are using it daily to watch repos, track work, and understand what's happening across the projects they care about.
+            </p>
+          </div>
 
           {/* Screenshot 1: Gary Tan commit in feed */}
           <div
@@ -140,7 +192,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
                   margin: 0,
                 }}
               >
-                Timeline shows when work happened. Feed shows what changed. File City shows where.
+                <strong style={{ color: theme.colors.text }}>When + What + Where:</strong> Timeline shows when work happened. Feed shows what changed. File City shows where. All at once.
               </p>
             </div>
           </div>
@@ -178,7 +230,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
                   margin: 0,
                 }}
               >
-                Click "Explain" on any commit. Get a plain-English summary. No diff reading required.
+                <strong style={{ color: theme.colors.text }}>No more reading diffs:</strong> Click "Explain" on any commit. Understand what happened in plain English. Recruiters, PMs, investors — everyone can follow along.
               </p>
             </div>
           </div>
@@ -216,7 +268,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
                   margin: 0,
                 }}
               >
-                See everyone who contributed. Visual timeline shows collaboration at a glance.
+                <strong style={{ color: theme.colors.text }}>Work surfaces the person:</strong> See every contributor. A chain of five faces tells a story no commit message can.
               </p>
             </div>
           </div>
@@ -259,15 +311,26 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
             </div>
           </div>
 
-          {/* Info Box */}
+          {/* CTA Box */}
           <div
             style={{
-              background: theme.colors.surface,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: "8px",
-              padding: isMobile ? "20px" : "24px",
+              background: `linear-gradient(135deg, ${theme.colors.primary}15 0%, ${theme.colors.surface} 100%)`,
+              border: `1px solid ${theme.colors.primary}40`,
+              borderRadius: "12px",
+              padding: isMobile ? "24px" : "32px",
             }}
           >
+            <h4
+              style={{
+                fontFamily: theme.fonts.heading,
+                fontSize: isMobile ? "18px" : "20px",
+                fontWeight: "700",
+                color: theme.colors.text,
+                marginBottom: "12px",
+              }}
+            >
+              Your repos. Same feed.
+            </h4>
             <p
               style={{
                 fontSize: "14px",
@@ -277,10 +340,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
                 margin: 0,
               }}
             >
-              <strong style={{ fontWeight: "600", color: theme.colors.text }}>
-                Follow any public repo
-              </strong>{" "}
-              — Paste a GitHub URL or search by name. Watch open-source projects you care about. See what's changing, who's building, and where the work is happening. Time-organized, contributor-visible, always up to date.
+              Inside the desktop app, your private repos appear in the same feed format. See your own building the same way you watch the world build. Morning commits, evening pushes, overnight AI work — all visible. Your codebase has a history. Now you can see it.
             </p>
           </div>
         </motion.div>
