@@ -399,7 +399,6 @@ export const Manifesto: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            style={{ marginBottom: isMobile ? "48px" : "64px" }}
           >
             <p style={{
               fontSize: isMobile ? "16px" : "18px",
@@ -415,32 +414,6 @@ export const Manifesto: React.FC = () => {
                 Play the game →
               </Link>
             </p>
-          </motion.div>
-
-          {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Link
-              href="/#access"
-              style={{
-                display: "inline-block",
-                backgroundColor: theme.colors.primary,
-                color: theme.colors.textOnPrimary,
-                padding: "14px 32px",
-                borderRadius: "8px",
-                fontSize: "16px",
-                fontWeight: "600",
-                textDecoration: "none",
-                fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-                transition: "all 0.2s ease",
-              }}
-            >
-              Get Early Access →
-            </Link>
           </motion.div>
         </div>
       </section>
