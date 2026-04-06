@@ -17,14 +17,14 @@ interface GitHubRelease {
   }[];
 }
 
-const Screenshot: React.FC<{ src: string; alt: string }> = ({ src, alt }) => (
+const Screenshot: React.FC<{ src: string; alt: string; borderColor: string }> = ({ src, alt, borderColor }) => (
   <img
     src={src}
     alt={alt}
     style={{
       width: '100%',
       borderRadius: '12px',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
+      border: `1px solid ${borderColor}`,
       display: 'block',
     }}
   />
@@ -84,7 +84,7 @@ export const DownloadADE: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0a0a",
+        background: theme.colors.background,
         fontFamily: theme.fonts.body,
       }}
     >
@@ -106,13 +106,15 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '36px' : isTablet ? '48px' : '58px',
               fontWeight: 700,
-              color: '#06b6d4',
               lineHeight: 1.1,
               letterSpacing: '-0.03em',
               marginBottom: '40px',
+              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
             }}
           >
-            Download Principal AI
+            <span style={{ color: theme.colors.primary }}>Download</span>{' '}
+            <span style={{ color: theme.colors.text }}>Principal</span>{' '}
+            <span style={{ fontWeight: 300, color: theme.colors.primary }}>AI</span>
           </motion.h1>
 
           <motion.blockquote
@@ -130,7 +132,7 @@ export const DownloadADE: React.FC = () => {
                 fontSize: isMobile ? '20px' : '24px',
                 fontWeight: 400,
                 fontStyle: 'italic',
-                color: '#ffffff',
+                color: theme.colors.text,
                 lineHeight: 1.5,
                 letterSpacing: '-0.01em',
                 margin: '0 0 12px 0',
@@ -142,7 +144,7 @@ export const DownloadADE: React.FC = () => {
               style={{
                 fontSize: isMobile ? '14px' : '16px',
                 fontWeight: 400,
-                color: '#8a919c',
+                color: theme.colors.textMuted,
                 fontStyle: 'normal',
                 letterSpacing: '-0.01em',
               }}
@@ -178,30 +180,30 @@ export const DownloadADE: React.FC = () => {
                 alignItems: 'center',
                 gap: '10px',
                 padding: isMobile ? '16px 36px' : '18px 44px',
-                background: loading ? '#4b5563' : '#06b6d4',
-                color: '#000000',
+                background: loading ? theme.colors.textMuted : theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 textDecoration: 'none',
                 fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 600,
                 borderRadius: '12px',
                 fontFamily: theme.fonts.body,
                 letterSpacing: '-0.01em',
-                boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
+                boxShadow: loading ? 'none' : `0 4px 20px ${theme.colors.primary}66`,
                 transition: 'all 0.2s ease',
                 pointerEvents: loading ? 'none' : 'auto',
               }}
               onMouseEnter={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.background = '#22d3ee';
+                  e.currentTarget.style.filter = 'brightness(1.1)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                  e.currentTarget.style.boxShadow = `0 8px 30px ${theme.colors.primary}80`;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.background = '#06b6d4';
+                  e.currentTarget.style.filter = 'brightness(1)';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                  e.currentTarget.style.boxShadow = `0 4px 20px ${theme.colors.primary}66`;
                 }
               }}
             >
@@ -212,7 +214,7 @@ export const DownloadADE: React.FC = () => {
               </svg>
               {loading ? 'Loading...' : 'Download for macOS — Free'}
             </a>
-            <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
+            <span style={{ fontSize: '14px', color: theme.colors.textMuted, letterSpacing: '-0.01em' }}>
               Windows + Linux coming soon.{' '}
               <a
                 href="https://discord.gg/G3qdcC2DXq"
@@ -234,8 +236,8 @@ export const DownloadADE: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.35 }}
             style={{ marginTop: '64px' }}
           >
-            <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Activity Feed</p>
-            <Screenshot src="/gary-tan-activity-feed.png" alt="Principal AI activity feed showing agent commits across repos" />
+            <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Activity Feed</p>
+            <Screenshot src="/gary-tan-activity-feed.png" alt="Principal AI activity feed showing agent commits across repos" borderColor={theme.colors.border} />
           </motion.div>
 
           <motion.p
@@ -245,7 +247,7 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '16px' : '18px',
               fontWeight: 400,
-              color: '#b0b8c4',
+              color: theme.colors.textSecondary,
               lineHeight: 1.7,
               maxWidth: '720px',
               margin: '32px auto 0',
@@ -263,7 +265,7 @@ export const DownloadADE: React.FC = () => {
       <section
         style={{
           padding: isMobile ? '40px 24px' : '60px 40px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -275,7 +277,7 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '22px' : '28px',
               fontWeight: 600,
-              color: '#ffffff',
+              color: theme.colors.text,
               lineHeight: 1.3,
               letterSpacing: '-0.02em',
               textAlign: 'center',
@@ -292,7 +294,7 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '22px' : '28px',
               fontWeight: 600,
-              color: '#06b6d4',
+              color: theme.colors.primary,
               lineHeight: 1.3,
               letterSpacing: '-0.02em',
               textAlign: 'center',
@@ -309,8 +311,8 @@ export const DownloadADE: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             style={{ marginBottom: '48px' }}
           >
-            <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Story-based Monitoring</p>
-            <Screenshot src="/codex-runner-error-with-file-city.png" alt="Principal AI codex runner error with file city view" />
+            <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Story-based Monitoring</p>
+            <Screenshot src="/codex-runner-error-with-file-city.png" alt="Principal AI codex runner error with file city view" borderColor={theme.colors.border} />
           </motion.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '48px' }}>
@@ -328,7 +330,7 @@ export const DownloadADE: React.FC = () => {
                 style={{
                   fontSize: isMobile ? '16px' : '18px',
                   fontWeight: 400,
-                  color: '#b0b8c4',
+                  color: theme.colors.textSecondary,
                   lineHeight: 1.7,
                   letterSpacing: '-0.01em',
                   margin: 0,
@@ -347,17 +349,17 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '18px' : '22px',
               fontWeight: 600,
-              color: '#ffffff',
+              color: theme.colors.text,
               lineHeight: 1.4,
               letterSpacing: '-0.02em',
               marginBottom: '48px',
-              borderLeft: '3px solid #06b6d4',
+              borderLeft: `3px solid ${theme.colors.primary}`,
               paddingLeft: '20px',
             }}
           >
             The log tells you what happened.
             <br />
-            The storyboard tells you what <em style={{ color: '#06b6d4', fontStyle: 'italic' }}>should</em> have.
+            The storyboard tells you what <em style={{ color: theme.colors.primary, fontStyle: 'italic' }}>should</em> have.
           </motion.p>
 
         </div>
@@ -367,7 +369,7 @@ export const DownloadADE: React.FC = () => {
       <section
         style={{
           padding: isMobile ? '24px 24px' : '32px 40px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
+          borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -375,7 +377,7 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '24px' : '32px',
               fontWeight: 700,
-              color: '#ffffff',
+              color: theme.colors.text,
               letterSpacing: '-0.03em',
               textAlign: 'center',
               marginBottom: '48px',
@@ -395,7 +397,7 @@ export const DownloadADE: React.FC = () => {
                 title: 'Activity Feed',
                 description: 'Every repo. Every commit. At a glance. Your agents\u2019 work, made visible.',
                 icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                   </svg>
                 ),
@@ -404,7 +406,7 @@ export const DownloadADE: React.FC = () => {
                 title: 'File City',
                 description: 'See inside your codebase. Every change, every file. Agents and humans, one view.',
                 icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="7" height="7" />
                     <rect x="14" y="3" width="7" height="7" />
                     <rect x="14" y="14" width="7" height="7" />
@@ -416,7 +418,7 @@ export const DownloadADE: React.FC = () => {
                 title: 'OTEL Behavioral Manifest',
                 description: 'What should happen, which code does it, and what telemetry proves it did. Connected.',
                 icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
@@ -426,7 +428,7 @@ export const DownloadADE: React.FC = () => {
                 title: 'Story-based Monitoring',
                 description: 'Observability that starts with intent, not with incidents.',
                 icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                   </svg>
@@ -440,8 +442,8 @@ export const DownloadADE: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 style={{
-                  background: '#141414',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: theme.colors.backgroundSecondary,
+                  border: `1px solid ${theme.colors.border}`,
                   borderRadius: '16px',
                   padding: isMobile ? '28px' : '36px',
                 }}
@@ -450,7 +452,7 @@ export const DownloadADE: React.FC = () => {
                   style={{
                     width: '48px',
                     height: '48px',
-                    background: 'rgba(6, 182, 212, 0.08)',
+                    background: `${theme.colors.primary}14`,
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
@@ -464,7 +466,7 @@ export const DownloadADE: React.FC = () => {
                   style={{
                     fontSize: isMobile ? '18px' : '20px',
                     fontWeight: 600,
-                    color: '#ffffff',
+                    color: theme.colors.text,
                     marginBottom: '10px',
                     letterSpacing: '-0.02em',
                     fontFamily: theme.fonts.body,
@@ -476,7 +478,7 @@ export const DownloadADE: React.FC = () => {
                   style={{
                     fontSize: '15px',
                     fontWeight: 400,
-                    color: '#8a919c',
+                    color: theme.colors.textMuted,
                     lineHeight: 1.6,
                     letterSpacing: '-0.01em',
                     margin: 0,
@@ -495,7 +497,7 @@ export const DownloadADE: React.FC = () => {
       <section
         style={{
           padding: isMobile ? '80px 24px 100px' : '120px 40px 140px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
+          borderTop: `1px solid ${theme.colors.border}`,
           textAlign: 'center',
         }}
       >
@@ -508,13 +510,13 @@ export const DownloadADE: React.FC = () => {
             style={{
               fontSize: isMobile ? '28px' : '40px',
               fontWeight: 700,
-              color: '#ffffff',
+              color: theme.colors.text,
               lineHeight: 1.2,
               letterSpacing: '-0.03em',
               marginBottom: '16px',
             }}
           >
-            See the work. <span style={{ color: '#06b6d4' }}>Read the story.</span>
+            See the work. <span style={{ color: theme.colors.primary }}>Read the story.</span>
             <br />
             Know if it went right.
           </motion.h2>
@@ -548,30 +550,30 @@ export const DownloadADE: React.FC = () => {
                 alignItems: 'center',
                 gap: '10px',
                 padding: isMobile ? '16px 36px' : '18px 44px',
-                background: loading ? '#4b5563' : '#06b6d4',
-                color: '#000000',
+                background: loading ? theme.colors.textMuted : theme.colors.primary,
+                color: theme.colors.textOnPrimary,
                 textDecoration: 'none',
                 fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 600,
                 borderRadius: '12px',
                 fontFamily: theme.fonts.body,
                 letterSpacing: '-0.01em',
-                boxShadow: loading ? 'none' : '0 4px 20px rgba(6, 182, 212, 0.4)',
+                boxShadow: loading ? 'none' : `0 4px 20px ${theme.colors.primary}66`,
                 transition: 'all 0.2s ease',
                 pointerEvents: loading ? 'none' : 'auto',
               }}
               onMouseEnter={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.background = '#22d3ee';
+                  e.currentTarget.style.filter = 'brightness(1.1)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(6, 182, 212, 0.5)';
+                  e.currentTarget.style.boxShadow = `0 8px 30px ${theme.colors.primary}80`;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.background = '#06b6d4';
+                  e.currentTarget.style.filter = 'brightness(1)';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(6, 182, 212, 0.4)';
+                  e.currentTarget.style.boxShadow = `0 4px 20px ${theme.colors.primary}66`;
                 }
               }}
             >
@@ -582,7 +584,7 @@ export const DownloadADE: React.FC = () => {
               </svg>
               {loading ? 'Loading...' : 'Download for macOS — Free'}
             </a>
-            <span style={{ fontSize: '14px', color: '#6b7280', letterSpacing: '-0.01em' }}>
+            <span style={{ fontSize: '14px', color: theme.colors.textMuted, letterSpacing: '-0.01em' }}>
               Windows + Linux.{' '}
               <a
                 href="https://discord.gg/G3qdcC2DXq"
