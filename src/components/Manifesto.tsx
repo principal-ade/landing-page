@@ -53,7 +53,7 @@ export const Manifesto: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "80px 24px 32px" : "120px 40px 40px",
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
