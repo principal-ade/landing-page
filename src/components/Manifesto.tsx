@@ -35,7 +35,7 @@ export const Manifesto: React.FC = () => {
     fontSize: mobile ? "24px" : "30px",
     fontWeight: "700",
     color: theme.colors.primary,
-    marginBottom: "24px",
+    marginBottom: "20px",
     lineHeight: "1.2",
     fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
   });
@@ -118,7 +118,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Old Paradigm Is a Flashlight After the Fall */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -160,7 +160,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: Stories Beat Logs */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -199,7 +199,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Inversion */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -235,7 +235,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: This Only Works Now */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -271,7 +271,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: One Story */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -301,7 +301,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Bet */}
       <section
         style={{
-          padding: isMobile ? "48px 24px" : "60px 40px",
+          padding: isMobile ? "32px 24px" : "40px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -331,7 +331,7 @@ export const Manifesto: React.FC = () => {
       {/* Closing */}
       <section
         style={{
-          padding: isMobile ? "64px 24px 100px" : "80px 40px 120px",
+          padding: isMobile ? "48px 24px 80px" : "60px 40px 100px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
