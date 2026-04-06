@@ -194,8 +194,8 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <Link
-            href="/early-access"
+          <a
+            href="https://principal-ade.com/download"
             style={{
               padding: '8px 20px',
               background: theme.colors.primary,
@@ -217,8 +217,8 @@ export const Header: React.FC = () => {
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            Get Early Access
-          </Link>
+            Download
+          </a>
         </div>
 
         {/* Mobile Hamburger Menu Button */}
@@ -314,8 +314,8 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <Link
-            href="/early-access"
+          <a
+            href="https://principal-ade.com/download"
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',
@@ -329,8 +329,8 @@ export const Header: React.FC = () => {
               textAlign: 'center',
             }}
           >
-            Get Early Access
-          </Link>
+            Download
+          </a>
         </div>
       )}
     </nav>

@@ -160,7 +160,7 @@ const HeroSection: React.FC = () => {
             }}
           >
             <a
-              href="/early-access"
+              href="https://principal-ade.com/download"
               style={{
                 backgroundColor: theme.colors.primary,
                 color: theme.colors.textOnPrimary,
