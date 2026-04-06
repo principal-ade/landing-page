@@ -118,11 +118,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Old Paradigm Is a Flashlight After the Fall */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -164,11 +160,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: Stories Beat Logs */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -207,11 +199,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Inversion */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -247,11 +235,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: This Only Works Now */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -287,11 +271,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: One Story */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -321,11 +301,7 @@ export const Manifesto: React.FC = () => {
       {/* Section: The Bet */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "60px 24px" : "80px 40px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -355,12 +331,7 @@ export const Manifesto: React.FC = () => {
       {/* Closing */}
       <section
         style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: isMobile ? "80px 24px" : "120px 40px",
+          padding: isMobile ? "80px 24px 120px" : "100px 40px 140px",
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
