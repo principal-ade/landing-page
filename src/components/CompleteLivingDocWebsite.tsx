@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '@principal-ade/industry-theme';
+import { Header } from './Header';
 import { LivingDocHomepage } from './LivingDocHomepage';
 import { TelemetryVisualization } from './TelemetryVisualization';
 import { AgentShift } from './AgentShift';
@@ -35,6 +36,7 @@ export const CompleteLivingDocWebsite: React.FC = () => {
       overflowX: 'hidden',
       boxSizing: 'border-box'
     }}>
+      <Header />
       <main style={{ flex: 1, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
         {/* Hero - The Hook */}
         <div style={{
