@@ -81,31 +81,18 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             Understand it in seconds.
           </h2>
 
-          {/* Subheading */}
+          {/* Value Prop */}
           <p
             style={{
-              fontSize: isMobile ? "16px" : "18px",
-              lineHeight: "1.6",
+              fontSize: isMobile ? "18px" : "22px",
+              lineHeight: "1.5",
               color: theme.colors.text,
               fontFamily: theme.fonts.body,
-              marginBottom: "20px",
+              marginBottom: "40px",
               fontWeight: "500",
             }}
           >
-            Every repo you open in Principal shows you the map.
-          </p>
-
-          {/* Body Copy */}
-          <p
-            style={{
-              fontSize: isMobile ? "15px" : "16px",
-              lineHeight: "1.7",
-              color: theme.colors.textSecondary,
-              fontFamily: theme.fonts.body,
-              marginBottom: "32px",
-            }}
-          >
-            What the codebase is made of. How it's organized. When an agent runs, the files it changed light up. You see what moved, what grew, and what didn't belong — without opening a terminal.
+            File City maps every codebase instantly. See what files exist, how they're organized, and what changed.
           </p>
 
           {/* File City Demo */}
@@ -262,7 +249,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
                   margin: 0,
                 }}
               >
-                From day one to today. See activity from any commit, the last week, or the last year.
+                From day one to today. Watch activity from any commit, the last week, or the last year.
               </p>
             </div>
           </div>
