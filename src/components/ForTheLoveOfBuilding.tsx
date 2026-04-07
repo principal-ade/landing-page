@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from '@principal-ade/industry-theme';
 import { Logo } from '@principal-ai/logo-component';
+import { Download } from 'lucide-react';
 
 export const ForTheLoveOfBuilding: React.FC = () => {
   const { theme } = useTheme();
@@ -251,7 +252,9 @@ export const ForTheLoveOfBuilding: React.FC = () => {
               <Link
                 href="/#access"
                 style={{
-                  display: "inline-block",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
                   backgroundColor: theme.colors.primary,
                   color: theme.colors.textOnPrimary,
                   padding: "16px 40px",
@@ -263,7 +266,8 @@ export const ForTheLoveOfBuilding: React.FC = () => {
                   transition: "all 0.2s ease",
                 }}
               >
-                Download →
+                Download
+                <Download size={20} strokeWidth={2} />
               </Link>
             </div>
           </motion.div>

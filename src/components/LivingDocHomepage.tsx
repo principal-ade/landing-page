@@ -3,6 +3,7 @@
 import React from "react";
 import { Logo } from "@principal-ai/logo-component";
 import { useTheme } from "@principal-ade/industry-theme";
+import { Download } from "lucide-react";
 
 const HeroSection: React.FC = () => {
   const { theme } = useTheme();
@@ -191,6 +192,7 @@ const HeroSection: React.FC = () => {
               }}
             >
               Download Alpha
+              <Download size={isMobile ? 20 : 24} strokeWidth={2} />
             </a>
           </div>
         </div>
