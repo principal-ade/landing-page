@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { useTheme } from '@principal-ade/industry-theme';
 
 export const Header: React.FC = () => {
@@ -13,11 +13,18 @@ export const Header: React.FC = () => {
     typeof window !== 'undefined' ? window.innerWidth : 1024
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [productDropdownOpen, setProductDropdownOpen] = useState(false);
+  const [mobileProductOpen, setMobileProductOpen] = useState(false);
 
   const isBlogPage = pathname?.startsWith('/blog');
   const isAboutPage = pathname?.startsWith('/about');
-  const isFeaturesPage = pathname?.startsWith('/product');
-  const isDemoPage = pathname?.startsWith('/observability-demo');
+  const isProductPage = pathname?.startsWith('/product') ||
+                        pathname?.startsWith('/file-city') ||
+                        pathname?.startsWith('/principal-feed') ||
+                        pathname?.startsWith('/story-based-monitoring');
+  const isFileCityPage = pathname?.startsWith('/file-city');
+  const isPrincipalFeedPage = pathname?.startsWith('/principal-feed');
+  const isStoryMonitoringPage = pathname?.startsWith('/story-based-monitoring');
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,11 +86,11 @@ export const Header: React.FC = () => {
               AI
             </span>
           </Link>
-          {isMobile && (isBlogPage || isAboutPage || isFeaturesPage || isDemoPage) && (
+          {isMobile && (isBlogPage || isAboutPage || isProductPage) && (
             <>
               <span style={{ color: theme.colors.textMuted }}>/</span>
               <Link
-                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : isDemoPage ? '/observability-demo' : '/product'}
+                href={isBlogPage ? '/blog' : isAboutPage ? '/about' : '/product'}
                 style={{
                   color: theme.colors.primary,
                   textDecoration: 'none',
@@ -92,7 +99,7 @@ export const Header: React.FC = () => {
                   fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
                 }}
               >
-                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : isDemoPage ? 'Demo' : 'Features'}
+                {isBlogPage ? 'Blog' : isAboutPage ? 'About' : 'Product'}
               </Link>
             </>
           )}
@@ -128,50 +135,127 @@ export const Header: React.FC = () => {
           >
             About
           </Link>
-          <Link
-            href="/product"
-            style={{
-              color: isFeaturesPage ? theme.colors.primary : theme.colors.textSecondary,
-              textDecoration: isFeaturesPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '14px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-            }}
-            onMouseLeave={(e) => {
-              if (!isFeaturesPage) {
-                e.currentTarget.style.color = theme.colors.textSecondary;
-              }
-            }}
+
+          {/* Product Dropdown */}
+          <div
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setProductDropdownOpen(true)}
+            onMouseLeave={() => setProductDropdownOpen(false)}
           >
-            Features
-          </Link>
-          <Link
-            href="/observability-demo"
-            style={{
-              color: isDemoPage ? theme.colors.primary : theme.colors.textSecondary,
-              textDecoration: isDemoPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '14px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-              transition: 'color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = theme.colors.primary;
-            }}
-            onMouseLeave={(e) => {
-              if (!isDemoPage) {
-                e.currentTarget.style.color = theme.colors.textSecondary;
-              }
-            }}
-          >
-            Demo
-          </Link>
+            <button
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: isProductPage ? theme.colors.primary : theme.colors.textSecondary,
+                textDecoration: isProductPage ? 'underline' : 'none',
+                textUnderlineOffset: '4px',
+                fontSize: '14px',
+                fontWeight: '500',
+                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: 0,
+                transition: 'color 0.2s ease',
+              }}
+            >
+              Product
+              <ChevronDown
+                size={14}
+                style={{
+                  transition: 'transform 0.2s ease',
+                  transform: productDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                }}
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {productDropdownOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  marginTop: '12px',
+                  background: theme.colors.background,
+                  border: `1px solid ${theme.colors.border}`,
+                  borderRadius: '8px',
+                  padding: '8px',
+                  minWidth: '200px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                }}
+              >
+                <Link
+                  href="/file-city"
+                  style={{
+                    display: 'block',
+                    padding: '10px 12px',
+                    color: isFileCityPage ? theme.colors.primary : theme.colors.text,
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    borderRadius: '4px',
+                    transition: 'background 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = theme.colors.surface;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  File City
+                </Link>
+                <Link
+                  href="/principal-feed"
+                  style={{
+                    display: 'block',
+                    padding: '10px 12px',
+                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.text,
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    borderRadius: '4px',
+                    transition: 'background 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = theme.colors.surface;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  Principal Feed
+                </Link>
+                <Link
+                  href="/story-based-monitoring"
+                  style={{
+                    display: 'block',
+                    padding: '10px 12px',
+                    color: isStoryMonitoringPage ? theme.colors.primary : theme.colors.text,
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    borderRadius: '4px',
+                    transition: 'background 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = theme.colors.surface;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  Story-based Monitoring
+                </Link>
+              </div>
+            )}
+          </div>
+
           <Link
             href="/blog"
             style={{
@@ -272,34 +356,83 @@ export const Header: React.FC = () => {
           >
             About
           </Link>
-          <Link
-            href="/product"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              color: isFeaturesPage ? theme.colors.primary : theme.colors.textSecondary,
-              textDecoration: isFeaturesPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '16px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            }}
-          >
-            Features
-          </Link>
-          <Link
-            href="/observability-demo"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              color: isDemoPage ? theme.colors.primary : theme.colors.textSecondary,
-              textDecoration: isDemoPage ? 'underline' : 'none',
-              textUnderlineOffset: '4px',
-              fontSize: '16px',
-              fontWeight: '500',
-              fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-            }}
-          >
-            Demo
-          </Link>
+
+          {/* Mobile Product Section */}
+          <div>
+            <button
+              onClick={() => setMobileProductOpen(!mobileProductOpen)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: isProductPage ? theme.colors.primary : theme.colors.textSecondary,
+                textDecoration: isProductPage ? 'underline' : 'none',
+                textUnderlineOffset: '4px',
+                fontSize: '16px',
+                fontWeight: '500',
+                fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                cursor: 'pointer',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '100%',
+                justifyContent: 'flex-start',
+              }}
+            >
+              Product
+              <ChevronDown
+                size={16}
+                style={{
+                  transition: 'transform 0.2s ease',
+                  transform: mobileProductOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                }}
+              />
+            </button>
+            {mobileProductOpen && (
+              <div style={{ paddingLeft: '16px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <Link
+                  href="/file-city"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    color: isFileCityPage ? theme.colors.primary : theme.colors.textSecondary,
+                    textDecoration: 'none',
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  File City
+                </Link>
+                <Link
+                  href="/principal-feed"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.textSecondary,
+                    textDecoration: 'none',
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Principal Feed
+                </Link>
+                <Link
+                  href="/story-based-monitoring"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    color: isStoryMonitoringPage ? theme.colors.primary : theme.colors.textSecondary,
+                    textDecoration: 'none',
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Story-based Monitoring
+                </Link>
+              </div>
+            )}
+          </div>
+
           <Link
             href="/blog"
             onClick={() => setMobileMenuOpen(false)}
