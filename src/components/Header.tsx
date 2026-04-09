@@ -138,7 +138,7 @@ export const Header: React.FC = () => {
 
           {/* Product Dropdown */}
           <div
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', paddingBottom: '20px' }}
             onMouseEnter={() => setProductDropdownOpen(true)}
             onMouseLeave={() => setProductDropdownOpen(false)}
           >
@@ -147,8 +147,7 @@ export const Header: React.FC = () => {
                 background: 'transparent',
                 border: 'none',
                 color: isProductPage ? theme.colors.primary : theme.colors.textSecondary,
-                textDecoration: isProductPage ? 'underline' : 'none',
-                textUnderlineOffset: '4px',
+                textDecoration: 'none',
                 fontSize: '14px',
                 fontWeight: '500',
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
@@ -157,15 +156,24 @@ export const Header: React.FC = () => {
                 alignItems: 'center',
                 gap: '4px',
                 padding: 0,
-                transition: 'color 0.2s ease',
+                transition: 'color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = theme.colors.primary;
+              }}
+              onMouseLeave={(e) => {
+                if (!isProductPage) {
+                  e.currentTarget.style.color = theme.colors.textSecondary;
+                }
               }}
             >
               Product
               <ChevronDown
                 size={14}
                 style={{
-                  transition: 'transform 0.2s ease',
-                  transform: productDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                  transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: productDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  opacity: productDropdownOpen ? 1 : 0.7,
                 }}
               />
             </button>
@@ -176,81 +184,164 @@ export const Header: React.FC = () => {
                 style={{
                   position: 'absolute',
                   top: '100%',
-                  left: 0,
-                  marginTop: '12px',
+                  left: '-12px',
+                  marginTop: '8px',
                   background: theme.colors.background,
                   border: `1px solid ${theme.colors.border}`,
-                  borderRadius: '8px',
-                  padding: '8px',
-                  minWidth: '200px',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  minWidth: '320px',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08)',
+                  animation: 'dropdownFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               >
+                <style>
+                  {`
+                    @keyframes dropdownFadeIn {
+                      from {
+                        opacity: 0;
+                        transform: translateY(-8px);
+                      }
+                      to {
+                        opacity: 1;
+                        transform: translateY(0);
+                      }
+                    }
+                  `}
+                </style>
                 <Link
                   href="/file-city"
                   style={{
                     display: 'block',
-                    padding: '10px 12px',
-                    color: isFileCityPage ? theme.colors.primary : theme.colors.text,
+                    padding: '14px 16px',
+                    color: theme.colors.text,
                     textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    borderRadius: '4px',
-                    transition: 'background 0.2s ease',
+                    borderRadius: '8px',
+                    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: isFileCityPage ? `${theme.colors.primary}15` : 'transparent',
+                    marginBottom: '4px',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = theme.colors.surface;
+                    e.currentTarget.style.background = isFileCityPage ? `${theme.colors.primary}25` : `${theme.colors.primary}10`;
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title) title.style.color = theme.colors.primary;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.background = isFileCityPage ? `${theme.colors.primary}15` : 'transparent';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title && !isFileCityPage) title.style.color = theme.colors.text;
                   }}
                 >
-                  File City
+                  <div data-title style={{
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    marginBottom: '4px',
+                    color: isFileCityPage ? theme.colors.primary : theme.colors.text,
+                    transition: 'color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}>
+                    File City
+                  </div>
+                  <div style={{
+                    fontSize: '13px',
+                    color: theme.colors.textMuted,
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    lineHeight: '1.5',
+                    fontWeight: '400',
+                  }}>
+                    Navigate your codebase visually
+                  </div>
                 </Link>
                 <Link
                   href="/principal-feed"
                   style={{
                     display: 'block',
-                    padding: '10px 12px',
-                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.text,
+                    padding: '14px 16px',
+                    color: theme.colors.text,
                     textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    borderRadius: '4px',
-                    transition: 'background 0.2s ease',
+                    borderRadius: '8px',
+                    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: isPrincipalFeedPage ? `${theme.colors.primary}15` : 'transparent',
+                    marginBottom: '4px',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = theme.colors.surface;
+                    e.currentTarget.style.background = isPrincipalFeedPage ? `${theme.colors.primary}25` : `${theme.colors.primary}10`;
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title) title.style.color = theme.colors.primary;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.background = isPrincipalFeedPage ? `${theme.colors.primary}15` : 'transparent';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title && !isPrincipalFeedPage) title.style.color = theme.colors.text;
                   }}
                 >
-                  Principal Feed
+                  <div data-title style={{
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    marginBottom: '4px',
+                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.text,
+                    transition: 'color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}>
+                    Principal Feed
+                  </div>
+                  <div style={{
+                    fontSize: '13px',
+                    color: theme.colors.textMuted,
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    lineHeight: '1.5',
+                    fontWeight: '400',
+                  }}>
+                    AI-powered development insights
+                  </div>
                 </Link>
                 <Link
                   href="/story-based-monitoring"
                   style={{
                     display: 'block',
-                    padding: '10px 12px',
-                    color: isStoryMonitoringPage ? theme.colors.primary : theme.colors.text,
+                    padding: '14px 16px',
+                    color: theme.colors.text,
                     textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    borderRadius: '4px',
-                    transition: 'background 0.2s ease',
+                    borderRadius: '8px',
+                    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: isStoryMonitoringPage ? `${theme.colors.primary}15` : 'transparent',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = theme.colors.surface;
+                    e.currentTarget.style.background = isStoryMonitoringPage ? `${theme.colors.primary}25` : `${theme.colors.primary}10`;
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title) title.style.color = theme.colors.primary;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.background = isStoryMonitoringPage ? `${theme.colors.primary}15` : 'transparent';
+                    e.currentTarget.style.transform = 'translateX(0)';
+                    const title = e.currentTarget.querySelector('[data-title]') as HTMLElement;
+                    if (title && !isStoryMonitoringPage) title.style.color = theme.colors.text;
                   }}
                 >
-                  Story-based Monitoring
+                  <div data-title style={{
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    marginBottom: '4px',
+                    color: isStoryMonitoringPage ? theme.colors.primary : theme.colors.text,
+                    transition: 'color 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}>
+                    Story-based Monitoring
+                  </div>
+                  <div style={{
+                    fontSize: '13px',
+                    color: theme.colors.textMuted,
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    lineHeight: '1.5',
+                    fontWeight: '400',
+                  }}>
+                    Track progress through user stories
+                  </div>
                 </Link>
               </div>
             )}
