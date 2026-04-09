@@ -18,7 +18,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
         padding: isMobile ? "60px 24px" : "100px 40px",
         width: "100%",
         boxSizing: "border-box",
-        background: "#dff1f5",
+        background: theme.colors.background,
       }}
     >
       <div style={{ maxWidth: "680px", margin: "0 auto" }}>
@@ -86,7 +86,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             style={{
               fontSize: isMobile ? "18px" : "22px",
               lineHeight: "1.5",
-              color: theme.colors.text,
+              color: "#0c3741",
               fontFamily: theme.fonts.body,
               marginBottom: "40px",
               fontWeight: "500",
@@ -254,43 +254,65 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             </div>
           </div>
 
-          {/* Info Box */}
-          <div
+          {/* File City Tours Box */}
+          <a
+            href="https://x.com/FileCityAI"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              background: theme.colors.surface,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: "8px",
-              padding: isMobile ? "20px" : "24px",
+              display: "block",
+              textDecoration: "none",
+              background: `linear-gradient(135deg, ${theme.colors.secondary}08 0%, ${theme.colors.secondary}18 100%)`,
+              border: `2px solid ${theme.colors.secondary}`,
+              borderRadius: "12px",
+              padding: isMobile ? "24px 20px" : "32px 40px",
+              position: "relative",
+              overflow: "hidden",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = `0 12px 24px ${theme.colors.secondary}20`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
+            <h3
+              style={{
+                fontSize: isMobile ? "20px" : "24px",
+                fontWeight: "700",
+                color: theme.colors.text,
+                fontFamily: theme.fonts.heading,
+                marginBottom: "8px",
+                lineHeight: "1.2",
+              }}
+            >
+              File City Tours
+            </h3>
             <p
               style={{
-                fontSize: "14px",
+                fontSize: isMobile ? "14px" : "16px",
                 lineHeight: "1.65",
                 color: theme.colors.textSecondary,
                 fontFamily: theme.fonts.body,
                 margin: 0,
               }}
             >
-              <strong style={{ fontWeight: "600", color: theme.colors.primary }}>
-                File City Tours
-              </strong>{" "}
-              — Narrated walkthroughs of public codebases. We post{" "}
-              <a
-                href="https://x.com/FileCityAI"
-                target="_blank"
-                rel="noopener noreferrer"
+              Narrated walkthroughs of public codebases. Follow{" "}
+              <span
                 style={{
-                  color: theme.colors.primary,
-                  fontWeight: "500",
-                  textDecoration: "none",
+                  color: theme.colors.secondary,
+                  fontWeight: "600",
                 }}
               >
                 @FileCityAI
-              </a>{" "}
-              so anyone can understand and learn from popular repos.
+              </span>{" "}
+              to understand and learn from popular repos.
             </p>
-          </div>
+          </a>
         </motion.div>
       </div>
     </section>
