@@ -415,7 +415,7 @@ export const DownloadADE: React.FC = () => {
                 ),
               },
               {
-                title: 'OTEL Behavioral Manifest',
+                title: 'Principal Behavioral Manifest',
                 description: 'What should happen, which code does it, and what telemetry proves it did. Connected.',
                 icon: (
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={theme.colors.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
