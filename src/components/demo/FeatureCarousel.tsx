@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Logo } from '@principal-ai/logo-component';
 import { useTheme } from '@principal-ade/industry-theme';
 
 interface FeatureItem {
   id: string;
-  icon: React.ReactNode;
+  icon: React.ReactNode | null;
   title: string;
   description: string;
 }
@@ -71,34 +70,22 @@ export function FeatureCarousel() {
 
   const features: FeatureItem[] = [
     {
-      id: 'story-based',
-      icon: <Logo width={90} height={90} color={theme.colors.accent} particleColor={theme.colors.primary} letterColor={theme.colors.text} />,
-      title: 'Story-based Dev',
-      description: 'Design your systems expected behaviors first',
+      id: 'file-city',
+      icon: null,
+      title: 'File City',
+      description: 'Understand your codebase differently',
     },
     {
-      id: 'ai-native',
-      icon: (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '12px' }}>
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#13120a', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
-            <img src="/cursor-logo.svg" alt="Cursor" width={38} height={38} />
-          </div>
-          <div style={{ width: 58, height: 58, borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', transform: 'translateY(-3px)', zIndex: 3, position: 'relative' }}>
-            <img src="/claude-logo.svg" alt="Claude" width={36} height={36} />
-          </div>
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '-28px', zIndex: 1, position: 'relative' }}>
-            <img src="/openai-logo.svg" alt="OpenAI Codex" width={38} height={38} />
-          </div>
-        </div>
-      ),
-      title: 'AI Native Validation',
-      description: 'Confirm agent code changes in development',
+      id: 'principal-feed',
+      icon: null,
+      title: 'Principal Activity Feed',
+      description: 'See work differently',
     },
     {
-      id: 'otel',
-      icon: <img src="/otel-logo.png" alt="OpenTelemetry" width={54} height={54} />,
-      title: 'Built on OTel',
-      description: 'Works with your existing OpenTelemetry setup',
+      id: 'story-monitoring',
+      icon: null,
+      title: 'Story-based Monitoring',
+      description: "Monitor so differently you can't even call it observability",
     },
   ];
 
@@ -190,7 +177,7 @@ export function FeatureCarousel() {
         style={{
           position: 'relative',
           overflow: 'hidden',
-          minHeight: '180px',
+          minHeight: '140px',
         }}
       >
         {/* Slides */}
@@ -218,40 +205,18 @@ export function FeatureCarousel() {
                   padding: '0 24px',
                 }}
               >
-                <div
+                {/* Description first - the hero */}
+                <h2
                   style={{
-                    height: '80px',
-                    marginBottom: '16px',
-                    color: theme.colors.primary,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  {feature.icon}
-                </div>
-                <h3
-                  style={{
-                    fontSize: '20px',
+                    fontSize: 'clamp(24px, 5vw, 36px)',
                     fontWeight: 600,
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
                     color: theme.colors.text,
                     margin: 0,
-                    marginBottom: '8px',
-                    minHeight: '28px',
-                  }}
-                >
-                  {feature.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '16px',
-                    fontFamily: 'Inter, sans-serif',
-                    color: theme.colors.textSecondary,
-                    margin: 0,
-                    lineHeight: 1.5,
-                    maxWidth: '280px',
-                    minHeight: '48px',
+                    marginBottom: '16px',
+                    lineHeight: 1.3,
+                    maxWidth: '600px',
+                    minHeight: '90px',
                   }}
                 >
                   <RevealText
@@ -260,6 +225,20 @@ export function FeatureCarousel() {
                     isActive={shouldReveal}
                     delay={0}
                   />
+                </h2>
+
+                {/* Title after - subtle label */}
+                <p
+                  style={{
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    fontFamily: 'Inter, sans-serif',
+                    color: theme.colors.textSecondary,
+                    margin: 0,
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  {feature.title}
                 </p>
               </div>
             );

@@ -1,140 +1,122 @@
 'use client';
 
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
 import { useTheme } from '@principal-ade/industry-theme';
-import { FeatureCarousel } from './FeatureCarousel';
+import Link from 'next/link';
+import { Heart } from 'lucide-react';
+
+interface ProductCard {
+  title: string;
+  description: string;
+  href: string;
+}
 
 export function ExplanationSection() {
   const { theme } = useTheme();
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth : 1024
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+
+  const products: ProductCard[] = [
+    {
+      title: 'File City',
+      description: 'understanding.',
+      href: '/file-city',
+    },
+    {
+      title: 'Principal Activity Feed',
+      description: 'seeing progress.',
+      href: '/principal-feed',
+    },
+    {
+      title: 'Story-based Monitoring',
+      description: 'knowing it works.',
+      href: '/story-based-monitoring',
+    },
+  ];
 
   return (
     <div style={{
-      width: '100vw',
-      marginLeft: 'calc(-50vw + 50%)',
-      height: 'calc(100vh - 70px)',
-      borderBottom: `1px solid ${theme.colors.border}`,
-      scrollSnapAlign: 'start',
-      background: `linear-gradient(180deg, ${theme.colors.backgroundSecondary} 0%, ${theme.colors.background} 100%)`,
-      position: 'relative',
-      overflow: 'hidden',
+      padding: isMobile ? '40px 24px 60px' : '60px 40px 80px',
+      maxWidth: '1200px',
+      margin: '0 auto',
     }}>
-      {/* Grid layer with radial fade */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(${theme.colors.primary}14 1px, transparent 1px),
-            linear-gradient(90deg, ${theme.colors.primary}14 1px, transparent 1px)
-          `,
-          backgroundSize: '300px 300px',
-          backgroundPosition: '50% calc(50% + 5px)',
-          maskImage: 'radial-gradient(ellipse 70% 60% at center, black 0%, black 50%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at center, black 0%, black 50%, transparent 100%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Subtle circular glow underneath */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '40%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '120%',
-          height: '120%',
-          background: `radial-gradient(circle at center, ${theme.colors.primary}10 0%, transparent 40%)`,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
+      {/* Cards Grid */}
       <div style={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px',
-        maxWidth: '1400px',
-        margin: '0 auto',
-        position: 'relative',
-        zIndex: 2,
-        transform: 'translateY(-80px)',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        gap: isMobile ? '20px' : '24px',
+        marginBottom: isMobile ? '48px' : '56px',
       }}>
-      <p style={{
-        fontSize: theme.fontSizes[2],
-        fontWeight: theme.fontWeights.medium,
-        fontFamily: theme.fonts.body,
-        color: theme.colors.primary,
-        margin: 0,
-        marginBottom: '16px',
-        textTransform: 'uppercase',
-        letterSpacing: '0.1em',
-      }}>
-        Story-based Monitoring
-      </p>
+        {products.map((product) => (
+          <Link
+            key={product.title}
+            href={product.href}
+            style={{
+              textDecoration: 'none',
+              background: theme.colors.surface,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: '12px',
+              padding: isMobile ? '32px 24px' : '40px 28px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.borderColor = theme.colors.primary;
+              e.currentTarget.style.boxShadow = `0 12px 24px ${theme.colors.primary}15`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.borderColor = theme.colors.border;
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            {/* Description - hero */}
+            <h3 style={{
+              fontSize: isMobile ? '20px' : '22px',
+              fontWeight: 600,
+              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              color: theme.colors.text,
+              margin: 0,
+              marginBottom: '12px',
+              lineHeight: 1.3,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}>
+              For the <Heart size={20} fill={theme.colors.primary} stroke={theme.colors.primary} style={{ flexShrink: 0 }} /> of {product.description}
+            </h3>
 
-      <h1 style={{
-        fontSize: 'clamp(28px, 6vw, 48px)',
-        fontWeight: theme.fontWeights.semibold,
-        fontFamily: theme.fonts.body,
-        color: theme.colors.text,
-        margin: 0,
-        marginBottom: '24px',
-        textAlign: 'center',
-        maxWidth: '800px',
-        lineHeight: 1.2,
-      }}>
-        Craft Traces that tell a story
-      </h1>
-
-      <FeatureCarousel />
-      </div>
-
-      {/* Learn More - positioned at bottom */}
-      <div style={{
-        position: 'absolute',
-        bottom: '32px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        color: theme.colors.primary,
-        zIndex: 2,
-      }}>
-        <p style={{
-          fontSize: theme.fontSizes[4],
-          fontFamily: theme.fonts.body,
-          margin: 0,
-          marginBottom: '8px',
-        }}>
-          Learn More
-        </p>
-        <div
-          onClick={() => {
-            const el = document.getElementById('demo-explanation-section');
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-          style={{
-            animation: 'bounce 2s ease-in-out infinite',
-            cursor: 'pointer',
-          }}
-        >
-          <ChevronDown size={48} />
-        </div>
-        <style>{`
-          @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
-          }
-        `}</style>
+            {/* Product name - subtle label */}
+            <p style={{
+              fontSize: '14px',
+              fontWeight: 500,
+              fontFamily: 'Inter, sans-serif',
+              color: theme.colors.textSecondary,
+              margin: 0,
+              letterSpacing: '0.02em',
+            }}>
+              {product.title}
+            </p>
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { ExplanationSection } from '@/components/demo/ExplanationSection';
 import { DemoExplanationSection } from '@/components/demo/DemoExplanationSection';
 import { initializeTelemetryProvider } from '@/components/demo/telemetry-provider';
 import { processTrace, preloadSchematic } from '@/components/demo/trace-orchestration';
@@ -99,9 +98,6 @@ export default function StoryBasedMonitoringPage() {
   return (
     <div style={{ minHeight: '100vh' }}>
       <Header />
-
-      {/* Hero Section */}
-      <ExplanationSection />
 
       {/* How It Works Section */}
       <DemoExplanationSection />

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTheme } from '@principal-ade/industry-theme';
 import { Logo } from '@principal-ai/logo-component';
 import { Download } from 'lucide-react';
+import { ExplanationSection } from './demo/ExplanationSection';
 
 export const ForTheLoveOfBuilding: React.FC = () => {
   const { theme } = useTheme();
@@ -104,11 +105,41 @@ export const ForTheLoveOfBuilding: React.FC = () => {
               color: theme.colors.textSecondary,
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
               maxWidth: "700px",
-              margin: "0 auto",
+              margin: "0 auto 40px",
               fontWeight: "400",
             }}>
               You're coding differently now. It's time to see differently too.
             </p>
+
+            {/* Download CTA */}
+            <a
+              href="https://principal-ade.com/download"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.textOnPrimary,
+                padding: isMobile ? "14px 32px" : "16px 40px",
+                borderRadius: "8px",
+                fontSize: isMobile ? "16px" : "17px",
+                fontWeight: "600",
+                textDecoration: "none",
+                fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = `0 8px 16px ${theme.colors.primary}40`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              Download Principal AI
+              <Download size={20} strokeWidth={2} />
+            </a>
           </motion.div>
         </div>
       </section>
@@ -160,70 +191,17 @@ export const ForTheLoveOfBuilding: React.FC = () => {
               Because you're still the boss of AI.
             </p>
 
-            {/* Product Links */}
-            <div style={{ marginBottom: "56px" }}>
-              <p style={{
-                fontSize: isMobile ? "17px" : "19px",
-                lineHeight: "1.9",
-                color: theme.colors.text,
-                fontFamily: theme.fonts.body,
-                marginBottom: "12px",
-              }}>
-                Understand your codebase differently:{" "}
-                <Link
-                  href="/file-city"
-                  style={{
-                    color: theme.colors.primary,
-                    textDecoration: "none",
-                    fontWeight: "600",
-                    borderBottom: `1px solid ${theme.colors.primary}`,
-                  }}
-                >
-                  File City
-                </Link>
-              </p>
+          </motion.div>
 
-              <p style={{
-                fontSize: isMobile ? "17px" : "19px",
-                lineHeight: "1.9",
-                color: theme.colors.text,
-                fontFamily: theme.fonts.body,
-                marginBottom: "12px",
-              }}>
-                See work differently:{" "}
-                <Link
-                  href="/principal-feed"
-                  style={{
-                    color: theme.colors.primary,
-                    textDecoration: "none",
-                    fontWeight: "600",
-                    borderBottom: `1px solid ${theme.colors.primary}`,
-                  }}
-                >
-                  Principal Activity Feed
-                </Link>
-              </p>
+          {/* Product Cards */}
+          <ExplanationSection />
 
-              <p style={{
-                fontSize: isMobile ? "17px" : "19px",
-                lineHeight: "1.9",
-                color: theme.colors.text,
-                fontFamily: theme.fonts.body,
-              }}>
-                Monitor so differently you can't even call it observability:{" "}
-                <Link
-                  href="/story-based-monitoring"
-                  style={{
-                    color: theme.colors.primary,
-                    textDecoration: "none",
-                    fontWeight: "600",
-                    borderBottom: `1px solid ${theme.colors.primary}`,
-                  }}
-                >
-                  Story-based Monitoring
-                </Link>
-              </p>
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
 
             {/* Closing paragraph */}
             <p style={{
