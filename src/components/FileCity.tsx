@@ -249,7 +249,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
                   margin: 0,
                 }}
               >
-                From day one to today. Watch activity from any commit, the last week, or the last year.
+                Watch the latest activity from today, the last week or last year.
               </p>
             </div>
           </div>
