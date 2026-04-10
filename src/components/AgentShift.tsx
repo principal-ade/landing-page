@@ -21,7 +21,7 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
     {
       num: "Principal Feed",
       title: "Watch the work",
-      desc: "Real-time activity from every agent and human across every repo.",
+      desc: "Real-time activity from every agent and human across repos.",
       accent: "#0893d2",
     },
     {
