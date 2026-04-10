@@ -14,8 +14,8 @@ export const AgentShift: React.FC<AgentShiftProps> = ({ isMobile = false }) => {
   const cards = [
     {
       num: "File City",
-      title: "See the territory",
-      desc: "The map of your codebase. What exists, what changed, what agents touched.",
+      title: "Your codebase, visualized.",
+      desc: "See files, structure, and changes at a glance.",
       accent: theme.colors.primary,
     },
     {
