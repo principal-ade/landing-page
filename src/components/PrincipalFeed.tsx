@@ -21,7 +21,6 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
 
   // Hero parallax effects
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -50]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [1, 1, 0.3]);
 
   return (
     <section
@@ -39,7 +38,6 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
         <motion.div
           style={{
             y: heroY,
-            opacity: heroOpacity,
           }}
         >
           {/* Badge */}
