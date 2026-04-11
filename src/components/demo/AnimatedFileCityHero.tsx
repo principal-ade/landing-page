@@ -203,7 +203,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
             color: '#ffffff',
             marginBottom: isMobile ? '32px' : '48px',
             lineHeight: '1.05',
-            fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
             letterSpacing: '-0.04em',
           }}
         >
@@ -221,7 +221,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
             fontSize: isMobile ? '20px' : '26px',
             lineHeight: '1.6',
             color: BLUE_LIGHT,
-            fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+            fontFamily: 'var(--font-inter, Inter, sans-serif)',
             maxWidth: '700px',
             margin: '0 auto 48px',
             fontWeight: '400',
@@ -254,7 +254,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
             fontSize: isMobile ? '17px' : '19px',
             fontWeight: '700',
             textDecoration: 'none',
-            fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+            fontFamily: 'var(--font-inter, Inter, sans-serif)',
             border: `2px solid ${ORANGE}`,
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           }}

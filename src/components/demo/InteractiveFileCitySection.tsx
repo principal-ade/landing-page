@@ -152,7 +152,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
               fontWeight: '700',
               color: '#ffffff',
               marginBottom: '24px',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -186,7 +186,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
             style={{
               fontSize: isMobile ? '15px' : '17px',
               color: BLUE_LIGHT,
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
               lineHeight: 1.5,
               maxWidth: '600px',
               margin: '0 auto',
@@ -291,7 +291,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
               fontSize: isMobile ? '15px' : '16px',
               fontWeight: '500',
               textDecoration: 'none',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
               borderBottom: `1px solid ${BLUE_MID}`,
               transition: 'opacity 0.2s ease',
             }}

@@ -68,7 +68,7 @@ export const ForTheLoveOfBuildingAnimated: React.FC = () => {
               fontWeight: '700',
               color: '#1a2842',
               marginBottom: '24px',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               lineHeight: 1.2,
             }}
           >
@@ -80,7 +80,7 @@ export const ForTheLoveOfBuildingAnimated: React.FC = () => {
               fontSize: isMobile ? '17px' : '22px',
               lineHeight: '1.6',
               color: '#2d4563',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
               marginBottom: '48px',
               maxWidth: '600px',
               margin: '0 auto 48px',
@@ -107,7 +107,7 @@ export const ForTheLoveOfBuildingAnimated: React.FC = () => {
               fontSize: isMobile ? '17px' : '19px',
               fontWeight: '700',
               textDecoration: 'none',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
               border: `2px solid ${theme.colors.primary}`,
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
