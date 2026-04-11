@@ -262,59 +262,6 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
           Download Principal AI
           <Download size={24} strokeWidth={2.5} />
         </motion.a>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          style={{
-            marginTop: isMobile ? '60px' : '80px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-            color: BLUE_LIGHT,
-          }}
-        >
-          <span style={{ fontSize: '13px', fontFamily: 'Inter, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            Scroll to explore
-          </span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            style={{
-              width: '24px',
-              height: '36px',
-              border: `2px solid ${BLUE_LIGHT}`,
-              borderRadius: '12px',
-              position: 'relative',
-            }}
-          >
-            <motion.div
-              animate={{ y: [0, 12, 0], opacity: [0.5, 1, 0.5] }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              style={{
-                width: '4px',
-                height: '8px',
-                background: BLUE_LIGHT,
-                borderRadius: '2px',
-                position: 'absolute',
-                top: '6px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
-            />
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );
