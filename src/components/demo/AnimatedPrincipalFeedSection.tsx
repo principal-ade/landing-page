@@ -506,7 +506,7 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
               transition: 'all 0.3s ease',
             }}
           >
-            Go To Live Feed
+            Go to Live Feed
             <ArrowRight size={20} strokeWidth={2.5} />
           </Link>
 
