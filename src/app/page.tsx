@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { CompleteLivingDocWebsite } from "../components/CompleteLivingDocWebsite";
+import { ForTheLoveOfBuildingAnimated } from "../components/ForTheLoveOfBuildingAnimated";
 
 export default function HomePage() {
   return (
     <>
-      <CompleteLivingDocWebsite />
+      <ForTheLoveOfBuildingAnimated />
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Heart, ArrowRight, Smartphone } from 'lucide-react';
+import { Heart, ArrowRight, Smartphone, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 // Color palette
@@ -483,14 +483,14 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
           style={{
             textAlign: 'center',
             display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            gap: isMobile ? '16px' : '20px',
+            flexDirection: 'column',
+            gap: '20px',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
           <Link
-            href="/principal-feed"
+            href="https://app.principal-ade.com/"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -506,31 +506,49 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
               transition: 'all 0.3s ease',
             }}
           >
-            See Live Feed
+            Watch Live Feed
             <ArrowRight size={20} strokeWidth={2.5} />
           </Link>
 
-          <Link
-            href="https://principal-ade.com/download"
+          <div
             style={{
-              display: 'inline-flex',
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: isMobile ? '12px' : '24px',
               alignItems: 'center',
-              gap: '8px',
-              color: '#ffffff',
-              backgroundColor: BLUE_MID,
-              fontSize: isMobile ? '16px' : '18px',
-              fontWeight: '600',
-              textDecoration: 'none',
-              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-              padding: isMobile ? '12px 24px' : '14px 32px',
-              border: `2px solid ${BLUE_MID}`,
-              borderRadius: '12px',
-              transition: 'all 0.3s ease',
+              justifyContent: 'center',
             }}
           >
-            Get Mobile App
-            <Smartphone size={20} strokeWidth={2.5} />
-          </Link>
+            <Link
+              href="/principal-feed"
+              style={{
+                color: BLUE_MID,
+                fontSize: isMobile ? '15px' : '16px',
+                fontWeight: '500',
+                textDecoration: 'none',
+                fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+                borderBottom: `1px solid ${BLUE_MID}`,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              Learn more about Principal Feed →
+            </Link>
+
+            <Link
+              href="https://apps.apple.com/us/app/principal-ai/id6761268899"
+              style={{
+                color: BLUE_MID,
+                fontSize: isMobile ? '15px' : '16px',
+                fontWeight: '500',
+                textDecoration: 'none',
+                fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+                borderBottom: `1px solid ${BLUE_MID}`,
+                transition: 'opacity 0.2s ease',
+              }}
+            >
+              Get iOS app →
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>

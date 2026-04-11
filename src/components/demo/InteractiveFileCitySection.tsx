@@ -285,24 +285,18 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
           }}
         >
           <Link
-            href="/file-city"
+            href="https://principal-ade.com/file-city"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              color: ORANGE,
-              fontSize: isMobile ? '16px' : '18px',
-              fontWeight: '600',
+              color: BLUE_MID,
+              fontSize: isMobile ? '15px' : '16px',
+              fontWeight: '500',
               textDecoration: 'none',
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-              padding: isMobile ? '12px 24px' : '14px 32px',
-              border: `2px solid ${ORANGE}`,
-              borderRadius: '12px',
-              transition: 'all 0.3s ease',
+              borderBottom: `1px solid ${BLUE_MID}`,
+              transition: 'opacity 0.2s ease',
             }}
           >
-            Explore File City
-            <ArrowRight size={20} strokeWidth={2.5} />
+            Learn more about File City →
           </Link>
         </motion.div>
       </div>

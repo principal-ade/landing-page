@@ -490,24 +490,18 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
           }}
         >
           <Link
-            href="/story-based-monitoring"
+            href="https://principal-ade.com/story-based-monitoring"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              color: ORANGE,
-              fontSize: isMobile ? '16px' : '18px',
-              fontWeight: '600',
+              color: BLUE_MID,
+              fontSize: isMobile ? '15px' : '16px',
+              fontWeight: '500',
               textDecoration: 'none',
               fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
-              padding: isMobile ? '12px 24px' : '14px 32px',
-              border: `2px solid ${ORANGE}`,
-              borderRadius: '12px',
-              transition: 'all 0.3s ease',
+              borderBottom: `1px solid ${BLUE_MID}`,
+              transition: 'opacity 0.2s ease',
             }}
           >
-            Try Story Monitoring
-            <ArrowRight size={20} strokeWidth={2.5} />
+            Learn more about Story Monitoring →
           </Link>
         </motion.div>
       </div>
