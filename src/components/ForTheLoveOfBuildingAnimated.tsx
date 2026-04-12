@@ -8,6 +8,7 @@ import { AnimatedFileCityHero } from './demo/AnimatedFileCityHero';
 import { InteractiveFileCitySection } from './demo/InteractiveFileCitySection';
 import { AnimatedPrincipalFeedSection } from './demo/AnimatedPrincipalFeedSection';
 import { AnimatedStoryMonitoringSection } from './demo/AnimatedStoryMonitoringSection';
+import { Footer } from './Footer';
 
 export const ForTheLoveOfBuildingAnimated: React.FC = () => {
   const { theme } = useTheme();
@@ -134,6 +135,9 @@ export const ForTheLoveOfBuildingAnimated: React.FC = () => {
           </motion.p>
         </motion.div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

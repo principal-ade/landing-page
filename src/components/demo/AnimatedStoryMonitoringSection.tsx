@@ -171,7 +171,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               stroke={ORANGE}
               style={{ flexShrink: 0 }}
             />{' '}
-            of knowing it works.
+            of being sure.
           </h2>
           <p
             style={{
@@ -188,6 +188,19 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
           </p>
           <p
             style={{
+              fontSize: isMobile ? '18px' : '22px',
+              color: '#ffffff',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              lineHeight: 1.5,
+              maxWidth: '600px',
+              margin: '0 auto 16px',
+              fontWeight: '600',
+            }}
+          >
+            Done is not the same as correct.
+          </p>
+          <p
+            style={{
               fontSize: isMobile ? '15px' : '17px',
               color: BLUE_LIGHT,
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
@@ -196,7 +209,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               margin: '0 auto',
             }}
           >
-            Verify behavior flows exactly as expected, every time
+            The intent is already in your code. The telemetry shows whether it held.
           </p>
         </motion.div>
 
@@ -460,25 +473,6 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
             </div>
           </div>
         </motion.div>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 2.2 }}
-          style={{
-            textAlign: 'center',
-            color: BLUE_LIGHT,
-            fontSize: isMobile ? '15px' : '17px',
-            fontFamily: 'var(--font-inter, Inter, sans-serif)',
-            maxWidth: '600px',
-            margin: '0 auto 40px',
-            lineHeight: 1.6,
-          }}
-        >
-          Watch behavior flow through your system. See when it matches your story.
-          Know exactly what happened.
-        </motion.p>
 
         {/* CTA */}
         <motion.div
