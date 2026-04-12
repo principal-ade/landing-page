@@ -91,13 +91,25 @@ function useFadeInOnScroll(threshold = 0.15) {
 }
 
 export function StoryBasedMonitoringContent() {
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div style={{ background: COLORS.bg, minHeight: '100vh' }}>
       <HeroSection />
-      <TwoWorldsSection />
-      <ManifestSection />
+      <TwoWorldsSection windowWidth={windowWidth} />
+      <ManifestSection windowWidth={windowWidth} />
       <DecompositionSection />
-      <WhySection />
+      <WhySection windowWidth={windowWidth} />
       <CTASection />
     </div>
   );
@@ -169,7 +181,7 @@ function HeroSection() {
 }
 
 // Two Worlds Section
-function TwoWorldsSection() {
+function TwoWorldsSection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
   return (
@@ -194,15 +206,15 @@ function TwoWorldsSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
+            gridTemplateColumns: windowWidth > 768 ? '1fr 1fr' : '1fr',
             gap: '1.5rem',
             marginBottom: '2rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
           }}
         >
-          <TracePanel type="traditional" />
-          <TracePanel type="story-based" />
+          <TracePanel type="traditional" windowWidth={windowWidth} />
+          <TracePanel type="story-based" windowWidth={windowWidth} />
         </div>
 
         <p
@@ -224,7 +236,7 @@ function TwoWorldsSection() {
   );
 }
 
-function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
+function TracePanel({ type, windowWidth }: { type: 'traditional' | 'story-based'; windowWidth: number }) {
   const [isAnimated, setIsAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -304,6 +316,7 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
             isAnimated={isAnimated}
             showCheck={isStoryBased && span.name !== 'check_fraud'}
             isSkipped={isStoryBased && span.name === 'check_fraud'}
+            windowWidth={windowWidth}
           />
         ))}
         {isStoryBased && (
@@ -314,6 +327,7 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
             delay={600}
             isAnimated={isAnimated}
             showCheck={true}
+            windowWidth={windowWidth}
           />
         )}
         {!isStoryBased && (
@@ -324,6 +338,7 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
             delay={600}
             isAnimated={isAnimated}
             showCheck={false}
+            windowWidth={windowWidth}
           />
         )}
       </div>
@@ -355,13 +370,13 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
   );
 }
 
-function TraceSpan({ name, width, time, delay, isAnimated, showCheck, isSkipped }: { name: string; width: string; time?: string; delay: number; isAnimated: boolean; showCheck: boolean; isSkipped?: boolean }) {
+function TraceSpan({ name, width, time, delay, isAnimated, showCheck, isSkipped, windowWidth }: { name: string; width: string; time?: string; delay: number; isAnimated: boolean; showCheck: boolean; isSkipped?: boolean; windowWidth: number }) {
   if (isSkipped) {
     return (
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: window.innerWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
+          gridTemplateColumns: windowWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
           alignItems: 'center',
           gap: '0.75rem',
           padding: '0.5rem 0',
@@ -384,7 +399,7 @@ function TraceSpan({ name, width, time, delay, isAnimated, showCheck, isSkipped 
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: window.innerWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
+        gridTemplateColumns: windowWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
         alignItems: 'center',
         gap: '0.75rem',
         padding: '0.5rem 0',
@@ -408,7 +423,7 @@ function TraceSpan({ name, width, time, delay, isAnimated, showCheck, isSkipped 
 }
 
 // Manifest Section
-function ManifestSection() {
+function ManifestSection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
   return (
@@ -510,7 +525,7 @@ function ManifestSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth > 640 ? 'repeat(3, 1fr)' : '1fr',
+            gridTemplateColumns: windowWidth > 640 ? 'repeat(3, 1fr)' : '1fr',
             gap: '1.5rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
@@ -722,7 +737,7 @@ function DecompositionSection() {
 }
 
 // Why Section
-function WhySection() {
+function WhySection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
   return (
@@ -762,7 +777,7 @@ function WhySection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
+            gridTemplateColumns: windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
             gap: '1rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
