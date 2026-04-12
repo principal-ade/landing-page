@@ -163,16 +163,6 @@ function HeroSection() {
         >
           No alerts fired. Logs show <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>success</code>. Nobody noticed for six hours. The system did exactly what the code told it to do. It just wasn't what anyone <em style={{ fontStyle: 'italic', color: COLORS.text }}>intended</em>.
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: COLORS.textFaint }}>Scroll to see</span>
-          <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-            <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-            <circle cx="8" cy="7" r="2" fill="currentColor">
-              <animate attributeName="cy" values="7;16;7" dur="2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
-            </circle>
-          </svg>
-        </div>
       </div>
     </section>
   );
