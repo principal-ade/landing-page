@@ -183,12 +183,150 @@ function HeroSection() {
 function SequenceDiagramSection() {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
-  const steps = [
-    { name: 'validate_cart', label: 'Validate Cart', duration: '12ms' },
-    { name: 'check_fraud', label: 'Check Fraud', duration: '156ms' },
-    { name: 'process_payment', label: 'Process Payment', duration: '234ms' },
-    { name: 'confirm_order', label: 'Confirm Order', duration: '8ms' },
+  const swimlanes = ['Cart', 'Fraud Service', 'Payment', 'Order'];
+
+  const expectedFlow = [
+    { swimlane: 0, label: 'Validate Cart', x: 15, y: 50 },
+    { swimlane: 1, label: 'Check Fraud', x: 40, y: 50 },
+    { swimlane: 2, label: 'Process Payment', x: 65, y: 50 },
+    { swimlane: 3, label: 'Confirm Order', x: 90, y: 50 },
   ];
+
+  const actualFlow = [
+    { swimlane: 0, label: 'Validate Cart', x: 15, y: 50 },
+    { swimlane: 1, label: 'Check Fraud', x: 40, y: 50, skipped: true },
+    { swimlane: 2, label: 'Process Payment', x: 65, y: 50 },
+    { swimlane: 3, label: 'Confirm Order', x: 90, y: 50 },
+  ];
+
+  const renderDiagram = (flow: typeof expectedFlow, isExpected: boolean) => (
+    <div style={{ position: 'relative', background: COLORS.bg, border: `1px solid ${COLORS.border}`, borderRadius: '12px', padding: '2rem 1rem', height: '280px' }}>
+      {/* Grid lines */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+        <defs>
+          <pattern id={`grid-${isExpected ? 'expected' : 'actual'}`} width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke={COLORS.border} strokeWidth="0.5" opacity="0.3" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#grid-${isExpected ? 'expected' : 'actual'})`} />
+      </svg>
+
+      {/* Swimlane labels */}
+      <div style={{ position: 'absolute', top: '1rem', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', paddingLeft: '1rem', paddingRight: '1rem' }}>
+        {swimlanes.map((lane, i) => (
+          <div
+            key={i}
+            style={{
+              fontFamily: '"Fira Code", monospace',
+              fontSize: '11px',
+              fontWeight: 600,
+              color: COLORS.textFaint,
+              textAlign: 'center',
+              opacity: isVisible ? 1 : 0,
+              transition: `opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${0.2 + i * 0.05}s`,
+            }}
+          >
+            {lane}
+          </div>
+        ))}
+      </div>
+
+      {/* Flow visualization */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+        {flow.map((step, i) => {
+          if (i < flow.length - 1 && !step.skipped && !flow[i + 1].skipped) {
+            const nextStep = flow[i + 1];
+            const x1 = `${step.x}%`;
+            const y1 = `${step.y}%`;
+            const x2 = `${nextStep.x}%`;
+            const y2 = `${nextStep.y}%`;
+            const midX = `${(step.x + nextStep.x) / 2}%`;
+            const controlY = `${step.y - 10}%`;
+
+            return (
+              <path
+                key={`line-${i}`}
+                d={`M ${x1} ${y1} Q ${midX} ${controlY}, ${x2} ${y2}`}
+                stroke={COLORS.blueLight}
+                strokeWidth="2"
+                fill="none"
+                style={{
+                  opacity: isVisible ? 1 : 0,
+                  transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.4 + i * 0.1}s`,
+                }}
+              />
+            );
+          }
+          return null;
+        })}
+
+        {flow.map((step, i) => (
+          <g
+            key={i}
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
+            }}
+          >
+            <circle
+              cx={`${step.x}%`}
+              cy={`${step.y}%`}
+              r={step.skipped ? "0" : "8"}
+              fill={COLORS.blueLight}
+            />
+            {step.skipped && (
+              <g>
+                <circle
+                  cx={`${step.x}%`}
+                  cy={`${step.y}%`}
+                  r="8"
+                  fill="none"
+                  stroke={COLORS.primary}
+                  strokeWidth="2"
+                  strokeDasharray="4 2"
+                />
+                <text
+                  x={`${step.x}%`}
+                  y={`${step.y}%`}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill={COLORS.primary}
+                  fontSize="14"
+                  fontWeight="bold"
+                >
+                  ⚠
+                </text>
+              </g>
+            )}
+            <text
+              x={`${step.x}%`}
+              y={`${step.y + 15}%`}
+              textAnchor="middle"
+              fill={step.skipped ? COLORS.primary : COLORS.text}
+              fontSize="11"
+              fontFamily='"Fira Code", monospace'
+              style={{ textDecoration: step.skipped ? 'line-through' : 'none' }}
+            >
+              {step.label}
+            </text>
+            {step.skipped && (
+              <text
+                x={`${step.x}%`}
+                y={`${step.y + 25}%`}
+                textAnchor="middle"
+                fill={COLORS.primary}
+                fontSize="9"
+                fontFamily='"Fira Code", monospace'
+                fontWeight="600"
+              >
+                SKIPPED
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
 
   return (
     <section ref={ref} style={{ padding: 'clamp(4rem, 10vw, 8rem) 1.5rem', background: COLORS.surface }}>
@@ -226,93 +364,13 @@ function SequenceDiagramSection() {
                 fontSize: '13px',
                 fontWeight: 600,
                 color: COLORS.blueLight,
-                marginBottom: '2rem',
+                marginBottom: '1.5rem',
                 textAlign: 'center',
               }}
             >
               Expected Flow
             </div>
-            <div style={{ position: 'relative' }}>
-              {steps.map((step, i) => (
-                <div
-                  key={i}
-                  style={{
-                    position: 'relative',
-                    marginBottom: i < steps.length - 1 ? '2.5rem' : '0',
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
-                    transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      padding: '1rem 1.25rem',
-                      background: COLORS.bg,
-                      border: `1px solid ${COLORS.border}`,
-                      borderRadius: '8px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: COLORS.blueLight,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontFamily: '"Fira Code", monospace',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        color: COLORS.bg,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {i + 1}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '14px', fontWeight: 500, color: COLORS.text, marginBottom: '0.25rem' }}>
-                        {step.label}
-                      </div>
-                      <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.textFaint }}>
-                        {step.duration}
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '50%',
-                        background: COLORS.green,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-                        <path d="M1 5L4.5 8.5L11 1.5" stroke={COLORS.bg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '15px',
-                        top: '100%',
-                        width: '2px',
-                        height: '2.5rem',
-                        background: COLORS.border,
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
+            {renderDiagram(expectedFlow, true)}
           </div>
 
           {/* What Happened */}
@@ -323,109 +381,13 @@ function SequenceDiagramSection() {
                 fontSize: '13px',
                 fontWeight: 600,
                 color: COLORS.primary,
-                marginBottom: '2rem',
+                marginBottom: '1.5rem',
                 textAlign: 'center',
               }}
             >
               What Happened
             </div>
-            <div style={{ position: 'relative' }}>
-              {steps.map((step, i) => {
-                const isSkipped = step.name === 'check_fraud';
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      position: 'relative',
-                      marginBottom: i < steps.length - 1 ? '2.5rem' : '0',
-                      opacity: isVisible ? 1 : 0,
-                      transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
-                      transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1rem 1.25rem',
-                        background: isSkipped ? 'rgba(255, 107, 53, 0.05)' : COLORS.bg,
-                        border: `1px solid ${isSkipped ? COLORS.primary : COLORS.border}`,
-                        borderRadius: '8px',
-                        borderStyle: isSkipped ? 'dashed' : 'solid',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          background: isSkipped ? 'transparent' : COLORS.blueLight,
-                          border: isSkipped ? `2px dashed ${COLORS.primary}` : 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontFamily: '"Fira Code", monospace',
-                          fontSize: '13px',
-                          fontWeight: 600,
-                          color: isSkipped ? COLORS.primary : COLORS.bg,
-                          flexShrink: 0,
-                        }}
-                      >
-                        {isSkipped ? '⚠' : i + 1}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div
-                          style={{
-                            fontFamily: '"Fira Code", monospace',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            color: isSkipped ? COLORS.primary : COLORS.text,
-                            marginBottom: '0.25rem',
-                            textDecoration: isSkipped ? 'line-through' : 'none',
-                          }}
-                        >
-                          {step.label}
-                        </div>
-                        <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: isSkipped ? COLORS.primary : COLORS.textFaint }}>
-                          {isSkipped ? 'SKIPPED' : step.duration}
-                        </div>
-                      </div>
-                      {!isSkipped && (
-                        <div
-                          style={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            background: COLORS.green,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                          }}
-                        >
-                          <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-                            <path d="M1 5L4.5 8.5L11 1.5" stroke={COLORS.bg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    {i < steps.length - 1 && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '15px',
-                          top: '100%',
-                          width: '2px',
-                          height: '2.5rem',
-                          background: isSkipped || steps[i + 1].name === 'check_fraud' ? COLORS.primary : COLORS.border,
-                        }}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            {renderDiagram(actualFlow, false)}
           </div>
         </div>
 
