@@ -225,7 +225,7 @@ function TwoWorldsSection() {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
           }}
         >
-          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring catches the sequence violation — fraud check skipped before payment processing. It checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
+          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring catches the sequence violation - fraud check skipped before payment processing. It checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
         </p>
       </div>
     </section>
@@ -464,7 +464,7 @@ function ManifestSection() {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
           }}
         >
-          Intent, implementation, and verification — connected in a single durable artifact. Written before the agent runs. Verified after.
+          Intent, implementation, and verification - connected in a single durable artifact. Written before the agent runs. Verified after.
         </p>
 
         <div
@@ -672,7 +672,7 @@ function DecompositionSection() {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
           }}
         >
-          Traditional logs repeat the same text millions of times. Event templates store the structure once and extract only the variables — cutting bytes and surfacing what matters.
+          Traditional logs repeat the same text millions of times. Event templates store the structure once and extract only the variables - cutting bytes and surfacing what matters.
         </p>
 
         <div style={{ maxWidth: '720px', margin: '0 auto' }}>
@@ -779,17 +779,17 @@ function WhySection() {
           {[
             {
               title: 'Agents act autonomously',
-              text: 'They write code, run tools, make decisions. You need more than a trace — you need intent verification.',
+              text: 'They write code, run tools, make decisions. You need more than a trace - you need intent verification.',
               icon: <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />,
             },
             {
               title: 'Errors are non-obvious',
-              text: 'An agent can complete every step and still fail the task. Logs won't tell you. Intent verification will.',
+              text: `An agent can complete every step and still fail the task. Logs won't tell you. Intent verification will.`,
               icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></>,
             },
             {
               title: 'Teams need shared context',
-              text: 'A storyboard is readable by anyone — not just the engineer who knows what the spans mean.',
+              text: 'A storyboard is readable by anyone - not just the engineer who knows what the spans mean.',
               icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v-2" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /><circle cx="9" cy="7" r="4" /></>,
             },
             {
