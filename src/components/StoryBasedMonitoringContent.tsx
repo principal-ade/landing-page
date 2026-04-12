@@ -146,20 +146,20 @@ function HeroSection() {
             marginBottom: '1.5rem',
           }}
         >
-          Your agent deleted a task.
+          Tests passed. Dashboards green.
           <br />
-          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>Did it work?</span>
+          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>Payment processed without a fraud check.</span>
         </h1>
         <p
           style={{
             fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
             lineHeight: 1.7,
             color: COLORS.textMuted,
-            maxWidth: '540px',
+            maxWidth: '580px',
             margin: '0 auto 3rem',
           }}
         >
-          The log says <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. But the file system commit never fired. Traditional observability can't tell you the difference. Story-based monitoring can.
+          No alerts fired. Logs show <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>success</code>. Nobody noticed for six hours. The system did exactly what the code told it to do. It just wasn't what anyone <em style={{ fontStyle: 'italic', color: COLORS.text }}>intended</em>.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: COLORS.textFaint }}>Scroll to see</span>
@@ -225,7 +225,7 @@ function TwoWorldsSection() {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
           }}
         >
-          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring knows the task was never persisted — because it checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
+          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring catches the sequence violation — fraud check skipped before payment processing. It checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
         </p>
       </div>
     </section>
@@ -299,9 +299,9 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
         {[
-          { name: 'agent.plan_task', width: '70%', time: '24ms' },
-          { name: 'llm.generate', width: '85%', time: '312ms' },
-          { name: 'tool.delete_task', width: '40%', time: '18ms' },
+          { name: 'validate_cart', width: '45%', time: '12ms' },
+          { name: isStoryBased ? 'check_fraud' : 'process_payment', width: '75%', time: isStoryBased ? '0ms' : '234ms' },
+          { name: isStoryBased ? 'process_payment' : 'confirm_order', width: isStoryBased ? '85%' : '28%', time: isStoryBased ? '234ms' : '8ms' },
         ].map((span, i) => (
           <TraceSpan
             key={i}
@@ -310,35 +310,25 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
             time={span.time}
             delay={i * 200}
             isAnimated={isAnimated}
-            showCheck={isStoryBased}
+            showCheck={isStoryBased && span.name !== 'check_fraud'}
+            isSkipped={isStoryBased && span.name === 'check_fraud'}
           />
         ))}
         {isStoryBased && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '140px 1fr auto',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '0.5rem 0',
-              opacity: isAnimated ? 1 : 0,
-              transform: isAnimated ? 'translateX(0)' : 'translateX(-8px)',
-              transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
-            }}
-          >
-            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.primary, fontWeight: 500 }}>fs.commit</span>
-            <div style={{ height: '6px', borderRadius: '3px', background: 'repeating-linear-gradient(90deg, rgba(255, 107, 53, 0.3) 0px, rgba(255, 107, 53, 0.3) 4px, transparent 4px, transparent 8px)' }}>
-              <style>{`@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }`}</style>
-              <div style={{ animation: 'pulse 2s ease-in-out infinite' }} />
-            </div>
-            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '10px', fontWeight: 600, color: COLORS.primary, letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>EXPECTED — NEVER FIRED</span>
-          </div>
+          <TraceSpan
+            name="confirm_order"
+            width="28%"
+            time="8ms"
+            delay={600}
+            isAnimated={isAnimated}
+            showCheck={true}
+          />
         )}
         {!isStoryBased && (
           <TraceSpan
             name="api.response"
-            width="30%"
-            time="8ms"
+            width="20%"
+            time="4ms"
             delay={600}
             isAnimated={isAnimated}
             showCheck={false}
@@ -367,13 +357,37 @@ function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
             <path d="M5 8l2 2 4-4" stroke={COLORS.green} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           )}
         </svg>
-        <span>{isStoryBased ? 'Behavioral manifest violation: step "persist changes" missing' : '4 spans, 0 errors, 362ms total'}</span>
+        <span>{isStoryBased ? 'Sequence violation: fraud check required before payment processing' : '4 spans, 0 errors, 258ms total'}</span>
       </div>
     </div>
   );
 }
 
-function TraceSpan({ name, width, time, delay, isAnimated, showCheck }: { name: string; width: string; time?: string; delay: number; isAnimated: boolean; showCheck: boolean }) {
+function TraceSpan({ name, width, time, delay, isAnimated, showCheck, isSkipped }: { name: string; width: string; time?: string; delay: number; isAnimated: boolean; showCheck: boolean; isSkipped?: boolean }) {
+  if (isSkipped) {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: window.innerWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
+          alignItems: 'center',
+          gap: '0.75rem',
+          padding: '0.5rem 0',
+          opacity: isAnimated ? 1 : 0,
+          transform: isAnimated ? 'translateX(0)' : 'translateX(-8px)',
+          transition: `opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${delay + 200}ms, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${delay + 200}ms`,
+        }}
+      >
+        <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.primary, fontWeight: 500 }}>{name}</span>
+        <div style={{ height: '6px', borderRadius: '3px', background: 'repeating-linear-gradient(90deg, rgba(255, 107, 53, 0.3) 0px, rgba(255, 107, 53, 0.3) 4px, transparent 4px, transparent 8px)' }}>
+          <style>{`@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }`}</style>
+          <div style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+        </div>
+        <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '10px', fontWeight: 600, color: COLORS.primary, letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>SKIPPED</span>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -470,30 +484,32 @@ function ManifestSection() {
               <path d="M4 1h6l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V2a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.2" />
               <path d="M10 1v4h4" stroke="currentColor" strokeWidth="1.2" />
             </svg>
-            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.textMuted, fontWeight: 500 }}>backlog.manifest.yaml</span>
+            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.textMuted, fontWeight: 500 }}>checkout.manifest.yaml</span>
             <span style={{ marginLeft: 'auto', fontFamily: '"Fira Code", monospace', fontSize: '10px', letterSpacing: '0.06em', color: COLORS.primary, background: 'rgba(255, 107, 53, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>OTEL Behavioral Manifest</span>
           </div>
           <div style={{ padding: '1.5rem', overflowX: 'auto' }}>
             <pre style={{ margin: 0, fontFamily: '"Fira Code", monospace', fontSize: '13px', lineHeight: 1.75, color: COLORS.textMuted }}>
               <code>
-                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>story</span>: <span style={{ color: COLORS.green }}>"Delete task from backlog"</span>
+                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>story</span>: <span style={{ color: COLORS.green }}>"Process checkout with fraud check"</span>
                 {'\n\n'}
                 <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>intent</span>:{'\n'}
-                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>actor</span>: <span style={{ color: COLORS.green }}>"coding-agent"</span>{'\n'}
-                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>goal</span>: <span style={{ color: COLORS.green }}>"Remove completed task and persist changes"</span>
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>actor</span>: <span style={{ color: COLORS.green }}>"checkout-service"</span>{'\n'}
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>goal</span>: <span style={{ color: COLORS.green }}>"Validate cart, check fraud, process payment, confirm order"</span>
                 {'\n\n'}
                 <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>steps</span>:{'\n'}
-                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"plan"</span>{'\n'}
-                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"agent.plan_task span with task_id"</span>{'\n'}
-                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"execute"</span>{'\n'}
-                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"tool.delete_task span with status: ok"</span>{'\n'}
-                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"persist changes"</span>{'\n'}
-                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"fs.commit span with file_path"</span>{'\n'}
-                {'    '}<span style={{ color: COLORS.textFaint, fontStyle: 'italic' }}># ^ This is the step traditional monitoring misses</span>
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"validate cart"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"validate_cart span with items"</span>{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"check fraud"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"check_fraud span before process_payment"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.textFaint, fontStyle: 'italic' }}># ^ This is the step traditional monitoring misses</span>{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"process payment"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"process_payment span with amount"</span>{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"confirm order"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"confirm_order span with order_id"</span>
                 {'\n\n'}
                 <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>verification</span>:{'\n'}
                 {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>mode</span>: <span style={{ color: COLORS.green }}>"strict"</span>{'\n'}
-                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>on_missing_step</span>: <span style={{ color: COLORS.green }}>"alert"</span>
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>on_sequence_violation</span>: <span style={{ color: COLORS.green }}>"alert"</span>
               </code>
             </pre>
           </div>
