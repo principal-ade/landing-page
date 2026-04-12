@@ -525,9 +525,9 @@ function ManifestSection() {
           }}
         >
           {[
-            { num: '01', title: 'Intent', text: 'The developer declares what the agent should accomplish — before it runs. This becomes ground truth.' },
+            { num: '01', title: 'Intent', text: 'The developer declares what the agent should accomplish - before it runs. This becomes ground truth.' },
             { num: '02', title: 'Implementation', text: 'Standard OTEL spans capture what actually happened: which tools ran, in what order, with what results.' },
-            { num: '03', title: 'Verification', text: 'Telemetry is compared to the manifest. A storyboard shows what matched — and what didn't.' },
+            { num: '03', title: 'Verification', text: 'Telemetry is compared to the manifest. A storyboard shows what matched - and what didn\'t.' },
           ].map((pillar, i) => (
             <div key={i} style={{ padding: '1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '12px' }}>
               <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.primary, marginBottom: '0.75rem', fontWeight: 600 }}>{pillar.num}</div>
