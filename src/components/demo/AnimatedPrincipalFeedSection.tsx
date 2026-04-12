@@ -226,7 +226,7 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
               stroke={ORANGE}
               style={{ flexShrink: 0 }}
             />{' '}
-            of seeing progress.
+            of following the work.
           </h2>
           <p
             style={{
@@ -251,7 +251,7 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
               margin: '0 auto',
             }}
           >
-            Track every change from humans and agents in real-time
+            A live stream of how software evolves. Across your repos, your team, and the builders shaping the code you depend on. Even the non-human ones.
           </p>
         </motion.div>
 

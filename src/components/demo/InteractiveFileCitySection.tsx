@@ -167,7 +167,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
               stroke={ORANGE}
               style={{ flexShrink: 0 }}
             />{' '}
-            of understanding.
+            of seeing the whole thing.
           </h2>
           <p
             style={{
@@ -192,7 +192,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
               margin: '0 auto',
             }}
           >
-            See your entire codebase as a living, visual map
+            Your entire codebase, rendered as a living map. Watch it light up when something changes.
           </p>
         </motion.div>
 
