@@ -178,6 +178,246 @@ function HeroSection() {
   );
 }
 
+// Sequence Diagram Section
+function SequenceDiagramSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  const swimlanes = ['Cart', 'Fraud Service', 'Payment', 'Order'];
+
+  const expectedFlow = [
+    { swimlane: 0, label: 'Validate Cart', x: 15, y: 50 },
+    { swimlane: 1, label: 'Check Fraud', x: 40, y: 50 },
+    { swimlane: 2, label: 'Process Payment', x: 65, y: 50 },
+    { swimlane: 3, label: 'Confirm Order', x: 90, y: 50 },
+  ];
+
+  const actualFlow = [
+    { swimlane: 0, label: 'Validate Cart', x: 15, y: 50 },
+    { swimlane: 1, label: 'Check Fraud', x: 40, y: 50, skipped: true },
+    { swimlane: 2, label: 'Process Payment', x: 65, y: 50 },
+    { swimlane: 3, label: 'Confirm Order', x: 90, y: 50 },
+  ];
+
+  const renderDiagram = (flow: typeof expectedFlow, isExpected: boolean) => (
+    <div style={{ position: 'relative', background: COLORS.bg, border: `1px solid ${COLORS.border}`, borderRadius: '12px', padding: '2rem 1rem', height: '280px' }}>
+      {/* Grid lines */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+        <defs>
+          <pattern id={`grid-${isExpected ? 'expected' : 'actual'}`} width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke={COLORS.border} strokeWidth="0.5" opacity="0.3" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#grid-${isExpected ? 'expected' : 'actual'})`} />
+      </svg>
+
+      {/* Swimlane labels */}
+      <div style={{ position: 'absolute', top: '1rem', left: 0, right: 0, display: 'flex', justifyContent: 'space-around', paddingLeft: '1rem', paddingRight: '1rem' }}>
+        {swimlanes.map((lane, i) => (
+          <div
+            key={i}
+            style={{
+              fontFamily: '"Fira Code", monospace',
+              fontSize: '11px',
+              fontWeight: 600,
+              color: COLORS.textFaint,
+              textAlign: 'center',
+              opacity: isVisible ? 1 : 0,
+              transition: `opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${0.2 + i * 0.05}s`,
+            }}
+          >
+            {lane}
+          </div>
+        ))}
+      </div>
+
+      {/* Flow visualization */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 100 100" preserveAspectRatio="none">
+        {flow.map((step, i) => {
+          if (i < flow.length - 1) {
+            const nextStep = flow[i + 1];
+            const x1 = step.x;
+            const x2 = nextStep.x;
+            const y = step.y;
+
+            // Create flowing S-curve
+            const controlY1 = y - 8;
+            const controlY2 = y + 8;
+            const midX = (x1 + x2) / 2;
+
+            const isSkippedConnection = step.skipped || nextStep.skipped;
+
+            return (
+              <path
+                key={`line-${i}`}
+                d={`M ${x1} ${y} C ${midX - 5} ${controlY1}, ${midX + 5} ${controlY2}, ${x2} ${y}`}
+                stroke={isSkippedConnection ? COLORS.primary : COLORS.blueLight}
+                strokeWidth="0.4"
+                fill="none"
+                strokeDasharray={isSkippedConnection ? "1 0.5" : "none"}
+                vectorEffect="non-scaling-stroke"
+                style={{
+                  opacity: isVisible ? (isSkippedConnection ? 0.6 : 1) : 0,
+                  transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.4 + i * 0.1}s`,
+                }}
+              />
+            );
+          }
+          return null;
+        })}
+
+        {flow.map((step, i) => (
+          <g
+            key={i}
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
+            }}
+          >
+            <circle
+              cx={`${step.x}%`}
+              cy={`${step.y}%`}
+              r={step.skipped ? "0" : "8"}
+              fill={COLORS.blueLight}
+            />
+            {step.skipped && (
+              <g>
+                <circle
+                  cx={`${step.x}%`}
+                  cy={`${step.y}%`}
+                  r="8"
+                  fill="none"
+                  stroke={COLORS.primary}
+                  strokeWidth="2"
+                  strokeDasharray="4 2"
+                />
+                <text
+                  x={`${step.x}%`}
+                  y={`${step.y}%`}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill={COLORS.primary}
+                  fontSize="14"
+                  fontWeight="bold"
+                >
+                  ⚠
+                </text>
+              </g>
+            )}
+            <text
+              x={`${step.x}%`}
+              y={`${step.y + 15}%`}
+              textAnchor="middle"
+              fill={step.skipped ? COLORS.primary : COLORS.text}
+              fontSize="11"
+              fontFamily='"Fira Code", monospace'
+              style={{ textDecoration: step.skipped ? 'line-through' : 'none' }}
+            >
+              {step.label}
+            </text>
+            {step.skipped && (
+              <text
+                x={`${step.x}%`}
+                y={`${step.y + 25}%`}
+                textAnchor="middle"
+                fill={COLORS.primary}
+                fontSize="9"
+                fontFamily='"Fira Code", monospace'
+                fontWeight="600"
+              >
+                SKIPPED
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 10vw, 8rem) 1.5rem', background: COLORS.surface }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '3rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          The Sequence Violation
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
+            gap: '3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          {/* Expected Flow */}
+          <div>
+            <div
+              style={{
+                fontFamily: '"Fira Code", monospace',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: COLORS.blueLight,
+                marginBottom: '1.5rem',
+                textAlign: 'center',
+              }}
+            >
+              Expected Flow
+            </div>
+            {renderDiagram(expectedFlow, true)}
+          </div>
+
+          {/* What Happened */}
+          <div>
+            <div
+              style={{
+                fontFamily: '"Fira Code", monospace',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: COLORS.primary,
+                marginBottom: '1.5rem',
+                textAlign: 'center',
+              }}
+            >
+              What Happened
+            </div>
+            {renderDiagram(actualFlow, false)}
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: '3rem',
+            padding: '1.5rem',
+            background: `linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%)`,
+            border: `1px solid ${COLORS.primary}`,
+            borderRadius: '12px',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
+          }}
+        >
+          <p style={{ fontSize: '15px', lineHeight: 1.6, color: COLORS.text, margin: 0 }}>
+            All spans returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.9em', background: 'rgba(255, 107, 53, 0.15)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px' }}>200 OK</code>.
+            Traditional monitoring only checks <em>if steps completed</em>. Story-based monitoring verifies <em>the sequence matches intent</em>.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Two Worlds Section
 function TwoWorldsSection() {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
