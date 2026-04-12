@@ -209,7 +209,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               margin: '0 auto',
             }}
           >
-            The intent is already in your code. The telemetry shows whether it held.
+            The intent is already in your code. The story-based telemetry shows whether it held.
           </p>
         </motion.div>
 
