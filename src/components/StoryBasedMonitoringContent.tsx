@@ -94,6 +94,7 @@ export function StoryBasedMonitoringContent() {
   return (
     <div style={{ background: COLORS.bg, minHeight: '100vh' }}>
       <HeroSection />
+      <SequenceDiagramSection />
       <TwoWorldsSection />
       <ManifestSection />
       <DecompositionSection />
@@ -146,7 +147,9 @@ function HeroSection() {
             marginBottom: '1.5rem',
           }}
         >
-          Tests passed. Dashboards green.
+          Tests passed.
+          <br />
+          Dashboards green.
           <br />
           <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>Payment processed without a fraud check.</span>
         </h1>
@@ -170,6 +173,278 @@ function HeroSection() {
               <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
             </circle>
           </svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Sequence Diagram Section
+function SequenceDiagramSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  const steps = [
+    { name: 'validate_cart', label: 'Validate Cart', duration: '12ms' },
+    { name: 'check_fraud', label: 'Check Fraud', duration: '156ms' },
+    { name: 'process_payment', label: 'Process Payment', duration: '234ms' },
+    { name: 'confirm_order', label: 'Confirm Order', duration: '8ms' },
+  ];
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 10vw, 8rem) 1.5rem', background: COLORS.surface }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '3rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          The Sequence Violation
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
+            gap: '3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          {/* Expected Flow */}
+          <div>
+            <div
+              style={{
+                fontFamily: '"Fira Code", monospace',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: COLORS.blueLight,
+                marginBottom: '2rem',
+                textAlign: 'center',
+              }}
+            >
+              Expected Flow
+            </div>
+            <div style={{ position: 'relative' }}>
+              {steps.map((step, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: 'relative',
+                    marginBottom: i < steps.length - 1 ? '2.5rem' : '0',
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      padding: '1rem 1.25rem',
+                      background: COLORS.bg,
+                      border: `1px solid ${COLORS.border}`,
+                      borderRadius: '8px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: COLORS.blueLight,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: '"Fira Code", monospace',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: COLORS.bg,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {i + 1}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '14px', fontWeight: 500, color: COLORS.text, marginBottom: '0.25rem' }}>
+                        {step.label}
+                      </div>
+                      <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.textFaint }}>
+                        {step.duration}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        background: COLORS.green,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                        <path d="M1 5L4.5 8.5L11 1.5" stroke={COLORS.bg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  {i < steps.length - 1 && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '15px',
+                        top: '100%',
+                        width: '2px',
+                        height: '2.5rem',
+                        background: COLORS.border,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* What Happened */}
+          <div>
+            <div
+              style={{
+                fontFamily: '"Fira Code", monospace',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: COLORS.primary,
+                marginBottom: '2rem',
+                textAlign: 'center',
+              }}
+            >
+              What Happened
+            </div>
+            <div style={{ position: 'relative' }}>
+              {steps.map((step, i) => {
+                const isSkipped = step.name === 'check_fraud';
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      position: 'relative',
+                      marginBottom: i < steps.length - 1 ? '2.5rem' : '0',
+                      opacity: isVisible ? 1 : 0,
+                      transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                      transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.3 + i * 0.1}s`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        padding: '1rem 1.25rem',
+                        background: isSkipped ? 'rgba(255, 107, 53, 0.05)' : COLORS.bg,
+                        border: `1px solid ${isSkipped ? COLORS.primary : COLORS.border}`,
+                        borderRadius: '8px',
+                        borderStyle: isSkipped ? 'dashed' : 'solid',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: isSkipped ? 'transparent' : COLORS.blueLight,
+                          border: isSkipped ? `2px dashed ${COLORS.primary}` : 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontFamily: '"Fira Code", monospace',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          color: isSkipped ? COLORS.primary : COLORS.bg,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isSkipped ? '⚠' : i + 1}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            fontFamily: '"Fira Code", monospace',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            color: isSkipped ? COLORS.primary : COLORS.text,
+                            marginBottom: '0.25rem',
+                            textDecoration: isSkipped ? 'line-through' : 'none',
+                          }}
+                        >
+                          {step.label}
+                        </div>
+                        <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: isSkipped ? COLORS.primary : COLORS.textFaint }}>
+                          {isSkipped ? 'SKIPPED' : step.duration}
+                        </div>
+                      </div>
+                      {!isSkipped && (
+                        <div
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            background: COLORS.green,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                            <path d="M1 5L4.5 8.5L11 1.5" stroke={COLORS.bg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {i < steps.length - 1 && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: '15px',
+                          top: '100%',
+                          width: '2px',
+                          height: '2.5rem',
+                          background: isSkipped || steps[i + 1].name === 'check_fraud' ? COLORS.primary : COLORS.border,
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: '3rem',
+            padding: '1.5rem',
+            background: `linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%)`,
+            border: `1px solid ${COLORS.primary}`,
+            borderRadius: '12px',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
+          }}
+        >
+          <p style={{ fontSize: '15px', lineHeight: 1.6, color: COLORS.text, margin: 0 }}>
+            All spans returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.9em', background: 'rgba(255, 107, 53, 0.15)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px' }}>200 OK</code>.
+            Traditional monitoring only checks <em>if steps completed</em>. Story-based monitoring verifies <em>the sequence matches intent</em>.
+          </p>
         </div>
       </div>
     </section>
@@ -794,7 +1069,7 @@ function WhySection() {
             },
             {
               title: 'The gap is structural',
-              text: 'No existing tool was built to answer "did it go right." That's the missing primitive in observability.',
+              text: `No existing tool was built to answer "did it go right." That's the missing primitive in observability.`,
               icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
             },
           ].map((card, i) => (
