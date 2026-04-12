@@ -234,24 +234,29 @@ function SequenceDiagramSection() {
       {/* Flow visualization */}
       <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
         {flow.map((step, i) => {
-          if (i < flow.length - 1 && !step.skipped && !flow[i + 1].skipped) {
+          if (i < flow.length - 1) {
             const nextStep = flow[i + 1];
-            const x1 = `${step.x}%`;
-            const y1 = `${step.y}%`;
-            const x2 = `${nextStep.x}%`;
-            const y2 = `${nextStep.y}%`;
-            const midX = `${(step.x + nextStep.x) / 2}%`;
-            const controlY = `${step.y - 10}%`;
+            const x1Percent = step.x;
+            const x2Percent = nextStep.x;
+            const yPercent = step.y;
+
+            // Create flowing S-curve
+            const controlY1 = yPercent - 8;
+            const controlY2 = yPercent + 8;
+            const midX = (x1Percent + x2Percent) / 2;
+
+            const isSkippedConnection = step.skipped || nextStep.skipped;
 
             return (
               <path
                 key={`line-${i}`}
-                d={`M ${x1} ${y1} Q ${midX} ${controlY}, ${x2} ${y2}`}
-                stroke={COLORS.blueLight}
-                strokeWidth="2"
+                d={`M ${x1Percent}% ${yPercent}% C ${midX - 5}% ${controlY1}%, ${midX + 5}% ${controlY2}%, ${x2Percent}% ${yPercent}%`}
+                stroke={isSkippedConnection ? COLORS.primary : COLORS.blueLight}
+                strokeWidth="2.5"
                 fill="none"
+                strokeDasharray={isSkippedConnection ? "6 4" : "none"}
                 style={{
-                  opacity: isVisible ? 1 : 0,
+                  opacity: isVisible ? (isSkippedConnection ? 0.6 : 1) : 0,
                   transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.4 + i * 0.1}s`,
                 }}
               />
