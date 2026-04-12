@@ -16,6 +16,13 @@ import {
   observabilityTourSteps,
 } from './tour';
 
+// Color palette matching "For the Love of Building" animated page
+const NAVY = '#1a2842';
+const BLUE_DARK = '#2d4563';
+const BLUE_MID = '#4a6fa5';
+const BLUE_LIGHT = '#6b9bd1';
+const ORANGE = '#ff6b35';
+
 // Dynamic imports for panel components
 const KanbanPanelWrapper = dynamic(
   () => import('./KanbanPanelWrapper'),
@@ -27,7 +34,7 @@ const KanbanPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#666',
+        color: BLUE_LIGHT,
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Kanban Panel...
@@ -46,7 +53,7 @@ const TraceListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#E4C04A',
+        color: BLUE_LIGHT,
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Trace Panel...
@@ -65,7 +72,7 @@ const StoryboardListPanelWrapper = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#E4C04A',
+        color: BLUE_LIGHT,
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Storyboards...
@@ -84,7 +91,7 @@ const WaterfallTraceView = dynamic(
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#666',
+        color: BLUE_LIGHT,
         fontFamily: 'Inter, sans-serif',
       }}>
         Loading Trace View...
@@ -153,29 +160,29 @@ function DemoViewInner({
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: theme.colors.primary,
-          bgColor: `${theme.colors.primary}1A`,
+          color: ORANGE,
+          bgColor: NAVY,
         };
       case 'kanban':
         return {
           label: 'Live App',
           sublabel: 'Backlog.md',
-          color: theme.colors.primary,
-          bgColor: `${theme.colors.primary}1A`,
+          color: ORANGE,
+          bgColor: NAVY,
         };
       case 'traditional-monitoring':
         return {
           label: 'Traditional Monitoring',
           sublabel: 'Traces',
-          color: theme.colors.primary,
-          bgColor: `${theme.colors.primary}1A`,
+          color: ORANGE,
+          bgColor: NAVY,
         };
       case 'story-monitoring':
         return {
           label: 'Principal AI',
           sublabel: 'Story-Based Monitoring',
-          color: theme.colors.primary,
-          bgColor: `${theme.colors.primary}1A`,
+          color: ORANGE,
+          bgColor: NAVY,
         };
       default:
         return null;
@@ -261,8 +268,8 @@ function DemoViewInner({
                     onClick={() => setActiveTab(tab.id)}
                     style={{
                       padding: '6px 16px',
-                      background: activeTab === tab.id ? `${theme.colors.primary}33` : 'transparent',
-                      color: activeTab === tab.id ? theme.colors.primary : theme.colors.textMuted,
+                      background: activeTab === tab.id ? `${ORANGE}33` : 'transparent',
+                      color: activeTab === tab.id ? ORANGE : BLUE_LIGHT,
                       border: 'none',
                       borderRadius: '6px',
                       fontFamily: 'Inter, sans-serif',
@@ -274,14 +281,14 @@ function DemoViewInner({
                     }}
                     onMouseEnter={(e) => {
                       if (activeTab !== tab.id) {
-                        e.currentTarget.style.background = `${theme.colors.primary}1A`;
-                        e.currentTarget.style.color = theme.colors.text;
+                        e.currentTarget.style.background = `${ORANGE}1A`;
+                        e.currentTarget.style.color = '#ffffff';
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (activeTab !== tab.id) {
                         e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = theme.colors.textMuted;
+                        e.currentTarget.style.color = BLUE_LIGHT;
                       }
                     }}
                   >
@@ -300,8 +307,8 @@ function DemoViewInner({
                 style={{
                   padding: '6px 12px',
                   background: 'transparent',
-                  color: 'rgba(255, 255, 255, 0.5)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: BLUE_LIGHT,
+                  border: `1px solid ${BLUE_DARK}`,
                   borderRadius: '6px',
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '12px',
@@ -311,12 +318,12 @@ function DemoViewInner({
                   whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                  e.currentTarget.style.borderColor = ORANGE;
+                  e.currentTarget.style.color = ORANGE;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)';
+                  e.currentTarget.style.borderColor = BLUE_DARK;
+                  e.currentTarget.style.color = BLUE_LIGHT;
                 }}
               >
                 Restart Tour
@@ -498,9 +505,9 @@ function IntroScreen() {
           <Logo
             width={100}
             height={100}
-            color={theme.colors.accent}
-            particleColor={theme.colors.primary}
-            letterColor={theme.colors.text}
+            color={ORANGE}
+            particleColor={ORANGE}
+            letterColor={BLUE_LIGHT}
             opacity={0.9}
           />
         </div>
@@ -563,9 +570,9 @@ function IntroScreen() {
               padding: '14px 28px',
               minWidth: '120px',
               background: 'transparent',
-              border: `1px solid ${theme.colors.border}`,
+              border: `1px solid ${BLUE_DARK}`,
               borderRadius: '10px',
-              color: theme.colors.textSecondary,
+              color: BLUE_LIGHT,
               fontSize: '16px',
               fontWeight: 500,
               fontFamily: 'Inter, sans-serif',
@@ -573,12 +580,12 @@ function IntroScreen() {
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.colors.primary;
-              e.currentTarget.style.color = theme.colors.text;
+              e.currentTarget.style.borderColor = ORANGE;
+              e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.colors.border;
-              e.currentTarget.style.color = theme.colors.textSecondary;
+              e.currentTarget.style.borderColor = BLUE_DARK;
+              e.currentTarget.style.color = BLUE_LIGHT;
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -599,24 +606,24 @@ function IntroScreen() {
             gap: '8px',
             padding: '14px 28px',
             minWidth: '120px',
-            background: theme.colors.primary,
+            background: ORANGE,
             border: 'none',
             borderRadius: '10px',
-            color: theme.colors.textOnPrimary,
+            color: '#ffffff',
             fontSize: '16px',
             fontWeight: 600,
             fontFamily: 'Inter, sans-serif',
             cursor: 'pointer',
-            boxShadow: `0 4px 20px ${theme.colors.primary}66`,
+            boxShadow: `0 4px 20px ${ORANGE}66`,
             transition: 'all 0.2s ease',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = `0 6px 24px ${theme.colors.primary}80`;
+            e.currentTarget.style.boxShadow = `0 6px 24px ${ORANGE}80`;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = `0 4px 20px ${theme.colors.primary}66`;
+            e.currentTarget.style.boxShadow = `0 4px 20px ${ORANGE}66`;
           }}
         >
           Start
