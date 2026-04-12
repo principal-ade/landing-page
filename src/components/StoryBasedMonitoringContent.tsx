@@ -1,341 +1,909 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '@principal-ade/industry-theme';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 
-export const StoryBasedMonitoringContent: React.FC = () => {
-  const { theme } = useTheme();
-  const [isMobile, setIsMobile] = useState(false);
+// Ice Tangerine Color Palette
+const COLORS = {
+  bg: '#0c1225',
+  surface: '#111a32',
+  surface2: '#162040',
+  border: 'rgba(107, 155, 209, 0.15)',
+  borderStrong: 'rgba(107, 155, 209, 0.25)',
+  text: '#e2e8f0',
+  textMuted: '#8899b4',
+  textFaint: '#4a5f80',
+  primary: '#ff6b35',
+  primaryGlow: 'rgba(255, 107, 53, 0.15)',
+  secondary: '#0893d2',
+  green: '#4ade80',
+  red: '#ef4444',
+  blueLight: '#6b9bd1',
+  navy: '#1a2842',
+};
+
+const LOG_EXAMPLES = [
+  {
+    fullLog: 'Payment declined: insufficient funds. Customer cust_8x9k2m attempted $299.99 charge but account balance is $45.20. Retry recommended with alternate payment method.',
+    template: 'Payment declined: {reason}. Customer {id} attempted ${amount} charge but account balance is ${balance}. Retry recommended with alternate payment method.',
+    logBytes: 175,
+    eventBytes: 68,
+    templateBytes: 140,
+    variables: [
+      { key: 'reason', value: 'insufficient funds', placeholder: '{reason}', color: COLORS.red },
+      { key: 'id', value: 'cust_8x9k2m', placeholder: '{id}', color: '#00C2FF' },
+      { key: 'amount', value: '299.99', placeholder: '{amount}', color: COLORS.green },
+      { key: 'balance', value: '45.20', placeholder: '{balance}', color: '#f59e0b' },
+    ],
+  },
+  {
+    fullLog: 'Payment declined: card expired. Customer cust_3p7n1q attempted $149.50 charge but account balance is $12.80. Retry recommended with alternate payment method.',
+    template: 'Payment declined: {reason}. Customer {id} attempted ${amount} charge but account balance is ${balance}. Retry recommended with alternate payment method.',
+    logBytes: 170,
+    eventBytes: 66,
+    templateBytes: 140,
+    variables: [
+      { key: 'reason', value: 'card expired', placeholder: '{reason}', color: COLORS.red },
+      { key: 'id', value: 'cust_3p7n1q', placeholder: '{id}', color: '#00C2FF' },
+      { key: 'amount', value: '149.50', placeholder: '{amount}', color: COLORS.green },
+      { key: 'balance', value: '12.80', placeholder: '{balance}', color: '#f59e0b' },
+    ],
+  },
+  {
+    fullLog: 'Payment declined: fraud detected. Customer cust_1m5r8k attempted $89.99 charge but account balance is $5.00. Retry recommended with alternate payment method.',
+    template: 'Payment declined: {reason}. Customer {id} attempted ${amount} charge but account balance is ${balance}. Retry recommended with alternate payment method.',
+    logBytes: 168,
+    eventBytes: 64,
+    templateBytes: 140,
+    variables: [
+      { key: 'reason', value: 'fraud detected', placeholder: '{reason}', color: COLORS.red },
+      { key: 'id', value: 'cust_1m5r8k', placeholder: '{id}', color: '#00C2FF' },
+      { key: 'amount', value: '89.99', placeholder: '{amount}', color: COLORS.green },
+      { key: 'balance', value: '5.00', placeholder: '{balance}', color: '#f59e0b' },
+    ],
+  },
+];
+
+// Fade-in scroll animation hook
+function useFadeInOnScroll(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 560);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
-  const styles = {
-    page: {
-      maxWidth: '760px',
-      margin: '0 auto',
-      padding: '5rem 2rem 6rem',
-      background: '#EFF6FB',
-      minHeight: '100vh',
-    },
-    eyebrow: {
-      fontFamily: theme.fonts.mono,
-      fontSize: '11px',
-      letterSpacing: '0.12em',
-      textTransform: 'uppercase' as const,
-      color: theme.colors.primary,
-      marginBottom: '1.25rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-    },
-    eyebrowLine: {
-      display: 'inline-block',
-      width: '20px',
-      height: '1px',
-      background: theme.colors.primary,
-    },
-    h1: {
-      fontFamily: theme.fonts.serif,
-      fontSize: 'clamp(36px, 6vw, 56px)',
-      fontWeight: 400,
-      lineHeight: 1.1,
-      color: theme.colors.text,
-      marginBottom: '1.5rem',
-      letterSpacing: '-0.01em',
-    },
-    h1Em: {
-      fontStyle: 'italic',
-      color: theme.colors.primary,
-    },
-    lede: {
-      fontSize: '18px',
-      lineHeight: 1.65,
-      color: theme.colors.textSecondary,
-      maxWidth: '560px',
-      marginBottom: '3.5rem',
-      fontWeight: 300,
-    },
-    divider: {
-      border: 'none',
-      borderTop: `1px solid ${theme.colors.border}`,
-      margin: '3rem 0',
-    },
-    sectionLabel: {
-      fontFamily: theme.fonts.mono,
-      fontSize: '10px',
-      letterSpacing: '0.14em',
-      textTransform: 'uppercase' as const,
-      color: theme.colors.textMuted,
-      marginBottom: '1.5rem',
-    },
-    contrastPair: {
-      display: 'grid',
-      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-      gap: '1px',
-      background: theme.colors.border,
-      borderRadius: '12px',
-      overflow: 'hidden',
-      marginBottom: '1.75rem',
-      border: `1px solid ${theme.colors.border}`,
-    },
-    contrastCard: {
-      background: theme.colors.surface,
-      padding: '1.5rem',
-    },
-    contrastCardRight: {
-      background: theme.colors.accent,
-      padding: '1.5rem',
-    },
-    cardLabel: {
-      fontFamily: theme.fonts.mono,
-      fontSize: '10px',
-      letterSpacing: '0.1em',
-      textTransform: 'uppercase' as const,
-      color: theme.colors.textMuted,
-      marginBottom: '0.75rem',
-    },
-    cardLabelRight: {
-      fontFamily: theme.fonts.mono,
-      fontSize: '10px',
-      letterSpacing: '0.1em',
-      textTransform: 'uppercase' as const,
-      color: '#FFFFFF',
-      marginBottom: '0.75rem',
-    },
-    cardText: {
-      fontSize: '14px',
-      lineHeight: 1.65,
-      color: theme.colors.textSecondary,
-    },
-    cardTextRight: {
-      fontSize: '14px',
-      lineHeight: 1.65,
-      color: '#FFFFFF',
-    },
-    prose: {
-      fontSize: '15px',
-      lineHeight: 1.7,
-      color: theme.colors.textSecondary,
-      marginBottom: '2rem',
-    },
-    steps: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      marginBottom: '2rem',
-    },
-    step: {
-      display: 'flex',
-      gap: '20px',
-      padding: '1.5rem 0',
-      borderBottom: `1px solid ${theme.colors.border}`,
-      position: 'relative' as const,
-    },
-    stepLast: {
-      borderBottom: 'none',
-    },
-    stepNum: {
-      fontFamily: theme.fonts.mono,
-      fontSize: '11px',
-      fontWeight: 500,
-      color: theme.colors.primary,
-      width: '24px',
-      paddingTop: '3px',
-      flexShrink: 0,
-    },
-    stepH3: {
-      fontSize: '15px',
-      fontWeight: 500,
-      color: theme.colors.text,
-      marginBottom: '5px',
-      fontFamily: theme.fonts.body,
-    },
-    stepP: {
-      fontSize: '14px',
-      lineHeight: 1.65,
-      color: theme.colors.textSecondary,
-    },
-    callout: {
-      background: theme.colors.surface,
-      border: `1px solid ${theme.colors.border}`,
-      borderLeft: `3px solid ${theme.colors.primary}`,
-      borderRadius: '0 10px 10px 0',
-      padding: '1.25rem 1.5rem',
-      marginBottom: '2rem',
-    },
-    calloutP: {
-      fontSize: '15px',
-      lineHeight: 1.65,
-      color: theme.colors.text,
-    },
-    calloutStrong: {
-      fontWeight: 500,
-      color: theme.colors.primary,
-    },
-    cardGrid: {
-      display: 'grid',
-      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-      gap: '10px',
-      marginBottom: '2rem',
-    },
-    miniCard: {
-      background: theme.colors.surface,
-      border: `1px solid ${theme.colors.border}`,
-      borderRadius: '10px',
-      padding: '1.25rem',
-      transition: 'border-color 0.15s ease',
-    },
-    miniCardH4: {
-      fontSize: '14px',
-      fontWeight: 500,
-      color: theme.colors.text,
-      marginBottom: '6px',
-      fontFamily: theme.fonts.body,
-    },
-    miniCardP: {
-      fontSize: '13px',
-      lineHeight: 1.55,
-      color: theme.colors.textSecondary,
-    },
-    footerLine: {
-      fontFamily: theme.fonts.serif,
-      fontStyle: 'italic',
-      fontSize: '18px',
-      color: theme.colors.textSecondary,
-      textAlign: 'center' as const,
-      paddingTop: '2rem',
-    },
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
+
+export function StoryBasedMonitoringContent() {
+  return (
+    <div style={{ background: COLORS.bg, minHeight: '100vh' }}>
+      <HeroSection />
+      <TwoWorldsSection />
+      <ManifestSection />
+      <DecompositionSection />
+      <WhySection />
+      <CTASection />
+    </div>
+  );
+}
+
+// Hero Section
+function HeroSection() {
+  return (
+    <section
+      style={{
+        minHeight: '100dvh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'clamp(6rem, 20vw, 9rem) 1.5rem 4rem',
+        position: 'relative',
+        overflow: 'hidden',
+        background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${COLORS.primaryGlow} 0%, transparent 60%), ${COLORS.bg}`,
+      }}
+    >
+      <div style={{ maxWidth: '720px', textAlign: 'center' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: COLORS.primary,
+            marginBottom: '1.5rem',
+          }}
+        >
+          <span style={{ display: 'inline-block', width: '24px', height: '1px', background: COLORS.primary }} />
+          <span>Story-Based Monitoring</span>
+        </div>
+        <h1
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2.5rem, 1rem + 4vw, 5rem)',
+            fontWeight: 700,
+            lineHeight: 1.05,
+            letterSpacing: '-0.03em',
+            color: COLORS.text,
+            marginBottom: '1.5rem',
+          }}
+        >
+          Your agent deleted a task.
+          <br />
+          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>Did it work?</span>
+        </h1>
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            maxWidth: '540px',
+            margin: '0 auto 3rem',
+          }}
+        >
+          The log says <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. But the file system commit never fired. Traditional observability can't tell you the difference. Story-based monitoring can.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: COLORS.textFaint }}>Scroll to see</span>
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+            <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
+            <circle cx="8" cy="7" r="2" fill="currentColor">
+              <animate attributeName="cy" values="7;16;7" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Two Worlds Section
+function TwoWorldsSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: COLORS.bg }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          The same trace. Two interpretations.
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
+            gap: '1.5rem',
+            marginBottom: '2rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          <TracePanel type="traditional" />
+          <TracePanel type="story-based" />
+        </div>
+
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            maxWidth: '660px',
+            margin: '0 auto',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+          }}
+        >
+          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring knows the task was never persisted — because it checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function TracePanel({ type }: { type: 'traditional' | 'story-based' }) {
+  const [isAnimated, setIsAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsAnimated(true), type === 'story-based' ? 200 : 0);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [type]);
+
+  const isStoryBased = type === 'story-based';
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        background: COLORS.surface,
+        border: `1px solid ${isStoryBased ? 'rgba(255, 107, 53, 0.25)' : COLORS.border}`,
+        borderRadius: '16px',
+        padding: '1.5rem',
+        boxShadow: isStoryBased ? '0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 40px rgba(255, 107, 53, 0.08)' : '0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+        <span
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '10px',
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            padding: '0.25rem 0.75rem',
+            borderRadius: '999px',
+            background: isStoryBased ? 'rgba(255, 107, 53, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            color: isStoryBased ? COLORS.primary : COLORS.textMuted,
+            border: `1px solid ${isStoryBased ? 'rgba(255, 107, 53, 0.25)' : 'rgba(239, 68, 68, 0.2)'}`,
+          }}
+        >
+          {isStoryBased ? 'Story-Based Monitoring' : 'Traditional Monitoring'}
+        </span>
+        <span
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '10px',
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            color: isStoryBased ? COLORS.primary : COLORS.green,
+          }}
+        >
+          {isStoryBased ? 'VIOLATION' : 'ALL CLEAR'}
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+        {[
+          { name: 'agent.plan_task', width: '70%', time: '24ms' },
+          { name: 'llm.generate', width: '85%', time: '312ms' },
+          { name: 'tool.delete_task', width: '40%', time: '18ms' },
+        ].map((span, i) => (
+          <TraceSpan
+            key={i}
+            name={span.name}
+            width={span.width}
+            time={span.time}
+            delay={i * 200}
+            isAnimated={isAnimated}
+            showCheck={isStoryBased}
+          />
+        ))}
+        {isStoryBased && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '140px 1fr auto',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '0.5rem 0',
+              opacity: isAnimated ? 1 : 0,
+              transform: isAnimated ? 'translateX(0)' : 'translateX(-8px)',
+              transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
+            }}
+          >
+            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.primary, fontWeight: 500 }}>fs.commit</span>
+            <div style={{ height: '6px', borderRadius: '3px', background: 'repeating-linear-gradient(90deg, rgba(255, 107, 53, 0.3) 0px, rgba(255, 107, 53, 0.3) 4px, transparent 4px, transparent 8px)' }}>
+              <style>{`@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }`}</style>
+              <div style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+            </div>
+            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '10px', fontWeight: 600, color: COLORS.primary, letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>EXPECTED — NEVER FIRED</span>
+          </div>
+        )}
+        {!isStoryBased && (
+          <TraceSpan
+            name="api.response"
+            width="30%"
+            time="8ms"
+            delay={600}
+            isAnimated={isAnimated}
+            showCheck={false}
+          />
+        )}
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          paddingTop: '1rem',
+          borderTop: `1px solid ${COLORS.border}`,
+          fontFamily: '"Fira Code", monospace',
+          fontSize: '11px',
+          lineHeight: 1.5,
+          color: isStoryBased ? COLORS.primary : COLORS.green,
+        }}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" stroke={isStoryBased ? COLORS.primary : COLORS.green} strokeWidth="1.5" />
+          {isStoryBased ? (
+            <path d="M6 6l4 4M10 6l-4 4" stroke={COLORS.primary} strokeWidth="1.5" strokeLinecap="round" />
+          ) : (
+            <path d="M5 8l2 2 4-4" stroke={COLORS.green} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          )}
+        </svg>
+        <span>{isStoryBased ? 'Behavioral manifest violation: step "persist changes" missing' : '4 spans, 0 errors, 362ms total'}</span>
+      </div>
+    </div>
+  );
+}
+
+function TraceSpan({ name, width, time, delay, isAnimated, showCheck }: { name: string; width: string; time?: string; delay: number; isAnimated: boolean; showCheck: boolean }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: window.innerWidth > 560 ? '140px 1fr auto' : '100px 1fr auto',
+        alignItems: 'center',
+        gap: '0.75rem',
+        padding: '0.5rem 0',
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'translateX(0)' : 'translateX(-8px)',
+        transition: `opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${delay + 200}ms, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${delay + 200}ms`,
+      }}
+    >
+      <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.textMuted, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
+      <div style={{ height: '6px', borderRadius: '3px', position: 'relative', overflow: 'hidden', background: 'rgba(74, 222, 128, 0.4)', width }}>
+        <style>{`@keyframes barFill { to { width: 100%; } }`}</style>
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0, background: COLORS.green, borderRadius: '3px', animation: 'barFill 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }} />
+      </div>
+      {showCheck ? (
+        <span style={{ fontSize: '12px', color: COLORS.green, fontWeight: 700 }}>✓</span>
+      ) : time ? (
+        <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.textFaint, fontVariantNumeric: 'tabular-nums' }}>{time}</span>
+      ) : null}
+    </div>
+  );
+}
+
+// Manifest Section
+function ManifestSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: `linear-gradient(180deg, ${COLORS.bg} 0%, #0e1530 50%, ${COLORS.bg} 100%)` }}>
+      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          The key artifact
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            textAlign: 'center',
+            marginBottom: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          The Behavioral Manifest
+        </h2>
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '580px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          Intent, implementation, and verification — connected in a single durable artifact. Written before the agent runs. Verified after.
+        </p>
+
+        <div
+          style={{
+            background: COLORS.surface,
+            border: `1px solid ${COLORS.borderStrong}`,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2)',
+            marginBottom: '3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', background: 'rgba(0, 0, 0, 0.2)', borderBottom: `1px solid ${COLORS.border}` }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: COLORS.textFaint, flexShrink: 0 }}>
+              <path d="M4 1h6l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V2a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.2" />
+              <path d="M10 1v4h4" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
+            <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', color: COLORS.textMuted, fontWeight: 500 }}>backlog.manifest.yaml</span>
+            <span style={{ marginLeft: 'auto', fontFamily: '"Fira Code", monospace', fontSize: '10px', letterSpacing: '0.06em', color: COLORS.primary, background: 'rgba(255, 107, 53, 0.1)', padding: '2px 8px', borderRadius: '999px' }}>OTEL Behavioral Manifest</span>
+          </div>
+          <div style={{ padding: '1.5rem', overflowX: 'auto' }}>
+            <pre style={{ margin: 0, fontFamily: '"Fira Code", monospace', fontSize: '13px', lineHeight: 1.75, color: COLORS.textMuted }}>
+              <code>
+                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>story</span>: <span style={{ color: COLORS.green }}>"Delete task from backlog"</span>
+                {'\n\n'}
+                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>intent</span>:{'\n'}
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>actor</span>: <span style={{ color: COLORS.green }}>"coding-agent"</span>{'\n'}
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>goal</span>: <span style={{ color: COLORS.green }}>"Remove completed task and persist changes"</span>
+                {'\n\n'}
+                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>steps</span>:{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"plan"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"agent.plan_task span with task_id"</span>{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"execute"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"tool.delete_task span with status: ok"</span>{'\n'}
+                {'  '}- <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>name</span>: <span style={{ color: COLORS.green }}>"persist changes"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>expects</span>: <span style={{ color: COLORS.green }}>"fs.commit span with file_path"</span>{'\n'}
+                {'    '}<span style={{ color: COLORS.textFaint, fontStyle: 'italic' }}># ^ This is the step traditional monitoring misses</span>
+                {'\n\n'}
+                <span style={{ color: COLORS.blueLight, fontWeight: 500 }}>verification</span>:{'\n'}
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>mode</span>: <span style={{ color: COLORS.green }}>"strict"</span>{'\n'}
+                {'  '}<span style={{ color: COLORS.blueLight, fontWeight: 500 }}>on_missing_step</span>: <span style={{ color: COLORS.green }}>"alert"</span>
+              </code>
+            </pre>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 640 ? 'repeat(3, 1fr)' : '1fr',
+            gap: '1.5rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+          }}
+        >
+          {[
+            { num: '01', title: 'Intent', text: 'The developer declares what the agent should accomplish — before it runs. This becomes ground truth.' },
+            { num: '02', title: 'Implementation', text: 'Standard OTEL spans capture what actually happened: which tools ran, in what order, with what results.' },
+            { num: '03', title: 'Verification', text: 'Telemetry is compared to the manifest. A storyboard shows what matched — and what didn't.' },
+          ].map((pillar, i) => (
+            <div key={i} style={{ padding: '1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '12px' }}>
+              <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.primary, marginBottom: '0.75rem', fontWeight: 600 }}>{pillar.num}</div>
+              <h3 style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(1.125rem, 1rem + 0.75vw, 1.5rem)', fontWeight: 600, color: COLORS.text, marginBottom: '0.5rem' }}>{pillar.title}</h3>
+              <p style={{ fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', lineHeight: 1.65, color: COLORS.textMuted, margin: 0 }}>{pillar.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Decomposition Section
+function DecompositionSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+  const [currentExample, setCurrentExample] = useState(0);
+  const [stage, setStage] = useState<'plain' | 'highlighting' | 'show_event' | 'populating' | 'replacing' | 'complete'>('plain');
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const [populateIndex, setPopulateIndex] = useState(-1);
+  const [replaceIndex, setReplaceIndex] = useState(-1);
+
+  const example = LOG_EXAMPLES[currentExample];
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const timer = setTimeout(() => {
+      switch (stage) {
+        case 'plain':
+          setStage('highlighting');
+          setHighlightIndex(0);
+          break;
+        case 'highlighting':
+          if (highlightIndex < example.variables.length - 1) {
+            setHighlightIndex(highlightIndex + 1);
+          } else {
+            setStage('show_event');
+          }
+          break;
+        case 'show_event':
+          setStage('populating');
+          setPopulateIndex(0);
+          break;
+        case 'populating':
+          if (populateIndex < example.variables.length - 1) {
+            setPopulateIndex(populateIndex + 1);
+          } else {
+            setStage('replacing');
+            setReplaceIndex(0);
+          }
+          break;
+        case 'replacing':
+          if (replaceIndex < example.variables.length - 1) {
+            setReplaceIndex(replaceIndex + 1);
+          } else {
+            setStage('complete');
+          }
+          break;
+        case 'complete':
+          setStage('plain');
+          setHighlightIndex(0);
+          setPopulateIndex(-1);
+          setReplaceIndex(-1);
+          setCurrentExample((currentExample + 1) % LOG_EXAMPLES.length);
+          break;
+      }
+    }, stage === 'plain' ? 2000 : stage === 'highlighting' ? 700 : stage === 'populating' ? 500 : stage === 'replacing' ? 800 : 3000);
+
+    return () => clearTimeout(timer);
+  }, [isVisible, stage, highlightIndex, populateIndex, replaceIndex, currentExample, example.variables.length]);
+
+  const getLogHTML = () => {
+    let html = example.fullLog;
+    if (stage === 'highlighting' || stage === 'show_event' || stage === 'populating') {
+      for (let i = 0; i <= (stage === 'highlighting' ? highlightIndex : example.variables.length - 1); i++) {
+        const v = example.variables[i];
+        html = html.replace(v.value, `<span style="color: ${v.color}; font-weight: 700;">${v.value}</span>`);
+      }
+    } else if (stage === 'replacing' || stage === 'complete') {
+      const numToReplace = stage === 'complete' ? example.variables.length : replaceIndex + 1;
+      example.variables.forEach((v, i) => {
+        html = html.replace(v.value, `<span style="color: ${v.color}; font-weight: 700;">${i < numToReplace ? v.placeholder : v.value}</span>`);
+      });
+    }
+    return html;
+  };
+
+  const getStatusText = () => {
+    switch (stage) {
+      case 'plain': return 'Watching...';
+      case 'highlighting': return `Identifying variable ${highlightIndex + 1}/${example.variables.length}: "${example.variables[highlightIndex].key}"...`;
+      case 'show_event': return 'Creating event data...';
+      case 'populating': return `Adding field ${populateIndex + 1}/${example.variables.length} to event data...`;
+      case 'replacing': return `Replacing variable ${replaceIndex + 1}/${example.variables.length} with placeholder...`;
+      case 'complete': return 'Complete! Next example in a moment...';
+    }
   };
 
   return (
-    <div style={styles.page}>
-      <p style={styles.eyebrow}>
-        <span style={styles.eyebrowLine}></span>
-        Principal AI
-      </p>
-      <h1 style={styles.h1}>
-        Story-based<br />
-        <em style={styles.h1Em}>monitoring</em>
-      </h1>
-      <p style={styles.lede}>
-        Traditional observability tells you what happened. Story-based monitoring tells you what should have — and whether it did.
-      </p>
-
-      <hr style={styles.divider} />
-
-      <p style={styles.sectionLabel}>The problem with logs</p>
-      <div style={styles.contrastPair}>
-        <div style={styles.contrastCard}>
-          <p style={styles.cardLabel}>What logs give you</p>
-          <p style={styles.cardText}>
-            A record of what the agent did. Function calls, token counts, timestamps. Accurate, but silent on intent.
-          </p>
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: `linear-gradient(180deg, ${COLORS.bg}, rgba(17, 24, 39, 0.9), ${COLORS.bg})` }}>
+      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          Under the hood
         </div>
-        <div style={styles.contrastCardRight}>
-          <p style={styles.cardLabelRight}>What you actually need</p>
-          <p style={styles.cardTextRight}>
-            A way to verify whether the agent's behavior matched what it was supposed to do. That's a different question entirely.
-          </p>
-        </div>
-      </div>
-
-      <p style={styles.prose}>
-        Logs were designed for debugging, not for intent verification. As agents take on more consequential work, the gap between "what happened" and "did it go right" becomes a real risk.
-      </p>
-
-      <hr style={styles.divider} />
-
-      <p style={styles.sectionLabel}>How it works</p>
-      <div style={styles.steps}>
-        <div style={styles.step}>
-          <span style={styles.stepNum}>01</span>
-          <div>
-            <h3 style={styles.stepH3}>Intent is declared before the agent runs</h3>
-            <p style={styles.stepP}>
-              The developer describes what the agent should accomplish — in plain language, structured as a manifest. This becomes the ground truth for the session.
-            </p>
-          </div>
-        </div>
-        <div style={styles.step}>
-          <span style={styles.stepNum}>02</span>
-          <div>
-            <h3 style={styles.stepH3}>The agent runs with OpenTelemetry instrumentation</h3>
-            <p style={styles.stepP}>
-              Standard OTEL spans capture what actually happened: which tools were called, in what order, with what results.
-            </p>
-          </div>
-        </div>
-        <div style={styles.step}>
-          <span style={styles.stepNum}>03</span>
-          <div>
-            <h3 style={styles.stepH3}>Behavior is mapped against declared intent</h3>
-            <p style={styles.stepP}>
-              The telemetry is compared to the manifest. Principal generates a storyboard — a human-readable account of what the agent did and whether it matched expectations.
-            </p>
-          </div>
-        </div>
-        <div style={{ ...styles.step, ...styles.stepLast }}>
-          <span style={styles.stepNum}>04</span>
-          <div>
-            <h3 style={styles.stepH3}>You see the result at a glance</h3>
-            <p style={styles.stepP}>
-              Not a wall of logs. A story. Agents and humans, one view.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <hr style={styles.divider} />
-
-      <p style={styles.sectionLabel}>The key artifact</p>
-      <div style={styles.callout}>
-        <p style={styles.calloutP}>
-          The <strong style={styles.calloutStrong}>Principal Behavioral Manifest</strong> is the output of story-based telemetry. It connects intent, implementation, and verification in a single durable artifact — generated by the agent, confirmed by the developer.
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            textAlign: 'center',
+            marginBottom: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          From Logs to Events
+        </h2>
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '580px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          Traditional logs repeat the same text millions of times. Event templates store the structure once and extract only the variables — cutting bytes and surfacing what matters.
         </p>
+
+        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+          <div
+            style={{
+              background: 'rgba(17, 24, 39, 0.7)',
+              border: `1px solid ${stage === 'complete' ? 'rgba(16, 185, 129, 0.3)' : COLORS.border}`,
+              borderRadius: '16px',
+              padding: '1.5rem',
+              backdropFilter: 'blur(12px)',
+              transition: 'border-color 0.4s ease',
+              minHeight: '200px',
+              opacity: isVisible ? 1 : 0,
+              transitionProperty: 'opacity, border-color',
+              transitionDuration: '0.6s, 0.4s',
+              transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              transitionDelay: '0.3s, 0s',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+              <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', fontWeight: 600, color: stage === 'complete' ? COLORS.green : COLORS.red, letterSpacing: '0.05em' }}>
+                {stage === 'complete' ? 'TEMPLATE' : 'TRADITIONAL LOG'}
+              </span>
+              <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.textFaint }}>
+                {stage === 'complete' ? `${example.templateBytes} bytes` : `${example.logBytes} bytes`}
+              </span>
+            </div>
+            <pre style={{ fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.text, lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0 }} dangerouslySetInnerHTML={{ __html: getLogHTML() }} />
+
+            {(stage === 'show_event' || stage === 'populating' || stage === 'replacing' || stage === 'complete') && (
+              <div style={{ borderTop: '1px solid rgba(0, 194, 255, 0.2)', paddingTop: '1rem', marginTop: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                  <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', fontWeight: 600, color: '#00C2FF', letterSpacing: '0.05em' }}>EVENT DATA</span>
+                  <span style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.textFaint }}>{example.eventBytes} bytes</span>
+                </div>
+                <pre style={{ fontFamily: '"Fira Code", monospace', fontSize: '13px', lineHeight: 1.7, color: COLORS.text, margin: 0, whiteSpace: 'pre' }}>
+                  {'{\n'}
+                  {example.variables.slice(0, stage === 'populating' ? populateIndex + 1 : example.variables.length).map((v, i) => {
+                    const maxKeyLen = Math.max(...example.variables.map(vv => vv.key.length));
+                    const pad = ' '.repeat(maxKeyLen - v.key.length);
+                    return `  ${v.key}:${pad} "<span style="color: ${v.color}; font-weight: 700;">${v.value}</span>"${i < example.variables.length - 1 ? ',' : ''}\n`;
+                  }).join('')}
+                  {'}'}
+                </pre>
+              </div>
+            )}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '11px', color: COLORS.textFaint, fontFamily: '"Fira Code", monospace' }}>
+            {getStatusText()}
+          </div>
+        </div>
       </div>
-
-      <hr style={styles.divider} />
-
-      <p style={styles.sectionLabel}>Why it matters now</p>
-      <div style={styles.cardGrid}>
-        <div style={styles.miniCard}>
-          <h4 style={styles.miniCardH4}>Agents act autonomously</h4>
-          <p style={styles.miniCardP}>
-            They don't just answer questions. They write code, run tools, make decisions. You need more than a trace.
-          </p>
-        </div>
-        <div style={styles.miniCard}>
-          <h4 style={styles.miniCardH4}>Errors are non-obvious</h4>
-          <p style={styles.miniCardP}>
-            An agent can complete every step and still fail the task. Logs won't tell you that. Intent verification will.
-          </p>
-        </div>
-        <div style={styles.miniCard}>
-          <h4 style={styles.miniCardH4}>Teams need shared context</h4>
-          <p style={styles.miniCardP}>
-            A storyboard is readable by anyone on the team, not just the engineer who knows what the spans mean.
-          </p>
-        </div>
-        <div style={styles.miniCard}>
-          <h4 style={styles.miniCardH4}>The gap is structural</h4>
-          <p style={styles.miniCardP}>
-            No existing observability tool was built to answer "did it go right." That's the missing primitive.
-          </p>
-        </div>
-      </div>
-
-      <hr style={styles.divider} />
-
-      <p style={styles.footerLine}>
-        The log tells you what happened. The storyboard tells you what should have.
-      </p>
-    </div>
+    </section>
   );
-};
+}
+
+// Why Section
+function WhySection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: COLORS.bg }}>
+      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          Why it matters now
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            textAlign: 'center',
+            marginBottom: '2rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          Agents Changed the Game
+        </h2>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
+            gap: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          {[
+            {
+              title: 'Agents act autonomously',
+              text: 'They write code, run tools, make decisions. You need more than a trace — you need intent verification.',
+              icon: <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />,
+            },
+            {
+              title: 'Errors are non-obvious',
+              text: 'An agent can complete every step and still fail the task. Logs won't tell you. Intent verification will.',
+              icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></>,
+            },
+            {
+              title: 'Teams need shared context',
+              text: 'A storyboard is readable by anyone — not just the engineer who knows what the spans mean.',
+              icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v-2" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /><circle cx="9" cy="7" r="4" /></>,
+            },
+            {
+              title: 'The gap is structural',
+              text: 'No existing tool was built to answer "did it go right." That's the missing primitive in observability.',
+              icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
+            },
+          ].map((card, i) => (
+            <div
+              key={i}
+              style={{
+                padding: '1.5rem',
+                background: COLORS.surface,
+                border: `1px solid ${COLORS.border}`,
+                borderRadius: '12px',
+                transition: 'border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = COLORS.borderStrong)}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = COLORS.border)}
+            >
+              <div style={{ marginBottom: '1rem' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.primary} strokeWidth="1.5">
+                  {card.icon}
+                </svg>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', fontWeight: 600, color: COLORS.text, marginBottom: '0.5rem' }}>{card.title}</h3>
+              <p style={{ fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', lineHeight: 1.65, color: COLORS.textMuted, margin: 0 }}>{card.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// CTA Section
+function CTASection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 10vw, 6rem) 1.5rem', background: `radial-gradient(ellipse 80% 50% at 50% 50%, ${COLORS.primaryGlow} 0%, transparent 60%), ${COLORS.bg}` }}>
+      <div style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
+        <blockquote
+          style={{
+            marginBottom: '2.5rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          <span style={{ display: 'block', fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.2, color: COLORS.textMuted }}>
+            The log tells you what happened.
+          </span>
+          <span style={{ display: 'block', fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.2, color: COLORS.primary, fontStyle: 'italic' }}>
+            The manifest tells you what should have.
+          </span>
+        </blockquote>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          <Link
+            href="/observability-demo"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.75rem 2rem',
+              borderRadius: '999px',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)',
+              fontWeight: 600,
+              textDecoration: 'none',
+              letterSpacing: '0.01em',
+              minHeight: '48px',
+              background: COLORS.primary,
+              color: '#fff',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 107, 53, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            See the Demo
+          </Link>
+          <Link
+            href="/game"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.75rem 2rem',
+              borderRadius: '999px',
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)',
+              fontWeight: 600,
+              textDecoration: 'none',
+              letterSpacing: '0.01em',
+              minHeight: '48px',
+              background: 'transparent',
+              color: COLORS.textMuted,
+              border: `1px solid ${COLORS.borderStrong}`,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = COLORS.text;
+              e.currentTarget.style.borderColor = COLORS.textMuted;
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = COLORS.textMuted;
+              e.currentTarget.style.borderColor = COLORS.borderStrong;
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Play the Game
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
