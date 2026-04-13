@@ -175,32 +175,6 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
           </h2>
           <p
             style={{
-              fontSize: isMobile ? '14px' : '16px',
-              fontWeight: '800',
-              color: ORANGE,
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              marginBottom: '12px',
-            }}
-          >
-            Story-based Monitoring
-          </p>
-          <p
-            style={{
-              fontSize: isMobile ? '18px' : '22px',
-              color: '#ffffff',
-              fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              lineHeight: 1.5,
-              maxWidth: '600px',
-              margin: '0 auto 16px',
-              fontWeight: '600',
-            }}
-          >
-            Done is not the same as correct.
-          </p>
-          <p
-            style={{
               fontSize: isMobile ? '15px' : '17px',
               color: BLUE_LIGHT,
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
@@ -209,7 +183,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               margin: '0 auto',
             }}
           >
-            The intent is already in your code. The story-based telemetry shows whether it held.
+            Story-based Monitoring. Done is not the same as correct. The intent is already in your code. The story-based telemetry shows whether it held.
           </p>
         </motion.div>
 
@@ -495,7 +469,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               transition: 'opacity 0.2s ease',
             }}
           >
-            Learn more about Story Monitoring →
+            Learn more about Story-based Monitoring →
           </Link>
         </motion.div>
       </div>
