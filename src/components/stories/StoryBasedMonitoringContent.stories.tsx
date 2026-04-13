@@ -1,32 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import { StoryBasedMonitoringContent } from '../StoryBasedMonitoringContent';
+import { StoryBasedMonitoringSimple } from '../StoryBasedMonitoringSimple';
 
 /**
- * Story-based Monitoring Content
+ * Story-based Monitoring Content (Simplified)
  *
- * An editorial-style page explaining the concept of story-based monitoring
- * and how it differs from traditional observability.
+ * A simplified, investor-pitch-style page explaining story-based monitoring.
+ * Focuses on clarity over complexity.
  *
  * Features:
- * - Serif typography for headings
- * - Monospace labels and eyebrows
- * - Contrast cards comparing traditional vs. story-based approaches
- * - Numbered steps explaining the process
- * - Callout boxes for key concepts
- * - Grid of benefit cards
- * - Ice tangerine theme styling
+ * - Clear problem statement
+ * - Product screenshot with simple callout
+ * - 3-step "How It Works"
+ * - Minimal "Why Now" section
+ * - Single strong CTA
  */
 
 const meta = {
   title: 'Pages/Story-based Monitoring Content',
-  component: StoryBasedMonitoringContent,
+  component: StoryBasedMonitoringSimple,
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Editorial content page explaining story-based monitoring with the ice tangerine theme.',
+        component: 'Simplified page explaining story-based monitoring with investor-pitch clarity.',
       },
     },
   },
@@ -38,7 +36,7 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof StoryBasedMonitoringContent>;
+} satisfies Meta<typeof StoryBasedMonitoringSimple>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
