@@ -108,6 +108,7 @@ export function StoryBasedMonitoringContent() {
     <div style={{ background: COLORS.bg, minHeight: '100vh' }}>
       <HeroSection />
       <TwoWorldsSection windowWidth={windowWidth} />
+      <MonitoringBackwardsSection />
       <ManifestSection windowWidth={windowWidth} />
       <DecompositionSection />
       <WhySection windowWidth={windowWidth} />
@@ -159,11 +160,9 @@ function HeroSection() {
             marginBottom: '1.5rem',
           }}
         >
-          Tests passed.
+          You're Shipping Code
           <br />
-          Dashboards green.
-          <br />
-          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>Payment processed without a fraud check.</span>
+          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>You Didn't Write.</span>
         </h1>
         <p
           style={{
@@ -174,14 +173,14 @@ function HeroSection() {
             margin: '0 auto 3rem',
           }}
         >
-          No alerts fired. Logs show <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>success</code>. Nobody noticed for six hours. The system did exactly what the code told it to do. It just wasn't what anyone <em style={{ fontStyle: 'italic', color: COLORS.text }}>intended</em>.
+          Your AI agent generated a pull request. Tests pass. CI is green. You merge it. The code runs perfectly - it just skips the fraud check before processing payments. Traditional monitoring sees success. You see a compliance violation six hours later.
         </p>
       </div>
     </section>
   );
 }
 
-// Two Worlds Section
+// Silent Failure Section
 function TwoWorldsSection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
@@ -201,8 +200,39 @@ function TwoWorldsSection({ windowWidth }: { windowWidth: number }) {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          The same trace. Two interpretations.
+          The Problem: Silent Failures
         </div>
+
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            textAlign: 'center',
+            marginBottom: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          All Green. All Wrong.
+        </h2>
+
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '660px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          Same trace. Two completely different interpretations.
+        </p>
 
         <div
           style={{
@@ -211,7 +241,7 @@ function TwoWorldsSection({ windowWidth }: { windowWidth: number }) {
             gap: '1.5rem',
             marginBottom: '2rem',
             opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
           }}
         >
           <TracePanel type="traditional" windowWidth={windowWidth} />
@@ -230,7 +260,116 @@ function TwoWorldsSection({ windowWidth }: { windowWidth: number }) {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
           }}
         >
-          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring catches the sequence violation - fraud check skipped before payment processing. It checks behavior against <em style={{ color: COLORS.primary, fontStyle: 'normal', fontWeight: 500 }}>intent</em>, not just status codes.
+          Every span returned <code style={{ fontFamily: '"Fira Code", monospace', fontSize: '0.88em', background: 'rgba(255, 107, 53, 0.12)', color: COLORS.primary, padding: '2px 6px', borderRadius: '4px', fontWeight: 500 }}>200 OK</code>. Traditional monitoring sees success. Story-based monitoring catches the sequence violation: <strong style={{ color: COLORS.primary }}>fraud check skipped before payment processing</strong>. This is a silent failure - successful execution of the wrong behavior.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+// Monitoring Backwards Section
+function MonitoringBackwardsSection() {
+  const { ref, isVisible } = useFadeInOnScroll(0.3);
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: `linear-gradient(180deg, ${COLORS.bg} 0%, #0e1530 50%, ${COLORS.bg} 100%)` }}>
+      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
+        <div
+          style={{
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          The Root Cause
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            textAlign: 'center',
+            marginBottom: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          Monitoring Starts From
+          <br />
+          <span style={{ color: COLORS.primary, fontStyle: 'italic' }}>the Wrong End.</span>
+        </h2>
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '720px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          We built observability backward. We instrument code. Capture telemetry. Then try to figure out what it means. But we never wrote down what was supposed to happen in the first place.
+        </p>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '2rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', fontWeight: 600, color: COLORS.red, marginBottom: '1rem', letterSpacing: '0.05em' }}>TRADITIONAL APPROACH</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ padding: '0.75rem 1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.textMuted }}>Ship Code</div>
+                <div style={{ color: COLORS.textFaint }}>→</div>
+                <div style={{ padding: '0.75rem 1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.textMuted }}>Capture Telemetry</div>
+                <div style={{ color: COLORS.textFaint }}>→</div>
+                <div style={{ padding: '0.75rem 1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.textMuted }}>Guess Intent</div>
+              </div>
+              <p style={{ marginTop: '1rem', fontSize: '14px', color: COLORS.textFaint, fontStyle: 'italic' }}>You're reverse-engineering what the code should have done.</p>
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '12px', fontWeight: 600, color: COLORS.primary, marginBottom: '1rem', letterSpacing: '0.05em' }}>STORY-BASED APPROACH</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ padding: '0.75rem 1.5rem', background: 'rgba(255, 107, 53, 0.1)', border: `1px solid ${COLORS.primary}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.text }}>Declare Intent</div>
+                <div style={{ color: COLORS.primary }}>→</div>
+                <div style={{ padding: '0.75rem 1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.textMuted }}>Ship Code</div>
+                <div style={{ color: COLORS.primary }}>→</div>
+                <div style={{ padding: '0.75rem 1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', fontFamily: '"Fira Code", monospace', fontSize: '13px', color: COLORS.textMuted }}>Verify Behavior</div>
+              </div>
+              <p style={{ marginTop: '1rem', fontSize: '14px', color: COLORS.primary, fontStyle: 'italic' }}>Intent is the starting point, not an afterthought.</p>
+            </div>
+          </div>
+        </div>
+
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '720px',
+            margin: '3rem auto 0',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+          }}
+        >
+          Story-based monitoring flips the model. You write down what should happen <em style={{ color: COLORS.text, fontStyle: 'normal', fontWeight: 500 }}>before</em> the agent runs. Then telemetry proves whether it did.
         </p>
       </div>
     </section>
@@ -428,7 +567,7 @@ function ManifestSection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
   return (
-    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: `linear-gradient(180deg, ${COLORS.bg} 0%, #0e1530 50%, ${COLORS.bg} 100%)` }}>
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: COLORS.bg }}>
       <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
         <div
           style={{
@@ -443,7 +582,7 @@ function ManifestSection({ windowWidth }: { windowWidth: number }) {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          The key artifact
+          The Solution
         </div>
         <h2
           style={{
@@ -458,7 +597,9 @@ function ManifestSection({ windowWidth }: { windowWidth: number }) {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
           }}
         >
-          The Behavioral Manifest
+          The Missing Artifact:
+          <br />
+          <span style={{ color: COLORS.primary }}>OTEL Behavioral Manifest</span>
         </h2>
         <p
           style={{
@@ -466,13 +607,13 @@ function ManifestSection({ windowWidth }: { windowWidth: number }) {
             lineHeight: 1.7,
             color: COLORS.textMuted,
             textAlign: 'center',
-            maxWidth: '580px',
+            maxWidth: '680px',
             margin: '0 auto 3rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
           }}
         >
-          Intent, implementation, and verification - connected in a single durable artifact. Written before the agent runs. Verified after.
+          A single file that connects intent, implementation, and verification. It's what you write <em style={{ color: COLORS.text, fontStyle: 'normal', fontWeight: 500 }}>before</em> your agent ships code. It's what telemetry gets compared against <em style={{ color: COLORS.text, fontStyle: 'normal', fontWeight: 500 }}>after</em>.
         </p>
 
         <div
@@ -533,9 +674,9 @@ function ManifestSection({ windowWidth }: { windowWidth: number }) {
           }}
         >
           {[
-            { num: '01', title: 'Intent', text: 'The developer declares what the agent should accomplish - before it runs. This becomes ground truth.' },
-            { num: '02', title: 'Implementation', text: 'Standard OTEL spans capture what actually happened: which tools ran, in what order, with what results.' },
-            { num: '03', title: 'Verification', text: 'Telemetry is compared to the manifest. A storyboard shows what matched - and what didn\'t.' },
+            { num: '01', title: 'Intent', text: 'You declare what the agent should do before it runs. This becomes ground truth - the source of "should" in your system.' },
+            { num: '02', title: 'Implementation', text: 'Standard OpenTelemetry spans capture what actually happened: which operations ran, in what sequence, with what results.' },
+            { num: '03', title: 'Verification', text: 'Runtime telemetry is validated against the manifest. A visual storyboard shows what matched the intent - and what didn\'t.' },
           ].map((pillar, i) => (
             <div key={i} style={{ padding: '1.5rem', background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '12px' }}>
               <div style={{ fontFamily: '"Fira Code", monospace', fontSize: '11px', color: COLORS.primary, marginBottom: '0.75rem', fontWeight: 600 }}>{pillar.num}</div>
@@ -737,12 +878,12 @@ function DecompositionSection() {
   );
 }
 
-// Why Section
+// Why Now Section
 function WhySection({ windowWidth }: { windowWidth: number }) {
   const { ref, isVisible } = useFadeInOnScroll(0.3);
 
   return (
-    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: COLORS.bg }}>
+    <section ref={ref} style={{ padding: 'clamp(4rem, 8vw, 6rem) 1.5rem', background: `linear-gradient(180deg, ${COLORS.bg} 0%, #0e1530 50%, ${COLORS.bg} 100%)` }}>
       <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
         <div
           style={{
@@ -757,7 +898,7 @@ function WhySection({ windowWidth }: { windowWidth: number }) {
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          Why it matters now
+          Why This Matters Now
         </div>
         <h2
           style={{
@@ -767,43 +908,60 @@ function WhySection({ windowWidth }: { windowWidth: number }) {
             letterSpacing: '-0.025em',
             color: COLORS.text,
             textAlign: 'center',
-            marginBottom: '2rem',
+            marginBottom: '1rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
           }}
         >
-          Agents Changed the Game
+          AI Agents Need
+          <br />
+          <span style={{ color: COLORS.primary }}>Behavioral Guardrails</span>
         </h2>
+
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            textAlign: 'center',
+            maxWidth: '680px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          Agents don't just write code - they ship it. They make autonomous decisions. And they can succeed at every step while completely missing the point. Traditional monitoring wasn't built for this.
+        </p>
 
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
-            gap: '1rem',
+            gap: '1.5rem',
             opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
           }}
         >
           {[
             {
-              title: 'Agents act autonomously',
-              text: 'They write code, run tools, make decisions. You need more than a trace - you need intent verification.',
-              icon: <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />,
+              title: 'Silent failures are the new norm',
+              text: 'An agent can complete every operation successfully and still violate the requirement. Status codes won\'t catch it.',
+              icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" /></>,
             },
             {
-              title: 'Errors are non-obvious',
-              text: `An agent can complete every step and still fail the task. Logs won't tell you. Intent verification will.`,
-              icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></>,
+              title: 'You need ground truth',
+              text: 'The manifest becomes the source of "should" in your system. Not documentation. Not tribal knowledge. A versioned, durable artifact.',
+              icon: <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 2v6h6M16 13H8M16 17H8M10 9H8" />,
             },
             {
-              title: 'Teams need shared context',
-              text: 'A storyboard is readable by anyone - not just the engineer who knows what the spans mean.',
-              icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v-2" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /><circle cx="9" cy="7" r="4" /></>,
+              title: 'Verification happens at runtime',
+              text: 'The storyboard doesn\'t just show what happened - it shows whether it matched the declared intent. Instantly.',
+              icon: <><path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><path d="M22 4L12 14.01l-3-3" /></>,
             },
             {
-              title: 'The gap is structural',
-              text: `No existing tool was built to answer "did it go right." That's the missing primitive in observability.`,
-              icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
+              title: 'It\'s still OpenTelemetry',
+              text: 'No proprietary formats. No vendor lock-in. Standard OTEL spans, enriched with behavioral verification. Use your existing instrumentation.',
+              icon: <><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></>,
             },
           ].map((card, i) => (
             <div
@@ -819,11 +977,11 @@ function WhySection({ windowWidth }: { windowWidth: number }) {
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = COLORS.border)}
             >
               <div style={{ marginBottom: '1rem' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.primary} strokeWidth="1.5">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={COLORS.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   {card.icon}
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', fontWeight: 600, color: COLORS.text, marginBottom: '0.5rem' }}>{card.title}</h3>
+              <h3 style={{ fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(1rem, 0.9rem + 0.5vw, 1.25rem)', fontWeight: 600, color: COLORS.text, marginBottom: '0.5rem' }}>{card.title}</h3>
               <p style={{ fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)', lineHeight: 1.65, color: COLORS.textMuted, margin: 0 }}>{card.text}</p>
             </div>
           ))}
@@ -839,21 +997,48 @@ function CTASection() {
 
   return (
     <section ref={ref} style={{ padding: 'clamp(4rem, 10vw, 6rem) 1.5rem', background: `radial-gradient(ellipse 80% 50% at 50% 50%, ${COLORS.primaryGlow} 0%, transparent 60%), ${COLORS.bg}` }}>
-      <div style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
-        <blockquote
+      <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+        <div
           style={{
-            marginBottom: '2.5rem',
+            fontFamily: '"Fira Code", monospace',
+            fontSize: '11px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: COLORS.textFaint,
+            marginBottom: '1.5rem',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          <span style={{ display: 'block', fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.2, color: COLORS.textMuted }}>
-            The log tells you what happened.
-          </span>
-          <span style={{ display: 'block', fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)', fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.2, color: COLORS.primary, fontStyle: 'italic' }}>
-            The manifest tells you what should have.
-          </span>
-        </blockquote>
+          See It In Action
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+            fontSize: 'clamp(2rem, 1.2rem + 2.5vw, 3.5rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            color: COLORS.text,
+            marginBottom: '1rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}
+        >
+          Try the Interactive Demo
+        </h2>
+        <p
+          style={{
+            fontSize: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',
+            lineHeight: 1.7,
+            color: COLORS.textMuted,
+            maxWidth: '640px',
+            margin: '0 auto 3rem',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+          }}
+        >
+          Explore a real working example using <strong style={{ color: COLORS.text }}>Backlog.md</strong> - an open-source task manager. See how manifests validate behavior, catch silent failures, and generate storyboards in real-time.
+        </p>
         <div
           style={{
             display: 'flex',
@@ -861,8 +1046,9 @@ function CTASection() {
             justifyContent: 'center',
             gap: '1rem',
             flexWrap: 'wrap',
+            marginBottom: '2rem',
             opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
           }}
         >
           <Link
@@ -871,62 +1057,41 @@ function CTASection() {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.75rem 2rem',
+              padding: '1rem 2.5rem',
               borderRadius: '999px',
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
               fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)',
               fontWeight: 600,
               textDecoration: 'none',
               letterSpacing: '0.01em',
-              minHeight: '48px',
+              minHeight: '52px',
               background: COLORS.primary,
               color: '#fff',
               transition: 'transform 0.2s ease, box-shadow 0.2s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 107, 53, 0.25)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 107, 53, 0.35)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            See the Demo
-          </Link>
-          <Link
-            href="/game"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0.75rem 2rem',
-              borderRadius: '999px',
-              fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              fontSize: 'clamp(0.875rem, 0.8rem + 0.35vw, 1rem)',
-              fontWeight: 600,
-              textDecoration: 'none',
-              letterSpacing: '0.01em',
-              minHeight: '48px',
-              background: 'transparent',
-              color: COLORS.textMuted,
-              border: `1px solid ${COLORS.borderStrong}`,
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = COLORS.text;
-              e.currentTarget.style.borderColor = COLORS.textMuted;
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = COLORS.textMuted;
-              e.currentTarget.style.borderColor = COLORS.borderStrong;
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            Play the Game
+            Launch Interactive Demo →
           </Link>
         </div>
+        <p
+          style={{
+            fontSize: '14px',
+            color: COLORS.textFaint,
+            fontStyle: 'italic',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+          }}
+        >
+          No signup required. Fully interactive in your browser.
+        </p>
       </div>
     </section>
   );
