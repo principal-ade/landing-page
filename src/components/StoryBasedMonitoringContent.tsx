@@ -91,11 +91,12 @@ function useFadeInOnScroll(threshold = 0.15) {
 }
 
 export function StoryBasedMonitoringContent() {
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1024
-  );
+  const [windowWidth, setWindowWidth] = useState(1024);
 
   useEffect(() => {
+    // Set initial window width after mount
+    setWindowWidth(window.innerWidth);
+
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };

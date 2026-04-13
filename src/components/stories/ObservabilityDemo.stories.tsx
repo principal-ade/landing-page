@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 import { DemoView } from '../demo/DemoView';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
+import { ThemeProvider, slateTheme } from '@principal-ade/industry-theme';
 
 /**
  * ObservabilityDemo - Full interactive demo showing Principal's observability features
@@ -74,6 +75,13 @@ const meta = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={slateTheme}>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
   tags: ['autodocs'],
 } satisfies Meta<typeof DemoView>;
 
@@ -112,53 +120,55 @@ function InteractiveDemo() {
   };
 
   return (
-    <div style={{ position: 'relative', height: '100vh' }}>
-      <div style={{
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        zIndex: 10000,
-        display: 'flex',
-        gap: '8px',
-      }}>
-        <button
-          onClick={handleAddTrace}
-          style={{
-            padding: '8px 16px',
-            background: '#00C2FF',
-            color: '#0d1b2a',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
-        >
-          Add Trace
-        </button>
-        <button
-          onClick={handleClearTraces}
-          style={{
-            padding: '8px 16px',
-            background: '#ef4444',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
-        >
-          Clear All
-        </button>
+    <ThemeProvider theme={slateTheme}>
+      <div style={{ position: 'relative', height: '100vh' }}>
+        <div style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          zIndex: 10000,
+          display: 'flex',
+          gap: '8px',
+        }}>
+          <button
+            onClick={handleAddTrace}
+            style={{
+              padding: '8px 16px',
+              background: '#00C2FF',
+              color: '#0d1b2a',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 600,
+            }}
+          >
+            Add Trace
+          </button>
+          <button
+            onClick={handleClearTraces}
+            style={{
+              padding: '8px 16px',
+              background: '#ef4444',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 600,
+            }}
+          >
+            Clear All
+          </button>
+        </div>
+        <DemoView
+          isOpen={true}
+          onClose={() => console.log('Close demo')}
+          schematics={mockSchematics}
+          providerReady={providerReady}
+          registeredTraces={traces}
+          onClearTraces={handleClearTraces}
+        />
       </div>
-      <DemoView
-        isOpen={true}
-        onClose={() => console.log('Close demo')}
-        schematics={mockSchematics}
-        providerReady={providerReady}
-        registeredTraces={traces}
-        onClearTraces={handleClearTraces}
-      />
-    </div>
+    </ThemeProvider>
   );
 }
 

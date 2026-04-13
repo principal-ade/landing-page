@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { TraceTape } from '../demo/TraceTape';
 import type { RegisteredTrace } from '@principal-ai/principal-view-core';
 import type { OtelSpanData } from '@principal-ai/principal-view-core';
+import { ThemeProvider, slateTheme } from '@principal-ade/industry-theme';
 
 /**
  * TraceTape - A horizontal timeline scrubber for navigating trace spans
@@ -115,19 +116,21 @@ const meta = {
     backgrounds: {
       default: 'dark',
       values: [
-        { name: 'dark', value: '#0d1b2a' },
+        { name: 'dark', value: slateTheme.colors.background },
       ],
     },
   },
   decorators: [
     (Story) => (
-      <div style={{
-        padding: '24px',
-        backgroundColor: '#0d1b2a',
-        minHeight: '200px',
-      }}>
-        <Story />
-      </div>
+      <ThemeProvider theme={slateTheme}>
+        <div style={{
+          padding: '24px',
+          backgroundColor: slateTheme.colors.background,
+          minHeight: '200px',
+        }}>
+          <Story />
+        </div>
+      </ThemeProvider>
     ),
   ],
   tags: ['autodocs'],
@@ -156,28 +159,30 @@ function InteractiveTraceTape() {
   const [highlightedSpan, setHighlightedSpan] = useState<OtelSpanData | null>(null);
 
   return (
-    <div>
-      <TraceTape
-        traces={mockTraces}
-        highlightedSpanId={highlightedSpanId ?? undefined}
-        onSpanHighlight={(spanId, span) => {
-          setHighlightedSpanId(spanId);
-          setHighlightedSpan(span);
-        }}
-      />
-      <div style={{
-        marginTop: '16px',
-        padding: '12px',
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '4px',
-        fontFamily: 'Fira Code, monospace',
-        fontSize: '13px',
-        color: '#94a3b8',
-      }}>
-        <div><strong style={{ color: '#fff' }}>Highlighted Span ID:</strong> {highlightedSpanId || 'None'}</div>
-        <div><strong style={{ color: '#fff' }}>Span Name:</strong> {highlightedSpan?.name || 'None'}</div>
+    <ThemeProvider theme={slateTheme}>
+      <div>
+        <TraceTape
+          traces={mockTraces}
+          highlightedSpanId={highlightedSpanId ?? undefined}
+          onSpanHighlight={(spanId, span) => {
+            setHighlightedSpanId(spanId);
+            setHighlightedSpan(span);
+          }}
+        />
+        <div style={{
+          marginTop: '16px',
+          padding: '12px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '4px',
+          fontFamily: 'Fira Code, monospace',
+          fontSize: '13px',
+          color: '#94a3b8',
+        }}>
+          <div><strong style={{ color: '#fff' }}>Highlighted Span ID:</strong> {highlightedSpanId || 'None'}</div>
+          <div><strong style={{ color: '#fff' }}>Span Name:</strong> {highlightedSpan?.name || 'None'}</div>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
