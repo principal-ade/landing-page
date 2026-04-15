@@ -175,6 +175,19 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
           </h2>
           <p
             style={{
+              fontSize: isMobile ? '14px' : '16px',
+              fontWeight: '800',
+              color: ORANGE,
+              fontFamily: 'Inter, sans-serif',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              marginBottom: '12px',
+            }}
+          >
+            Story-Based Monitoring
+          </p>
+          <p
+            style={{
               fontSize: isMobile ? '15px' : '17px',
               color: BLUE_LIGHT,
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
@@ -183,7 +196,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
               margin: '0 auto',
             }}
           >
-            Story-based Monitoring. Done is not the same as correct. The intent is already in your code. The story-based telemetry shows whether it held.
+            Your agent said it's done. That's not the same as correct. We capture the intent in your code and show you whether the running code did what you meant.
           </p>
         </motion.div>
 
