@@ -2,6 +2,7 @@
 
 **Published:** January 29, 2026
 **Author:** Principal Team
+**Tags:** Observability, Intent-Driven Development, Technical Deep Dive
 
 *A White Paper on Story-Native, Workflow-Driven Execution*
 

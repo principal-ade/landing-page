@@ -1,6 +1,7 @@
 # What Story-Based Monitoring Actually Looks Like
 
 **Published:** February 19, 2026
+**Tags:** Observability, Product Updates, Software Quality
 
 We talk a lot about monitoring starting from the wrong end. Fair enough. But at some point you have to show people what the right end looks like. So here it is.
 

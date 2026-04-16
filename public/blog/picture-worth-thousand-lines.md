@@ -2,6 +2,7 @@
 
 **Published:** January 15, 2026
 **Author:** Principal Team
+**Tags:** AI Agents, Product Updates, Engineering Culture
 
 Development is no longer about reading code. It's about watching it. Directing it.
 

@@ -2,6 +2,7 @@
 
 **Published:** October 1, 2025
 **Author:** Principal Team
+**Tags:** AI Agents, Engineering Culture, Product Updates
 
 One of the biggest challenges in modern software development is maintaining context across multiple projects, repositories, and tools. Let's talk about how Principal ADE solves this.
 

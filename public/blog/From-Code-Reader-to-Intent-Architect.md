@@ -1,6 +1,7 @@
 # From Code Reader to Intent Architect
 
 **Published:** November 27, 2025
+**Tags:** AI Agents, Intent-Driven Development, Engineering Culture
 
 The job is changing.
 

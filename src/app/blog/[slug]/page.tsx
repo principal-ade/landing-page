@@ -1,269 +1,96 @@
-"use client";
-
 import React from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useTheme } from "@principal-ade/industry-theme";
-import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
-import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
-import mermaid from "mermaid";
-import "themed-markdown/dist/index.css";
+import { notFound } from "next/navigation";
+import fs from "fs";
+import path from "path";
+import type { Metadata } from "next";
+import { BlogPostViewer } from "@/components/BlogPostViewer";
 
-// Process blog content to extract and reformat metadata
-function processContent(rawContent: string): { content: string; date: string; author: string } {
-  let date = "";
-  let author = "";
-
-  // Extract date
-  const dateMatch = rawContent.match(/\*\*Published:\*\*\s+(.+)$/m);
-  if (dateMatch) {
-    date = dateMatch[1].trim();
-  }
-
-  // Extract author
-  const authorMatch = rawContent.match(/\*\*Author:\*\*\s+(.+)$/m);
-  if (authorMatch) {
-    author = authorMatch[1].trim();
-    // Hide author if it's "Principal Team"
-    if (author.toLowerCase().includes("principal team")) {
-      author = "";
-    }
-  }
-
-  // Remove the metadata lines from content
-  let content = rawContent
-    .replace(/\*\*Published:\*\*\s+.+$/m, "")
-    .replace(/\*\*Author:\*\*\s+.+$/m, "");
-
-  // Build the new metadata line
-  const metadataParts: string[] = [];
-  if (date) metadataParts.push(date);
-  if (author) metadataParts.push(author);
-
-  if (metadataParts.length > 0) {
-    // Insert metadata after the title (first # heading)
-    const titleMatch = content.match(/^(#\s+.+)$/m);
-    if (titleMatch) {
-      const metadataLine = `\n\n*${metadataParts.join(" • ")}*\n`;
-      content = content.replace(titleMatch[0], titleMatch[0] + metadataLine);
-    }
-  }
-
-  // Clean up extra blank lines
-  content = content.replace(/\n{3,}/g, "\n\n");
-
-  return { content, date, author };
+interface PageProps {
+  params: Promise<{ slug: string }>;
 }
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const { theme } = useTheme();
-  const [content, setContent] = React.useState<string>("");
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-  const [isClient, setIsClient] = React.useState(false);
-  const [viewMode, _setViewMode] = React.useState<"book" | "single">("book");
-  const [slides, setSlides] = React.useState<string[]>([]);
+// Generate static params for all blog posts
+export async function generateStaticParams() {
+  const blogDir = path.join(process.cwd(), "public/blog");
+  const files = fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"));
 
-  // Prevent scroll on mount
-  React.useEffect(() => {
-    setIsClient(true);
-    window.scrollTo(0, 0);
+  return files
+    .filter((file) => !file.startsWith("_"))
+    .map((file) => ({
+      slug: file.replace(/\.md$/, ""),
+    }));
+}
 
-    const preventScroll = () => {
-      window.scrollTo(0, 0);
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const blogDir = path.join(process.cwd(), "public/blog");
+  const filePath = path.join(blogDir, `${slug}.md`);
+
+  if (!fs.existsSync(filePath)) {
+    return {
+      title: "Post Not Found | Principal AI",
     };
+  }
 
-    window.addEventListener('scroll', preventScroll);
-    setTimeout(() => {
-      window.removeEventListener('scroll', preventScroll);
-    }, 1000);
+  const content = fs.readFileSync(filePath, "utf-8");
 
-    return () => {
-      window.removeEventListener('scroll', preventScroll);
-    };
-  }, []);
+  // Extract title
+  const titleMatch = content.match(/^#\s+(.+)$/m);
+  const title = titleMatch ? titleMatch[1].trim() : slug;
 
-  // Keep scroll at top when content loads
-  React.useEffect(() => {
-    if (content) {
-      window.scrollTo(0, 0);
+  // Extract excerpt for description
+  const lines = content.split("\n");
+  let inContent = false;
+  let paragraphLines: string[] = [];
+
+  for (const line of lines) {
+    if (line.match(/^#\s+/)) {
+      inContent = true;
+      continue;
     }
-  }, [content]);
+    if (line.match(/\*\*Published:\*\*/)) continue;
+    if (line.match(/\*\*Author:\*\*/)) continue;
+    if (!inContent) continue;
+    if (line.trim() === "") {
+      if (paragraphLines.length > 0) break;
+      continue;
+    }
+    if (line.match(/^#+\s+/)) continue;
+    paragraphLines.push(line.trim());
+  }
 
-  // Initialize mermaid
-  React.useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "default",
-      securityLevel: "loose",
-    });
-    // @ts-expect-error - Expose mermaid to window for themed-markdown
-    window.mermaid = mermaid;
-  }, []);
+  const description = paragraphLines.join(" ").slice(0, 160);
 
-  React.useEffect(() => {
-    if (!slug) return;
+  return {
+    title: `${title} | Principal AI Blog`,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+    },
+  };
+}
 
-    fetch(`/api/blog/${slug}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Blog post not found");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const { content: processedContent } = processContent(data.content || "");
-        setContent(processedContent);
+async function getBlogPost(slug: string): Promise<string | null> {
+  const blogDir = path.join(process.cwd(), "public/blog");
+  const filePath = path.join(blogDir, `${slug}.md`);
 
-        // If this is the pitch-deck, parse it into slides
-        if (slug === "pitch-deck") {
-          try {
-            const presentation = parseMarkdownIntoPresentation(data.content);
-            const parsedSlides = (presentation?.slides || []).map((s) => s.location.content);
-            setSlides(parsedSlides);
-          } catch (error) {
-            console.error("Error parsing markdown into slides:", error);
-            setSlides([data.content]); // Fallback to single slide
-          }
-        }
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
 
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching blog post:", error);
-        setError(error.message);
-        setLoading(false);
-      });
-  }, [slug]);
+  return fs.readFileSync(filePath, "utf-8");
+}
 
-  return (
-    <div
-      style={{
-        height: "100%",
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          overflow: "auto",
-          backgroundColor: theme.colors.backgroundSecondary,
-        }}
-      >
-      {/* Loading State */}
-      {loading && (
-        <div
-          style={{
-            textAlign: "center",
-            padding: "60px 20px",
-            color: theme.colors.textSecondary,
-          }}
-        >
-          Loading blog post...
-        </div>
-      )}
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params;
+  const content = await getBlogPost(slug);
 
-      {/* Error State */}
-      {error && (
-        <div
-          style={{
-            textAlign: "center",
-            padding: "60px 20px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "36px",
-              fontWeight: "700",
-              color: theme.colors.text,
-              marginBottom: "16px",
-            }}
-          >
-            Blog Post Not Found
-          </h1>
-          <p
-            style={{
-              fontSize: "18px",
-              color: theme.colors.textSecondary,
-              marginBottom: "24px",
-            }}
-          >
-            The blog post you&apos;re looking for doesn&apos;t exist.
-          </p>
-          <Link
-            href="/blog"
-            style={{
-              display: "inline-block",
-              padding: "12px 24px",
-              backgroundColor: theme.colors.primary,
-              color: theme.colors.background,
-              borderRadius: "8px",
-              textDecoration: "none",
-              fontSize: "16px",
-              fontWeight: "600",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 8px 24px ${theme.colors.primary}40`;
-            }}
-            onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Back to Blog
-          </Link>
-        </div>
-      )}
+  if (!content) {
+    notFound();
+  }
 
-      {/* Blog Content */}
-      {!loading && !error && content && (
-        <div style={{ opacity: isClient && content ? 1 : 0, transition: "opacity 0.3s ease-in" }}>
-          {slug === "pitch-deck" && viewMode === "book" && slides.length > 0 ? (
-            <div style={{
-              width: "100%",
-              height: "calc(100vh - 120px)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "20px"
-            }}>
-              <div style={{
-                width: "90%",
-                height: "100%",
-                maxWidth: "1400px",
-                border: `2px solid ${theme.colors.border}`,
-                borderRadius: "12px",
-                overflow: "hidden",
-                backgroundColor: theme.colors.background,
-              }}>
-                <ThemedSlidePresentationBook
-                  slides={slides}
-                  viewMode="single"
-                  showNavigation={true}
-                  showSlideCounter={true}
-                  showFullscreenButton={true}
-                  containerHeight="100%"
-                  theme={theme}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="blog-post-content">
-              <DocumentView
-                content={content}
-                transparentBackground={true}
-                theme={theme}
-                maxWidth="100%"
-              />
-            </div>
-          )}
-        </div>
-      )}
-      </div>
-    </div>
-  );
+  return <BlogPostViewer slug={slug} content={content} />;
 }

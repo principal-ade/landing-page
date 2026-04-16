@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';

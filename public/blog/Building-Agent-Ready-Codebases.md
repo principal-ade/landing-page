@@ -1,6 +1,7 @@
 # Intent-Driven Development: Building Agent-Ready Codebases
 
 **Published:** November 24, 2025
+**Tags:** AI Agents, Intent-Driven Development, Engineering Culture
 
 Bug filed. Agent fixes it. Tests pass. Patch ships in two hours. This is possible today. So why isn't it happening?
 

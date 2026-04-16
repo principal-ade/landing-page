@@ -1,6 +1,7 @@
 # Anthropic Just Paid Datadog $10M+. Here's the Question They Should Be Asking Instead.
 
-**Published:** February 2026
+**Published:** February 20, 2026
+**Tags:** Observability, Industry Analysis, AI Agents
 
 ## When AI agents write production code, observability tools tell you what broke. Story-based monitoring tells you if what shipped is what you intended.
 

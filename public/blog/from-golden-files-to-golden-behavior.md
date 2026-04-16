@@ -2,6 +2,7 @@
 
 **Published:** January 14, 2026
 **Author:** Principal Team
+**Tags:** Testing & Behavior, AI Agents, Software Quality
 
 For decades, we've tested software by checking outputs.
 

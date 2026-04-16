@@ -1,6 +1,7 @@
 # The Unreliable Narrator Problem in Agentic Development
 
 **Published:** November 25, 2025
+**Tags:** AI Agents, Software Quality, Engineering Culture
 
 ## When Your Developer Lies Beautifully
 

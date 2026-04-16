@@ -1,6 +1,7 @@
 # Welcome to Principal ADE
 
 **Published:** October 1, 2025
+**Tags:** Product Updates, Engineering Culture
 
 Welcome to Principal ADE - your AI-powered development environment designed to make engineering teams more productive.
 
