@@ -62,7 +62,64 @@ const mockTraces: RegisteredTrace[] = [
 ];
 
 // Mock schematics data
-const mockSchematics: VersionSnapshot[] = [];
+const mockSchematics: VersionSnapshot[] = [
+  {
+    repositoryUrl: 'https://github.com/backlog-md/backlog-md',
+    commitSha: 'abc123',
+    version: '1.0.0',
+    createdAt: new Date().toISOString(),
+    storyboards: [
+      {
+        id: 'task-creation',
+        title: 'Task Creation Flow',
+        description: 'How users create new tasks in the kanban board',
+        markers: [],
+        views: [],
+        canvas: {
+          id: 'task-creation-canvas',
+          name: 'Task Creation',
+          path: '.principal-views/task-creation.canvas',
+          content: {
+            nodes: [
+              { id: 'ui-click', x: 100, y: 100, label: 'User clicks Add Task' },
+              { id: 'validate', x: 300, y: 100, label: 'Validate task data' },
+              { id: 'save', x: 500, y: 100, label: 'Save to Backlog.md' },
+            ],
+            edges: [
+              { from: 'ui-click', to: 'validate' },
+              { from: 'validate', to: 'save' },
+            ],
+          },
+        },
+        workflows: [],
+      },
+      {
+        id: 'drag-drop',
+        title: 'Drag & Drop Task',
+        description: 'Moving tasks between columns',
+        markers: [],
+        views: [],
+        canvas: {
+          id: 'drag-drop-canvas',
+          name: 'Drag & Drop',
+          path: '.principal-views/drag-drop.canvas',
+          content: {
+            nodes: [
+              { id: 'drag-start', x: 100, y: 100, label: 'Start dragging' },
+              { id: 'drop-handler', x: 300, y: 100, label: 'Handle drop' },
+              { id: 'update-status', x: 500, y: 100, label: 'Update task status' },
+            ],
+            edges: [
+              { from: 'drag-start', to: 'drop-handler' },
+              { from: 'drop-handler', to: 'update-status' },
+            ],
+          },
+        },
+        workflows: [],
+      },
+    ],
+  } as VersionSnapshot,
+];
 
 const meta = {
   title: 'Demo/ObservabilityDemo',

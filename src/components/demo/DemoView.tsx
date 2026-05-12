@@ -580,7 +580,7 @@ function IntroScreen() {
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = ORANGE;
+              e.currentTarget.style.borderColor = NAVY;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
