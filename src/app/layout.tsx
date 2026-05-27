@@ -4,6 +4,8 @@ import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Header } from "@/components/Header";
+import { AnalyticsProvider } from "@/lib/analytics";
+import { AnalyticsTracker } from "@/lib/analytics/components/AnalyticsTracker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -64,17 +66,20 @@ export default function RootLayout({
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
-        <ClientThemeProvider>
-          <Header />
-          <div style={{
-            height: '100vh',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            paddingTop: '70px'
-          }}>
-            {children}
-          </div>
-        </ClientThemeProvider>
+        <AnalyticsProvider>
+          <AnalyticsTracker />
+          <ClientThemeProvider>
+            <Header />
+            <div style={{
+              height: '100vh',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              paddingTop: '70px'
+            }}>
+              {children}
+            </div>
+          </ClientThemeProvider>
+        </AnalyticsProvider>
       </body>
     </html>
   );

@@ -1,0 +1,155 @@
+{
+  "id": "blog-rendering-flow",
+  "title": "Blog Discovery & Rendering Flow",
+  "summary": "The blog list renders by scanning markdown files in `public/blog`, extracting frontmatter metadata with regex, generating excerpts from the first content paragraph, cleaning markdown syntax, sorting by date, and passing the structured data to `BlogList`.",
+  "purpose": "informative",
+  "kind": "flow",
+  "markers": [
+    {
+      "id": "file-system-scan",
+      "label": "File System Scan",
+      "description": "The flow begins in `getBlogPosts` where `fs.readdirSync` reads all `.md` files from the `public/blog` directory. Files starting with underscore are filtered out. Each filename becomes a slug by stripping the `.md` extension.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 24,
+        "endLine": 30,
+        "focusLine": 25
+      }
+    },
+    {
+      "id": "metadata-extraction",
+      "label": "Metadata Extraction",
+      "description": "For each markdown file, `fs.readFileSync` loads the content. Regex patterns extract the title from the first `#` heading, the publication date from `**Published:**`, the author from `**Author:**`, and tags from `**Tags:**`. Authors matching 'Principal Team' are filtered to empty string. Tags are split on commas into an array.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 31,
+        "endLine": 57,
+        "focusLine": 35
+      }
+    },
+    {
+      "id": "excerpt-generation",
+      "label": "Excerpt Generation",
+      "description": "The content is split into lines and iterated to find the first meaningful paragraph after the frontmatter. The loop skips metadata lines and headings, collecting paragraph lines until reaching 150 characters. This ensures the excerpt shows actual content rather than metadata.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 59,
+        "endLine": 88,
+        "focusLine": 65
+      }
+    },
+    {
+      "id": "markdown-cleaning",
+      "label": "Markdown Cleaning",
+      "description": "The raw excerpt contains markdown formatting symbols. Sequential regex replacements strip `**bold**`, `*italic*`, `[links](url)`, and `` `code` `` while preserving the text content. The result is sliced to 200 characters with ellipsis added if truncated.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 90,
+        "endLine": 98,
+        "focusLine": 91
+      }
+    },
+    {
+      "id": "sorting",
+      "label": "Sorting by Date",
+      "description": "All posts are sorted by parsing the date string into `Date` objects and comparing their millisecond timestamps with `getTime`. The comparison is reversed (`dateB - dateA`) to achieve newest-first ordering.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 103,
+        "endLine": 108,
+        "focusLine": 104
+      }
+    },
+    {
+      "id": "render-component",
+      "label": "BlogList Rendering",
+      "description": "The `BlogPage` component awaits `getBlogPosts` and passes the resulting array to the `BlogList` component as props. Each post now has clean metadata, a readable excerpt, and proper chronological ordering for display.",
+      "sourcePath": "src/app/blog/page.tsx",
+      "snippet": {
+        "kind": "slice",
+        "startLine": 113,
+        "endLine": 131,
+        "focusLine": 130
+      }
+    }
+  ],
+  "views": [
+    {
+      "kind": "sequence",
+      "markers": [
+        {
+          "markerId": "file-system-scan",
+          "name": "filesystem.blog.scan",
+          "participant": "File System"
+        },
+        {
+          "markerId": "metadata-extraction",
+          "name": "parser.frontmatter.extract",
+          "participant": "Parser"
+        },
+        {
+          "markerId": "excerpt-generation",
+          "name": "parser.excerpt.generate",
+          "participant": "Parser"
+        },
+        {
+          "markerId": "markdown-cleaning",
+          "name": "transformer.markdown.clean",
+          "participant": "Transformer"
+        },
+        {
+          "markerId": "sorting",
+          "name": "transformer.posts.sort",
+          "participant": "Transformer"
+        },
+        {
+          "markerId": "render-component",
+          "name": "ui.bloglist.render",
+          "participant": "UI Layer"
+        }
+      ],
+      "edges": [
+        {
+          "id": "scan-to-extract",
+          "fromEvent": "file-system-scan",
+          "toEvent": "metadata-extraction",
+          "label": "for each file"
+        },
+        {
+          "id": "extract-to-excerpt",
+          "fromEvent": "metadata-extraction",
+          "toEvent": "excerpt-generation",
+          "label": "then"
+        },
+        {
+          "id": "excerpt-to-clean",
+          "fromEvent": "excerpt-generation",
+          "toEvent": "markdown-cleaning",
+          "label": "then"
+        },
+        {
+          "id": "clean-to-sort",
+          "fromEvent": "markdown-cleaning",
+          "toEvent": "sorting",
+          "label": "then"
+        },
+        {
+          "id": "sort-to-render",
+          "fromEvent": "sorting",
+          "toEvent": "render-component",
+          "label": "then"
+        }
+      ],
+      "layout": {
+        "laneOrder": ["File System", "Parser", "Transformer", "UI Layer"]
+      }
+    }
+  ],
+  "createdAt": "2026-05-14T00:00:00Z",
+  "updatedAt": "2026-05-14T00:00:00Z"
+}

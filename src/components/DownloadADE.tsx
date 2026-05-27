@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { trackDownload } from '../app/lib/analytics';
+import { useAnalytics } from '@/lib/analytics';
 import { useTheme } from '@principal-ade/industry-theme';
 
 interface GitHubRelease {
@@ -32,6 +32,7 @@ const Screenshot: React.FC<{ src: string; alt: string; borderColor: string }> = 
 
 export const DownloadADE: React.FC = () => {
   const { theme } = useTheme();
+  const { trackDownload } = useAnalytics();
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
