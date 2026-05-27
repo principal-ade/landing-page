@@ -1,0 +1,136 @@
+// Prisma schema for server-side analytics tracking
+// Supports PostgreSQL, MySQL, or SQLite
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Can be changed to "mysql" or "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Session tracking table
+// Stores user session metadata for journey tracking
+model Session {
+  id                String   @id @default(uuid())
+  sessionId         String   @unique // Client-facing session ID
+
+  // Timestamps
+  startTime         DateTime @default(now())
+  lastActivityTime  DateTime @updatedAt
+  endTime           DateTime?
+
+  // Session metadata
+  landingPage       String
+  exitPage          String?
+  referrer          String?
+
+  // User agent and device info
+  userAgent         String?
+  ipAddress         String?
+  country           String?
+  city              String?
+  deviceType        String?
+  browser           String?
+  os                String?
+
+  // Session stats
+  totalPages        Int      @default(0)
+  totalEvents       Int      @default(0)
+  sessionDuration   Int?     // in seconds
+
+  // Bot detection
+  isBot             Boolean  @default(false)
+  botScore          Float?   // 0-1, higher = more likely bot
+
+  // Relations
+  events            AnalyticsEvent[]
+  pageVisits        PageVisit[]
+
+  // Indexes
+  @@index([sessionId])
+  @@index([startTime])
+  @@index([lastActivityTime])
+  @@index([isBot])
+  @@map("sessions")
+}
+
+// Page visits within a session
+// Tracks each page the user visits
+model PageVisit {
+  id          String   @id @default(uuid())
+  sessionId   String
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  pagePath    String
+  pageTitle   String?
+  timestamp   DateTime @default(now())
+
+  // Time tracking
+  timeOnPage  Int?     // in seconds
+
+  @@index([sessionId])
+  @@index([pagePath])
+  @@index([timestamp])
+  @@map("page_visits")
+}
+
+// Analytics events table
+// Stores all analytics events (clicks, form submissions, etc.)
+model AnalyticsEvent {
+  id          String   @id @default(uuid())
+  sessionId   String
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // Event data
+  eventType   String   // 'click', 'form_submit', 'scroll_depth', etc.
+  category    String
+  action      String
+  label       String?
+  value       Int?
+
+  // Additional event params (stored as JSON)
+  params      Json?
+
+  // Timestamps
+  timestamp   DateTime @default(now())
+
+  // Server enrichment
+  ipAddress   String?
+  userAgent   String?
+
+  // GA4 sync status
+  sentToGA4   Boolean  @default(false)
+  ga4SentAt   DateTime?
+  ga4Error    String?
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([timestamp])
+  @@index([sentToGA4])
+  @@map("analytics_events")
+}
+
+// Failed event queue (for GA4 sync retries)
+model FailedEvent {
+  id          String   @id @default(uuid())
+
+  // Event data
+  eventType   String
+  eventData   Json
+
+  // Retry tracking
+  attempts    Int      @default(0)
+  lastAttempt DateTime?
+  nextRetry   DateTime?
+  error       String?
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([nextRetry])
+  @@index([attempts])
+  @@map("failed_events")
+}

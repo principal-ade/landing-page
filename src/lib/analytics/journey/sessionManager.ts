@@ -2,6 +2,8 @@
 // Uses sessionStorage for client-side persistence
 
 import { trackSessionStart, trackSessionEnd, trackNavigation } from '../core';
+import { isServerSideEnabled } from '../config';
+import { initServerSession, endServerSession } from '../client/serverApi';
 
 const SESSION_STORAGE_KEY = 'analytics_session';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
@@ -57,7 +59,7 @@ const saveSession = (session: SessionData): void => {
 };
 
 // Initialize or resume a session
-export const initSession = (currentPath: string): SessionData => {
+export const initSession = async (currentPath: string): Promise<SessionData> => {
   const existingSession = getStoredSession();
 
   if (existingSession) {
@@ -79,7 +81,22 @@ export const initSession = (currentPath: string): SessionData => {
   };
 
   saveSession(newSession);
-  trackSessionStart(newSession.sessionId, newSession.landingPage, newSession.referrer);
+
+  // Initialize on server if server-side tracking is enabled
+  if (isServerSideEnabled()) {
+    try {
+      await initServerSession(
+        newSession.sessionId,
+        newSession.landingPage,
+        newSession.referrer
+      );
+    } catch (error) {
+      console.error('[SessionManager] Server-side init error:', error);
+    }
+  }
+
+  // Track session start (client-side if enabled)
+  await trackSessionStart(newSession.sessionId, newSession.landingPage, newSession.referrer);
 
   if (process.env.NODE_ENV === 'development') {
     console.log('[SessionManager] New session started:', newSession.sessionId);
@@ -89,14 +106,14 @@ export const initSession = (currentPath: string): SessionData => {
 };
 
 // Track a page navigation
-export const trackPageNavigation = (
+export const trackPageNavigation = async (
   newPath: string,
   navigationType: 'link' | 'back' | 'forward' | 'direct' = 'link'
-): void => {
+): Promise<void> => {
   const session = getStoredSession();
   if (!session) {
     // Session expired or doesn't exist, initialize new one
-    initSession(newPath);
+    await initSession(newPath);
     return;
   }
 
@@ -104,7 +121,7 @@ export const trackPageNavigation = (
 
   // Track navigation if it's a new page
   if (previousPage !== newPath) {
-    trackNavigation(previousPage, newPath, navigationType);
+    await trackNavigation(previousPage, newPath, navigationType);
 
     // Update session
     session.currentPage = newPath;
@@ -133,14 +150,24 @@ export const updateSessionActivity = (): void => {
 };
 
 // End the session (called on page unload)
-export const endSession = (): void => {
+export const endSession = async (): Promise<void> => {
   const session = getStoredSession();
   if (!session) return;
 
   const now = Date.now();
   const sessionDurationSeconds = Math.round((now - session.startTime) / 1000);
 
-  trackSessionEnd(
+  // End session on server if enabled
+  if (isServerSideEnabled()) {
+    try {
+      await endServerSession(session.sessionId);
+    } catch (error) {
+      console.error('[SessionManager] Server-side end error:', error);
+    }
+  }
+
+  // Track session end (client-side if enabled)
+  await trackSessionEnd(
     session.sessionId,
     session.currentPage,
     session.pagesVisited.length,

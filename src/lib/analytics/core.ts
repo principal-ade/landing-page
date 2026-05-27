@@ -1,5 +1,10 @@
 // Core analytics functionality - consolidated from duplicate utilities
 
+import { getEventQueue } from './eventQueue';
+import { isServerSideEnabled, isClientSideEnabled } from './config';
+import { trackServerPageView, trackServerEvent } from './client/serverApi';
+import { getCurrentSession } from './journey/sessionManager';
+
 declare global {
   interface Window {
     gtag?: (
@@ -28,46 +33,116 @@ const logDebug = (eventName: string, eventParams?: Record<string, any>) => {
  * Track page views
  * Called automatically on route changes by usePageTracking hook
  */
-export const pageview = (url: string, title?: string): void => {
-  if (!isAnalyticsAvailable()) {
-    logDebug('pageview (not sent - analytics unavailable)', { url, title });
-    return;
+export const pageview = async (url: string, title?: string): Promise<void> => {
+  const pageTitle = title || (typeof document !== 'undefined' ? document.title : '');
+
+  // Server-side tracking
+  if (isServerSideEnabled()) {
+    const session = getCurrentSession();
+    if (session) {
+      try {
+        await trackServerPageView(
+          session.sessionId,
+          url,
+          pageTitle,
+          session.referrer
+        );
+        logDebug('pageview (server-side)', { url, title });
+      } catch (error) {
+        console.error('[Analytics] Server-side pageview error:', error);
+      }
+    }
   }
 
-  window.gtag!('config', GA_TRACKING_ID!, {
-    page_path: url,
-    page_title: title || document.title,
-  });
+  // Client-side tracking
+  if (isClientSideEnabled() && isAnalyticsAvailable()) {
+    const params = {
+      page_path: url,
+      page_title: pageTitle,
+    };
 
-  logDebug('pageview', { url, title });
+    try {
+      window.gtag!('config', GA_TRACKING_ID!, params);
+      logDebug('pageview (client-side)', { url, title });
+    } catch (error) {
+      console.error('[Analytics] Client-side pageview error:', error);
+      // Queue for retry
+      const queue = getEventQueue();
+      if (queue) {
+        queue.enqueue('pageview', {
+          targetId: GA_TRACKING_ID!,
+          params,
+        });
+      }
+    }
+  } else if (!isServerSideEnabled()) {
+    logDebug('pageview (not sent - analytics unavailable)', { url, title });
+  }
 };
 
 /**
  * Generic event tracking
  * Base function for all custom events
  */
-export const event = (eventParams: {
+export const event = async (eventParams: {
   action: string;
   category: string;
   label?: string;
   value?: number;
   [key: string]: any;
-}): void => {
+}): Promise<void> => {
   const { action, category, label, value, ...otherParams } = eventParams;
 
-  if (!isAnalyticsAvailable()) {
-    logDebug(`event: ${action} (not sent - analytics unavailable)`, eventParams);
-    return;
+  // Server-side tracking
+  if (isServerSideEnabled()) {
+    const session = getCurrentSession();
+    if (session) {
+      try {
+        // Determine event type from action or category
+        const eventType = otherParams.eventType || action;
+
+        await trackServerEvent(
+          session.sessionId,
+          eventType,
+          category,
+          action,
+          label,
+          value,
+          otherParams
+        );
+        logDebug(`event: ${action} (server-side)`, eventParams);
+      } catch (error) {
+        console.error('[Analytics] Server-side event error:', error);
+      }
+    }
   }
 
-  window.gtag!('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-    ...otherParams,
-  });
+  // Client-side tracking
+  if (isClientSideEnabled() && isAnalyticsAvailable()) {
+    const params = {
+      event_category: category,
+      event_label: label,
+      value: value,
+      ...otherParams,
+    };
 
-  logDebug(`event: ${action}`, eventParams);
+    try {
+      window.gtag!('event', action, params);
+      logDebug(`event: ${action} (client-side)`, eventParams);
+    } catch (error) {
+      console.error('[Analytics] Client-side event error:', error);
+      // Queue for retry
+      const queue = getEventQueue();
+      if (queue) {
+        queue.enqueue('event', {
+          action,
+          params,
+        });
+      }
+    }
+  } else if (!isServerSideEnabled()) {
+    logDebug(`event: ${action} (not sent - analytics unavailable)`, eventParams);
+  }
 };
 
 /**
