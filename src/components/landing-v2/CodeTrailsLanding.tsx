@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 import { CodeTrailsHero } from './demo/CodeTrailsHero';
 import { CodeTrailsFrameIoMoment } from './demo/CodeTrailsFrameIoMoment';
+import { CodeTrailsMakeFor } from './demo/CodeTrailsMakeFor';
 import { CodeTrailsPitch } from './demo/CodeTrailsPitch';
 import { CodeTrailsBeforeAfter } from './demo/CodeTrailsBeforeAfter';
 import { Footer } from '../Footer';
@@ -38,6 +39,8 @@ export const CodeTrailsLanding: React.FC = () => {
       {/* Frame.io Moment - Four Synchronized Views */}
       <CodeTrailsFrameIoMoment isMobile={isMobile} />
 
+      {/* Make For Section - Use Cases */}
+      <CodeTrailsMakeFor isMobile={isMobile} />
 
       {/* Pitch Section */}
       <CodeTrailsPitch isMobile={isMobile} />
