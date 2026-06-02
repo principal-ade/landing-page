@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../../providers/ClientThemeProvider';
-import { CodeTrailsLandingFinal } from '../CodeTrailsLandingFinal';
+import { CodeTrailsLandingFinal } from '../../landing-v2/CodeTrailsLandingFinal';
 
 /**
  * Code Trails Landing Page — Final Edition

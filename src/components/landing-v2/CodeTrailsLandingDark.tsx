@@ -6,7 +6,7 @@ import { CodeTrailsHeroDark } from './codetrails/CodeTrailsHeroDark';
 import { CodeTrailsHowItWorksStory } from './codetrails/CodeTrailsHowItWorksStory';
 import { CodeTrailsLiveDemo } from './codetrails/CodeTrailsLiveDemo';
 import { CodeTrailsTransformationFinal } from './codetrails/CodeTrailsTransformationFinal';
-import { Footer } from './Footer';
+import { Footer } from '../Footer';
 
 // Color palette
 const NAVY = '#1a2842';

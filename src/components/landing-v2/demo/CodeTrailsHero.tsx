@@ -45,43 +45,18 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div
-              style={{
-                fontFamily: 'var(--font-mono, monospace)',
-                fontSize: '12px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.18em',
-                color: theme.colors.primary,
-                marginBottom: '24px',
-              }}
-            >
-              Code · Trails
-            </div>
-
             <h1
               style={{
                 fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
                 fontWeight: '700',
                 lineHeight: 1.0,
                 letterSpacing: '-0.04em',
-                color: theme.colors.primary,
+                color: theme.colors.text,
                 margin: 0,
                 fontSize: isMobile ? 'clamp(42px, 11vw, 64px)' : 'clamp(48px, 9.2vw, 120px)',
               }}
             >
-              Ask about
-              <br />
-              your code.
-              <br />
-              <span
-                style={{
-                  color: theme.colors.text,
-                  fontWeight: '400',
-                  display: 'block',
-                }}
-              >
-                Anyone can answer.
-              </span>
+              Code Trails
             </h1>
 
             <p
@@ -95,55 +70,8 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >
-              One link. Walks itself. <strong>They drop a note.</strong>
+              A path through your code, with everything needed to understand it, in one link.
             </p>
-
-            <div
-              style={{
-                marginTop: '40px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '16px',
-              }}
-            >
-              <motion.a
-                href="#get-started"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '16px 32px',
-                  fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                  fontSize: '17px',
-                  fontWeight: '600',
-                  color: '#fff',
-                  background: theme.colors.primary,
-                  border: 'none',
-                  borderRadius: '8px',
-                  boxShadow: `0 4px 20px ${theme.colors.primary}38`,
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Make your first trail →
-              </motion.a>
-
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono, monospace)',
-                  fontSize: '11px',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: theme.colors.textTertiary,
-                }}
-              >
-                No signup<span style={{ color: theme.colors.accent, padding: '0 6px' }}>·</span>Works with Claude
-              </span>
-            </div>
           </motion.div>
         </div>
 

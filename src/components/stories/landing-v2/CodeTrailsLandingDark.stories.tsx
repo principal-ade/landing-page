@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../../providers/ClientThemeProvider';
-import { CodeTrailsLandingDark } from '../CodeTrailsLandingDark';
+import { CodeTrailsLandingDark } from '../../landing-v2/CodeTrailsLandingDark';
 
 /**
  * Code Trails Landing Page — Dark Theme Edition
