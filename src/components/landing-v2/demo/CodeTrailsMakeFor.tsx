@@ -30,7 +30,7 @@ const trails = [
   {
     tag: 'Understanding what your agent did',
     title: 'How video tracking works',
-    description: 'Following a real feature through the code, play to analytics, one step at a time.',
+    description: 'Following a real feature through the code, one step at a time.',
     url: 'https://app.principal-ade.com/trail/f191756b-616a-4a9d-b3fb-84fc0bacf642',
   },
 ];
