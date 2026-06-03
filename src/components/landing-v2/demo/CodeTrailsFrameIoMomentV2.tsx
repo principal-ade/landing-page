@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 
-interface CodeTrailsFrameIoMomentProps {
+interface CodeTrailsFrameIoMomentV2Props {
   isMobile?: boolean;
 }
 
@@ -35,13 +35,13 @@ const spotlights = [
   },
   {
     id: 5,
-    title: 'Sequence flow.',
+    title: 'Behavior flow.',
     desc: 'Every step in the trail, in order.',
     region: { top: '60%', left: '20%', width: '60%', height: '35%' }, // Bottom flow
   },
 ];
 
-export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = ({ isMobile = false }) => {
+export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props> = ({ isMobile = false }) => {
   const { theme } = useTheme();
   const [activeSpotlight, setActiveSpotlight] = React.useState(0);
   const [isInView, setIsInView] = React.useState(false);

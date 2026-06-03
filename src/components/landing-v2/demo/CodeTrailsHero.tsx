@@ -70,7 +70,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >
-              A path through your code, with everything needed to understand it, in one link.
+              A self-contained path through your code, with all the context to understand it. Any browser. Open it and everything's already there.
             </p>
           </motion.div>
         </div>

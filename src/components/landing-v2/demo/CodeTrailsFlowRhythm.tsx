@@ -11,31 +11,31 @@ interface CodeTrailsFlowRhythmProps {
 const cards = [
   {
     number: '01',
-    label: 'FLOW',
-    title: 'Stay in motion with the agent.',
-    description: "The trail captures what happens as it happens. You don't break out to write it down — the act of working with the agent is the act of building the trail.",
+    label: 'SHARED AWARENESS',
+    title: 'Everyone sees what got built.',
+    description: 'Why it matters, where it lives, how it works. The context that makes code make sense, available to the whole team.',
     visual: 'curve',
   },
   {
     number: '02',
-    label: 'RHYTHM',
+    label: 'DURABLE KNOWLEDGE',
     title: (
       <>
-        Know when to pause — <span style={{ color: '#FF6B35' }}>and when not to.</span>
+        Understanding that <span style={{ color: '#FF6B35' }}>compounds.</span>
       </>
     ),
-    description: 'Not every change deserves a meeting; not every change is fire-and-forget. Trails create natural moments where it makes sense to look up, ask, or keep going.',
+    description: 'Every trail makes the next one easier. One link at a time, your team gets smarter about its own code.',
     visual: 'blocks',
   },
   {
     number: '03',
-    label: 'CHECKPOINTS',
+    label: 'COLLECTIVE CONFIDENCE',
     title: (
       <>
-        Moments that <span style={{ color: '#FF6B35' }}>stay.</span>
+        Code everyone can <span style={{ color: '#FF6B35' }}>stand behind.</span>
       </>
     ),
-    description: 'A signed trail is a checkpoint — a kept artifact of what got built, who weighed in, and why. Future-you can find it. Future-them can cite it.',
+    description: 'When understanding is shared, confidence is too. Decisions stop living in one head and become something the whole team owns.',
     visual: 'timeline',
   },
 ];
@@ -73,11 +73,11 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
               fontSize: '11px',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: '#9DB1BF',
+              color: theme.colors.primary,
               marginBottom: '16px',
             }}
           >
-            — 04 A NEW SHAPE FOR AI-ASSISTED WORK
+            BUILT FOR TEAMS THAT BUILD TOGETHER
           </div>
           <h2
             style={{
@@ -90,9 +90,9 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
               marginBottom: '24px',
             }}
           >
-            Flow. Rhythm.
+            When the whole team understands it,
             <br />
-            <span style={{ color: theme.colors.primary }}>Checkpoints.</span>
+            <span style={{ color: theme.colors.primary }}>the whole team owns it.</span>
           </h2>
           <p
             style={{
@@ -103,7 +103,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
               maxWidth: '900px',
             }}
           >
-            Working with agents is faster, but flatter — one undifferentiated stream of activity with no natural moments to look up. Trails put the shape back: places to keep moving, places to pause, places that stay.
+            Agents made one person fast. Code Trails make the whole team keep pace. One link at a time, understanding stops living in one head and starts compounding into something everyone can find, follow, and build on.
           </p>
         </motion.div>
 

@@ -16,7 +16,7 @@ const trails = [
     url: 'https://app.principal-ade.com/trail/dc577428',
   },
   {
-    tag: "A second mind when you're stuck",
+    tag: "A second opinion when you're stuck",
     title: "The carousel that wouldn't render",
     description: 'An hour fighting the agent, "I don\'t even know what to ask it." Solved once the right person could see the trail.',
     url: 'https://app.principal-ade.com/trail/346ab185-d876-4f7f-8bdd-2f5b74610b76',
@@ -37,7 +37,7 @@ const trails = [
 
 const examples = [
   'clarity',
-  'a second mind',
+  'another opinion',
   'coordination',
   'understanding',
 ];
@@ -128,7 +128,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               maxWidth: '800px',
             }}
           >
-            Experience an actual trail. Just click and it will open in your browser.
+            Trails are a byproduct of working, not extra work. See an example trail.
           </p>
         </motion.div>
 
