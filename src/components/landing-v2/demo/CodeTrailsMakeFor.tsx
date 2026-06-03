@@ -13,13 +13,13 @@ const trails = [
     tag: 'Clarity for someone else',
     title: 'How opencode does it',
     description: 'Showing another team how a project actually works, as a link they can open.',
-    url: 'https://app.principal-ade.com/trail/dc577428',
+    url: 'https://app.principal-ade.com/trail/dc577428-6eb3-4180-9002-6494a2ef2c7b',
   },
   {
     tag: "A second opinion when you're stuck",
     title: "The carousel that wouldn't render",
     description: 'An hour fighting the agent, "I don\'t even know what to ask it." Solved once the right person could see the trail.',
-    url: 'https://app.principal-ade.com/trail/346ab185-d876-4f7f-8bdd-2f5b74610b76',
+    url: 'https://app.principal-ade.com/trail/bc6a3653-9559-48b6-a7b8-8a78db9b8b0f',
   },
   {
     tag: "When the decision needs context you don't have",
@@ -163,6 +163,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 display: 'block',
                 position: 'relative',
                 overflow: 'hidden',
+                cursor: 'pointer',
               }}
             >
               {/* Orange bar on left */}
@@ -206,11 +207,13 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               </p>
 
               <div
+                className="trail-link"
                 style={{
                   fontFamily: 'var(--font-inter, Inter, sans-serif)',
                   fontSize: '13px',
                   fontWeight: '600',
                   color: '#F0A48B',
+                  transition: 'text-decoration 0.18s ease',
                 }}
               >
                 Open trail →
@@ -223,6 +226,9 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
       <style jsx>{`
         a:hover .trail-bar {
           opacity: 1 !important;
+        }
+        a:hover .trail-link {
+          text-decoration: underline;
         }
       `}</style>
     </section>
