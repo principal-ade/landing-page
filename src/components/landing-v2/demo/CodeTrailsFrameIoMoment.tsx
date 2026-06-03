@@ -62,7 +62,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
   return (
     <section
       style={{
-        background: 'linear-gradient(180deg, #f0f7ff 0%, #e3f0ff 100%)',
+        background: '#15324A',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
       }}
@@ -103,7 +103,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
               fontSize: isMobile ? 'clamp(28px, 9vw, 42px)' : 'clamp(42px, 4.5vw, 56px)',
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
-              color: '#0a1128',
+              color: '#ffffff',
               marginBottom: '16px',
             }}
           >
@@ -116,7 +116,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
               fontSize: isMobile ? '16px' : '18px',
               lineHeight: 1.6,
-              color: '#4a5568',
+              color: '#9DB1BF',
               maxWidth: '800px',
               margin: 0,
             }}
@@ -196,7 +196,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
                   fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
                   fontSize: isMobile ? '24px' : '32px',
                   fontWeight: '700',
-                  color: '#0a1128',
+                  color: '#ffffff',
                   marginBottom: '12px',
                   letterSpacing: '-0.02em',
                 }}
@@ -208,7 +208,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
                   fontFamily: 'var(--font-inter, Inter, sans-serif)',
                   fontSize: isMobile ? '16px' : '18px',
                   lineHeight: 1.6,
-                  color: '#4a5568',
+                  color: '#B8C7D6',
                   maxWidth: '600px',
                   margin: '0 auto',
                 }}
@@ -235,7 +235,7 @@ export const CodeTrailsFrameIoMoment: React.FC<CodeTrailsFrameIoMomentProps> = (
                   width: index === activeSpotlight ? '32px' : '8px',
                   height: '8px',
                   borderRadius: '4px',
-                  background: index === activeSpotlight ? theme.colors.primary : '#cbd5e0',
+                  background: index === activeSpotlight ? theme.colors.primary : 'rgba(255,255,255,0.2)',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',

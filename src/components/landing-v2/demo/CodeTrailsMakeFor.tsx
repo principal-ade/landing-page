@@ -57,7 +57,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
   return (
     <section
       style={{
-        background: theme.colors.background,
+        background: '#0c1741',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
       }}
@@ -85,7 +85,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               fontSize: isMobile ? 'clamp(28px, 9vw, 42px)' : 'clamp(42px, 4.5vw, 56px)',
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
-              color: '#0a1128',
+              color: '#ffffff',
               marginBottom: '16px',
             }}
           >
@@ -124,7 +124,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
               fontSize: isMobile ? '16px' : '18px',
               lineHeight: 1.6,
-              color: '#4a5568',
+              color: '#9DB1BF',
               maxWidth: '800px',
             }}
           >
@@ -152,13 +152,13 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -3 }}
               style={{
-                background: '#0c1741',
+                background: '#15324A',
                 borderRadius: '14px',
                 padding: isMobile ? '24px' : '28px',
                 textDecoration: 'none',
                 color: '#fff',
-                border: '1px solid #15324A',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                 transition: 'all 0.18s ease',
                 display: 'block',
                 position: 'relative',

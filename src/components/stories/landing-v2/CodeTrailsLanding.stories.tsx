@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../../providers/ClientThemeProvider';
 import { CodeTrailsLanding } from '../../landing-v2/CodeTrailsLanding';
+import { CodeTrailsLandingV3 } from '../../landing-v2/CodeTrailsLandingV3';
 
 /**
  * Code Trails Landing Page
@@ -114,4 +115,30 @@ export const Tablet: Story = {
       defaultViewport: 'tablet',
     },
   },
+};
+
+/**
+ * V3 - AKQA Recommendations
+ *
+ * Restructured based on AKQA feedback:
+ * 1. Hero with strong hook + clear CTA (before/after pain state)
+ * 2. Four views demo (Frame.io moment) - show the product immediately
+ * 3. Use cases (Make For) - when you need this
+ * 4. Get started (For Builders) - moved UP for clarity
+ * 5. Social proof - traction and credibility
+ * 6. Philosophy (Flow/Rhythm) - optional depth, moved to bottom
+ *
+ * Key changes:
+ * - Lead with action ("See a trail in action")
+ * - Show pain → solution in hero
+ * - Earlier proof of what a trail IS
+ * - Clear CTA hierarchy
+ * - Social proof before philosophy
+ */
+export const V3_AKQA: Story = {
+  render: () => (
+    <ClientThemeProvider>
+      <CodeTrailsLandingV3 />
+    </ClientThemeProvider>
+  ),
 };
