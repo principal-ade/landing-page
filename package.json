@@ -13,7 +13,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@a24z/observability-sdk": "^0.5.3",
     "@aws-sdk/client-s3": "^3.932.0",
     "@backlog-md/core": "^0.3.21",
     "@dnd-kit/core": "^6.3.1",
