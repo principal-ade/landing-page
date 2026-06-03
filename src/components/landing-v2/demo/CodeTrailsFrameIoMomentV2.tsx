@@ -13,31 +13,31 @@ const spotlights = [
     id: 1,
     title: 'Plain English.',
     desc: 'What the code does, in words, before you read the code.',
-    region: { top: '8%', left: '0%', width: '45%', height: '35%' }, // Left panel
+    region: { top: '13%', left: '0.4%', width: '24%', height: '46%' },
   },
   {
     id: 2,
     title: 'File City.',
-    desc: 'Spacial understanding, your codebase as a map by files and packages.',
-    region: { top: '15%', left: '15%', width: '40%', height: '40%' }, // File City viz
+    desc: 'Spatial understanding, your codebase as a map by files and packages.',
+    region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
   },
   {
     id: 3,
     title: 'Human feedback.',
     desc: 'Leave a note by highlighting words or attach to a specific line of code.',
-    region: { top: '15%', left: '45%', width: '30%', height: '30%' }, // Notes dialog
+    region: { top: '15%', left: '54%', width: '19%', height: '28%' },
   },
   {
     id: 4,
     title: 'Relevant code.',
     desc: 'The lines that matter, for whoever needs them.',
-    region: { top: '12%', left: '63%', width: '34%', height: '48%' }, // Code panel - tighter around code
+    region: { top: '15%', left: '74%', width: '25%', height: '43%' },
   },
   {
     id: 5,
     title: 'Behavior flow.',
     desc: 'Every step in the trail, in order.',
-    region: { top: '60%', left: '20%', width: '60%', height: '35%' }, // Bottom flow
+    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
   },
 ];
 
@@ -156,27 +156,57 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               }}
             />
 
+            {/* Marching ants keyframes */}
+            <style>{`
+              @keyframes marchTop    { to { background-position: 16px 0; } }
+              @keyframes marchRight  { to { background-position: 0 16px; } }
+              @keyframes marchBottom { to { background-position: -16px 0; } }
+              @keyframes marchLeft   { to { background-position: 0 -16px; } }
+            `}</style>
+
             {/* Animated Spotlight */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSpotlight.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 style={{
                   position: 'absolute',
                   top: currentSpotlight.region.top,
                   left: currentSpotlight.region.left,
                   width: currentSpotlight.region.width,
                   height: currentSpotlight.region.height,
-                  boxShadow: `inset 0 0 0 3px ${theme.colors.primary},
-                              0 0 30px rgba(255, 107, 53, 0.3),
-                              0 0 60px rgba(255, 107, 53, 0.15)`,
                   borderRadius: '8px',
                   pointerEvents: 'none',
                 }}
-              />
+              >
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                  background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
+                  backgroundSize: '16px 3px',
+                  animation: 'marchTop 0.7s linear infinite',
+                }} />
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, width: '3px',
+                  background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
+                  backgroundSize: '3px 16px',
+                  animation: 'marchRight 0.7s linear infinite',
+                }} />
+                <div style={{
+                  position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px',
+                  background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
+                  backgroundSize: '16px 3px',
+                  animation: 'marchBottom 0.7s linear infinite',
+                }} />
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px',
+                  background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
+                  backgroundSize: '3px 16px',
+                  animation: 'marchLeft 0.7s linear infinite',
+                }} />
+              </motion.div>
             </AnimatePresence>
           </div>
 
