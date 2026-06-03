@@ -35,7 +35,7 @@ const spotlights = [
   },
   {
     id: 5,
-    title: 'The flow.',
+    title: 'Sequence flow.',
     desc: 'Every step in the trail, in order.',
     region: { top: '60%', left: '20%', width: '60%', height: '35%' }, // Bottom flow
   },
