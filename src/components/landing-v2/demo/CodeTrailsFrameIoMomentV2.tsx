@@ -46,18 +46,8 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
   const [activeSpotlight, setActiveSpotlight] = React.useState(0);
   const [isInView, setIsInView] = React.useState(false);
 
-  // Auto-cycle through spotlights when in view
-  React.useEffect(() => {
-    if (!isInView) return;
-
-    const interval = setInterval(() => {
-      setActiveSpotlight((prev) => (prev + 1) % spotlights.length);
-    }, 3000); // Change every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [isInView]);
-
   const currentSpotlight = spotlights[activeSpotlight];
+  const handleNext = () => setActiveSpotlight((prev) => (prev + 1) % spotlights.length);
 
   return (
     <section
@@ -171,7 +161,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
                 style={{
                   position: 'absolute',
                   top: currentSpotlight.region.top,
@@ -247,30 +237,58 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           </div>
 
           {/* Progress Indicators */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '12px',
-              marginTop: '32px',
-            }}
-          >
-            {spotlights.map((spotlight, index) => (
-              <button
-                key={spotlight.id}
-                onClick={() => setActiveSpotlight(index)}
-                style={{
-                  width: index === activeSpotlight ? '32px' : '8px',
-                  height: '8px',
-                  borderRadius: '4px',
-                  background: index === activeSpotlight ? theme.colors.primary : 'rgba(255,255,255,0.2)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  padding: 0,
-                }}
-              />
-            ))}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '32px' }}>
+            {/* Left arrow */}
+            <button
+              onClick={() => setActiveSpotlight((prev) => (prev - 1 + spotlights.length) % spotlights.length)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: '20px',
+                padding: '4px 8px',
+                lineHeight: 1,
+              }}
+            >
+              ←
+            </button>
+
+            {/* Dots */}
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              {spotlights.map((spotlight, index) => (
+                <button
+                  key={spotlight.id}
+                  onClick={() => setActiveSpotlight(index)}
+                  style={{
+                    width: index === activeSpotlight ? '36px' : '10px',
+                    height: '10px',
+                    borderRadius: '5px',
+                    background: index === activeSpotlight ? theme.colors.primary : 'rgba(255,255,255,0.2)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Right arrow */}
+            <button
+              onClick={handleNext}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: '20px',
+                padding: '4px 8px',
+                lineHeight: 1,
+              }}
+            >
+              →
+            </button>
           </div>
         </motion.div>
       </div>
