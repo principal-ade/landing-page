@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useAnalytics } from '@/lib/analytics';
+// TEMP: Analytics disabled for deployment
+// import { useAnalytics } from '@/lib/analytics';
 import { useTheme } from '@principal-ade/industry-theme';
 
 interface GitHubRelease {
@@ -32,7 +33,8 @@ const Screenshot: React.FC<{ src: string; alt: string; borderColor: string }> = 
 
 export const DownloadADE: React.FC = () => {
   const { theme } = useTheme();
-  const { trackDownload } = useAnalytics();
+  // TEMP: Analytics disabled for deployment
+  const trackDownload = () => {}; // no-op
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
