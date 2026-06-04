@@ -21,7 +21,9 @@ export const Header: React.FC = () => {
   const isProductPage = pathname?.startsWith('/product') ||
                         pathname?.startsWith('/file-city') ||
                         pathname?.startsWith('/principal-feed') ||
-                        pathname?.startsWith('/story-based-monitoring');
+                        pathname?.startsWith('/story-based-monitoring') ||
+                        pathname?.startsWith('/code-trails');
+  const isCodeTrailsPage = pathname?.startsWith('/code-trails');
   const isFileCityPage = pathname?.startsWith('/file-city');
   const isPrincipalFeedPage = pathname?.startsWith('/principal-feed');
   const isStoryMonitoringPage = pathname?.startsWith('/story-based-monitoring');
@@ -220,6 +222,33 @@ export const Header: React.FC = () => {
                     }
                   `}
                 </style>
+                <a
+                  href="https://principal-ade.com/code-trails"
+                  style={{
+                    display: 'block',
+                    padding: '12px 16px',
+                    color: isCodeTrailsPage ? theme.colors.primary : theme.colors.text,
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                    borderRadius: '8px',
+                    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+                    background: isCodeTrailsPage ? `${theme.colors.primary}15` : 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = isCodeTrailsPage ? `${theme.colors.primary}25` : `${theme.colors.primary}10`;
+                    e.currentTarget.style.color = theme.colors.primary;
+                    e.currentTarget.style.transform = 'translateX(4px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = isCodeTrailsPage ? `${theme.colors.primary}15` : 'transparent';
+                    e.currentTarget.style.color = isCodeTrailsPage ? theme.colors.primary : theme.colors.text;
+                    e.currentTarget.style.transform = 'translateX(0)';
+                  }}
+                >
+                  Code Trails
+                </a>
                 <Link
                   href="/file-city"
                   style={{
@@ -440,6 +469,19 @@ export const Header: React.FC = () => {
             </button>
             {mobileProductOpen && (
               <div style={{ paddingLeft: '16px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a
+                  href="https://principal-ade.com/code-trails"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    color: isCodeTrailsPage ? theme.colors.primary : theme.colors.textSecondary,
+                    textDecoration: 'none',
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  Code Trails
+                </a>
                 <Link
                   href="/file-city"
                   onClick={() => setMobileMenuOpen(false)}
