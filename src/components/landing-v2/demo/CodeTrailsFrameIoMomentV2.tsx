@@ -52,9 +52,13 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
   return (
     <section
       style={{
+        minHeight: 'calc(100vh - 70px)',
         background: '#15324A',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       <div

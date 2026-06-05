@@ -14,7 +14,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
   return (
     <section
       style={{
-        minHeight: '90vh',
+        minHeight: 'calc(100vh - 70px)',
         background: `radial-gradient(1100px 600px at 70% 8%, rgba(255,135,85,0.10), transparent 60%),
                      radial-gradient(900px 600px at 12% 90%, rgba(34,211,238,0.10), transparent 60%),
                      ${theme.colors.background}`,
@@ -22,6 +22,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
         flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
+        justifyContent: 'center',
       }}
     >
       {/* Hero Content */}

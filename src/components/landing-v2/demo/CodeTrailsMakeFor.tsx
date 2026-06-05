@@ -57,9 +57,13 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
   return (
     <section
       style={{
+        minHeight: 'calc(100vh - 70px)',
         background: '#0c1741',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       <div

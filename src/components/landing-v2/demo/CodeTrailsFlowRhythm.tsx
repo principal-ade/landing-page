@@ -46,9 +46,13 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
   return (
     <section
       style={{
+        minHeight: 'calc(100vh - 70px)',
         background: '#0c1741',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       <div
