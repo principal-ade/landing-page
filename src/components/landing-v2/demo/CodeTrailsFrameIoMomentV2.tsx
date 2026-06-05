@@ -40,7 +40,7 @@ const spotlights = [
   {
     id: 5,
     title: 'Behavior flow.',
-    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
+    region: { top: '59%', left: '26%', width: '48%', height: '27%' },
     commentPos: { top: '60%', left: '8%' },
   },
 ];
