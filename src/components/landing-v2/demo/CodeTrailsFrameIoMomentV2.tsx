@@ -15,33 +15,38 @@ interface CodeTrailsFrameIoMomentV2Props {
 const spotlights = [
   {
     id: 1,
-    title: 'Plain English.',
-    region: { top: '13%', left: '0.4%', width: '24%', height: '46%' },
+    title: 'Plain English description',
+    region: { top: '8%', left: '0.4%', width: '28%', height: '31%' },
     commentPos: { top: '11%', left: '26%' },
+    labelPos: { top: '41.5%', left: '1.5%' },
   },
   {
     id: 2,
-    title: 'File City.',
+    title: 'File City',
     region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
     commentPos: { top: '53%', left: '30%' },
+    labelPos: { top: '53%', left: '35.5%' },
   },
   {
     id: 3,
-    title: 'Human feedback.',
+    title: 'Leave a note',
     region: { top: '15%', left: '54%', width: '19%', height: '28%' },
     commentPos: { top: '44%', left: '54%' },
+    labelPos: { top: '44%', left: '57.5%' },
   },
   {
     id: 4,
-    title: 'Relevant code.',
+    title: 'Actual code',
     region: { top: '15%', left: '74%', width: '25%', height: '43%' },
     commentPos: { top: '60%', left: '74%' },
+    labelPos: { top: '59%', left: '81%' },
   },
   {
     id: 5,
-    title: 'Behavior flow.',
-    region: { top: '59%', left: '26%', width: '48%', height: '27%' },
+    title: 'Sequence flow',
+    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
     commentPos: { top: '60%', left: '8%' },
+    labelPos: { top: '77%', left: '76%' },
   },
 ];
 
@@ -214,88 +219,39 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               </motion.div>
             </AnimatePresence>
 
-            {/* Editable comment box */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`comment-${currentSpotlight.id}`}
-                initial={{ opacity: 0, scale: 0.95, y: -4 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -4 }}
-                transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  position: 'absolute',
-                  top: currentSpotlight.commentPos.top,
-                  left: currentSpotlight.commentPos.left,
-                  width: isMobile ? '40%' : '22%',
-                  padding: '10px 12px',
-                  zIndex: 20,
-                  pointerEvents: 'all',
-                }}
-              >
-                <textarea
-                  value={comments[activeSpotlight]}
-                  onChange={(e) =>
-                    setComments((prev) =>
-                      prev.map((c, i) => (i === activeSpotlight ? e.target.value : c))
-                    )
-                  }
-                  readOnly={!hasAccess}
-                  rows={3}
+            {/* Label with pointer line (for spotlights that have labelPos) */}
+            {currentSpotlight.labelPos && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`label-${currentSpotlight.id}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
                   style={{
-                    width: '100%',
-                    border: 'none',
-                    outline: 'none',
-                    resize: 'none',
-                    fontSize: `${textFontSize}px`,
-                    lineHeight: 1.55,
-                    color: textColor,
-                    background: 'transparent',
-                    fontFamily: textFontFamily,
-                    boxSizing: 'border-box',
-                    padding: 0,
-                    margin: 0,
-                    cursor: hasAccess ? 'text' : 'default',
-                    opacity: hasAccess ? 1 : 0.75,
+                    position: 'absolute',
+                    top: currentSpotlight.labelPos.top,
+                    left: currentSpotlight.labelPos.left,
+                    zIndex: 15,
                   }}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                >
+                  {/* Label text */}
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                      fontSize: isMobile ? '16px' : '18px',
+                      fontWeight: '600',
+                      color: theme.colors.primary,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {currentSpotlight.title}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            )}
 
-          {/* Text Description Below */}
-          <div
-            style={{
-              marginTop: isMobile ? '32px' : '48px',
-              textAlign: 'center',
-              minHeight: isMobile ? '100px' : '120px',
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                  fontSize: isMobile ? '24px' : '32px',
-                  fontWeight: '700',
-                  color: '#ffffff',
-                  marginBottom: '12px',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {currentSpotlight.title}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                  fontSize: isMobile ? '16px' : '18px',
-                  lineHeight: 1.6,
-                  color: '#B8C7D6',
-                  maxWidth: '600px',
-                  margin: '0 auto',
-                }}
-              >
-                {comments[activeSpotlight]}
-              </div>
-            </div>
+            {/* Editable comment box - hidden */}
           </div>
 
           {/* Progress Indicators */}
