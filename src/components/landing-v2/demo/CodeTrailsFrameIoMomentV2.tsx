@@ -6,45 +6,56 @@ import { useTheme } from '@principal-ade/industry-theme';
 
 interface CodeTrailsFrameIoMomentV2Props {
   isMobile?: boolean;
+  hasAccess?: boolean;
+  textFontSize?: number;
+  textFontFamily?: string;
+  textColor?: string;
 }
 
 const spotlights = [
   {
     id: 1,
     title: 'Plain English.',
-    desc: 'What the code does, in words, before you read the code.',
     region: { top: '13%', left: '0.4%', width: '24%', height: '46%' },
+    commentPos: { top: '11%', left: '26%' },
   },
   {
     id: 2,
     title: 'File City.',
-    desc: 'Spatial understanding, your codebase as a map by files and packages.',
     region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
+    commentPos: { top: '53%', left: '30%' },
   },
   {
     id: 3,
     title: 'Human feedback.',
-    desc: 'Leave a note by highlighting words or attach to a specific line of code.',
     region: { top: '15%', left: '54%', width: '19%', height: '28%' },
+    commentPos: { top: '44%', left: '54%' },
   },
   {
     id: 4,
     title: 'Relevant code.',
-    desc: 'The lines that matter, for whoever needs them.',
     region: { top: '15%', left: '74%', width: '25%', height: '43%' },
+    commentPos: { top: '60%', left: '74%' },
   },
   {
     id: 5,
     title: 'Behavior flow.',
-    desc: 'Every step in the trail, in order.',
     region: { top: '59%', left: '26%', width: '48%', height: '37%' },
+    commentPos: { top: '60%', left: '8%' },
   },
 ];
 
-export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props> = ({ isMobile = false }) => {
+export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props> = ({
+  isMobile = false,
+  hasAccess = false,
+  textFontSize = 25,
+  textFontFamily = 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+  textColor = '#FF6E00',
+}) => {
   const { theme } = useTheme();
   const [activeSpotlight, setActiveSpotlight] = React.useState(0);
   const [isInView, setIsInView] = React.useState(false);
+  const [comments, setComments] = React.useState(spotlights.map((s) => s.title));
 
   const currentSpotlight = spotlights[activeSpotlight];
   const handleNext = () => setActiveSpotlight((prev) => (prev + 1) % spotlights.length);
@@ -81,7 +92,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           <div
             style={{
               fontFamily: 'var(--font-mono, monospace)',
-              fontSize: '11px',
+              fontSize: '50px',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               color: theme.colors.primary,
@@ -202,6 +213,53 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                 }} />
               </motion.div>
             </AnimatePresence>
+
+            {/* Editable comment box */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`comment-${currentSpotlight.id}`}
+                initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -4 }}
+                transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  position: 'absolute',
+                  top: currentSpotlight.commentPos.top,
+                  left: currentSpotlight.commentPos.left,
+                  width: isMobile ? '40%' : '22%',
+                  padding: '10px 12px',
+                  zIndex: 20,
+                  pointerEvents: 'all',
+                }}
+              >
+                <textarea
+                  value={comments[activeSpotlight]}
+                  onChange={(e) =>
+                    setComments((prev) =>
+                      prev.map((c, i) => (i === activeSpotlight ? e.target.value : c))
+                    )
+                  }
+                  readOnly={!hasAccess}
+                  rows={3}
+                  style={{
+                    width: '100%',
+                    border: 'none',
+                    outline: 'none',
+                    resize: 'none',
+                    fontSize: `${textFontSize}px`,
+                    lineHeight: 1.55,
+                    color: textColor,
+                    background: 'transparent',
+                    fontFamily: textFontFamily,
+                    boxSizing: 'border-box',
+                    padding: 0,
+                    margin: 0,
+                    cursor: hasAccess ? 'text' : 'default',
+                    opacity: hasAccess ? 1 : 0.75,
+                  }}
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Text Description Below */}
@@ -235,7 +293,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                   margin: '0 auto',
                 }}
               >
-                {currentSpotlight.desc}
+                {comments[activeSpotlight]}
               </div>
             </div>
           </div>
