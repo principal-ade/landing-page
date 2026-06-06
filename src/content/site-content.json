@@ -1,5 +1,8 @@
 {
-  "sizes": {},
+  "sizes": {
+    "flowRhythm.eyebrow": 50,
+    "forBuilders.eyebrow": 50
+  },
   "hero": {
     "heading": "Code Trails",
     "subheading": "A self-contained path through your code, with all the context to understand it. Any browser. Open it and everything's already there."
