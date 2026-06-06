@@ -10,7 +10,7 @@ const EditModeContext = React.createContext<EditModeContextValue>({ isEditMode: 
 
 export const useEditMode = () => React.useContext(EditModeContext);
 
-export const EditModeProvider: React.FC<{ children: React.ReactNode; canEdit?: boolean }> = ({ children, canEdit = false }) => {
+export const EditModeProvider: React.FC<{ children: React.ReactNode; canEdit?: boolean }> = ({ children, canEdit = true }) => {
   const [isEditMode, setIsEditMode] = React.useState(() => {
     if (!canEdit || typeof window === 'undefined') return false;
     return localStorage.getItem('edit-mode') === 'true';
