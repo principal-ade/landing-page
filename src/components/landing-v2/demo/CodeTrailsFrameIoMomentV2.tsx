@@ -97,7 +97,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           <div
             style={{
               fontFamily: 'var(--font-mono, monospace)',
-              fontSize: '50px',
+              fontSize: isMobile ? '22px' : '28px',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               color: theme.colors.primary,
