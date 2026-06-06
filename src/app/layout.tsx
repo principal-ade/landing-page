@@ -24,8 +24,8 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Principal-ade - The Principal Engineer for Your Codebase",
-  description: "AI-powered principal engineering assistant that helps you make better architectural decisions and maintain code quality at scale.",
+  title: "Principal AI",
+  description: "Code Trails: Frame.io for code collaboration",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -45,12 +45,22 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Principal-ade",
+    title: "Principal AI",
   },
   formatDetection: {
     telephone: false,
   },
   manifest: "/manifest.json",
+  openGraph: {
+    title: "Principal AI",
+    description: "Code Trails: Frame.io for code collaboration",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Principal AI",
+    description: "Code Trails: Frame.io for code collaboration",
+  },
 };
 
 export default function RootLayout({
