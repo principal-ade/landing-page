@@ -1,0 +1,91 @@
+{
+  "sizes": {},
+  "hero": {
+    "heading": "Code Trails",
+    "subheading": "A self-contained path through your code, with all the context to understand it. Any browser. Open it and everything's already there."
+  },
+  "frameIo": {
+    "eyebrow": "It's Frame.io. But for code.",
+    "heading": "Open it like you'd open a video.",
+    "body": "Four synchronized views. File City shows where. Sequence shows how. Code shows what. Plain English explains why. Click one, the others follow. Click a line, leave a note, right where it belongs.",
+    "spotlights": [
+      "Plain English description",
+      "File City",
+      "Leave a note",
+      "Actual code",
+      "Sequence flow"
+    ]
+  },
+  "makeFor": {
+    "heading": "Create a Trail when you need:",
+    "body": "Trails are a byproduct of working, not extra work. See an example trail.",
+    "examples": ["clarity", "another opinion", "coordination", "understanding"],
+    "trails": [
+      {
+        "tag": "Clarity for someone else",
+        "description": "Showing another team how a project actually works, as a link they can open.",
+        "url": "https://app.principal-ade.com/trail/dc577428-6eb3-4180-9002-6494a2ef2c7b"
+      },
+      {
+        "tag": "A second opinion when you're stuck",
+        "description": "An hour fighting the agent, \"I don't even know what to ask it.\" Solved once the right person could see the trail.",
+        "url": "https://app.principal-ade.com/trail/bc6a3653-9559-48b6-a7b8-8a78db9b8b0f"
+      },
+      {
+        "tag": "When the decision needs context you don't have",
+        "description": "An architecture choice that needed the customer and budget picture, weighed in on the exact step.",
+        "url": "https://app.principal-ade.com/trail/e16d8a04-c898-46d9-8bac-500fb06f1922"
+      },
+      {
+        "tag": "Understanding what your agent did",
+        "description": "Following a real feature through the code, one step at a time.",
+        "url": "https://app.principal-ade.com/trail/f191756b-616a-4a9d-b3fb-84fc0bacf642"
+      }
+    ]
+  },
+  "flowRhythm": {
+    "eyebrow": "BUILT FOR TEAMS THAT BUILD TOGETHER",
+    "heading": "When the whole team understands it,",
+    "headingHighlight": "the whole team owns it.",
+    "body": "Agents made one person fast. Code Trails make the whole team keep pace. One link at a time, understanding stops living in one head and starts compounding into something everyone can find, follow, and build on.",
+    "cards": [
+      {
+        "number": "01",
+        "label": "SHARED AWARENESS",
+        "title": "Everyone sees what got built.",
+        "titleBase": null,
+        "titleHighlight": null,
+        "description": "Why it matters, where it lives, how it works. The context that makes code make sense, available to the whole team."
+      },
+      {
+        "number": "02",
+        "label": "DURABLE KNOWLEDGE",
+        "title": null,
+        "titleBase": "Understanding that",
+        "titleHighlight": "compounds.",
+        "description": "Every trail makes the next one easier. One link at a time, your team gets smarter about its own code."
+      },
+      {
+        "number": "03",
+        "label": "COLLECTIVE CONFIDENCE",
+        "title": null,
+        "titleBase": "Code everyone can",
+        "titleHighlight": "stand behind.",
+        "description": "When understanding is shared, confidence is too. Decisions stop living in one head and become something the whole team owns."
+      }
+    ]
+  },
+  "forBuilders": {
+    "eyebrow": "For the builders",
+    "heading": "Make your own code trail.",
+    "body": "Add the Code Trails skill to the agent you already use. Next time you're not sure about a change, make a trail and send it, no new tool to learn.",
+    "command": "npx @principal-ai/code-trails init"
+  },
+  "closer": {
+    "quote": "Built by engineers who got tired of clone-the-repo to answer one question.",
+    "skillSource": "Skill source",
+    "docs": "Docs",
+    "runLocally": "Run locally",
+    "copyright": "© 2026 Principal AI"
+  }
+}

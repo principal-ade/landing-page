@@ -3,6 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
+import { EditableText } from '../EditableText';
+import siteContent from '../../../content/site-content.json';
 
 interface CodeTrailsForBuildersProps {
   isMobile?: boolean;
@@ -10,10 +12,11 @@ interface CodeTrailsForBuildersProps {
 
 export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ isMobile = false }) => {
   const { theme } = useTheme();
+  const c = siteContent.forBuilders;
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('npx @principal-ai/code-trails init');
+    navigator.clipboard.writeText(c.command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -30,19 +33,13 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
         justifyContent: 'center',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1000px',
-          margin: '0 auto',
-        }}
-      >
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Eyelash */}
           <div
             style={{
               fontFamily: 'var(--font-mono, monospace)',
@@ -53,10 +50,9 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
               marginBottom: '16px',
             }}
           >
-            For the builders
+            <EditableText contentKey="forBuilders.eyebrow" value={c.eyebrow} />
           </div>
 
-          {/* Headline */}
           <h2
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -68,10 +64,9 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
               marginBottom: '24px',
             }}
           >
-            Make your own code trail.
+            <EditableText contentKey="forBuilders.heading" value={c.heading} />
           </h2>
 
-          {/* Body Copy */}
           <p
             style={{
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
@@ -82,10 +77,9 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
               marginBottom: '32px',
             }}
           >
-            Add the Code Trails skill to the agent you already use. Next time you're not sure about a change, make a trail and send it, no new tool to learn.
+            <EditableText contentKey="forBuilders.body" value={c.body} />
           </p>
 
-          {/* Code Snippet */}
           <div
             style={{
               display: 'inline-flex',
@@ -105,7 +99,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
                 letterSpacing: '0.02em',
               }}
             >
-              npx @principal-ai/code-trails init
+              <EditableText contentKey="forBuilders.command" value={c.command} />
             </code>
             <button
               onClick={handleCopy}

@@ -3,6 +3,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
+import { EditableText } from '../EditableText';
+import siteContent from '../../../content/site-content.json';
 
 interface CodeTrailsFrameIoMomentV2Props {
   isMobile?: boolean;
@@ -12,42 +14,12 @@ interface CodeTrailsFrameIoMomentV2Props {
   textColor?: string;
 }
 
-const spotlights = [
-  {
-    id: 1,
-    title: 'Plain English description',
-    region: { top: '8%', left: '0.4%', width: '28%', height: '31%' },
-    commentPos: { top: '11%', left: '26%' },
-    labelPos: { top: '41.5%', left: '1.5%' },
-  },
-  {
-    id: 2,
-    title: 'File City',
-    region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
-    commentPos: { top: '53%', left: '30%' },
-    labelPos: { top: '53%', left: '35.5%' },
-  },
-  {
-    id: 3,
-    title: 'Leave a note',
-    region: { top: '15%', left: '54%', width: '19%', height: '28%' },
-    commentPos: { top: '44%', left: '54%' },
-    labelPos: { top: '44%', left: '57.5%' },
-  },
-  {
-    id: 4,
-    title: 'Actual code',
-    region: { top: '15%', left: '74%', width: '25%', height: '43%' },
-    commentPos: { top: '60%', left: '74%' },
-    labelPos: { top: '59%', left: '81%' },
-  },
-  {
-    id: 5,
-    title: 'Sequence flow',
-    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
-    commentPos: { top: '60%', left: '8%' },
-    labelPos: { top: '77%', left: '76%' },
-  },
+const spotlightsMeta = [
+  { id: 1, region: { top: '8%', left: '0.4%', width: '28%', height: '31%' }, commentPos: { top: '11%', left: '26%' }, labelPos: { top: '41.5%', left: '1.5%' } },
+  { id: 2, region: { top: '19%', left: '29.6%', width: '21%', height: '33%' }, commentPos: { top: '53%', left: '30%' }, labelPos: { top: '53%', left: '35.5%' } },
+  { id: 3, region: { top: '15%', left: '54%', width: '19%', height: '28%' }, commentPos: { top: '44%', left: '54%' }, labelPos: { top: '44%', left: '57.5%' } },
+  { id: 4, region: { top: '15%', left: '74%', width: '25%', height: '43%' }, commentPos: { top: '60%', left: '74%' }, labelPos: { top: '59%', left: '81%' } },
+  { id: 5, region: { top: '59%', left: '26%', width: '48%', height: '37%' }, commentPos: { top: '60%', left: '8%' }, labelPos: { top: '77%', left: '76%' } },
 ];
 
 export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props> = ({
@@ -58,9 +30,11 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
   textColor = '#FF6E00',
 }) => {
   const { theme } = useTheme();
+  const c = siteContent.frameIo;
+  const spotlights = spotlightsMeta.map((s, i) => ({ ...s, title: c.spotlights[i] }));
   const [activeSpotlight, setActiveSpotlight] = React.useState(0);
   const [isInView, setIsInView] = React.useState(false);
-  const [comments, setComments] = React.useState(spotlights.map((s) => s.title));
+  const [comments, setComments] = React.useState(c.spotlights);
 
   const currentSpotlight = spotlights[activeSpotlight];
   const handleNext = () => setActiveSpotlight((prev) => (prev + 1) % spotlights.length);
@@ -77,22 +51,14 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
         justifyContent: 'center',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-        }}
-      >
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Headline */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            marginBottom: isMobile ? '48px' : '72px',
-            textAlign: 'left',
-          }}
+          style={{ marginBottom: isMobile ? '48px' : '72px', textAlign: 'left' }}
         >
           <div
             style={{
@@ -104,7 +70,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               marginBottom: '16px',
             }}
           >
-            It's Frame.io. But for code.
+            <EditableText contentKey="frameIo.eyebrow" value={c.eyebrow} />
           </div>
           <h2
             style={{
@@ -117,7 +83,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               marginBottom: '16px',
             }}
           >
-            Open it like you'd open a video.
+            <EditableText contentKey="frameIo.heading" value={c.heading} />
           </h2>
           <p
             style={{
@@ -129,7 +95,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               margin: 0,
             }}
           >
-            Four synchronized views. File City shows where. Sequence shows how. Code shows what. Plain English explains why. Click one, the others follow. Click a line, leave a note, right where it belongs.
+            <EditableText contentKey="frameIo.body" value={c.body} />
           </p>
         </motion.div>
 
@@ -141,10 +107,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           onViewportLeave={() => setIsInView(false)}
           viewport={{ once: false, margin: '-100px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-          }}
+          style={{ maxWidth: '1200px', margin: '0 auto' }}
         >
           {/* Screenshot Container */}
           <div
@@ -155,18 +118,12 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
               boxShadow: '0 40px 120px rgba(0,0,0,0.25)',
             }}
           >
-            {/* Base Screenshot */}
             <img
               src="/trail-four-views.jpg"
               alt="Four synchronized views of a Code Trail"
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-              }}
+              style={{ width: '100%', height: 'auto', display: 'block' }}
             />
 
-            {/* Marching ants keyframes */}
             <style>{`
               @keyframes marchTop    { to { background-position: 16px 0; } }
               @keyframes marchRight  { to { background-position: 0 16px; } }
@@ -192,87 +149,51 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                   pointerEvents: 'none',
                 }}
               >
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                  background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
-                  backgroundSize: '16px 3px',
-                  animation: 'marchTop 0.7s linear infinite',
-                }} />
-                <div style={{
-                  position: 'absolute', top: 0, right: 0, bottom: 0, width: '3px',
-                  background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
-                  backgroundSize: '3px 16px',
-                  animation: 'marchRight 0.7s linear infinite',
-                }} />
-                <div style={{
-                  position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px',
-                  background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
-                  backgroundSize: '16px 3px',
-                  animation: 'marchBottom 0.7s linear infinite',
-                }} />
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px',
-                  background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`,
-                  backgroundSize: '3px 16px',
-                  animation: 'marchLeft 0.7s linear infinite',
-                }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`, backgroundSize: '16px 3px', animation: 'marchTop 0.7s linear infinite' }} />
+                <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '3px', background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`, backgroundSize: '3px 16px', animation: 'marchRight 0.7s linear infinite' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: `repeating-linear-gradient(90deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`, backgroundSize: '16px 3px', animation: 'marchBottom 0.7s linear infinite' }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px', background: `repeating-linear-gradient(180deg, ${theme.colors.primary} 0px, ${theme.colors.primary} 10px, transparent 10px, transparent 16px)`, backgroundSize: '3px 16px', animation: 'marchLeft 0.7s linear infinite' }} />
               </motion.div>
             </AnimatePresence>
 
-            {/* Label with pointer line (for spotlights that have labelPos) */}
-            {currentSpotlight.labelPos && (
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`label-${currentSpotlight.id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            {/* On-image label */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`label-${currentSpotlight.id}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  position: 'absolute',
+                  top: currentSpotlight.labelPos.top,
+                  left: currentSpotlight.labelPos.left,
+                  zIndex: 15,
+                }}
+              >
+                <div
                   style={{
-                    position: 'absolute',
-                    top: currentSpotlight.labelPos.top,
-                    left: currentSpotlight.labelPos.left,
-                    zIndex: 15,
+                    fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                    fontSize: isMobile ? '16px' : '18px',
+                    fontWeight: '600',
+                    color: theme.colors.primary,
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  {/* Label text */}
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                      fontSize: isMobile ? '16px' : '18px',
-                      fontWeight: '600',
-                      color: theme.colors.primary,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {currentSpotlight.title}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            )}
-
-            {/* Editable comment box - hidden */}
+                  <EditableText contentKey={`frameIo.spotlights.${activeSpotlight}`} value={currentSpotlight.title} />
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Progress Indicators */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '32px' }}>
-            {/* Left arrow */}
             <button
               onClick={() => setActiveSpotlight((prev) => (prev - 1 + spotlights.length) % spotlights.length)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'rgba(255,255,255,0.6)',
-                fontSize: '20px',
-                padding: '4px 8px',
-                lineHeight: 1,
-              }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.6)', fontSize: '20px', padding: '4px 8px', lineHeight: 1 }}
             >
               ←
             </button>
-
-            {/* Dots */}
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               {spotlights.map((spotlight, index) => (
                 <button
@@ -291,19 +212,9 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                 />
               ))}
             </div>
-
-            {/* Right arrow */}
             <button
               onClick={handleNext}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'rgba(255,255,255,0.6)',
-                fontSize: '20px',
-                padding: '4px 8px',
-                lineHeight: 1,
-              }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.6)', fontSize: '20px', padding: '4px 8px', lineHeight: 1 }}
             >
               →
             </button>

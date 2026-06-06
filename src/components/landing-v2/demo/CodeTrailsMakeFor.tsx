@@ -3,56 +3,24 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
+import { EditableText } from '../EditableText';
+import siteContent from '../../../content/site-content.json';
 
 interface CodeTrailsMakeForProps {
   isMobile?: boolean;
 }
 
-const trails = [
-  {
-    tag: 'Clarity for someone else',
-    title: 'How opencode does it',
-    description: 'Showing another team how a project actually works, as a link they can open.',
-    url: 'https://app.principal-ade.com/trail/dc577428-6eb3-4180-9002-6494a2ef2c7b',
-  },
-  {
-    tag: "A second opinion when you're stuck",
-    title: "The carousel that wouldn't render",
-    description: 'An hour fighting the agent, "I don\'t even know what to ask it." Solved once the right person could see the trail.',
-    url: 'https://app.principal-ade.com/trail/bc6a3653-9559-48b6-a7b8-8a78db9b8b0f',
-  },
-  {
-    tag: "When the decision needs context you don't have",
-    title: 'Session tracking: client vs server',
-    description: 'An architecture choice that needed the customer and budget picture, weighed in on the exact step.',
-    url: 'https://app.principal-ade.com/trail/e16d8a04-c898-46d9-8bac-500fb06f1922',
-  },
-  {
-    tag: 'Understanding what your agent did',
-    title: 'How video tracking works',
-    description: 'Following a real feature through the code, one step at a time.',
-    url: 'https://app.principal-ade.com/trail/f191756b-616a-4a9d-b3fb-84fc0bacf642',
-  },
-];
-
-const examples = [
-  'clarity',
-  'another opinion',
-  'coordination',
-  'understanding',
-];
-
 export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile = false }) => {
   const { theme } = useTheme();
+  const c = siteContent.makeFor;
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % examples.length);
+      setCurrentIndex((prev) => (prev + 1) % c.examples.length);
     }, 2500);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [c.examples.length]);
 
   return (
     <section
@@ -66,21 +34,13 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
         justifyContent: 'center',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-        }}
-      >
-        {/* Animated Headline */}
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            marginBottom: isMobile ? '48px' : '64px',
-          }}
+          style={{ marginBottom: isMobile ? '48px' : '64px' }}
         >
           <h2
             style={{
@@ -93,7 +53,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               marginBottom: '16px',
             }}
           >
-            Create a Trail when you need:{' '}
+            <EditableText contentKey="makeFor.heading" value={c.heading} />{' '}
             <span
               style={{
                 display: 'inline-block',
@@ -110,15 +70,9 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    color: theme.colors.primary,
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    whiteSpace: 'nowrap',
-                  }}
+                  style={{ color: theme.colors.primary, position: 'absolute', left: 0, top: 0, whiteSpace: 'nowrap' }}
                 >
-                  {examples[currentIndex]}
+                  <EditableText contentKey={`makeFor.examples.${currentIndex}`} value={c.examples[currentIndex]} />
                 </motion.span>
               </AnimatePresence>
             </span>
@@ -132,19 +86,18 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
               maxWidth: '800px',
             }}
           >
-            Trails are a byproduct of working, not extra work. See an example trail.
+            <EditableText contentKey="makeFor.body" value={c.body} />
           </p>
         </motion.div>
 
-        {/* Trail Cards Grid */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-            gap: isMobile ? '20px' : '20px',
+            gap: '20px',
           }}
         >
-          {trails.map((trail, index) => (
+          {c.trails.map((trail, index) => (
             <motion.a
               key={index}
               href={trail.url}
@@ -163,28 +116,13 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 color: '#fff',
                 border: '1px solid rgba(255,255,255,0.06)',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                transition: 'all 0.18s ease',
                 display: 'block',
                 position: 'relative',
                 overflow: 'hidden',
                 cursor: 'pointer',
               }}
             >
-              {/* Orange bar on left */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: '4px',
-                  background: theme.colors.primary,
-                  opacity: 0,
-                  transition: 'opacity 0.18s ease',
-                }}
-                className="trail-bar"
-              />
-
+              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px', background: theme.colors.primary, opacity: 0, transition: 'opacity 0.18s ease' }} className="trail-bar" />
               <div
                 style={{
                   fontFamily: 'var(--font-mono, monospace)',
@@ -195,9 +133,8 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                   marginBottom: '14px',
                 }}
               >
-                {trail.tag}
+                <EditableText contentKey={`makeFor.trails.${index}.tag`} value={trail.tag} />
               </div>
-
               <p
                 style={{
                   fontFamily: 'var(--font-inter, Inter, sans-serif)',
@@ -207,19 +144,9 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                   marginBottom: '18px',
                 }}
               >
-                {trail.description}
+                <EditableText contentKey={`makeFor.trails.${index}.description`} value={trail.description} />
               </p>
-
-              <div
-                className="trail-link"
-                style={{
-                  fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  color: '#F0A48B',
-                  transition: 'text-decoration 0.18s ease',
-                }}
-              >
+              <div className="trail-link" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)', fontSize: '13px', fontWeight: '600', color: '#F0A48B' }}>
                 Open trail →
               </div>
             </motion.a>
@@ -228,12 +155,8 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
       </div>
 
       <style jsx>{`
-        a:hover .trail-bar {
-          opacity: 1 !important;
-        }
-        a:hover .trail-link {
-          text-decoration: underline;
-        }
+        a:hover .trail-bar { opacity: 1 !important; }
+        a:hover .trail-link { text-decoration: underline; }
       `}</style>
     </section>
   );

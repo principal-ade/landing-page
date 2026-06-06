@@ -3,7 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
-import { TrailCityDiagram } from '@principal-ai/logo-component';
+import { EditableText } from '../EditableText';
+import siteContent from '../../../content/site-content.json';
 
 interface CodeTrailsHeroProps {
   isMobile?: boolean;
@@ -11,6 +12,7 @@ interface CodeTrailsHeroProps {
 
 export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false }) => {
   const { theme } = useTheme();
+  const c = siteContent.hero;
 
   return (
     <section
@@ -26,7 +28,6 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
         justifyContent: 'center',
       }}
     >
-      {/* Hero Content */}
       <div
         style={{
           flex: 1,
@@ -58,7 +59,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
                 fontSize: isMobile ? 'clamp(42px, 11vw, 64px)' : 'clamp(48px, 9.2vw, 120px)',
               }}
             >
-              Code Trails
+              <EditableText contentKey="hero.heading" value={c.heading} />
             </h1>
 
             <p
@@ -72,7 +73,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >
-              A self-contained path through your code, with all the context to understand it. Any browser. Open it and everything's already there.
+              <EditableText contentKey="hero.subheading" value={c.subheading} />
             </p>
           </motion.div>
         </div>
@@ -89,7 +90,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             margin: '0 auto',
           }}
         >
-          <TrailCityDiagram theme={theme} />
+          <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.04)', borderRadius: '12px' }} />
         </motion.div>
       </div>
     </section>

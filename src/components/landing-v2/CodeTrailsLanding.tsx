@@ -9,8 +9,15 @@ import { CodeTrailsMakeFor } from './demo/CodeTrailsMakeFor';
 import { CodeTrailsFlowRhythm } from './demo/CodeTrailsFlowRhythm';
 import { CodeTrailsForBuilders } from './demo/CodeTrailsForBuilders';
 import { Footer } from '../Footer';
+import { EditModeProvider } from './EditModeProvider';
+import { EditableText } from './EditableText';
+import siteContent from '../../content/site-content.json';
 
-export const CodeTrailsLanding: React.FC = () => {
+interface CodeTrailsLandingProps {
+  canEdit?: boolean;
+}
+
+export const CodeTrailsLanding: React.FC<CodeTrailsLandingProps> = ({ canEdit = false }) => {
   const { theme } = useTheme();
   const [windowWidth, setWindowWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
@@ -26,7 +33,10 @@ export const CodeTrailsLanding: React.FC = () => {
 
   const isMobile = windowWidth < 768;
 
+  const c = siteContent.closer;
+
   return (
+    <EditModeProvider canEdit={canEdit}>
     <div
       style={{
         background: theme.colors.background,
@@ -72,7 +82,7 @@ export const CodeTrailsLanding: React.FC = () => {
               fontWeight: '400',
             }}
           >
-            Built by engineers who got tired of clone-the-repo to answer one question.
+            <EditableText contentKey="closer.quote" value={c.quote} />
           </motion.p>
 
           <div
@@ -110,7 +120,7 @@ export const CodeTrailsLanding: React.FC = () => {
               onMouseEnter={(e) => (e.currentTarget.style.color = theme.colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = theme.colors.textTertiary)}
             >
-              Skill source
+              <EditableText contentKey="closer.skillSource" value={c.skillSource} />
             </a>
             <span style={{ color: theme.colors.border }}>·</span>
             <a
@@ -123,7 +133,7 @@ export const CodeTrailsLanding: React.FC = () => {
               onMouseEnter={(e) => (e.currentTarget.style.color = theme.colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = theme.colors.textTertiary)}
             >
-              Docs
+              <EditableText contentKey="closer.docs" value={c.docs} />
             </a>
             <span style={{ color: theme.colors.border }}>·</span>
             <a
@@ -136,7 +146,7 @@ export const CodeTrailsLanding: React.FC = () => {
               onMouseEnter={(e) => (e.currentTarget.style.color = theme.colors.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = theme.colors.textTertiary)}
             >
-              Run locally
+              <EditableText contentKey="closer.runLocally" value={c.runLocally} />
             </a>
           </motion.div>
 
@@ -149,7 +159,7 @@ export const CodeTrailsLanding: React.FC = () => {
               letterSpacing: '0.06em',
             }}
           >
-            © 2026 Principal AI
+            <EditableText contentKey="closer.copyright" value={c.copyright} />
           </div>
         </div>
       </section>
@@ -157,5 +167,6 @@ export const CodeTrailsLanding: React.FC = () => {
       {/* Footer */}
       <Footer />
     </div>
+    </EditModeProvider>
   );
 };
