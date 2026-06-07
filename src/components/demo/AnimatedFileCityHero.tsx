@@ -106,7 +106,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
   return (
     <section
       style={{
-        minHeight: '100vh',
+        minHeight: 'calc(100vh - 70px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -124,6 +124,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
           inset: 0,
           opacity: 0.15,
           zIndex: 0,
+          transform: 'translateY(-40px)',
         }}
       >
         {blocks.map((block) => (
@@ -182,12 +183,13 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
           style={{
             display: 'flex',
             justifyContent: 'center',
+            marginTop: '-44px',
             marginBottom: '40px',
           }}
         >
           <FileCityLogo
-            width={isMobile ? 90 : 120}
-            height={isMobile ? 90 : 120}
+            width={isMobile ? 130 : 180}
+            height={isMobile ? 130 : 180}
             primary={ORANGE}
             color="#ffffff"
             background="transparent"

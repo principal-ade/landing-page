@@ -125,17 +125,19 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
     <section
       ref={ref}
       style={{
-        minHeight: '100vh',
+        height: isMobile ? undefined : 'calc(100vh - 70px)',
+        minHeight: 'calc(100vh - 70px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         background: '#0a0e1a',
-        padding: isMobile ? '80px 24px' : '100px 40px',
+        padding: isMobile ? '80px 24px' : '64px 40px',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '1200px', width: '100%' }}>
+      <div style={{ maxWidth: '1200px', width: '100%', height: isMobile ? 'auto' : '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0 }}>
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -143,7 +145,8 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
           transition={{ duration: 0.8 }}
           style={{
             textAlign: 'center',
-            marginBottom: isMobile ? '48px' : '80px',
+            marginBottom: isMobile ? '48px' : '40px',
+            flexShrink: 0,
           }}
         >
           <h2
@@ -204,12 +207,15 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
           style={{
             position: 'relative',
             width: '100%',
-            height: isMobile ? '400px' : '600px',
+            height: isMobile ? '400px' : 'auto',
+            flex: isMobile ? undefined : '1 1 auto',
+            minHeight: 0,
+            maxHeight: isMobile ? undefined : '600px',
             background: NAVY,
             borderRadius: '16px',
             overflow: 'hidden',
             border: `3px solid ${BLUE_DARK}`,
-            marginBottom: isMobile ? '40px' : '60px',
+            marginBottom: isMobile ? '40px' : '32px',
           }}
         >
           {fileBlocks.map((block, index) => (
@@ -282,6 +288,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
           transition={{ duration: 0.8, delay: 0.6 }}
           style={{
             textAlign: 'center',
+            flexShrink: 0,
           }}
         >
           <Link
