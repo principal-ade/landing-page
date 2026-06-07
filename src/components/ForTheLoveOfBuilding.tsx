@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from '@principal-ade/industry-theme';
-import { Logo } from '@principal-ai/logo-component';
+import { FileCityLogo } from '@principal-ai/logo-component';
 import { Download } from 'lucide-react';
 import { ExplanationSection } from './demo/ExplanationSection';
 
@@ -52,10 +52,12 @@ export const ForTheLoveOfBuilding: React.FC = () => {
               marginBottom: "32px",
             }}
           >
-            <Logo
+            <FileCityLogo
               width={isMobile ? 80 : 100}
               height={isMobile ? 80 : 100}
-              color={theme.colors.primary}
+              primary={theme.colors.primary}
+              color={theme.colors.text}
+              background="transparent"
             />
           </motion.div>
 

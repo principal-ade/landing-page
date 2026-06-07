@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Logo } from "@principal-ai/logo-component";
+import { FileCityLogo } from "@principal-ai/logo-component";
 import { useTheme } from "@principal-ade/industry-theme";
 import { Download } from "lucide-react";
 
@@ -77,12 +77,12 @@ const HeroSection: React.FC = () => {
             justifyContent: "center",
           }}
         >
-          <Logo
+          <FileCityLogo
             width={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
             height={isMobile ? 80 : isConstrainedHeight ? 120 : 140}
-            color={theme.colors.accent}
-            particleColor={theme.colors.primary}
-            letterColor={theme.colors.text}
+            primary={theme.colors.accent}
+            color={theme.colors.text}
+            background="transparent"
             opacity={0.9}
           />
         </div>

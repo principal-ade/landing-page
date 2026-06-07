@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Logo } from '@principal-ai/logo-component';
+import { FileCityLogo } from '@principal-ai/logo-component';
 import { Download } from 'lucide-react';
 import { useTheme } from '@principal-ade/industry-theme';
 
@@ -185,10 +185,12 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
             marginBottom: '40px',
           }}
         >
-          <Logo
+          <FileCityLogo
             width={isMobile ? 90 : 120}
             height={isMobile ? 90 : 120}
-            color={ORANGE}
+            primary={ORANGE}
+            color="#ffffff"
+            background="transparent"
           />
         </motion.div>
 

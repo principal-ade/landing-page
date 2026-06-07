@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
-import { Logo } from '@principal-ai/logo-component';
+import { FileCityLogo } from '@principal-ai/logo-component';
 import { useTheme } from '@principal-ade/industry-theme';
 import {
   TourProvider,
@@ -502,12 +502,13 @@ function IntroScreen() {
     >
       {isWelcome ? (
         <div style={{ marginBottom: '32px' }}>
-          <Logo
+          <FileCityLogo
             width={100}
             height={100}
-            color={ORANGE}
-            particleColor={ORANGE}
-            letterColor={BLUE_LIGHT}
+            primary={ORANGE}
+            accent={BLUE_LIGHT}
+            color="#ffffff"
+            background="transparent"
             opacity={0.9}
           />
         </div>
