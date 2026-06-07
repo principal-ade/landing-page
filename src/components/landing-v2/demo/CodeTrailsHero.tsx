@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
+import { TrailCityDiagram } from '@principal-ai/logo-component';
 import { EditableText } from '../EditableText';
 import siteContent from '../../../content/site-content.json';
 
@@ -90,7 +91,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             margin: '0 auto',
           }}
         >
-          <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.04)', borderRadius: '12px' }} />
+          <TrailCityDiagram theme={theme} />
         </motion.div>
       </div>
     </section>
