@@ -89,6 +89,10 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             width: '100%',
             maxWidth: isMobile ? '420px' : '620px',
             margin: '0 auto',
+            minHeight: isMobile ? '420px' : '620px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <TrailCityDiagram theme={theme} />
