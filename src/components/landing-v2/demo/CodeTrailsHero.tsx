@@ -57,7 +57,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
                 letterSpacing: '-0.04em',
                 color: theme.colors.text,
                 margin: 0,
-                fontSize: isMobile ? 'clamp(42px, 11vw, 64px)' : 'clamp(48px, 9.2vw, 120px)',
+                fontSize: isMobile ? 'clamp(32px, 9vw, 50px)' : 'clamp(48px, 9.2vw, 120px)',
               }}
             >
               <EditableText contentKey="hero.heading" value={c.heading} />
@@ -66,7 +66,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             <p
               style={{
                 marginTop: '32px',
-                fontSize: isMobile ? '18px' : '22px',
+                fontSize: isMobile ? '15px' : '22px',
                 lineHeight: 1.5,
                 color: theme.colors.text,
                 maxWidth: '560px',

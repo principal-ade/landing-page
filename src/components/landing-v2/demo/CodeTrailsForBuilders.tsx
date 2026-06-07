@@ -33,7 +33,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
         justifyContent: 'center',
       }}
     >
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               fontWeight: '700',
-              fontSize: isMobile ? 'clamp(28px, 9vw, 42px)' : 'clamp(42px, 4.5vw, 56px)',
+              fontSize: isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(42px, 4.5vw, 56px)',
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
               color: '#ffffff',
@@ -70,7 +70,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
           <p
             style={{
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '13px' : '18px',
               lineHeight: 1.6,
               color: '#9DB1BF',
               maxWidth: '700px',
@@ -94,7 +94,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
             <code
               style={{
                 fontFamily: 'var(--font-mono, monospace)',
-                fontSize: isMobile ? '14px' : '16px',
+                fontSize: isMobile ? '12px' : '16px',
                 color: '#F0A48B',
                 letterSpacing: '0.02em',
               }}

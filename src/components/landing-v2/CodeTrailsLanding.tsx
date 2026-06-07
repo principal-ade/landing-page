@@ -75,7 +75,7 @@ export const CodeTrailsLanding: React.FC<CodeTrailsLandingProps> = ({ canEdit = 
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               fontStyle: 'italic',
-              fontSize: isMobile ? '20px' : '24px',
+              fontSize: isMobile ? '16px' : '24px',
               lineHeight: 1.5,
               color: theme.colors.textSecondary,
               margin: 0,

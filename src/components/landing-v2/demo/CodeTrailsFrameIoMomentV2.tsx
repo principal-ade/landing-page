@@ -63,7 +63,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           <div
             style={{
               fontFamily: 'var(--font-mono, monospace)',
-              fontSize: isMobile ? '22px' : '28px',
+              fontSize: isMobile ? '17px' : '28px',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               color: theme.colors.primary,
@@ -76,7 +76,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               fontWeight: '700',
-              fontSize: isMobile ? 'clamp(28px, 9vw, 42px)' : 'clamp(42px, 4.5vw, 56px)',
+              fontSize: isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(42px, 4.5vw, 56px)',
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
               color: '#ffffff',
@@ -88,7 +88,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
           <p
             style={{
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              fontSize: isMobile ? '16px' : '18px',
+              fontSize: isMobile ? '13px' : '18px',
               lineHeight: 1.6,
               color: '#9DB1BF',
               maxWidth: '800px',
@@ -174,7 +174,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
                 <div
                   style={{
                     fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                    fontSize: isMobile ? '16px' : '18px',
+                    fontSize: isMobile ? '10px' : '13px',
                     fontWeight: '600',
                     color: theme.colors.primary,
                     whiteSpace: 'nowrap',

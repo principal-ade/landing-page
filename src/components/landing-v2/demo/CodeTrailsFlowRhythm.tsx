@@ -26,7 +26,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
         justifyContent: 'center',
       }}
     >
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
               fontWeight: '700',
-              fontSize: isMobile ? 'clamp(32px, 9vw, 48px)' : 'clamp(48px, 5vw, 72px)',
+              fontSize: isMobile ? 'clamp(24px, 7vw, 36px)' : 'clamp(48px, 5vw, 72px)',
               lineHeight: 1.1,
               letterSpacing: '-0.03em',
               color: '#fff',
@@ -66,7 +66,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
           <p
             style={{
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              fontSize: isMobile ? '16px' : '20px',
+              fontSize: isMobile ? '13px' : '20px',
               lineHeight: 1.6,
               color: '#9DB1BF',
               maxWidth: '900px',
@@ -116,7 +116,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
                 style={{
                   fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
                   fontWeight: '700',
-                  fontSize: isMobile ? '22px' : '28px',
+                  fontSize: isMobile ? '17px' : '28px',
                   lineHeight: 1.2,
                   letterSpacing: '-0.02em',
                   color: '#fff',
