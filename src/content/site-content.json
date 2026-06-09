@@ -80,9 +80,12 @@
   },
   "forBuilders": {
     "eyebrow": "For the builders",
-    "heading": "Make your own code trail.",
-    "body": "Add the Code Trails skill to the agent you already use. Next time you're not sure about a change, make a trail and send it, no new tool to learn.",
-    "command": "npx @principal-ai/code-trails init"
+    "heading": "Make your own Trail",
+    "body": "Drop this prompt into your agent.",
+    "prompt": "Read the author-local-investigation-trail skill at https://github.com/principal-ai/skills/blob/main/author-local-investigation-trail/SKILL.md and use it to walk me through <topic> locally as an investigation trail.",
+    "skillUrl": "https://github.com/principal-ai/skills/blob/main/author-local-investigation-trail/SKILL.md",
+    "downloadText": "Get the desktop app for the full File City experience.",
+    "downloadUrl": "https://principal-ade.com/download"
   },
   "closer": {
     "quote": "Built by engineers who got tired of clone-the-repo to answer one question.",

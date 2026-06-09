@@ -16,7 +16,7 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(c.command);
+    navigator.clipboard.writeText(c.prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -82,32 +82,44 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
 
           <div
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              background: '#0c1741',
+              background: 'rgba(12, 23, 65, 0.5)',
               borderRadius: '8px',
-              padding: isMobile ? '16px 20px' : '18px 24px',
-              gap: '16px',
-              border: '1px solid rgba(255,255,255,0.1)',
+              padding: isMobile ? '20px' : '24px',
+              border: '1px solid rgba(255, 114, 94, 0.3)',
+              marginBottom: '24px',
+              maxWidth: '700px',
             }}
           >
             <code
               style={{
                 fontFamily: 'var(--font-mono, monospace)',
-                fontSize: isMobile ? '12px' : '16px',
-                color: '#F0A48B',
-                letterSpacing: '0.02em',
+                fontSize: isMobile ? '13px' : '14px',
+                color: '#E8E8E8',
+                lineHeight: 1.6,
+                display: 'block',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
               }}
             >
-              <EditableText contentKey="forBuilders.command" value={c.command} />
+              <EditableText contentKey="forBuilders.prompt" value={c.prompt} />
             </code>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '12px',
+              marginBottom: '32px',
+              flexWrap: 'wrap',
+            }}
+          >
             <button
               onClick={handleCopy}
               style={{
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
                 fontSize: '14px',
                 fontWeight: '600',
-                padding: '8px 16px',
+                padding: '12px 24px',
                 borderRadius: '6px',
                 background: theme.colors.primary,
                 color: '#fff',
@@ -116,8 +128,29 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
                 transition: 'all 0.2s ease',
               }}
             >
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? 'Copied!' : 'Copy prompt'}
             </button>
+            <a
+              href={c.skillUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: 'var(--font-inter, Inter, sans-serif)',
+                fontSize: '14px',
+                fontWeight: '600',
+                padding: '12px 24px',
+                borderRadius: '6px',
+                background: 'transparent',
+                color: theme.colors.primary,
+                border: `1px solid ${theme.colors.primary}`,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                textDecoration: 'none',
+                display: 'inline-block',
+              }}
+            >
+              View skill
+            </a>
           </div>
         </motion.div>
       </div>

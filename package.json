@@ -28,7 +28,7 @@
     "@principal-ade/panel-framework-core": "^0.5.1",
     "@principal-ade/panel-layouts": "^0.4.0",
     "@principal-ai/codebase-composition": "^0.2.56",
-    "@principal-ai/logo-component": "^0.1.21",
+    "@principal-ai/logo-component": "^0.1.22",
     "@principal-ai/principal-view-core": "^0.26.19",
     "@principal-ai/repository-abstraction": "^0.5.7",
     "@prisma/client": "^7.8.0",
