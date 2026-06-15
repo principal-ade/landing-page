@@ -6,6 +6,7 @@ import { useTheme } from '@principal-ade/industry-theme';
 import { TrailCityDiagram } from '@principal-ai/logo-component';
 import { EditableText } from '../EditableText';
 import siteContent from '../../../content/site-content.json';
+import { typography, spacing, layout, px, responsive } from '../designSystem';
 
 interface CodeTrailsHeroProps {
   isMobile?: boolean;
@@ -32,10 +33,10 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
         style={{
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr',
-          gap: isMobile ? '40px' : '60px',
+          gap: px(isMobile ? spacing.gap.md : spacing.gap.lg),
           alignItems: 'center',
-          padding: isMobile ? '40px 24px 48px' : '60px 40px 60px',
-          maxWidth: '1480px',
+          padding: spacing.section[isMobile ? 'mobile' : 'desktop'],
+          maxWidth: px(layout.maxWidth.content),
           margin: '0 auto',
           width: '100%',
         }}
@@ -50,12 +51,12 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
             <h1
               style={{
                 fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                fontWeight: '700',
-                lineHeight: 1.0,
-                letterSpacing: '-0.04em',
+                fontWeight: typography.weight.bold,
+                lineHeight: typography.lineHeight.tight,
+                letterSpacing: typography.letterSpacing.tight,
                 color: theme.colors.text,
                 margin: 0,
-                fontSize: isMobile ? 'clamp(32px, 9vw, 50px)' : 'clamp(48px, 9.2vw, 120px)',
+                fontSize: responsive(typography.size.displayLarge.mobile, typography.size.displayLarge.desktop, isMobile),
               }}
             >
               <EditableText contentKey="hero.heading" value={c.heading} />
@@ -63,12 +64,12 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
 
             <p
               style={{
-                marginTop: '24px',
-                fontSize: isMobile ? '15px' : '22px',
-                lineHeight: 1.5,
+                marginTop: px(spacing.gap.sm),
+                fontSize: responsive(typography.size.bodyLarge.mobile, typography.size.bodyLarge.desktop, isMobile),
+                lineHeight: typography.lineHeight.relaxed,
                 color: theme.colors.text,
-                maxWidth: '560px',
-                fontWeight: '400',
+                maxWidth: px(layout.maxWidth.prose),
+                fontWeight: typography.weight.normal,
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >

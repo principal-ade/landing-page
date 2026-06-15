@@ -6,6 +6,7 @@ import { useTheme } from '@principal-ade/industry-theme';
 import { EditableText } from '../EditableText';
 import { PrincipalTrailCard } from './PrincipalTrailCard';
 import siteContent from '../../../content/site-content.json';
+import { typography, spacing, layout, px, responsive } from '../designSystem';
 
 interface CodeTrailsMakeForProps {
   isMobile?: boolean;
@@ -28,30 +29,30 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
       style={{
         minHeight: 'calc(100vh - 70px)',
         background: '#0c1741',
-        padding: isMobile ? '80px 24px' : '100px 40px 120px',
+        padding: spacing.section[isMobile ? 'mobile' : 'desktop'],
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
       }}
     >
-      <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+      <div style={{ maxWidth: px(layout.maxWidth.content), margin: '0 auto', width: '100%' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: isMobile ? '48px' : '64px' }}
+          style={{ marginBottom: px(isMobile ? spacing.gap.md : spacing.gap.lg) }}
         >
           <h2
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-              fontWeight: '700',
-              fontSize: isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(42px, 4.5vw, 56px)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.03em',
+              fontWeight: typography.weight.bold,
+              fontSize: responsive(typography.size.h1.mobile, typography.size.h1.desktop, isMobile),
+              lineHeight: typography.lineHeight.tight,
+              letterSpacing: typography.letterSpacing.tight,
               color: '#ffffff',
-              marginBottom: '16px',
+              marginBottom: px(spacing.gap.xs),
             }}
           >
             <EditableText contentKey="makeFor.heading" value={c.heading} />{' '}
@@ -81,10 +82,10 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
           <p
             style={{
               fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              fontSize: isMobile ? '13px' : '18px',
-              lineHeight: 1.6,
+              fontSize: responsive(typography.size.body.mobile, typography.size.bodyLarge.desktop, isMobile),
+              lineHeight: typography.lineHeight.relaxed,
               color: '#9DB1BF',
-              maxWidth: '800px',
+              maxWidth: px(layout.maxWidth.prose),
             }}
           >
             <EditableText contentKey="makeFor.body" value={c.body} />
@@ -95,7 +96,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
           style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-            gap: '20px',
+            gap: px(spacing.gap.sm),
           }}
         >
           {c.trails.map((trail, index) => {
@@ -142,11 +143,11 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 <div
                   style={{
                     fontFamily: 'var(--font-mono, monospace)',
-                    fontSize: '11px',
-                    letterSpacing: '1.5px',
+                    fontSize: px(typography.size.label.mobile),
+                    letterSpacing: typography.letterSpacing.wide,
                     textTransform: 'uppercase',
                     color: '#F0A48B',
-                    marginBottom: '14px',
+                    marginBottom: px(spacing.gap.xs),
                   }}
                 >
                   <EditableText contentKey={`makeFor.trails.${index}.tag`} value={trail.tag} />
@@ -154,15 +155,15 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 <p
                   style={{
                     fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                    fontSize: '14px',
+                    fontSize: responsive(typography.size.bodySmall.mobile, typography.size.bodySmall.desktop, isMobile),
                     color: '#9DB1BF',
-                    lineHeight: 1.55,
-                    marginBottom: '18px',
+                    lineHeight: typography.lineHeight.relaxed,
+                    marginBottom: px(spacing.gap.xs),
                   }}
                 >
                   <EditableText contentKey={`makeFor.trails.${index}.description`} value={trail.description} />
                 </p>
-                <div className="trail-link" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)', fontSize: '13px', fontWeight: '600', color: '#F0A48B' }}>
+                <div className="trail-link" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)', fontSize: px(typography.size.bodySmall.mobile), fontWeight: typography.weight.semibold, color: '#F0A48B' }}>
                   Open trail →
                 </div>
               </motion.a>

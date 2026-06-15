@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { typography, spacing, px } from '../designSystem';
 
 interface PrincipalTrailCardProps {
   trailId: string;
@@ -114,7 +115,7 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
       <div
         style={{
           background: '#0f2438',
-          padding: isMobile ? '16px 20px' : '20px 24px',
+          padding: px(spacing.gap.sm),
           borderBottom: '1px solid rgba(255,255,255,0.08)',
         }}
       >
@@ -124,9 +125,9 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            marginBottom: '12px',
+            marginBottom: px(spacing.gap.xs),
             fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '12px',
+            fontSize: px(typography.size.bodySmall.mobile),
             color: '#64748b',
           }}
         >
@@ -138,14 +139,14 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
         </div>
 
         {/* Published badge + Title */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: px(spacing.gap.xs) }}>
           <div
             style={{
               background: 'rgba(34, 211, 238, 0.15)',
               color: '#22d3ee',
-              fontSize: '10px',
-              fontWeight: '700',
-              letterSpacing: '0.05em',
+              fontSize: px(typography.size.label.mobile),
+              fontWeight: typography.weight.bold,
+              letterSpacing: typography.letterSpacing.wide,
               textTransform: 'uppercase',
               padding: '4px 8px',
               borderRadius: '4px',
@@ -158,11 +159,11 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
           <h3
             style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-              fontSize: isMobile ? '16px' : '18px',
-              fontWeight: '600',
+              fontSize: px(typography.size.bodyLarge.mobile),
+              fontWeight: typography.weight.semibold,
               color: '#f8fafc',
               margin: 0,
-              lineHeight: 1.3,
+              lineHeight: typography.lineHeight.normal,
             }}
           >
             {entry.title}
@@ -171,15 +172,15 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
       </div>
 
       {/* Body */}
-      <div style={{ padding: isMobile ? '20px' : '24px' }}>
+      <div style={{ padding: px(spacing.gap.sm) }}>
         {/* Summary */}
         <p
           style={{
             fontFamily: 'var(--font-inter, Inter, sans-serif)',
-            fontSize: isMobile ? '13px' : '14px',
-            lineHeight: 1.6,
+            fontSize: px(typography.size.bodySmall.mobile),
+            lineHeight: typography.lineHeight.relaxed,
             color: '#94a3b8',
-            margin: '0 0 20px 0',
+            margin: `0 0 ${px(spacing.gap.sm)} 0`,
           }}
         >
           {entry.summaryPreview}
@@ -189,12 +190,12 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
         <div
           style={{
             display: 'flex',
-            gap: '20px',
+            gap: px(spacing.gap.sm),
             flexWrap: 'wrap',
             fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '12px',
+            fontSize: px(typography.size.bodySmall.mobile),
             color: '#64748b',
-            marginBottom: payload.notes && payload.notes.length > 0 ? '20px' : '0',
+            marginBottom: payload.notes && payload.notes.length > 0 ? px(spacing.gap.sm) : '0',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -217,14 +218,14 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
               background: 'rgba(15, 36, 56, 0.5)',
               borderLeft: '2px solid #22d3ee',
               borderRadius: '6px',
-              padding: '12px 16px',
+              padding: px(spacing.gap.xs),
             }}
           >
             <div
               style={{
                 fontFamily: 'var(--font-mono, monospace)',
-                fontSize: '10px',
-                letterSpacing: '0.05em',
+                fontSize: px(typography.size.label.mobile),
+                letterSpacing: typography.letterSpacing.wide,
                 textTransform: 'uppercase',
                 color: '#22d3ee',
                 marginBottom: '8px',
@@ -237,9 +238,9 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
                 key={idx}
                 style={{
                   fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                  fontSize: '12px',
+                  fontSize: px(typography.size.bodySmall.mobile),
                   color: '#94a3b8',
-                  lineHeight: 1.5,
+                  lineHeight: typography.lineHeight.relaxed,
                   margin: idx < payload.notes!.length - 1 ? '0 0 8px 0' : '0',
                   fontStyle: 'italic',
                 }}
@@ -253,10 +254,10 @@ export const PrincipalTrailCard: React.FC<PrincipalTrailCardProps> = ({
         {/* View trail link */}
         <div
           style={{
-            marginTop: '20px',
+            marginTop: px(spacing.gap.sm),
             fontFamily: 'var(--font-inter, Inter, sans-serif)',
-            fontSize: '13px',
-            fontWeight: '600',
+            fontSize: px(typography.size.bodySmall.mobile),
+            fontWeight: typography.weight.semibold,
             color: '#22d3ee',
           }}
         >
