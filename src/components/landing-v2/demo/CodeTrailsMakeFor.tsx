@@ -4,6 +4,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 import { EditableText } from '../EditableText';
+import { PrincipalTrailCard } from './PrincipalTrailCard';
 import siteContent from '../../../content/site-content.json';
 
 interface CodeTrailsMakeForProps {
@@ -97,60 +98,76 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
             gap: '20px',
           }}
         >
-          {c.trails.map((trail, index) => (
-            <motion.a
-              key={index}
-              href={trail.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -3 }}
-              style={{
-                background: '#15324A',
-                borderRadius: '14px',
-                padding: isMobile ? '24px' : '28px',
-                textDecoration: 'none',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.06)',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                display: 'block',
-                position: 'relative',
-                overflow: 'hidden',
-                cursor: 'pointer',
-              }}
-            >
-              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px', background: theme.colors.primary, opacity: 0, transition: 'opacity 0.18s ease' }} className="trail-bar" />
-              <div
+          {c.trails.map((trail, index) => {
+            // Use PrincipalTrailCard for the session tracking trail
+            if (trail.url === 'https://app.principal-ade.com/trail/e16d8a04-c898-46d9-8bac-500fb06f1922') {
+              return (
+                <PrincipalTrailCard
+                  key={index}
+                  trailId="e16d8a04-c898-46d9-8bac-500fb06f1922"
+                  url={trail.url}
+                  isMobile={isMobile}
+                  delay={index * 0.1}
+                />
+              );
+            }
+
+            // Regular card for other trails
+            return (
+              <motion.a
+                key={index}
+                href={trail.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -3 }}
                 style={{
-                  fontFamily: 'var(--font-mono, monospace)',
-                  fontSize: '11px',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                  color: '#F0A48B',
-                  marginBottom: '14px',
+                  background: '#15324A',
+                  borderRadius: '14px',
+                  padding: isMobile ? '24px' : '28px',
+                  textDecoration: 'none',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                  display: 'block',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
                 }}
               >
-                <EditableText contentKey={`makeFor.trails.${index}.tag`} value={trail.tag} />
-              </div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-inter, Inter, sans-serif)',
-                  fontSize: '14px',
-                  color: '#9DB1BF',
-                  lineHeight: 1.55,
-                  marginBottom: '18px',
-                }}
-              >
-                <EditableText contentKey={`makeFor.trails.${index}.description`} value={trail.description} />
-              </p>
-              <div className="trail-link" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)', fontSize: '13px', fontWeight: '600', color: '#F0A48B' }}>
-                Open trail →
-              </div>
-            </motion.a>
-          ))}
+                <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px', background: theme.colors.primary, opacity: 0, transition: 'opacity 0.18s ease' }} className="trail-bar" />
+                <div
+                  style={{
+                    fontFamily: 'var(--font-mono, monospace)',
+                    fontSize: '11px',
+                    letterSpacing: '1.5px',
+                    textTransform: 'uppercase',
+                    color: '#F0A48B',
+                    marginBottom: '14px',
+                  }}
+                >
+                  <EditableText contentKey={`makeFor.trails.${index}.tag`} value={trail.tag} />
+                </div>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-inter, Inter, sans-serif)',
+                    fontSize: '14px',
+                    color: '#9DB1BF',
+                    lineHeight: 1.55,
+                    marginBottom: '18px',
+                  }}
+                >
+                  <EditableText contentKey={`makeFor.trails.${index}.description`} value={trail.description} />
+                </p>
+                <div className="trail-link" style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)', fontSize: '13px', fontWeight: '600', color: '#F0A48B' }}>
+                  Open trail →
+                </div>
+              </motion.a>
+            );
+          })}
         </div>
       </div>
 
