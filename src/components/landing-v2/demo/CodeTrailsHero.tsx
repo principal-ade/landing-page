@@ -18,7 +18,6 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
   return (
     <section
       style={{
-        minHeight: 'calc(100vh - 70px)',
         background: `radial-gradient(1100px 600px at 70% 8%, rgba(255,135,85,0.10), transparent 60%),
                      radial-gradient(900px 600px at 12% 90%, rgba(34,211,238,0.10), transparent 60%),
                      ${theme.colors.background}`,
@@ -31,12 +30,11 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
     >
       <div
         style={{
-          flex: 1,
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr',
-          gap: isMobile ? '56px' : '80px',
+          gap: isMobile ? '40px' : '60px',
           alignItems: 'center',
-          padding: isMobile ? '40px 24px 64px' : '64px 40px 96px',
+          padding: isMobile ? '40px 24px 48px' : '60px 40px 60px',
           maxWidth: '1480px',
           margin: '0 auto',
           width: '100%',
@@ -65,7 +63,7 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
 
             <p
               style={{
-                marginTop: '32px',
+                marginTop: '24px',
                 fontSize: isMobile ? '15px' : '22px',
                 lineHeight: 1.5,
                 color: theme.colors.text,
@@ -87,9 +85,9 @@ export const CodeTrailsHero: React.FC<CodeTrailsHeroProps> = ({ isMobile = false
           style={{
             position: 'relative',
             width: '100%',
-            maxWidth: isMobile ? '420px' : '620px',
+            maxWidth: isMobile ? '380px' : '520px',
             margin: '0 auto',
-            minHeight: isMobile ? '420px' : '620px',
+            minHeight: isMobile ? '380px' : '520px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

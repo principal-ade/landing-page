@@ -123,8 +123,8 @@ export const CodeTrailsHeroCycle: React.FC<CodeTrailsHeroCycleProps> = ({
   ).current;
 
   const headingFontSize = isMobile
-    ? 'clamp(32px, 9vw, 50px)'
-    : 'clamp(48px, 9.2vw, 120px)';
+    ? 'clamp(16px, 4.5vw, 25px)'
+    : 'clamp(24px, 4.6vw, 60px)';
 
   return (
     <section
@@ -154,7 +154,7 @@ export const CodeTrailsHeroCycle: React.FC<CodeTrailsHeroCycleProps> = ({
         }}
       >
         {/* Left: Copy */}
-        <div>
+        <div style={{ marginLeft: '100px' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,9 +231,9 @@ export const CodeTrailsHeroCycle: React.FC<CodeTrailsHeroCycleProps> = ({
           style={{
             position: 'relative',
             width: '100%',
-            maxWidth: isMobile ? '420px' : '620px',
+            maxWidth: isMobile ? '315px' : '465px',
             margin: '0 auto',
-            minHeight: isMobile ? '420px' : '620px',
+            minHeight: isMobile ? '315px' : '465px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

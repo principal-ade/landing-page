@@ -106,7 +106,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
   return (
     <section
       style={{
-        minHeight: 'calc(100vh - 70px)',
+        minHeight: isMobile ? '70vh' : '75vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -114,7 +114,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
         position: 'relative',
         overflow: 'hidden',
         background: NAVY,
-        padding: isMobile ? '120px 24px 80px' : '120px 40px 80px',
+        padding: isMobile ? '80px 24px 60px' : '80px 40px 60px',
       }}
     >
       {/* Animated File City Background */}
