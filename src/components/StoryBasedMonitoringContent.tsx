@@ -76,14 +76,24 @@ export function StoryBasedMonitoringContent() {
 
 // Hero Section
 function HeroSection() {
+  const [windowWidth, setWindowWidth] = useState(1024);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+
   return (
     <section
       style={{
-        minHeight: '100dvh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(6rem, 20vw, 9rem) 1.5rem 4rem',
+        padding: isMobile ? '80px 24px' : '100px 40px',
         position: 'relative',
         overflow: 'hidden',
         background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${COLORS.primaryGlow} 0%, transparent 60%), ${COLORS.bg}`,
@@ -127,7 +137,7 @@ function HeroSection() {
             lineHeight: 1.7,
             color: COLORS.textMuted,
             maxWidth: '580px',
-            margin: '0 auto 3rem',
+            margin: '0 auto',
           }}
         >
           Your AI agent generated a pull request. Tests pass. CI is green. You merge it. The code runs perfectly - it just skips the fraud check before processing payments. Traditional monitoring sees success. You see a compliance violation six hours later.

@@ -3,7 +3,6 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
-import { LiveFeedTicker } from "./LiveFeedTicker";
 
 interface PrincipalFeedProps {
   isMobile?: boolean;
@@ -26,7 +25,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
     <section
       ref={containerRef}
       style={{
-        padding: isMobile ? "60px 24px" : "100px 40px",
+        padding: isMobile ? "80px 24px" : "100px 40px",
         width: "100%",
         boxSizing: "border-box",
         background: theme.colors.background,
@@ -114,17 +113,6 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
           >
             See who's building what, when they built it, and who contributed...and not just the humans.
           </motion.p>
-        </motion.div>
-
-        {/* Live Feed Ticker */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ marginBottom: "48px", marginLeft: "-40px", marginRight: "-40px" }}
-        >
-          <LiveFeedTicker />
         </motion.div>
 
         {/* Screenshots */}
@@ -274,67 +262,6 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
             </p>
           </div>
 
-          {/* CTA Box */}
-          <div
-            style={{
-              background: `linear-gradient(135deg, ${theme.colors.primary}15 0%, ${theme.colors.surface} 100%)`,
-              border: `1px solid ${theme.colors.primary}40`,
-              borderRadius: "12px",
-              padding: isMobile ? "32px 24px" : "40px 48px",
-              textAlign: "center",
-            }}
-          >
-            <h4
-              style={{
-                fontFamily: theme.fonts.heading,
-                fontSize: isMobile ? "24px" : "28px",
-                fontWeight: "700",
-                color: theme.colors.text,
-                marginBottom: "16px",
-                lineHeight: "1.2",
-              }}
-            >
-              The feed runs 24/7.
-            </h4>
-            <p
-              style={{
-                fontSize: isMobile ? "15px" : "16px",
-                lineHeight: "1.65",
-                color: theme.colors.textSecondary,
-                fontFamily: theme.fonts.body,
-                marginBottom: "28px",
-              }}
-            >
-              Watch the builder world in real time. No login required. Inside the desktop app, add your private repos and see your team build the same way you watch the world build.
-            </p>
-            <a
-              href="https://app.principal-ade.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-block",
-                padding: isMobile ? "14px 28px" : "16px 32px",
-                background: theme.colors.primary,
-                color: "#FFFFFF",
-                fontFamily: theme.fonts.body,
-                fontSize: isMobile ? "15px" : "16px",
-                fontWeight: "600",
-                borderRadius: "8px",
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow = `0 8px 16px ${theme.colors.primary}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              See the Principal Feed
-            </a>
-          </div>
         </div>
       </div>
     </section>

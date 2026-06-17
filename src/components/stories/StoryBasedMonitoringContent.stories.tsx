@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import ClientThemeProvider from '../providers/ClientThemeProvider';
-import { StoryBasedMonitoringSimple } from '../StoryBasedMonitoringSimple';
+import { StoryBasedMonitoringContent } from '../StoryBasedMonitoringContent';
 
 /**
  * Story-based Monitoring Content (Simplified)
@@ -19,12 +19,12 @@ import { StoryBasedMonitoringSimple } from '../StoryBasedMonitoringSimple';
 
 const meta = {
   title: 'Pages/Story-based Monitoring Content',
-  component: StoryBasedMonitoringSimple,
+  component: StoryBasedMonitoringContent,
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Simplified page explaining story-based monitoring with investor-pitch clarity.',
+        component: 'Story-based monitoring page matching the live site at principal-ade.com/story-based-monitoring',
       },
     },
   },
@@ -36,7 +36,7 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof StoryBasedMonitoringSimple>;
+} satisfies Meta<typeof StoryBasedMonitoringContent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

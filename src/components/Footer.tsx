@@ -132,7 +132,7 @@ export const Footer: React.FC = () => {
                 fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               }}
             >
-              Story-based software<br />from dev to production.
+              For the love of building.
             </p>
 
             {/* Social Links */}
