@@ -132,7 +132,15 @@ export const Manifesto: React.FC = () => {
             <p style={bodyTextStyle(isMobile)}>
               Your. Name. The one with a reputation behind it. The one that got there because over the years you developed judgment. You learned when to trust your instincts, when to keep digging, when something felt just a little off. No one sends a panic ping to Cursor. Codex wasn't in the after-action meeting when the client almost left. Nobody puts Claude on a PIP.
             </p>
-            <p style={bodyTextStyle(isMobile)}>
+            <p style={{
+              fontSize: isMobile ? "24px" : "32px",
+              lineHeight: "1.4",
+              color: "#1a2842",
+              marginTop: isMobile ? "32px" : "48px",
+              marginBottom: isMobile ? "32px" : "48px",
+              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: "700",
+            }}>
               The responsibility never moved to the agent. Only the typing did.
             </p>
             <p style={bodyTextStyle(isMobile)}>
@@ -151,7 +159,7 @@ export const Manifesto: React.FC = () => {
               In most teams, that work disappears. It lives in a chat thread, a meeting, or somebody's memory.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              <strong style={{ fontWeight: "700", color: theme.colors.text }}>We think that's a mistake.</strong>
+              We think that's a mistake.
             </p>
             <p style={bodyTextStyle(isMobile)}>
               Those investigations are some of the most valuable things a team creates.
