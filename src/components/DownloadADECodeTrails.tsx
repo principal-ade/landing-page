@@ -78,11 +78,10 @@ export const DownloadADECodeTrails: React.FC = () => {
       {/* ── SECTION 1: HERO - CODE TRAILS FOCUSED ── */}
       <section
         style={{
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding: isMobile ? '60px 24px 60px' : '80px 40px 80px',
+          padding: isMobile ? '60px 24px 40px' : '80px 40px 60px',
         }}
       >
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
@@ -95,7 +94,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               fontWeight: 700,
               lineHeight: 1,
               letterSpacing: '-0.04em',
-              marginBottom: '32px',
+              marginBottom: '24px',
               fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
               color: theme.colors.primary,
             }}
@@ -113,7 +112,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               color: theme.colors.text,
               lineHeight: 1.4,
               maxWidth: '700px',
-              margin: '0 auto 48px',
+              margin: '0 auto 32px',
               letterSpacing: '-0.02em',
             }}
           >
@@ -210,7 +209,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               letterSpacing: '-0.01em',
             }}
           >
-            Not just comments. Not just docs. The actual journey through the code. Click through a trail and see exactly how a feature works, from entry point to database query to API response.
+            The actual journey through the code. Click through a trail and see exactly how a feature works, from entry point to database query to API response.
           </motion.p>
         </div>
       </section>
@@ -218,7 +217,7 @@ export const DownloadADECodeTrails: React.FC = () => {
       {/* ── SECTION 2: THE KNOWLEDGE PROBLEM ── */}
       <section
         style={{
-          padding: isMobile ? '40px 24px' : '60px 40px',
+          padding: isMobile ? '40px 24px' : '50px 40px',
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -252,13 +251,13 @@ export const DownloadADECodeTrails: React.FC = () => {
               lineHeight: 1.3,
               letterSpacing: '-0.02em',
               textAlign: 'center',
-              marginBottom: '48px',
+              marginBottom: '32px',
             }}
           >
             It&rsquo;s gone the moment they walk away.
           </motion.p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '48px', marginTop: '48px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px', marginTop: '32px' }}>
             {[
               "You join a new codebase. Thousands of files. Where do you start?",
               "You need to understand how authentication works. The files are scattered across 8 directories. The flow touches 12 files. Good luck.",
@@ -295,7 +294,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               color: theme.colors.text,
               lineHeight: 1.4,
               letterSpacing: '-0.02em',
-              marginBottom: '48px',
+              marginBottom: '0',
               borderLeft: `3px solid ${theme.colors.primary}`,
               paddingLeft: '20px',
             }}
@@ -311,7 +310,7 @@ export const DownloadADECodeTrails: React.FC = () => {
       {/* ── SECTION 3: FEATURE CARDS ── */}
       <section
         style={{
-          padding: isMobile ? '24px 24px' : '32px 40px',
+          padding: isMobile ? '40px 24px' : '50px 40px',
           borderTop: `1px solid ${theme.colors.border}`,
         }}
       >
@@ -323,7 +322,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               color: theme.colors.text,
               letterSpacing: '-0.03em',
               textAlign: 'center',
-              marginBottom: '48px',
+              marginBottom: '32px',
             }}
           >
             What&rsquo;s Inside
@@ -440,7 +439,7 @@ export const DownloadADECodeTrails: React.FC = () => {
       {/* ── SECTION 4: CLOSING CTA ── */}
       <section
         style={{
-          padding: isMobile ? '80px 24px 100px' : '120px 40px 140px',
+          padding: isMobile ? '50px 24px 60px' : '60px 40px 80px',
           borderTop: `1px solid ${theme.colors.border}`,
           textAlign: 'center',
         }}
@@ -475,7 +474,7 @@ export const DownloadADECodeTrails: React.FC = () => {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '16px',
-              marginTop: '40px',
+              marginTop: '32px',
             }}
           >
             <a

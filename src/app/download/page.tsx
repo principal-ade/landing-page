@@ -1,7 +1,7 @@
 "use client";
 
-import { DownloadADE } from "@/components/DownloadADE";
+import { DownloadADECodeTrails } from "@/components/DownloadADECodeTrails";
 
 export default function DownloadPage() {
-  return <DownloadADE />;
+  return <DownloadADECodeTrails />;
 }
