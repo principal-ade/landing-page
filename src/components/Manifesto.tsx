@@ -171,10 +171,7 @@ export const Manifesto: React.FC = () => {
               The knowing compounds.
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              We think that's how organizations get smarter.
-            </p>
-            <p style={bodyTextStyle(isMobile)}>
-              But we also think it changes how we should think about production.
+              We think that's how organizations get smarter. But we also think it changes how we should think about production.
             </p>
             <p style={bodyTextStyle(isMobile)}>
               Most monitoring begins after something breaks. The software is already running, and now we're trying to figure out what happened.
@@ -186,10 +183,7 @@ export const Manifesto: React.FC = () => {
               The real story began much earlier, when somebody asked a question. Why are we building it this way? What did we expect it to do, and what were we willing to trade to get there?
             </p>
             <p style={bodyTextStyle(isMobile)}>
-              If those questions mattered before the software shipped, they shouldn't become invisible after it does.
-            </p>
-            <p style={bodyTextStyle(isMobile)}>
-              The understanding should follow the code into production, where reality can be measured against the intent that created it in the first place.
+              If those questions mattered before the software shipped, they shouldn't become invisible after it does. The understanding should follow the code into production, where reality can be measured against the intent that created it in the first place.
             </p>
             <p style={{ ...bodyTextStyle(isMobile), fontStyle: "italic", color: theme.colors.text }}>
               To us, that's one continuous story. From the first question all the way to production.
