@@ -16,32 +16,32 @@ const ORANGE = '#ff6b35';
 const spotlights = [
   {
     id: 1,
-    region: { top: '15%', left: '74%', width: '25%', height: '43%' },
-    labelPos: { top: '59%', left: '81%' },
+    region: { top: '8%', left: '0.4%', width: '28%', height: '31%' },
+    labelPos: { top: '41.5%', left: '1.5%' },
     title: 'Plain English description'
   },
   {
     id: 2,
-    region: { top: '8%', left: '0.4%', width: '28%', height: '31%' },
-    labelPos: { top: '41.5%', left: '1.5%' },
+    region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
+    labelPos: { top: '53%', left: '35.5%' },
     title: 'File City'
   },
   {
     id: 3,
-    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
-    labelPos: { top: '77%', left: '76%' },
+    region: { top: '15%', left: '54%', width: '19%', height: '28%' },
+    labelPos: { top: '44%', left: '57.5%' },
     title: 'Leave a note'
   },
   {
     id: 4,
-    region: { top: '15%', left: '54%', width: '19%', height: '28%' },
-    labelPos: { top: '44%', left: '57.5%' },
+    region: { top: '15%', left: '74%', width: '25%', height: '43%' },
+    labelPos: { top: '59%', left: '81%' },
     title: 'Actual code'
   },
   {
     id: 5,
-    region: { top: '19%', left: '29.6%', width: '21%', height: '33%' },
-    labelPos: { top: '53%', left: '35.5%' },
+    region: { top: '59%', left: '26%', width: '48%', height: '37%' },
+    labelPos: { top: '77%', left: '76%' },
     title: 'Sequence flow'
   },
 ];
