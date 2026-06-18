@@ -103,7 +103,15 @@ export const Manifesto: React.FC = () => {
             <p style={bodyTextStyle(isMobile)}>
               That feeling has a name. It's called <strong style={{ fontWeight: "700", color: theme.colors.text }}>building</strong>. And it's the reason any of us are here.
             </p>
-            <p style={bodyTextStyle(isMobile)}>
+            <p style={{
+              fontSize: isMobile ? "24px" : "32px",
+              lineHeight: "1.4",
+              color: "#1a2842",
+              marginTop: isMobile ? "32px" : "48px",
+              marginBottom: isMobile ? "32px" : "48px",
+              fontFamily: '"Outfit", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: "700",
+            }}>
               Then agents showed up.
             </p>
             <p style={bodyTextStyle(isMobile)}>
