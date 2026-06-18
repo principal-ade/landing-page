@@ -20,12 +20,10 @@ export const Header: React.FC = () => {
   const isAboutPage = pathname?.startsWith('/about');
   const isProductPage = pathname?.startsWith('/product') ||
                         pathname?.startsWith('/file-city') ||
-                        pathname?.startsWith('/principal-feed') ||
                         pathname?.startsWith('/story-based-monitoring') ||
                         pathname?.startsWith('/code-trails');
   const isCodeTrailsPage = pathname?.startsWith('/code-trails');
   const isFileCityPage = pathname?.startsWith('/file-city');
-  const isPrincipalFeedPage = pathname?.startsWith('/principal-feed');
   const isStoryMonitoringPage = pathname?.startsWith('/story-based-monitoring');
 
   useEffect(() => {
@@ -277,33 +275,6 @@ export const Header: React.FC = () => {
                   File City
                 </Link>
                 <Link
-                  href="/principal-feed"
-                  style={{
-                    display: 'block',
-                    padding: '12px 16px',
-                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.text,
-                    textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    borderRadius: '8px',
-                    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-                    background: isPrincipalFeedPage ? `${theme.colors.primary}15` : 'transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = isPrincipalFeedPage ? `${theme.colors.primary}25` : `${theme.colors.primary}10`;
-                    e.currentTarget.style.color = theme.colors.primary;
-                    e.currentTarget.style.transform = 'translateX(4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = isPrincipalFeedPage ? `${theme.colors.primary}15` : 'transparent';
-                    e.currentTarget.style.color = isPrincipalFeedPage ? theme.colors.primary : theme.colors.text;
-                    e.currentTarget.style.transform = 'translateX(0)';
-                  }}
-                >
-                  Principal Feed
-                </Link>
-                <Link
                   href="/story-based-monitoring"
                   style={{
                     display: 'block',
@@ -494,19 +465,6 @@ export const Header: React.FC = () => {
                   }}
                 >
                   File City
-                </Link>
-                <Link
-                  href="/principal-feed"
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{
-                    color: isPrincipalFeedPage ? theme.colors.primary : theme.colors.textSecondary,
-                    textDecoration: 'none',
-                    fontSize: '15px',
-                    fontWeight: '500',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  }}
-                >
-                  Principal Feed
                 </Link>
                 <Link
                   href="/story-based-monitoring"

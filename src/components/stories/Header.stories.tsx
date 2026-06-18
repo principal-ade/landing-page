@@ -22,7 +22,7 @@ const meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'The main header navigation for the Principal AI website. Features a dropdown menu for products with File City, Principal Feed, and Story-based Monitoring.',
+        component: 'The main header navigation for the Principal AI website. Features a dropdown menu for products with Code Trails, File City, and Story-based Monitoring.',
       },
     },
   },
@@ -49,7 +49,7 @@ export const Default: Story = {
 
 /**
  * Header with page content below to show the dropdown interaction
- * Hover over "Product" to see the dropdown menu with File City, Principal Feed, and Story-based Monitoring
+ * Hover over "Product" to see the dropdown menu with Code Trails, File City, and Story-based Monitoring
  */
 export const WithPageContent: Story = {
   args: {},
@@ -72,8 +72,8 @@ export const WithPageContent: Story = {
                 The menu items include:
               </p>
               <ul style={{ marginLeft: '20px', marginBottom: '20px' }}>
+                <li>Code Trails - Share knowledge through interactive code paths</li>
                 <li>File City - Navigate your codebase visually</li>
-                <li>Principal Feed - AI-powered development insights</li>
                 <li>Story-based Monitoring - Track progress through user stories</li>
               </ul>
               <p>
