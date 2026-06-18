@@ -24,13 +24,9 @@ export const CodeTrailsForBuilders: React.FC<CodeTrailsForBuildersProps> = ({ is
   return (
     <section
       style={{
-        minHeight: 'calc(100vh - 70px)',
         background: '#15324A',
         padding: isMobile ? '80px 24px' : '100px 40px 120px',
         position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
       }}
     >
       <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>

@@ -4,7 +4,6 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 import { EditableText } from '../EditableText';
-import { PrincipalTrailCard } from './PrincipalTrailCard';
 import siteContent from '../../../content/site-content.json';
 import { typography, spacing, layout, px, responsive } from '../designSystem';
 
@@ -27,13 +26,9 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
   return (
     <section
       style={{
-        minHeight: 'calc(100vh - 70px)',
         background: '#0c1741',
         padding: spacing.section[isMobile ? 'mobile' : 'desktop'],
         position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
       }}
     >
       <div style={{ maxWidth: px(layout.maxWidth.content), margin: '0 auto', width: '100%' }}>
@@ -99,22 +94,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
             gap: px(spacing.gap.sm),
           }}
         >
-          {c.trails.map((trail, index) => {
-            // Use PrincipalTrailCard for the session tracking trail
-            if (trail.url === 'https://app.principal-ade.com/trail/e16d8a04-c898-46d9-8bac-500fb06f1922') {
-              return (
-                <PrincipalTrailCard
-                  key={index}
-                  trailId="e16d8a04-c898-46d9-8bac-500fb06f1922"
-                  url={trail.url}
-                  isMobile={isMobile}
-                  delay={index * 0.1}
-                />
-              );
-            }
-
-            // Regular card for other trails
-            return (
+          {c.trails.map((trail, index) => (
               <motion.a
                 key={index}
                 href={trail.url}
@@ -167,8 +147,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                   Open trail →
                 </div>
               </motion.a>
-            );
-          })}
+          ))}
         </div>
       </div>
 
