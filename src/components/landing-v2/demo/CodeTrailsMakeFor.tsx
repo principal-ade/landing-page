@@ -123,7 +123,7 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 <div
                   style={{
                     fontFamily: 'var(--font-mono, monospace)',
-                    fontSize: isMobile ? '20px' : '36px',
+                    fontSize: '20px',
                     letterSpacing: typography.letterSpacing.wide,
                     textTransform: 'uppercase',
                     color: '#F0A48B',

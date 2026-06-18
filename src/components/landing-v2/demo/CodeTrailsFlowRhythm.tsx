@@ -100,7 +100,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
               <div
                 style={{
                   fontFamily: 'var(--font-mono, monospace)',
-                  fontSize: '11px',
+                  fontSize: '20px',
                   letterSpacing: '0.15em',
                   textTransform: 'uppercase',
                   color: theme.colors.primary,
