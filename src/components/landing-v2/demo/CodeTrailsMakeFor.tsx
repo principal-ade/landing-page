@@ -123,11 +123,12 @@ export const CodeTrailsMakeFor: React.FC<CodeTrailsMakeForProps> = ({ isMobile =
                 <div
                   style={{
                     fontFamily: 'var(--font-mono, monospace)',
-                    fontSize: px(typography.size.label.mobile),
+                    fontSize: isMobile ? '20px' : '36px',
                     letterSpacing: typography.letterSpacing.wide,
                     textTransform: 'uppercase',
                     color: '#F0A48B',
                     marginBottom: px(spacing.gap.xs),
+                    fontWeight: '700',
                   }}
                 >
                   <EditableText contentKey={`makeFor.trails.${index}.tag`} value={trail.tag} />

@@ -116,7 +116,7 @@ export const CodeTrailsFlowRhythm: React.FC<CodeTrailsFlowRhythmProps> = ({ isMo
                 style={{
                   fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
                   fontWeight: '700',
-                  fontSize: isMobile ? '17px' : '28px',
+                  fontSize: isMobile ? '20px' : '36px',
                   lineHeight: 1.2,
                   letterSpacing: '-0.02em',
                   color: '#fff',
