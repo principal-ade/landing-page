@@ -134,7 +134,7 @@ export function AnimatedStoryMonitoringSection({ isMobile }: { isMobile: boolean
         justifyContent: 'center',
         alignItems: 'center',
         background: '#0a0e1a',
-        padding: isMobile ? '80px 24px' : '100px 40px',
+        padding: isMobile ? '60px 24px' : '70px 40px',
         position: 'relative',
       }}
     >

@@ -63,7 +63,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
         justifyContent: 'center',
         alignItems: 'center',
         background: NAVY,
-        padding: isMobile ? '80px 24px' : '100px 40px',
+        padding: isMobile ? '60px 24px' : '70px 40px',
         position: 'relative',
       }}
     >

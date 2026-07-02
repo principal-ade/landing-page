@@ -50,7 +50,7 @@ export const ForTheLoveOfBuildingAnimated: React.FC = () => {
           justifyContent: 'center',
           alignItems: 'center',
           background: '#dff1f5',
-          padding: isMobile ? '80px 24px' : '100px 40px',
+          padding: isMobile ? '60px 24px' : '70px 40px',
           textAlign: 'center',
         }}
       >

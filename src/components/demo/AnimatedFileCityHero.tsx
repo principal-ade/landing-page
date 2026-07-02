@@ -114,7 +114,7 @@ export function AnimatedFileCityHero({ isMobile }: { isMobile: boolean }) {
         position: 'relative',
         overflow: 'hidden',
         background: NAVY,
-        padding: isMobile ? '80px 24px 60px' : '80px 40px 60px',
+        padding: isMobile ? '60px 24px 40px' : '60px 40px 40px',
       }}
     >
       {/* Animated File City Background */}

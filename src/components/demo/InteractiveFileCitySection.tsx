@@ -132,7 +132,7 @@ export function InteractiveFileCitySection({ isMobile }: { isMobile: boolean }) 
         justifyContent: 'center',
         alignItems: 'center',
         background: '#0a0e1a',
-        padding: isMobile ? '80px 24px' : '64px 40px',
+        padding: isMobile ? '60px 24px' : '48px 40px',
         position: 'relative',
         overflow: 'hidden',
       }}
