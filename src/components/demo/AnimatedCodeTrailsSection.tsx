@@ -78,6 +78,42 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
             marginBottom: isMobile ? '48px' : '64px',
           }}
         >
+          {/* Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 12px',
+              background: ORANGE,
+              borderRadius: '20px',
+              marginBottom: '24px',
+            }}
+          >
+            <span
+              style={{
+                fontSize: '12px',
+                fontWeight: '700',
+                color: '#FFFFFF',
+                fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              }}
+            >
+              02
+            </span>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: '700',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#FFFFFF',
+                fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              }}
+            >
+              CODE TRAILS
+            </span>
+          </div>
+
           <h2
             style={{
               fontSize: isMobile ? '36px' : '56px',
@@ -99,7 +135,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
               stroke={ORANGE}
               style={{ flexShrink: 0 }}
             />{' '}
-            of standing behind your work.
+            of knowing how it works.
           </h2>
           <p
             style={{

@@ -8,7 +8,8 @@ import { AnimatedCodeTrailsSection } from "../demo/AnimatedCodeTrailsSection";
  *
  * This section replaces the Principal Feed section in the home page.
  * Features:
- * - Headline: "For the [♥] of standing behind your work."
+ * - Badge: "02 CODE TRAILS"
+ * - Headline: "For the [♥] of knowing how it works."
  * - Interactive trail cards showing code paths
  * - Animated step-by-step flow visualization
  * - Two example trails: Authentication and Payment Processing
