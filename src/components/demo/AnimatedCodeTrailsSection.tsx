@@ -84,9 +84,6 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '6px 12px',
-              background: ORANGE,
-              borderRadius: '20px',
               marginBottom: '24px',
             }}
           >
@@ -94,7 +91,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
               style={{
                 fontSize: '12px',
                 fontWeight: '700',
-                color: '#FFFFFF',
+                color: ORANGE,
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >
@@ -106,7 +103,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
                 fontWeight: '700',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: '#FFFFFF',
+                color: ORANGE,
                 fontFamily: 'var(--font-inter, Inter, sans-serif)',
               }}
             >
