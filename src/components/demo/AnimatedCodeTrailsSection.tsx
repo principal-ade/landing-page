@@ -99,7 +99,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
             </span>
             <span
               style={{
-                fontSize: '11px',
+                fontSize: '16px',
                 fontWeight: '700',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
