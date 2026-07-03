@@ -79,27 +79,19 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
           }}
         >
           {/* Badge */}
-          <div
+          <p
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
+              fontSize: '16px',
+              fontWeight: '800',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: ORANGE,
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
               marginBottom: '24px',
             }}
           >
-            <span
-              style={{
-                fontSize: '16px',
-                fontWeight: '700',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: ORANGE,
-                fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              }}
-            >
-              CODE TRAILS
-            </span>
-          </div>
+            CODE TRAILS
+          </p>
 
           <h2
             style={{
