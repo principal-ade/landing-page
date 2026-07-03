@@ -78,21 +78,6 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
             marginBottom: isMobile ? '48px' : '64px',
           }}
         >
-          {/* Badge */}
-          <p
-            style={{
-              fontSize: '16px',
-              fontWeight: '800',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: ORANGE,
-              fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              marginBottom: '24px',
-            }}
-          >
-            CODE TRAILS
-          </p>
-
           <h2
             style={{
               fontSize: isMobile ? '36px' : '56px',
@@ -116,6 +101,22 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
             />{' '}
             of knowing how it works.
           </h2>
+
+          {/* Badge */}
+          <p
+            style={{
+              fontSize: '16px',
+              fontWeight: '800',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: ORANGE,
+              fontFamily: 'var(--font-inter, Inter, sans-serif)',
+              marginBottom: '24px',
+            }}
+          >
+            CODE TRAILS
+          </p>
+
           <p
             style={{
               fontSize: isMobile ? '15px' : '17px',
