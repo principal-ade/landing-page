@@ -89,16 +89,6 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
           >
             <span
               style={{
-                fontSize: '12px',
-                fontWeight: '700',
-                color: ORANGE,
-                fontFamily: 'var(--font-inter, Inter, sans-serif)',
-              }}
-            >
-              02
-            </span>
-            <span
-              style={{
                 fontSize: '16px',
                 fontWeight: '700',
                 letterSpacing: '0.08em',
