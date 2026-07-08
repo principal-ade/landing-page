@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// TEMP: Analytics disabled for deployment
-// import { useAnalytics } from '@/lib/analytics';
+import { trackAndStartDownload } from '@/lib/download';
 import { useTheme } from '@principal-ade/industry-theme';
 
 interface GitHubRelease {
@@ -33,8 +32,6 @@ const Screenshot: React.FC<{ src: string; alt: string; borderColor: string }> = 
 
 export const DownloadADE: React.FC = () => {
   const { theme } = useTheme();
-  // TEMP: Analytics disabled for deployment
-  const trackDownload = () => {}; // no-op
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -169,14 +166,14 @@ export const DownloadADE: React.FC = () => {
           >
             <a
               href={downloadUrl}
-              onClick={() => {
-                if (macAsset) {
-                  trackDownload({
-                    filename: macAsset.name,
-                    platform: 'mac',
-                    assetId: macAsset.id,
-                  });
-                }
+              onClick={(e) => {
+                if (!macAsset) return;
+                e.preventDefault();
+                trackAndStartDownload(downloadUrl, {
+                  filename: macAsset.name,
+                  platform: 'mac',
+                  assetId: macAsset.id,
+                });
               }}
               style={{
                 display: 'inline-flex',
@@ -539,14 +536,14 @@ export const DownloadADE: React.FC = () => {
           >
             <a
               href={downloadUrl}
-              onClick={() => {
-                if (macAsset) {
-                  trackDownload({
-                    filename: macAsset.name,
-                    platform: 'mac',
-                    assetId: macAsset.id,
-                  });
-                }
+              onClick={(e) => {
+                if (!macAsset) return;
+                e.preventDefault();
+                trackAndStartDownload(downloadUrl, {
+                  filename: macAsset.name,
+                  platform: 'mac',
+                  assetId: macAsset.id,
+                });
               }}
               style={{
                 display: 'inline-flex',

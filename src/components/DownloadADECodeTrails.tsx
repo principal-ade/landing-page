@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { trackAndStartDownload } from '@/lib/download';
 import { useTheme } from '@principal-ade/industry-theme';
 
 interface GitHubRelease {
@@ -18,7 +19,6 @@ interface GitHubRelease {
 
 export const DownloadADECodeTrails: React.FC = () => {
   const { theme } = useTheme();
-  const trackDownload = () => {}; // no-op
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024,
   );
@@ -132,14 +132,14 @@ export const DownloadADECodeTrails: React.FC = () => {
           >
             <a
               href={downloadUrl}
-              onClick={() => {
-                if (macAsset) {
-                  trackDownload({
-                    filename: macAsset.name,
-                    platform: 'mac',
-                    assetId: macAsset.id,
-                  });
-                }
+              onClick={(e) => {
+                if (!macAsset) return;
+                e.preventDefault();
+                trackAndStartDownload(downloadUrl, {
+                  filename: macAsset.name,
+                  platform: 'mac',
+                  assetId: macAsset.id,
+                });
               }}
               style={{
                 display: 'inline-flex',
@@ -479,14 +479,14 @@ export const DownloadADECodeTrails: React.FC = () => {
           >
             <a
               href={downloadUrl}
-              onClick={() => {
-                if (macAsset) {
-                  trackDownload({
-                    filename: macAsset.name,
-                    platform: 'mac',
-                    assetId: macAsset.id,
-                  });
-                }
+              onClick={(e) => {
+                if (!macAsset) return;
+                e.preventDefault();
+                trackAndStartDownload(downloadUrl, {
+                  filename: macAsset.name,
+                  platform: 'mac',
+                  assetId: macAsset.id,
+                });
               }}
               style={{
                 display: 'inline-flex',
