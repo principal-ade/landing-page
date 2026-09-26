@@ -220,8 +220,8 @@ export const Header: React.FC = () => {
                     }
                   `}
                 </style>
-                <a
-                  href="https://principal-ade.com/code-trails"
+                <Link
+                  href="/code-trails"
                   style={{
                     display: 'block',
                     padding: '12px 16px',
@@ -246,7 +246,7 @@ export const Header: React.FC = () => {
                   }}
                 >
                   Code Trails
-                </a>
+                </Link>
                 <Link
                   href="/file-city"
                   style={{
@@ -328,8 +328,8 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <a
-            href="https://principal-ade.com/download"
+          <Link
+            href="/download"
             style={{
               padding: '8px 20px',
               background: theme.colors.primary,
@@ -352,7 +352,7 @@ export const Header: React.FC = () => {
             }}
           >
             Download
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Hamburger Menu Button */}
@@ -440,8 +440,8 @@ export const Header: React.FC = () => {
             </button>
             {mobileProductOpen && (
               <div style={{ paddingLeft: '16px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <a
-                  href="https://principal-ade.com/code-trails"
+                <Link
+                  href="/code-trails"
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
                     color: isCodeTrailsPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -452,7 +452,7 @@ export const Header: React.FC = () => {
                   }}
                 >
                   Code Trails
-                </a>
+                </Link>
                 <Link
                   href="/file-city"
                   onClick={() => setMobileMenuOpen(false)}
@@ -497,8 +497,8 @@ export const Header: React.FC = () => {
           >
             Blog
           </Link>
-          <a
-            href="https://principal-ade.com/download"
+          <Link
+            href="/download"
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',
@@ -513,7 +513,7 @@ export const Header: React.FC = () => {
             }}
           >
             Download
-          </a>
+          </Link>
         </div>
       )}
     </nav>
