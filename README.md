@@ -1,22 +1,22 @@
-# Code City Landing
+# Principal ADE Landing Page
 
-This is the landing page for Code City - an interactive 2D visualization tool for exploring codebases.
+This is the landing page for Principal ADE - an AI-powered development environment with interactive codebase visualization.
 
 ## Getting Started
 
 First, install dependencies:
 
 ```bash
-pnpm install
+npm install
 ```
 
 Then, run the development server:
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
-Open [http://localhost:3002](http://localhost:3002) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Tech Stack
 
@@ -29,20 +29,18 @@ Open [http://localhost:3002](http://localhost:3002) with your browser to see the
 ## Project Structure
 
 ```
-code-city-landing/
+landing-page/
 ├── src/
-│   └── app/
-│       ├── layout.tsx    # Root layout with metadata
-│       ├── page.tsx      # Homepage
-│       └── globals.css   # Global styles
+│   ├── app/              # Next.js app directory
+│   ├── components/       # React components
+│   └── lib/              # Utility functions
 ├── public/               # Static assets
 ├── next.config.mjs       # Next.js configuration
 ├── tailwind.config.js    # Tailwind CSS configuration
-├── postcss.config.mjs    # PostCSS configuration
 ├── tsconfig.json         # TypeScript configuration
 └── package.json          # Project dependencies
 ```
 
-## Development
+## Environment Variables
 
-The app runs on port 3002 to avoid conflicts with other Next.js apps in the monorepo.
+See `.env.example` for optional configuration (Google Analytics, AWS S3, GitHub releases token, etc.)
