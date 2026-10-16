@@ -9,8 +9,12 @@ interface DownloadMeta {
 const EVENT_CATEGORY = 'Downloads';
 
 /**
- * Fire a GA "download" event, probe the download endpoint to determine
- * success/failure, fire a result event, then trigger the real download.
+ * Fire a GA "download" event, trigger the real download, then probe the
+ * download URL to determine success/failure and report the result.
+ *
+ * Navigation is never gated on the probe: on a static host the download URL
+ * points straight at GitHub's CDN, so we hand off immediately and treat the
+ * probe as best-effort telemetry.
  */
 export async function trackAndStartDownload(
   downloadUrl: string,
@@ -26,13 +30,15 @@ export async function trackAndStartDownload(
 
   trackGAEvent('download', { ...baseParams, download_status: 'started' });
 
+  // Start the download right away so it works even if the telemetry probe fails.
+  window.location.href = downloadUrl;
+
   try {
     const res = await fetch(downloadUrl, { redirect: 'manual' });
     const started = res.type === 'opaqueredirect' || res.ok;
 
     if (started) {
       trackGAEvent('download', { ...baseParams, download_status: 'completed' });
-      window.location.href = downloadUrl;
       return;
     }
 

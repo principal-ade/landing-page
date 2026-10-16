@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { trackAndStartDownload } from '@/lib/download';
+import { fetchReleases, getLatestAsset, type GitHubRelease } from '@/lib/github-releases';
 import { useTheme } from '@principal-ade/industry-theme';
-
-interface GitHubRelease {
-  id: number;
-  tag_name: string;
-  name: string;
-  body: string;
-  published_at: string;
-  assets: {
-    id: number;
-    name: string;
-    browser_download_url: string;
-    size: number;
-  }[];
-}
 
 export const DownloadADECodeTrails: React.FC = () => {
   const { theme } = useTheme();
@@ -32,37 +19,21 @@ export const DownloadADECodeTrails: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchReleases = async () => {
-      try {
-        const response = await fetch("/api/github/releases");
-        if (response.ok) {
-          const data = await response.json();
-          setReleases(data);
-        }
-      } catch {
-        // Silently fail - buttons will show fallback
-      } finally {
-        setLoading(false);
-      }
+    let cancelled = false;
+    fetchReleases()
+      .then((data) => {
+        if (!cancelled) setReleases(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
     };
-    fetchReleases();
   }, []);
 
-  const getAssetForPlatform = (release: GitHubRelease, platform: "mac" | "windows" | "linux") => {
-    const patterns = {
-      mac: [".dmg", "darwin", "macos"],
-      windows: [".exe", ".msi", "win32", "windows"],
-      linux: [".AppImage", ".deb", ".rpm", "linux"],
-    };
-    return release.assets.find((asset) =>
-      patterns[platform].some((pattern) => asset.name.toLowerCase().includes(pattern))
-    );
-  };
-
-  const macAsset = releases[0] ? getAssetForPlatform(releases[0], "mac") : null;
-  const downloadUrl = macAsset
-    ? `/api/github/download?assetId=${macAsset.id}&filename=${encodeURIComponent(macAsset.name)}`
-    : "/download";
+  const macAsset = getLatestAsset(releases, "mac");
+  const downloadUrl = macAsset ? macAsset.browser_download_url : "/download";
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;

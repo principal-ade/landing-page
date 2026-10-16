@@ -9,9 +9,9 @@ const DESKTOP_APP_CONFIG = {
   // GitHub repository for desktop app releases
   github: {
     owner: 'principal-ade',
-    repo: 'landing-page',
+    repo: 'electron-app',
     // Full repository path
-    fullRepo: 'principal-ade/landing-page' as const,
+    fullRepo: 'principal-ade/electron-app' as const,
   },
 
   // Application branding
@@ -34,10 +34,4 @@ export const getGitHubApiUrl = (endpoint: 'releases' | 'latest' = 'releases') =>
   const { owner, repo } = DESKTOP_APP_CONFIG.github;
   const base = `https://api.github.com/repos/${owner}/${repo}/releases`;
   return endpoint === 'latest' ? `${base}/latest` : base;
-};
-
-// Helper to construct download URL for a specific asset
-export const getAssetDownloadUrl = (assetId: string | number) => {
-  const { owner, repo } = DESKTOP_APP_CONFIG.github;
-  return `https://api.github.com/repos/${owner}/${repo}/releases/assets/${assetId}`;
 };
