@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
+import { withBase } from '@/lib/withBase';
 import { Star } from 'lucide-react';
 import { useTheme } from '@principal-ade/industry-theme';
 
@@ -66,7 +66,7 @@ export function BacklogBackgroundSection({ onStartTour }: BacklogBackgroundSecti
         </p>
 
         <img
-          src="/backlog-logo.jpg"
+          src={withBase("/backlog-logo.jpg")}
           alt="Backlog.md"
           style={{
             width: 'clamp(80px, 15vw, 120px)',

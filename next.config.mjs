@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
+// Deploy base path. Empty locally (root), set to e.g. '/landing-page' in CI for a
+// GitHub Pages project site. `withBase()` in src/lib/withBase.ts mirrors this for
+// hand-written links/assets.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 const nextConfig = {
+  // Static HTML export — the deployable artifact is `out/`.
+  output: 'export',
+  basePath: basePath || undefined,
+  // Directory-style output (/about/ -> about/index.html), friendliest for static hosts.
+  trailingSlash: true,
   reactStrictMode: false, // Disabled to prevent double-mount animation issues in dev
   transpilePackages: ['themed-markdown'],
   typescript: {
@@ -18,22 +28,24 @@ const nextConfig = {
         path: false,
       };
     }
-    
+
     // Use lighter source maps in development to reduce memory usage
     if (dev && !isServer) {
       config.devtool = 'cheap-module-source-map';
     }
-    
+
     // Handle ESM packages
     config.resolve.extensionAlias = {
       '.js': ['.js', '.mjs'],
       '.jsx': ['.jsx'],
       '.ts': ['.tsx', '.ts'],
     };
-    
+
     return config;
   },
   images: {
+    // Required for `output: 'export'` — there is no server-side image optimizer.
+    unoptimized: true,
     loader: 'default',
     remotePatterns: [
       {

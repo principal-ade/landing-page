@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
+import { withBase } from '@/lib/withBase';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -113,7 +113,7 @@ export function StoryBasedMonitoringSimple() {
               }}
             >
               <Image
-                src="/otel1_manifest_screenshot.png"
+                src={withBase("/otel1_manifest_screenshot.png")}
                 alt="OTEL Behavioral Manifest - Auto-generated workflow templates"
                 width={1200}
                 height={800}
@@ -378,7 +378,7 @@ export function StoryBasedMonitoringSimple() {
           </p>
 
           <Link
-            href="/observability-demo"
+            href={withBase("/observability-demo")}
             style={{
               display: 'inline-flex',
               alignItems: 'center',

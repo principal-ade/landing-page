@@ -1,6 +1,6 @@
 'use client';
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Heart, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -149,7 +149,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
             }}
           >
             <img
-              src="/trail-four-views.jpg"
+              src={withBase("/trail-four-views.jpg")}
               alt="Four synchronized views of a Code Trail"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
@@ -266,7 +266,7 @@ export function AnimatedCodeTrailsSection({ isMobile }: { isMobile: boolean }) {
           }}
         >
           <Link
-            href="/code-trails"
+            href={withBase("/code-trails")}
             style={{
               color: BLUE_MID,
               fontSize: isMobile ? '15px' : '16px',

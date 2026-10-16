@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useRef } from "react";
+import { withBase } from '@/lib/withBase';
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
 
@@ -128,7 +128,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
             }}
           >
             <img
-              src="/images/gary-tan-tweet.png"
+              src={withBase("/images/gary-tan-tweet.png")}
               alt="Gary Tan's tweet about Principal Feed showing 11K views"
               style={{
                 width: "100%",
@@ -166,7 +166,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
             }}
           >
             <img
-              src="/images/principal-feed-activity.png"
+              src={withBase("/images/principal-feed-activity.png")}
               alt="Principal Feed showing commit activity timeline, feed details, and File City visualization"
               style={{
                 width: "100%",
@@ -204,7 +204,7 @@ export const PrincipalFeed: React.FC<PrincipalFeedProps> = ({ isMobile = false }
             }}
           >
             <img
-              src="/images/contributor-timeline.png"
+              src={withBase("/images/contributor-timeline.png")}
               alt="Contributor timeline showing collaborator avatars"
               style={{
                 width: "100%",

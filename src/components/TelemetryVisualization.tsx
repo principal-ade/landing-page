@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { withBase } from '@/lib/withBase';
 import { motion } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
 
@@ -93,7 +93,7 @@ export const TelemetryVisualization: React.FC<TelemetryVisualizationProps> = ({
               {/* Link */}
               <div style={{ marginTop: "24px" }}>
                 <a
-                  href="/about"
+                  href={withBase("/about")}
                   style={{
                     fontSize: isMobile ? "14px" : "15px",
                     fontWeight: "600",

@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { withBase } from '@/lib/withBase';
 import Link from 'next/link';
 
 // Ice Tangerine Color Palette
@@ -831,7 +831,7 @@ function CTASection() {
           }}
         >
           <Link
-            href="/observability-demo"
+            href={withBase("/observability-demo")}
             style={{
               display: 'inline-flex',
               alignItems: 'center',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion } from 'framer-motion';
 import { trackAndStartDownload } from '@/lib/download';
 import { fetchReleases, getLatestAsset, type GitHubRelease } from '@/lib/github-releases';
@@ -46,7 +47,7 @@ export const DownloadADE: React.FC = () => {
   }, []);
 
   const macAsset = getLatestAsset(releases, "mac");
-  const downloadUrl = macAsset ? macAsset.browser_download_url : "/download";
+  const downloadUrl = macAsset ? macAsset.browser_download_url : withBase("/download");
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -208,7 +209,7 @@ export const DownloadADE: React.FC = () => {
             style={{ marginTop: '64px' }}
           >
             <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Activity Feed</p>
-            <Screenshot src="/gary-tan-activity-feed.png" alt="Principal AI activity feed showing agent commits across repos" borderColor={theme.colors.border} />
+            <Screenshot src={withBase("/gary-tan-activity-feed.png")} alt="Principal AI activity feed showing agent commits across repos" borderColor={theme.colors.border} />
           </motion.div>
 
           <motion.p
@@ -283,7 +284,7 @@ export const DownloadADE: React.FC = () => {
             style={{ marginBottom: '48px' }}
           >
             <p style={{ fontSize: isMobile ? '14px' : '16px', fontWeight: 500, color: theme.colors.textMuted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px', textAlign: 'center' }}>Story-based Monitoring</p>
-            <Screenshot src="/codex-runner-error-with-file-city.png" alt="Principal AI codex runner error with file city view" borderColor={theme.colors.border} />
+            <Screenshot src={withBase("/codex-runner-error-with-file-city.png")} alt="Principal AI codex runner error with file city view" borderColor={theme.colors.border} />
           </motion.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '48px' }}>

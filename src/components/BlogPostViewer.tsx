@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "@principal-ade/industry-theme";
 import { DocumentView, parseMarkdownIntoPresentation } from "themed-markdown";
 import { ThemedSlidePresentationBook } from "@/components/ThemedSlidePresentationBook";
+import { BASE_PATH } from "@/lib/withBase";
 import mermaid from "mermaid";
 import "themed-markdown/dist/index.css";
 
@@ -56,6 +57,12 @@ function processContent(rawContent: string): { content: string; date: string; au
 
   // Clean up extra blank lines
   content = content.replace(/\n{3,}/g, "\n\n");
+
+  // Prefix root-absolute image/link destinations (e.g. ![alt](/img.png)) with the
+  // deploy base path. No-op in local dev where BASE_PATH is empty.
+  if (BASE_PATH) {
+    content = content.replace(/\]\(\/(?!\/)/g, `](${BASE_PATH}/`);
+  }
 
   return { content, date, author };
 }

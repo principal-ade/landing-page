@@ -1,6 +1,6 @@
 'use client';
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { useTheme } from '@principal-ade/industry-theme';
 import Link from 'next/link';
 import { Heart } from 'lucide-react';
@@ -156,19 +156,19 @@ export function ExplanationSection() {
     {
       title: 'File City',
       description: 'understanding.',
-      href: '/file-city',
+      href: withBase('/file-city'),
       graphic: <FileCityGraphic />,
     },
     {
       title: 'Principal Activity Feed',
       description: 'seeing progress.',
-      href: '/principal-feed',
+      href: withBase('/principal-feed'),
       graphic: <PrincipalFeedGraphic />,
     },
     {
       title: 'Story-based Monitoring',
       description: 'knowing it works.',
-      href: '/story-based-monitoring',
+      href: withBase('/story-based-monitoring'),
       graphic: <StoryMonitoringGraphic />,
     },
   ];

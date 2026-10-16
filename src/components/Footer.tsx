@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
@@ -19,17 +19,17 @@ const footerSections: FooterSection[] = [
   {
     title: 'Resources',
     links: [
-      { label: 'Blog', href: '/blog' },
-      { label: 'Support', href: '/support' },
+      { label: 'Blog', href: withBase('/blog') },
+      { label: 'Support', href: withBase('/support') },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
+      { label: 'About', href: withBase('/about') },
+      { label: 'Contact', href: withBase('/contact') },
+      { label: 'Privacy Policy', href: withBase('/privacy') },
+      { label: 'Terms of Service', href: withBase('/terms') },
     ],
   },
 ];
@@ -200,7 +200,7 @@ export const Footer: React.FC = () => {
           </p>
           <div style={{ display: 'flex', gap: '24px' }}>
             <a
-              href="/privacy"
+              href={withBase("/privacy")}
               style={{
                 color: theme.colors.textTertiary,
                 textDecoration: 'none',
@@ -218,7 +218,7 @@ export const Footer: React.FC = () => {
               Privacy Policy
             </a>
             <a
-              href="/terms"
+              href={withBase("/terms")}
               style={{
                 color: theme.colors.textTertiary,
                 textDecoration: 'none',
@@ -236,7 +236,7 @@ export const Footer: React.FC = () => {
               Terms of Service
             </a>
             <a
-              href="/cookies"
+              href={withBase("/cookies")}
               style={{
                 color: theme.colors.textTertiary,
                 textDecoration: 'none',

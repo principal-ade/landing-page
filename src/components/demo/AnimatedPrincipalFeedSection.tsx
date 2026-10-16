@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useMemo } from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion, useInView } from 'framer-motion';
 import { Heart, ArrowRight, Smartphone, BookOpen } from 'lucide-react';
 import Link from 'next/link';
@@ -520,7 +520,7 @@ export function AnimatedPrincipalFeedSection({ isMobile }: { isMobile: boolean }
             }}
           >
             <Link
-              href="/principal-feed"
+              href={withBase("/principal-feed")}
               style={{
                 color: BLUE_MID,
                 fontSize: isMobile ? '15px' : '16px',

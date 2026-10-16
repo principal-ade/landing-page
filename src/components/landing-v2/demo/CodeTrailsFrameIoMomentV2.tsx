@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 import { EditableText } from '../EditableText';
@@ -119,7 +119,7 @@ export const CodeTrailsFrameIoMomentV2: React.FC<CodeTrailsFrameIoMomentV2Props>
             }}
           >
             <img
-              src="/trail-four-views.jpg"
+              src={withBase("/trail-four-views.jpg")}
               alt="Four synchronized views of a Code Trail"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />

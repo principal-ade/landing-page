@@ -1,6 +1,6 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
+import { withBase } from '@/lib/withBase';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
         {/* Logo/Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Link
-            href="/"
+            href={withBase("/")}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -114,7 +114,7 @@ export const Header: React.FC = () => {
           }}
         >
           <Link
-            href="/about"
+            href={withBase("/about")}
             style={{
               color: isAboutPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isAboutPage ? 'underline' : 'none',
@@ -221,7 +221,7 @@ export const Header: React.FC = () => {
                   `}
                 </style>
                 <Link
-                  href="/code-trails"
+                  href={withBase("/code-trails")}
                   style={{
                     display: 'block',
                     padding: '12px 16px',
@@ -248,7 +248,7 @@ export const Header: React.FC = () => {
                   Code Trails
                 </Link>
                 <Link
-                  href="/file-city"
+                  href={withBase("/file-city")}
                   style={{
                     display: 'block',
                     padding: '12px 16px',
@@ -275,7 +275,7 @@ export const Header: React.FC = () => {
                   File City
                 </Link>
                 <Link
-                  href="/story-based-monitoring"
+                  href={withBase("/story-based-monitoring")}
                   style={{
                     display: 'block',
                     padding: '12px 16px',
@@ -307,7 +307,7 @@ export const Header: React.FC = () => {
           </div>
 
           <Link
-            href="/blog"
+            href={withBase("/blog")}
             style={{
               color: isBlogPage ? theme.colors.primary : theme.colors.textSecondary,
               textDecoration: isBlogPage ? 'underline' : 'none',
@@ -329,7 +329,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="/download"
+            href={withBase("/download")}
             style={{
               padding: '8px 20px',
               background: theme.colors.primary,
@@ -393,7 +393,7 @@ export const Header: React.FC = () => {
           }}
         >
           <Link
-            href="/about"
+            href={withBase("/about")}
             onClick={() => setMobileMenuOpen(false)}
             style={{
               color: isAboutPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -441,7 +441,7 @@ export const Header: React.FC = () => {
             {mobileProductOpen && (
               <div style={{ paddingLeft: '16px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <Link
-                  href="/code-trails"
+                  href={withBase("/code-trails")}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
                     color: isCodeTrailsPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -454,7 +454,7 @@ export const Header: React.FC = () => {
                   Code Trails
                 </Link>
                 <Link
-                  href="/file-city"
+                  href={withBase("/file-city")}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
                     color: isFileCityPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -467,7 +467,7 @@ export const Header: React.FC = () => {
                   File City
                 </Link>
                 <Link
-                  href="/story-based-monitoring"
+                  href={withBase("/story-based-monitoring")}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
                     color: isStoryMonitoringPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -484,7 +484,7 @@ export const Header: React.FC = () => {
           </div>
 
           <Link
-            href="/blog"
+            href={withBase("/blog")}
             onClick={() => setMobileMenuOpen(false)}
             style={{
               color: isBlogPage ? theme.colors.primary : theme.colors.textSecondary,
@@ -498,7 +498,7 @@ export const Header: React.FC = () => {
             Blog
           </Link>
           <Link
-            href="/download"
+            href={withBase("/download")}
             onClick={() => setMobileMenuOpen(false)}
             style={{
               padding: '12px 24px',

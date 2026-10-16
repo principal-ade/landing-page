@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { withBase } from '@/lib/withBase';
 import { motion } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
 import { FileCityDemo } from "./FileCityDemo";
@@ -122,7 +122,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             }}
           >
             <img
-              src="/images/new 3D.jpg"
+              src={withBase("/images/new 3D.jpg")}
               alt="File City 3D view with building heights representing lines of code"
               style={{
                 width: "100%",
@@ -174,7 +174,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             }}
           >
             <img
-              src="/images/File City in Story Monitoring .png"
+              src={withBase("/images/File City in Story Monitoring .png")}
               alt="File City always visible during Story-Based Monitoring"
               style={{
                 width: "100%",
@@ -226,7 +226,7 @@ export const FileCity: React.FC<FileCityProps> = ({ isMobile = false }) => {
             }}
           >
             <img
-              src="/images/History view.jpg"
+              src={withBase("/images/History view.jpg")}
               alt="File City with commit history and time travel"
               style={{
                 width: "100%",

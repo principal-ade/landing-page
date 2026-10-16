@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { withBase } from '@/lib/withBase';
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 
@@ -128,7 +128,7 @@ export default function CommunityPage() {
             }}
           >
             <img
-              src="/images/social/michael-datadog-post.png"
+              src={withBase("/images/social/michael-datadog-post.png")}
               alt="Michael Flannery's LinkedIn post about Anthropic's Datadog deal"
               style={{
                 width: "100%",
@@ -215,7 +215,7 @@ export default function CommunityPage() {
             }}
           >
             <img
-              src="/images/social/filecity-tours-post.png"
+              src={withBase("/images/social/filecity-tours-post.png")}
               alt="FileCity's X post about File City Tours"
               style={{
                 width: "100%",
@@ -302,7 +302,7 @@ export default function CommunityPage() {
             }}
           >
             <img
-              src="/images/social/fernando-event-templates.png"
+              src={withBase("/images/social/fernando-event-templates.png")}
               alt="Fernando's X post about Event Templates vs Logs"
               style={{
                 width: "100%",
@@ -543,7 +543,7 @@ export default function CommunityPage() {
             </div>
 
             <a
-              href="/game"
+              href={withBase("/game")}
               style={{
                 display: "inline-flex",
                 alignItems: "center",

@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { withBase } from '@/lib/withBase';
 import { motion } from "framer-motion";
 import { useTheme } from "@principal-ade/industry-theme";
 
@@ -66,7 +66,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
         </p>
 
         <a
-          href="/download"
+          href={withBase("/download")}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -103,7 +103,7 @@ export const SimpleCTA: React.FC<SimpleCTAProps> = ({ isMobile = false }) => {
         >
           Design partner?{" "}
           <a
-            href="/contact"
+            href={withBase("/contact")}
             style={{
               color: theme.colors.primary,
               textDecoration: "none",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion } from 'framer-motion';
 import { trackAndStartDownload } from '@/lib/download';
 import { fetchReleases, getLatestAsset, type GitHubRelease } from '@/lib/github-releases';
@@ -33,7 +34,7 @@ export const DownloadADECodeTrails: React.FC = () => {
   }, []);
 
   const macAsset = getLatestAsset(releases, "mac");
-  const downloadUrl = macAsset ? macAsset.browser_download_url : "/download";
+  const downloadUrl = macAsset ? macAsset.browser_download_url : withBase("/download");
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;

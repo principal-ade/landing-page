@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientThemeProvider from "@/components/providers/ClientThemeProvider";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Header } from "@/components/Header";
+import { withBase } from "@/lib/withBase";
 // TEMP: Analytics disabled for deployment
 // import { AnalyticsProvider } from "@/lib/analytics";
 // import { AnalyticsTracker } from "@/lib/analytics/components/AnalyticsTracker";
@@ -28,11 +29,11 @@ export const metadata: Metadata = {
   description: "Code Trails: Frame.io for code collaboration",
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: withBase("/favicon.ico") },
+      { url: withBase("/favicon-16x16.png"), sizes: "16x16", type: "image/png" },
+      { url: withBase("/favicon-32x32.png"), sizes: "32x32", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: withBase("/apple-touch-icon.png"),
   },
   viewport: {
     width: "device-width",
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  manifest: "/manifest.json",
+  manifest: withBase("/manifest.json"),
   openGraph: {
     title: "Principal AI",
     description: "Code Trails: Frame.io for code collaboration",

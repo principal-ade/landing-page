@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
 import { CodeTrailsHeroFinal } from './codetrails/CodeTrailsHeroFinal';
@@ -311,9 +311,9 @@ export const CodeTrailsLandingFinal: React.FC<CodeTrailsLandingFinalProps> = ({ 
             </div>
             <div style={{ display: 'flex', gap: '24px' }}>
               {[
-                { label: 'Privacy', href: '/privacy' },
-                { label: 'Terms', href: '/terms' },
-                { label: 'Security', href: '/security' },
+                { label: 'Privacy', href: withBase('/privacy') },
+                { label: 'Terms', href: withBase('/terms') },
+                { label: 'Security', href: withBase('/security') },
               ].map((link, index) => (
                 <a
                   key={index}

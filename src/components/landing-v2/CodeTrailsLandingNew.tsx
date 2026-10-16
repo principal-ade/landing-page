@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { useTheme } from '@principal-ade/industry-theme';
 import { CodeTrailsHeroNew } from './demo/CodeTrailsHeroNew';
 import { CodeTrailsHowItWorks } from './demo/CodeTrailsHowItWorks';
@@ -56,7 +56,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
           }}
         >
           <a
-            href="/"
+            href={withBase("/")}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -232,7 +232,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li>
                 <a
-                  href="/file-city"
+                  href={withBase("/file-city")}
                   style={{
                     fontSize: '15px',
                     color: 'rgba(255,255,255,0.7)',
@@ -248,7 +248,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="/principal-feed"
+                  href={withBase("/principal-feed")}
                   style={{
                     fontSize: '15px',
                     color: 'rgba(255,255,255,0.7)',
@@ -264,7 +264,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="/code-trails"
+                  href={withBase("/code-trails")}
                   style={{
                     fontSize: '15px',
                     color: theme.colors.primary,
@@ -364,7 +364,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li>
                 <a
-                  href="/about"
+                  href={withBase("/about")}
                   style={{
                     fontSize: '15px',
                     color: 'rgba(255,255,255,0.7)',
@@ -380,7 +380,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="/blog"
+                  href={withBase("/blog")}
                   style={{
                     fontSize: '15px',
                     color: 'rgba(255,255,255,0.7)',
@@ -396,7 +396,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="/contact"
+                  href={withBase("/contact")}
                   style={{
                     fontSize: '15px',
                     color: 'rgba(255,255,255,0.7)',
@@ -445,7 +445,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
             }}
           >
             <a
-              href="/privacy"
+              href={withBase("/privacy")}
               style={{
                 color: 'rgba(255,255,255,0.7)',
                 textDecoration: 'none',
@@ -458,7 +458,7 @@ export const CodeTrailsLandingNew: React.FC = () => {
               Privacy
             </a>
             <a
-              href="/terms"
+              href={withBase("/terms")}
               style={{
                 color: 'rgba(255,255,255,0.7)',
                 textDecoration: 'none',

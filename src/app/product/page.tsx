@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { withBase } from '@/lib/withBase';
 import Image from "next/image";
 import { useTheme } from "@principal-ade/industry-theme";
 import { Header } from "../../components/Header";
@@ -80,7 +80,7 @@ export default function FeaturesPage() {
             Monitor it in production.
           </p>
           <a
-            href="/download"
+            href={withBase("/download")}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -255,7 +255,7 @@ export default function FeaturesPage() {
             }}
           >
             <Image
-              src="/tldraw-example.png"
+              src={withBase("/tldraw-example.png")}
               alt="File City visualization"
               width={800}
               height={600}
@@ -400,7 +400,7 @@ export default function FeaturesPage() {
             }}
           >
             <Image
-              src="/quality-radar.png"
+              src={withBase("/quality-radar.png")}
               alt="Quality Radar dashboard"
               width={1200}
               height={800}
@@ -576,7 +576,7 @@ export default function FeaturesPage() {
               }}
             >
               <Image
-                src="/system-story-flow.png"
+                src={withBase("/system-story-flow.png")}
                 alt="System story flow diagram showing expected behavior in blue and error divergence in red"
                 width={900}
                 height={733}

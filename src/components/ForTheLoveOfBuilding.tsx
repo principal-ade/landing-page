@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+import { withBase } from '@/lib/withBase';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from '@principal-ade/industry-theme';
@@ -230,7 +230,7 @@ export const ForTheLoveOfBuilding: React.FC = () => {
                 Ready to see your code differently?
               </p>
               <Link
-                href="/#access"
+                href={withBase("/#access")}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
