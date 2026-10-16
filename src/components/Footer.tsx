@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@principal-ade/industry-theme';
@@ -21,7 +21,6 @@ const footerSections: FooterSection[] = [
     links: [
       { label: 'Blog', href: '/blog' },
       { label: 'Support', href: '/support' },
-      { label: 'Book a Demo', href: '/demo' },
     ],
   },
   {
@@ -44,46 +43,6 @@ const socialLinks = [
 
 export const Footer: React.FC = () => {
   const { theme } = useTheme();
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email) {
-      setStatus('error');
-      setMessage('Please enter your email');
-      return;
-    }
-
-    setStatus('loading');
-    setMessage('');
-
-    try {
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, source: 'footer' }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus('success');
-        setMessage('Successfully subscribed!');
-        setEmail('');
-      } else {
-        setStatus('error');
-        setMessage(data.error || 'Failed to subscribe');
-      }
-    } catch {
-      setStatus('error');
-      setMessage('Failed to subscribe. Please try again.');
-    }
-  };
 
   return (
     <footer
@@ -215,131 +174,6 @@ export const Footer: React.FC = () => {
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* Newsletter Subscription */}
-        <div
-          style={{
-            background: `${theme.colors.primary}0D`,
-            border: `1px solid ${theme.colors.primary}33`,
-            borderRadius: '12px',
-            padding: '32px',
-            marginBottom: '60px',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '24px',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <h3
-                style={{
-                  color: theme.colors.text,
-                  fontSize: '18px',
-                  fontWeight: '600',
-                  marginBottom: '8px',
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                }}
-              >
-                Stay Updated
-              </h3>
-              <p
-                style={{
-                  color: theme.colors.textTertiary,
-                  fontSize: '14px',
-                  margin: 0,
-                  fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                }}
-              >
-                Get the latest updates on Principal AI features and releases.
-              </p>
-            </div>
-            <form
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                width: '100%',
-              }}
-              onSubmit={handleSubmit}
-            >
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={status === 'loading'}
-                  style={{
-                    flex: '1 1 150px',
-                    minWidth: '0',
-                    padding: '8px 10px',
-                    background: theme.colors.surface,
-                    border: `1px solid ${theme.colors.border}`,
-                    borderRadius: '8px',
-                    color: theme.colors.text,
-                    fontSize: '13px',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    outline: 'none',
-                    opacity: status === 'loading' ? 0.6 : 1,
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.primary;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.border;
-                  }}
-                />
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  style={{
-                    flex: '0 0 auto',
-                    padding: '8px 16px',
-                    background: status === 'loading' ? theme.colors.muted : theme.colors.primary,
-                    color: theme.colors.textOnPrimary,
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                    transition: 'all 0.2s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (status !== 'loading') {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}66`;
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
-                </button>
-              </div>
-              {message && (
-                <p
-                  style={{
-                    color: status === 'success' ? '#4ade80' : '#f87171',
-                    fontSize: '12px',
-                    margin: 0,
-                    fontFamily: 'Inter, "Geist Sans", system-ui, -apple-system, sans-serif',
-                  }}
-                >
-                  {message}
-                </p>
-              )}
-            </form>
-          </div>
         </div>
 
         {/* Bottom Bar */}

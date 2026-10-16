@@ -478,41 +478,6 @@ export const MazeDemo: React.FC<MazeDemoProps> = ({
           </button>
         </div>
       )}
-
-      {/* Principal mode - Schedule A Call button */}
-      {mode === 'principal' && blockageFound && previousIncidentCost > 0 && (
-        <button
-          onClick={() => {
-            if (typeof window !== 'undefined') {
-              window.location.href = '/demo';
-            }
-          }}
-          style={{
-            padding: isMobile ? '10px 24px' : '12px 32px',
-            background: theme.colors.primary,
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: theme.fontSizes[0],
-            fontWeight: theme.fontWeights.bold,
-            color: theme.colors.text,
-            cursor: 'pointer',
-            fontFamily: theme.fonts.body,
-            transition: 'all 0.2s ease',
-            opacity: 0.9,
-            minWidth: isMobile ? '200px' : '220px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.colors.primary}40`;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
-        >
-          Schedule A Call Today
-        </button>
-      )}
     </div>
   );
 };
