@@ -3,8 +3,12 @@
 import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import type { RegisteredTrace } from '@principal-ai/principal-view-core';
 import type { OtelSpanData } from '@principal-ai/principal-view-core';
-import { getSpansFromTrace } from '@industry-theme/principal-view-panels';
 
+function getSpansFromTrace(trace: RegisteredTrace): OtelSpanData[] {
+  return trace.otlpData?.resourceSpans.flatMap((resourceSpan) =>
+    resourceSpan.scopeSpans.flatMap((scopeSpan) => scopeSpan.spans)
+  ) ?? [];
+}
 
 /**
  * Color configuration for the tape

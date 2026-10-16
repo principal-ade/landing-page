@@ -7,7 +7,7 @@ export const TourOverlay: React.FC = () => {
   const { isActive, currentStep, prev, next, currentStepIndex, steps } = useTour();
 
   // Don't show during intro steps (they have their own UI)
-  const introStepIds = ['welcome', 'tab-storyboards', 'tab-backlog', 'tab-story-monitoring', 'tab-traditional-monitoring'];
+  const introStepIds = ['welcome'];
   if (!isActive || !currentStep || introStepIds.includes(currentStep.id)) {
     return null;
   }

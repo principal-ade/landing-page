@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
@@ -19,11 +19,10 @@ import {
 // Color palette matching "For the Love of Building" animated page
 const NAVY = '#1a2842';
 const BLUE_DARK = '#2d4563';
-const BLUE_MID = '#4a6fa5';
 const BLUE_LIGHT = '#6b9bd1';
 const ORANGE = '#ff6b35';
 
-// Dynamic imports for panel components
+// Dynamic import for the independent Kanban demo panel
 const KanbanPanelWrapper = dynamic(
   () => import('./KanbanPanelWrapper'),
   {
@@ -43,65 +42,6 @@ const KanbanPanelWrapper = dynamic(
   }
 );
 
-const TraceListPanelWrapper = dynamic(
-  () => import('./TraceListPanelWrapper'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: BLUE_LIGHT,
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Trace Panel...
-      </div>
-    ),
-  }
-);
-
-const StoryboardListPanelWrapper = dynamic(
-  () => import('./StoryboardListPanelWrapper'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: BLUE_LIGHT,
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Storyboards...
-      </div>
-    ),
-  }
-);
-
-const WaterfallTraceView = dynamic(
-  () => import('./WaterfallTraceView'),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        color: BLUE_LIGHT,
-        fontFamily: 'Inter, sans-serif',
-      }}>
-        Loading Trace View...
-      </div>
-    ),
-  }
-);
-
-type DemoTab = 'storyboards' | 'kanban' | 'story-monitoring' | 'traditional-monitoring';
-
 interface DemoViewProps {
   isOpen: boolean;
   onClose: () => void;
@@ -115,36 +55,18 @@ interface DemoViewProps {
 function DemoViewInner({
   isOpen,
   onClose: _onClose,
-  schematics,
   providerReady,
-  registeredTraces,
-  onClearTraces,
+  schematics: _schematics,
+  registeredTraces: _registeredTraces,
+  onClearTraces: _onClearTraces,
 }: DemoViewProps) {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<DemoTab>('storyboards');
-  const storyboardEventsRef = useRef<PanelEventEmitter | null>(null);
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
-  const traceListEventsRef = useRef<PanelEventEmitter | null>(null);
   const { currentStep, isActive: isTourActive, start: startTour } = useTour();
-
-  const handleStoryboardEventsReady = useCallback((events: PanelEventEmitter) => {
-    storyboardEventsRef.current = events;
-  }, []);
 
   const handleKanbanEventsReady = useCallback((events: PanelEventEmitter) => {
     kanbanEventsRef.current = events;
   }, []);
-
-  const handleTraceListEventsReady = useCallback((events: PanelEventEmitter) => {
-    traceListEventsRef.current = events;
-  }, []);
-
-  // Reset to first tab when opening
-  useEffect(() => {
-    if (isOpen) {
-      setActiveTab('storyboards');
-    }
-  }, [isOpen]);
 
   if (!isOpen) {
     return null;
@@ -152,44 +74,6 @@ function DemoViewInner({
 
   // Check if we're on an intro step (don't show context bar during intro)
   const isOnIntroStep = isTourActive && currentStep && isIntroStep(currentStep.id);
-
-  // Get context header based on active tab
-  const getContextHeader = () => {
-    switch (activeTab) {
-      case 'storyboards':
-        return {
-          label: 'Principal AI',
-          sublabel: 'Story-Based Monitoring',
-          color: ORANGE,
-          bgColor: NAVY,
-        };
-      case 'kanban':
-        return {
-          label: 'Live App',
-          sublabel: 'Backlog.md',
-          color: ORANGE,
-          bgColor: NAVY,
-        };
-      case 'traditional-monitoring':
-        return {
-          label: 'Traditional Monitoring',
-          sublabel: 'Traces',
-          color: ORANGE,
-          bgColor: NAVY,
-        };
-      case 'story-monitoring':
-        return {
-          label: 'Principal AI',
-          sublabel: 'Story-Based Monitoring',
-          color: ORANGE,
-          bgColor: NAVY,
-        };
-      default:
-        return null;
-    }
-  };
-
-  const contextHeader = getContextHeader();
 
   // Check if we should show exploration controls (on try-it step)
   const showExplorationControls = isTourActive && currentStep?.id === 'try-it';
@@ -210,12 +94,12 @@ function DemoViewInner({
       }}
     >
       {/* Context Header Bar - hide during intro screens */}
-      {contextHeader && !isOnIntroStep && (
+      {!isOnIntroStep && (
         <div
           style={{
             height: '50px',
-            background: contextHeader.bgColor,
-            borderBottom: `1px solid ${contextHeader.color}`,
+            background: NAVY,
+            borderBottom: `1px solid ${ORANGE}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: showExplorationControls ? 'space-between' : 'center',
@@ -233,9 +117,9 @@ function DemoViewInner({
               fontWeight: 500,
             }}
           >
-            <span style={{ color: contextHeader.color }}>{contextHeader.label}</span>
+            <span style={{ color: ORANGE }}>Live App</span>
             <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>•</span>
-            <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{contextHeader.sublabel}</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Backlog.md</span>
           </div>
 
           {/* Segmented Controls - shown only on try-it step */}
@@ -247,56 +131,6 @@ function DemoViewInner({
                 gap: '16px',
               }}
             >
-              {/* Segmented Control */}
-              <div
-                style={{
-                  display: 'inline-flex',
-                  padding: '4px',
-                  background: 'rgba(0, 0, 0, 0.3)',
-                  borderRadius: '8px',
-                  gap: '2px',
-                }}
-              >
-                {[
-                  { id: 'storyboards' as DemoTab, label: 'Architecture' },
-                  { id: 'kanban' as DemoTab, label: 'Kanban' },
-                  { id: 'traditional-monitoring' as DemoTab, label: 'Traditional' },
-                  { id: 'story-monitoring' as DemoTab, label: 'Story-Based' },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    style={{
-                      padding: '6px 16px',
-                      background: activeTab === tab.id ? `${ORANGE}33` : 'transparent',
-                      color: activeTab === tab.id ? ORANGE : BLUE_LIGHT,
-                      border: 'none',
-                      borderRadius: '6px',
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '13px',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (activeTab !== tab.id) {
-                        e.currentTarget.style.background = `${ORANGE}1A`;
-                        e.currentTarget.style.color = '#ffffff';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (activeTab !== tab.id) {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = BLUE_LIGHT;
-                      }
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
               {/* Restart Tour Button */}
               <button
                 onClick={() => {
@@ -350,76 +184,9 @@ function DemoViewInner({
               margin: '0 auto',
             }}
           >
-            {/* Storyboards Tab */}
-            {activeTab === 'storyboards' && (
-              <div
-                id="storyboard-section"
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                  background: theme.colors.background,
-                }}
-              >
-                <StoryboardListPanelWrapper
-                  schematics={schematics}
-                  onEventsReady={handleStoryboardEventsReady}
-                />
-              </div>
-            )}
-
-            {/* Kanban Tab */}
-            {activeTab === 'kanban' && (
-              <div
-                id="kanban-section"
-                style={{
-                  flex: 1,
-                  overflow: 'hidden',
-                }}
-              >
-                {providerReady && <KanbanPanelWrapper onEventsReady={handleKanbanEventsReady} />}
-              </div>
-            )}
-
-            {/* Story-Based Monitoring Tab */}
-            {activeTab === 'story-monitoring' && (
-              <div
-                data-tour-id="story-monitoring"
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                  background: theme.colors.background,
-                }}
-              >
-                <TraceListPanelWrapper
-                  traces={registeredTraces}
-                  schematics={schematics}
-                  onClear={onClearTraces}
-                  onEventsReady={handleTraceListEventsReady}
-                />
-              </div>
-            )}
-
-            {/* Traditional Monitoring Tab */}
-            {activeTab === 'traditional-monitoring' && (
-              <div
-                data-tour-id="traditional-monitoring"
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                }}
-              >
-                <WaterfallTraceView
-                  traces={registeredTraces}
-                  onClear={onClearTraces}
-                />
-              </div>
-            )}
+            <div id="kanban-section" style={{ flex: 1, overflow: 'hidden' }}>
+              {providerReady && <KanbanPanelWrapper onEventsReady={handleKanbanEventsReady} />}
+            </div>
           </div>
         </div>
 
@@ -431,10 +198,7 @@ function DemoViewInner({
 
         {/* Tour panel events integration */}
         <TourPanelEventsConnector
-          storyboardEventsRef={storyboardEventsRef}
           kanbanEventsRef={kanbanEventsRef}
-          traceListEventsRef={traceListEventsRef}
-          onTabChange={(tab) => setActiveTab(tab as DemoTab)}
         />
     </div>
   );
@@ -461,7 +225,7 @@ export function DemoView(props: DemoViewProps) {
 const introStepContent: Record<string, { title: string; description: string; icon?: React.ReactNode }> = {
   welcome: {
     title: '',
-    description: "Using Principal's skill, the agent reads the codebase,\nmaps the workflows, and sets up story-based monitoring.\n\nThe live app you'll interact with is Backlog.md,\nan open source task manager.",
+    description: "Using Principal's skill, the agent reads the codebase\nand sets up monitoring.\n\nThe live app you'll interact with is Backlog.md,\nan open source task manager.",
   },
 };
 
@@ -639,40 +403,23 @@ function IntroScreen() {
 
 // Component to connect panel events to tour context
 function TourPanelEventsConnector({
-  storyboardEventsRef,
   kanbanEventsRef,
-  traceListEventsRef,
-  onTabChange,
 }: {
-  storyboardEventsRef: React.RefObject<PanelEventEmitter | null>;
   kanbanEventsRef: React.RefObject<PanelEventEmitter | null>;
-  traceListEventsRef: React.RefObject<PanelEventEmitter | null>;
-  onTabChange: (tab: string) => void;
 }) {
-  const { setPanelEvents, setKanbanEvents, setTraceListEvents, setTabHandler } = useTour();
-
-  useEffect(() => {
-    setTabHandler(onTabChange);
-    return () => setTabHandler(null);
-  }, [onTabChange, setTabHandler]);
+  const { setKanbanEvents } = useTour();
 
   useEffect(() => {
     const checkEvents = () => {
-      if (storyboardEventsRef.current) {
-        setPanelEvents(storyboardEventsRef.current);
-      }
       if (kanbanEventsRef.current) {
         setKanbanEvents(kanbanEventsRef.current);
-      }
-      if (traceListEventsRef.current) {
-        setTraceListEvents(traceListEventsRef.current);
       }
     };
 
     checkEvents();
     const interval = setInterval(checkEvents, 500);
     return () => clearInterval(interval);
-  }, [storyboardEventsRef, kanbanEventsRef, traceListEventsRef, setPanelEvents, setKanbanEvents, setTraceListEvents]);
+  }, [kanbanEventsRef, setKanbanEvents]);
 
   return null;
 }

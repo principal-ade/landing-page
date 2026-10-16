@@ -284,20 +284,6 @@ export function TourDebugPanel() {
                         gap: '4px',
                       }}
                     >
-                      {step.tab && (
-                        <span
-                          style={{
-                            padding: '2px 6px',
-                            fontSize: '10px',
-                            fontWeight: 500,
-                            background: 'rgba(139, 92, 246, 0.2)',
-                            color: '#a78bfa',
-                            borderRadius: '3px',
-                          }}
-                        >
-                          tab: {step.tab}
-                        </span>
-                      )}
                       {step.target?.selector && (
                         <span
                           style={{
@@ -312,7 +298,7 @@ export function TourDebugPanel() {
                           spotlight
                         </span>
                       )}
-                      {(step.target?.tourAction || step.target?.panelAction) && (
+                      {(step.target?.tourAction || step.target?.tourActions) && (
                         <span
                           style={{
                             padding: '2px 6px',

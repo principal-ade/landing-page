@@ -15,21 +15,8 @@ interface CodeTrailsHeroCycleProps {
 
 const DEFAULT_SUFFIXES = [
   '…you’re stuck.',
-  '…you need a second opinion.',
-  '…expert feedback is needed.',
-  '…the agent went sideways.',
-  '…someone needs to weigh in.',
-  '…you’re handing it off.',
-  '…you actually need to understand it.',
-  '…you’re building together.',
-  '…alignment matters.',
-  '…you’ll be responsible if it breaks.',
-  '…you aren’t quite sure enough.',
-  '…you need a mental model.',
-  '…something just feels off.',
+  '…something feels off.',
   '…you doubt the agent understands.',
-  '…you don’t even know what to ask.',
-  '…your files touch another team’s.',
 ];
 
 function usePrefersReducedMotion(): boolean {
