@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import type { RegisteredTrace, VersionSnapshot } from '@principal-ai/principal-view-core';
 import type { PanelEventEmitter } from '@principal-ade/panel-framework-core';
 import { FileCityLogo } from '@principal-ai/logo-component';
 import { useTheme } from '@principal-ade/industry-theme';
@@ -45,10 +44,7 @@ const KanbanPanelWrapper = dynamic(
 interface DemoViewProps {
   isOpen: boolean;
   onClose: () => void;
-  schematics: VersionSnapshot[];
   providerReady: boolean;
-  registeredTraces: RegisteredTrace[];
-  onClearTraces: () => void;
 }
 
 // Inner component to access tour context
@@ -56,9 +52,6 @@ function DemoViewInner({
   isOpen,
   onClose: _onClose,
   providerReady,
-  schematics: _schematics,
-  registeredTraces: _registeredTraces,
-  onClearTraces: _onClearTraces,
 }: DemoViewProps) {
   const { theme } = useTheme();
   const kanbanEventsRef = useRef<PanelEventEmitter | null>(null);
